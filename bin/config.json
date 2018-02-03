@@ -1,0 +1,9 @@
+{
+"token":"token",
+"testtoken":"testtoken",
+"loginmode":"test",
+"prefix":"*",
+"game":"*help | HerrEurobeat",
+"version":"2.8",
+"musicenable":"false"
+}
