@@ -1,0 +1,47 @@
+Get a list of all commands with** *help**!
+( ) - **needed** argument
+[ ] - ***optional*** argument
+
+__Help & Test:__
+    ** *help ** - *commands
+    ** *invite ** - /
+    ** *ping ** - *pong
+    ** *os ** - /
+    ** *privilegeerror ** - /
+
+__Moderation:__
+    ** *kick (mention) [reason] ** - /
+    ** *ban (mention) [reason]/[duration + "minutes|hours|days"] [reason] ** - /
+    ** *clear (amount) ** - *delete (amount)
+    ** *mute (mention) [duration + "minutes|hours"] ** - /
+    ** *unmute (mention) ** - /
+
+__Info & User:__
+    ** *info [mention] ** - *userinfo [mention], *me [mention]
+    ** *id [mention] ** - *userid [mention]
+    ** *avatar [mention] ** - *useravatar [mention]
+    ** *servericon ** - *serveravatar
+    ** *nick [mention] (nick) ** - *nickname [mention] (nick)
+    ** *nickreset [mention] ** - /
+
+__Misc:__
+    ** *poll [description] ** - *vote [description], *survey [description]
+    ** *say (text) ** - /
+    ** *dice (number) ** - /
+    ** *time ** - *date, *bottime
+    ** *timer (duration + "minutes|hours") ** - *clock (duration + "minutes|hours")
+    ** *color ** - *randomcolor
+    ** *serverlist ** - /
+
+__Fun:__
+    ** *wikihow ** - /
+    ** *cat ** - *meow
+    ** *rps-game ** - /
+
+__Owner only:__
+    ** *setname (name)/("default|x-mas") ** - /
+    ** *setgame [game]/["default"] ** - /
+    ** *setstatus ("online|idle|dnd") ** - /
+    ** *setavatar (url)/("default|x-mas|testbot") ** - /
+    ** *botrs ** - *botrestart
+    ** *botstop ** - 
