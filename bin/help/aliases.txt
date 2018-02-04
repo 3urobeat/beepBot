@@ -32,6 +32,7 @@ __Misc:__
     ** *timer (duration + "minutes|hours") ** - *clock (duration + "minutes|hours")
     ** *color ** - *randomcolor
     ** *serverlist ** - *servers
+    ** *github ** - /
 
 __Fun:__
     ** *wikihow ** - /
@@ -45,6 +46,8 @@ __Owner only:__
     ** *setavatar (url)/("default|x-mas|testbot") ** - /
     ** *setversion (number) ** - /
     ** *loginmode ("normal|test") ** - /
+    ** *debugmode ("true|false") ** - /
     ** *eval (code) ** - /
+    ** *reload (module) ** - /
     ** *botrs ** - *botrestart
     ** *botstop ** - 

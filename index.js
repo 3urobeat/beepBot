@@ -112,7 +112,6 @@ v.bot.on("ready", async function() {
         })
         
         console.log("Playing status was set to: " + GAME)
-        var gameloop = 0;
 
         if (v.botconfig.musicenable === "true" && v.os.platform == "win32") {
             console.log("*Music feature is enabled!*")
@@ -234,31 +233,6 @@ v.bot.on("ready", async function() {
         }
     });
 
-    v.bot.setInterval(() => {
-        if (v.botconfig.game === v.DEFAULTGAME) {
-            if (gameloop == 0) {
-                console.log("gameloop 0")
-                v.bot.user.setGame("test 1")
-                var gameloop = 1;
-                return;
-            }
-            if (gameloop == 1) {
-                console.log("gameloop 2")
-                v.bot.user.setGame("test 2")
-                var gameloop = 2;
-                return;
-            }
-            if (gameloop == 2) {
-                console.log("gameloop default")
-                v.bot.user.setGame(GAME)
-                var gameloop = 0;
-                return;
-            }
-        } else {
-            console.log("Custom game")
-        }
-    }, 5000)
-
 });
 
 //Events
@@ -350,7 +324,9 @@ v.bot.on("message", async function(message) {
         await message.react("🇮")
     } */
 
-    if (!message.content.startsWith(PREFIX)) return;
+    if (!message.content.startsWith(PREFIX)) {
+        return;
+    }
 
     var cont = message.content.slice(PREFIX.length).split(" ");
     var args = cont.slice(1);

@@ -3,44 +3,43 @@ module.exports.run = async (bot, message, args) => {
     const fs = v.fs
 
     if (message.author.id === v.OWNERID) {
-        var login = args[0]
+        var debugmode = args[0]
 
-        if (login === v.botconfig.loginmode) {
-            message.channel.send("The bot is already in " + v.botconfig.loginmode + " mode.")
+        if (debugmode === v.botconfig.debug) {
+            message.channel.send("The bot'S debug mode is already set to " + v.botconfig.debug + ".")
             return;
         }
 
         v.botconfig = {
             token: v.botconfig.token,
             testtoken: v.botconfig.testtoken,
-            loginmode: login,
+            loginmode: v.botconfig.loginmode,
             prefix: v.botconfig.prefix,
             game: v.botconfig.game,
             version: v.botconfig.version,
             musicenable: v.botconfig.musicenable,
-            debug: v.botconfig.debug
+            debug: debugmode
         }
 
         fs.writeFile("./bin/config.json", JSON.stringify(v.botconfig, null, 4), err => {
             if(err) message.channel.send("Error: " + err); return;
         });
-        console.log("Loginmode was changed to: " + login)
+        console.log("Debugmode was set to: " + debugmode)
 
         if (v.os.platform == "linux") {
-            message.channel.send("Loginmode was changed to " + login + ". Restarting... ")
+            message.channel.send("Debug mode was set to " + debugmode + ". Restarting... ")
             v.exec('pm2 restart bot')
         }
         if (v.os.platform == "win32") {
-            message.channel.send("Loginmode was changed to " + login + "\nYou have to restart manually on windows to see changes.")
+            message.channel.send("Debug mode was set to " + debugmode + "\nYou have to restart manually on windows to see changes.")
             return;
         }
     } else {
         message.channel.send(v.owneronlyerror())
-        return
     }
 
     }
 
 module.exports.config = {
-    command: "loginmode"
+    command: "debugmode"
 }

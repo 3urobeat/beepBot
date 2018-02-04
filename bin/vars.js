@@ -5,6 +5,7 @@ const configpath = "./config.json";
 const aliaspath = "./bin/help/aliases.txt"
 const helppath = "./bin/help/help.txt";
 const helppath2 = "./bin/help/help2.txt";
+const helppath3 = "./bin/help/help3.txt";
 const chatmutespath = "./bin/eventdata/chatmutes.json"
 const voicemutespath = "./bin/eventdata/voicemutes.json"
 const banspath = "./bin/eventdata/bans.json"
@@ -36,6 +37,7 @@ const testbotinvitelink = "https://discordapp.com/oauth2/authorize?client_id=264
 const botdefaultavatar = "https://i.imgur.com/64BkKW4.png";
 const botxmasavatar = "https://i.imgur.com/GgHBtkG.png";
 const testbotdefaultavatar = "https://i.imgur.com/gmP9eFn.png"
+const githublink = "https://github.com/HerrEurobeat/beepBot"
 
 var botloginmode = botconfig.loginmode;
 
@@ -68,6 +70,7 @@ module.exports={
     aliaspath,
     helppath,
     helppath2,
+    helppath3,
     chatmutespath,
     voicemutespath,
     banspath,
@@ -95,6 +98,7 @@ module.exports={
     botdefaultavatar,
     botxmasavatar,
     testbotdefaultavatar,
+    githublink,
     botloginmode,
     randomstring,
     owneronlyerror,
