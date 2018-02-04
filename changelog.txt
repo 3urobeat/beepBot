@@ -31,3 +31,5 @@ Version 2.8.2: botconfig can be chaged with commands now. (owneronly). Added a *
 
 Version 2.9: Added *eval command (owneronly). Added a debug mode.
 Version 2.9.1: On servers with more than 250 members the on join mention is disabled and only the username will be shown due to ping spam. An invite link will also not be send via DM anymore if a user leaves.
+
+Version 2.10: Added a *loginmode command (owneronly).

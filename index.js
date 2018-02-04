@@ -236,19 +236,19 @@ v.bot.on("ready", async function() {
 
     v.bot.setInterval(() => {
         if (v.botconfig.game === v.DEFAULTGAME) {
-            if (gameloop === 0) {
+            if (gameloop == 0) {
                 console.log("gameloop 0")
                 v.bot.user.setGame("test 1")
                 var gameloop = 1;
                 return;
             }
-            if (gameloop === 1) {
+            if (gameloop == 1) {
                 console.log("gameloop 2")
                 v.bot.user.setGame("test 2")
                 var gameloop = 2;
                 return;
             }
-            if (gameloop === 2) {
+            if (gameloop == 2) {
                 console.log("gameloop default")
                 v.bot.user.setGame(GAME)
                 var gameloop = 0;
