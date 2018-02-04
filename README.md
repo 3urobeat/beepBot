@@ -7,3 +7,4 @@ Invite my bot to your server:
 https://discordapp.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=1610087551
 
 See the changelog in the changelog.txt file!
+
