@@ -31,7 +31,7 @@ __Misc:__
     ** *time ** - *date, *bottime
     ** *timer (duration + "minutes|hours") ** - *clock (duration + "minutes|hours")
     ** *color ** - *randomcolor
-    ** *serverlist ** - /
+    ** *serverlist ** - *servers
 
 __Fun:__
     ** *wikihow ** - /
@@ -43,5 +43,6 @@ __Owner only:__
     ** *setgame [game]/["default"] ** - /
     ** *setstatus ("online|idle|dnd") ** - /
     ** *setavatar (url)/("default|x-mas|testbot") ** - /
+    ** *setversion (number) ** - /
     ** *botrs ** - *botrestart
     ** *botstop ** - 
