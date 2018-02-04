@@ -44,5 +44,7 @@ __Owner only:__
     ** *setstatus ("online|idle|dnd") ** - /
     ** *setavatar (url)/("default|x-mas|testbot") ** - /
     ** *setversion (number) ** - /
+    ** *loginmode ("normal|test") ** - /
+    ** *eval (code) ** - /
     ** *botrs ** - *botrestart
     ** *botstop ** - 
