@@ -24,6 +24,7 @@ module.exports.run = async (bot, message, args) => {
         fs.writeFile("./bin/config.json", JSON.stringify(v.botconfig, null, 4), err => {
             if(err) message.channel.send("Error: " + err); return;
         });
+        console.log("Loginmode was changed to: " + login)
 
         if (v.os.platform == "linux") {
             message.channel.send("Loginmode was changed to " + login + ". Restarting... ")

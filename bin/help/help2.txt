@@ -10,19 +10,4 @@ __Misc:__
     ** *time ** - The current time of the bot.
     ** *color [color code ]** - Gives you an random hex color code or your color with example. Given color code must not contain #'s. Example: *color 6861159
     ** *serverlist ** - Responds with names of all servers the bot is connected to.
-
-__Fun:__
-    ** *wikihow ** - Posts a link to a random wikihow article.
-    ** *cat ** - Posts a random cat picture.
-    ** *rps-game ** - Just a __very__ basic rock, paper, scissors game.
-
-__Owner only:__
-    ** *setname (name)/("default|x-mas") ** - Sets the bot username to the fiven argument (2-32) or to default or to x-mas. Owner only.
-    ** *setgame [game]/["default"] ** - Sets the playing status to the given argument or to default. Owner only.
-    ** *setstatus ("online|idle|dnd") ** - Sets the bot status to the given argument. Owner only.
-    ** *setavatar (url)/("default|x-mas|testbot") ** - Sets the avatar to the given url or to default/x-mas/testbot default. Owner only.
-    ** *setversion (number) ** - Sets a new version number. Owner only.
-    ** *loginmode ("normal|test") ** - Changes the loginmode. Owner only.
-    ** *eval (code) ** - Runs eval code. Owner only.
-    ** *botrs ** - Restarts the bot. Owner only.
-    ** *botstop ** - Stops the bot when running on Linux. Owner only.
+    ** *github ** - Get a link to my GitHub repository.

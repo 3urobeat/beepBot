@@ -1,4 +1,6 @@
-﻿Prefix **--->** * **<---** Just wonderful. Get __alias__ commands with** *alias**!
+﻿Here is a list of all commands: :1234:
+
+Prefix **--->** * **<---** Just wonderful. Get __alias__ commands with** *alias**!
 ( ) - **needed** argument
 [ ] - ***optional*** argument
 

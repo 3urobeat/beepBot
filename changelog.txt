@@ -33,3 +33,5 @@ Version 2.9: Added *eval command (owneronly). Added a debug mode.
 Version 2.9.1: On servers with more than 250 members the on join mention is disabled and only the username will be shown due to ping spam. An invite link will also not be send via DM anymore if a user leaves.
 
 Version 2.10: Added a *loginmode command (owneronly).
+Version 2.10.1: Added a *reload command for testing purposes and a *debugmode to enable or disable the debug mode. (owneronly). Added a console.log to the *loginmode command.
+Version 2.10.2: Added a *github command to get link to my beepBot GitHub repository. Added abother *help page because it's  to long.
