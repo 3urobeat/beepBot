@@ -26,7 +26,7 @@ function botstartupmode() {
         var TOKEN = v.botconfig.testtoken;
         v.bot.login(TOKEN)
     } else {
-        console.log("Error logging in.")
+        console.log(v.LOGWARN + "Error logging in.")
         return;
     }
 }
@@ -57,7 +57,11 @@ async function unban(banguild, unbanMember) {
 if (v.botloginmode === "test") { 
     var PREFIX = "**";
     var BOTNAME = "beepTestBot";
-    var GAME = "testing beepBot...";
+    if (v.botconfig.game === v.DEFAULTGAME) {
+        var GAME = "testing beepBot...";
+    } else {
+        var GAME = v.botconfig.game
+    }
     var botavatar = v.testbotdefaultavatar;
     var botinvite = v.testbotinvitelink;
 } else {
@@ -108,6 +112,7 @@ v.bot.on("ready", async function() {
         })
         
         console.log("Playing status was set to: " + GAME)
+        var gameloop = 0;
 
         if (v.botconfig.musicenable === "true" && v.os.platform == "win32") {
             console.log("*Music feature is enabled!*")
@@ -224,9 +229,35 @@ v.bot.on("ready", async function() {
             BOTNAME,
             PREFIX,
             botavatar,
-            botinvite 
+            botinvite,
+            GAME
         }
     });
+
+    v.bot.setInterval(() => {
+        if (v.botconfig.game === v.DEFAULTGAME) {
+            if (gameloop === 0) {
+                console.log("gameloop 0")
+                v.bot.user.setGame("test 1")
+                var gameloop = 1;
+                return;
+            }
+            if (gameloop === 1) {
+                console.log("gameloop 2")
+                v.bot.user.setGame("test 2")
+                var gameloop = 2;
+                return;
+            }
+            if (gameloop === 2) {
+                console.log("gameloop default")
+                v.bot.user.setGame(GAME)
+                var gameloop = 0;
+                return;
+            }
+        } else {
+            console.log("Custom game")
+        }
+    }, 5000)
 
 });
 
@@ -249,13 +280,18 @@ v.bot.on("guildDelete", guild => {
     guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/q3KXW2P")
 });
 
-v.bot.on("guildMemberAdd", function(member) {
+v.bot.on("guildMemberAdd", async function(member) {
     // When a user joins the server message
     if (member.guild.systemChannelID == null) {
         return;
     } else {
-        member.guild.channels.find("id", member.guild.systemChannel.id).send(member.toString() + " Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
-        })
+        if (member.guild.members.size > 250) {
+            member.guild.channels.find("id", member.guild.systemChannel.id).send(member.user.username + ": Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
+            })
+        } else {
+            member.guild.channels.find("id", member.guild.systemChannel.id).send(member.toString() + " Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
+            })
+        }  
     }
 
     if (!member.guild.id === 231828052127121408) {
@@ -277,22 +313,33 @@ v.bot.on("guildMemberRemove", function(member) {
         maxAge: false
     }
     if (member.guild.systemChannelID == null) {
-        
-    } else {
-        member.guild.systemChannel.send(member.toString() + " left **" + member.guild.name + "**! :(")
-    }
 
-    var invite = member.guild.channels.find("id", member.guild.channels.find("position", 1).id).createInvite(options).then(function(newInvite) {
-        member.send("Sadly you left **" + member.guild.name + "**. To join again use this link: https://discord.gg/" + newInvite.code).catch(err => {
-            console.log("Error: " + err)
-        })
-    })
+    } else {
+        if (member.guild.members.size > 250) {
+            member.guild.channels.find("id", member.guild.systemChannel.id).send(member.user.username + " left **" + member.guild.name + "**! :(").catch(err => {
+            })
+        } else {
+            member.guild.channels.find("id", member.guild.systemChannel.id).send(member.toString() + " left **" + member.guild.name + "**! :(").catch(err => {
+            })
+            var invite = member.guild.channels.find("id", member.guild.channels.find("position", 1).id).createInvite(options).then(function(newInvite) {
+                member.send("Sadly you left **" + member.guild.name + "**. To join again use this link: https://discord.gg/" + newInvite.code).catch(err => {
+                    console.log("Error: " + err)
+                })
+            })
+        }
+    }
 });
 
 v.bot.on("guildUnavailable", function(guild) {
     // When a guild becomes unavailable, likely due to a server outage
     guild.owner.send("Your server **" + guild.name + "** has become unavailable just in this moment. This can be caused by a server outage. For more information check the Discord Server Status: https://status.discordapp.com/")
 });
+
+v.bot.on("error", (e) => console.error(e));
+v.bot.on("warn", (e) => console.warn(e));
+if (v.botconfig.debug === "true") {
+    v.bot.on("debug", (e) => console.info(e));
+}
 
 //Command/Message Handler
 v.bot.on("message", async function(message) {

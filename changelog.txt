@@ -1,0 +1,33 @@
+Version 2.0: Complete rewrite of the bot structure.
+Version 2.1: Added a *dice command.
+
+Version 2.4.9: Fixed the welcome message.
+Version 2.4.10: Fixed the *botrs command and added a quote for the wrongcmd message.
+Version 2.4.11: Fixed the *setstatus command because of a not working argument.
+
+Version 2.5: Added a *userid [mention] to simply get an id from you or an mentioned user.
+Version 2.5.1: Updated *help command. Changed "user" to "mention"
+Version 2.5.2: Added an error definition to an error message
+Version 2.5.3: Added a round function. *info bot uptime now only in hous with maximal 2 digits after the comma. This was also added to the *ping command.
+
+Version 2.6: The Bot has now an alias function! Get aliases with *alias. That means *ping and *pong would trigger the same command.
+Version 2.6.1: Fixed a *nick error where no provided argument would have given no error message.
+Version 2.6.2: Time measurement for bootup time.
+Version 2.6.3: Added bootup time to *info command, moved botid in *info command under "Bot Name". Updated help command, the first message is now seperated from the actual help message and the alias in "Get alias commands with" is now underlined. Fixed alias (*meow) for the *cat command.
+Version 2.6.4: FIxed variables that are exported from the main js file. Updated *info command and added a randomhex color function.
+Version 2.6.5: *info command updated again and fixed an error that was caused when trying to execute *info in a dm. Now you will get an error message that will save the bot from the evil error.
+
+Version 2.7: New Command: *color Now you can get an random color for your role colors or for what ever.
+Version 2.7.1: Updated the *avatar command. The message is now way more fancy and cool!
+Version 2.7.2: Updated *ping command.
+Version 2.7.3: Removed *timer command, *invite and *info will now show the right invite link depending on if the bot is in normal or test mode.
+Version 2.7.4: Fixed a bug where the bot crashed when a new member joined. Automated role adding was disabled for all servers that are not my main and my testserver (this one) to avoid that a server owner may not want this feature.
+Version 2.7.5: Removed the Wrong Command error response on servers because it was disturbing. The botid will now change depending on if the bot is @beepBot or @beepTestBot in the ban etc. commands. The owneronly, usermissperm, dmerror and wrongcmd-Errors are now random again an not only changed at a restart because of a bug. *help command will now show the right invite link depending on @beepBot or @beepTestBot send it. Fixed the **invite command that crashed the bot when it was used in a dm.
+Version 2.7.6: Fixed a bug where the *say command crashed the bot in a dm or if no argument was given.
+
+Version 2.8: Big update! Mutes are now able to be set for chat|voice|all ! Chat, voice-mutes and bans are now saved in an external file to be saved even if the bot crashes or restarts! The unmutes or unbans can have an delay of 5 seconds when the bot is running because of the check interval. Many bugs were fixed (from Version 2.7.3 to 2.7.6 - read above) and i am happy to release this update!
+Version 2.8.1 *color command does no support to display your color of choice. Use *color [color code].
+Version 2.8.2: botconfig can be chaged with commands now. (owneronly). Added a *setversion command to change the version number.
+
+Version 2.9: Added *eval command (owneronly). Added a debug mode.
+Version 2.9.1: On servers with more than 250 members the on join mention is disabled and only the username will be shown due to ping spam. An invite link will also not be send via DM anymore if a user leaves.
