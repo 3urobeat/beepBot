@@ -6,6 +6,10 @@ On GitHub you can find the newest version of my Discord.js Bot.
 Invite my bot to your server: 
 https://discordapp.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=1610087551
 
+<a href="https://discordbots.org/bot/265162449441783808">
+  <img src="https://discordbots.org/api/widget/265162449441783808.svg" />
+</a>
+
 Join my support server!
 https://discord.gg/q3KXW2P
 
