@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
-    const index = require("../../index.js") 
+    const index = require("../index.js") 
 
     const help = v.fs.readFileSync(v.helppath, {"encoding": "utf-8"});
     const help2 = v.fs.readFileSync(v.helppath2, {"encoding": "utf-8"});
@@ -18,5 +18,6 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.config = {
     command: "help",
-    alias: "commands"
+    alias: "commands",
+    alias2: "h"
 }

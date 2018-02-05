@@ -5,9 +5,18 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send("A poll does not make sense in a dm! :no_good:")
         return;
     } else {
-        await message.react("👍")
-        await message.react("👎")
-        await message.react("🤷")
+        await message.react("👍").catch(err => {
+            message.channel.send("Error: " + err)
+            return;
+        })
+        await message.react("👎").catch(err => {
+            message.channel.send("Error: " + err)
+            return;
+        })
+        await message.react("🤷").catch(err => {
+            message.channel.send("Error: " + err)
+            return;
+        })
     } 
 
 }

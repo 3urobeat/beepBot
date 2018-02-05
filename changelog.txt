@@ -34,4 +34,5 @@ Version 2.9.1: On servers with more than 250 members the on join mention is disa
 
 Version 2.10: Added a *loginmode command (owneronly).
 Version 2.10.1: Added a *reload command for testing purposes and a *debugmode to enable or disable the debug mode. (owneronly). Added a console.log to the *loginmode command.
-Version 2.10.2: Added a *github command to get link to my beepBot GitHub repository. Added abother *help page because it's  to long.
+Version 2.10.2: Added a *github command to get link to my beepBot GitHub repository. Added abother *help page because it's too long.
+Version 2.10.3: Added a *h alias to the *help command. Changed console error message when username or avatar settings fail. Changed storage folder for bans and mutes to make updates easier. Fixed an error that was caused if the bot does not have permission to create the muted role and then tried to find the role. Fixed a bug that caused the bot to set its "default" game to the current game and only set the new game on restart. Added *poll error catching. Added error catching to few events in my index.js file.

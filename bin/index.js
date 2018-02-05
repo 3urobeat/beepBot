@@ -1,5 +1,5 @@
 ﻿console.log(" ")
-const v = require("./bin/vars.js")
+const v = require("./vars.js")
 var bootstart = new Date();
 console.log("Loading...")
 
@@ -7,14 +7,15 @@ console.log("Loading...")
 function avatarinterval() {
     if (v.d.getMonth() == 11) {
         v.bot.user.setUsername(v.BOTXMASNAME).catch(err => {
-            console.warn(v.LOGWARN + "Username Fail. Probably changing too fast.") })
+            console.log(v.LOGWARN + "Username fail. " + err + "\n ") })
         v.bot.user.setAvatar(v.botxmasavatar).catch(err => {
-            console.log(v.LOGWARN + "Avatar fail. Probably changing too fast.") })
+            console.log(v.LOGWARN + "Avatar fail. " + err + "\n ") })
     }else{
         v.bot.user.setUsername(BOTNAME).catch(err => {
-            console.warn(v.LOGWARN + "Username Fail. Probably changing too fast.") })
+            console.log(v.LOGWARN + "Username fail. " + err + "\n ") })
+            
         v.bot.user.setAvatar(botavatar).catch(err => {
-            console.log(v.LOGWARN + "Avatar fail. Probably changing too fast.") })
+            console.log(v.LOGWARN + "Avatar fail. " + err + "\n ") })
     }
 }
 
@@ -81,7 +82,7 @@ v.bot.on("ready", async function() {
     if (v.botloginmode === "test") { console.log("Started " + BOTNAME + " " + v.BOTVERSION + " by " + v.BOTOWNER + " in *" + v.botloginmode + "ing mode.*") }
     v.bot.user.setGame(GAME);
     v.bot.user.setStatus(v.STATUS).catch(err => {
-        console.log("Status fail. Probably changing too fast.")
+        console.log("Status fail. " + err)
     })
     if (v.os.platform == "linux") console.log("I'm running on Linux...") 
     if (v.os.platform == "win32") console.log("I'm running on Windows...")
@@ -97,7 +98,7 @@ v.bot.on("ready", async function() {
     }, 3600 * 6000); //1 hour in seconds to 6 hours in milliseconds.
 
     //Command reader
-    v.fs.readdir('./bin/commands/', (err, files) => {
+    v.fs.readdir('./commands/', (err, files) => {
         if (err) console.error(err);
         
         var jsfiles = files.filter(f => f.split('.').pop() === 'js');
@@ -105,7 +106,7 @@ v.bot.on("ready", async function() {
         else { console.log("-> " + jsfiles.length + " commands found.") }
         
         jsfiles.forEach((f, i) => {
-            var cmds = require(`./bin/commands/${f}`);
+            var cmds = require(`./commands/${f}`);
             v.bot.commands.set(cmds.config.command, cmds);
             v.bot.alias.set(cmds.config.alias, cmds)
             v.bot.alias2.set(cmds.config.alias2, cmds)
@@ -147,7 +148,9 @@ v.bot.on("ready", async function() {
                         return;
                     }
                     chatunmute(chatunmuteMember, chatmutedRole)
-                    chatchannel.send(chatunmuteMember + " was chat-unmuted after " + chatrawmuteduration + " " + chatmutedurationtype + " by " + chatmuteauthor + ".")
+                    chatchannel.send(chatunmuteMember + " was chat-unmuted after " + chatrawmuteduration + " " + chatmutedurationtype + " by " + chatmuteauthor + ".").catch(err => {
+                        console.log("Error: " + err)
+                    })
                     
                     delete v.bot.chatmutes[i];
                     v.fs.writeFile(v.chatmutespath, JSON.stringify(v.bot.chatmutes), err => {
@@ -181,9 +184,13 @@ v.bot.on("ready", async function() {
                     }
                     voiceunmute(voiceunmuteMember)
                     if (!voiceunmuteMember.voiceChannel) {
-                        voicemuteauthor.send(voiceunmuteMember + " is now able to get voice-unmuted after " + voicerawmuteduration + " " + voicemutedurationtype + ". I can't unmute him if he is not in a voice channel so please do that yourself. Thanks! :)")
+                        voicemuteauthor.send(voiceunmuteMember + " is now able to get voice-unmuted after " + voicerawmuteduration + " " + voicemutedurationtype + ". I can't unmute him if he is not in a voice channel so please do that yourself. Thanks! :)").catch(err => {
+                            console.log("Error: " + err)
+                        })
                     } else {
-                        voicechannel.send(voiceunmuteMember + " was voice-unmuted after " + voicerawmuteduration + " " + voicemutedurationtype + " by " + voicemuteauthor + ".")
+                        voicechannel.send(voiceunmuteMember + " was voice-unmuted after " + voicerawmuteduration + " " + voicemutedurationtype + " by " + voicemuteauthor + ".").catch(err => {
+                            console.log("Error: " + err)
+                        })
                     }
 
                     delete v.bot.voicemutes[i];
@@ -213,7 +220,9 @@ v.bot.on("ready", async function() {
                 if (Date.now() > bantime) {
 
                     unban(banguild, unbanMember)
-                    banchannel.send(banauthor + ": The user @" + banname + " was unbanned after " + rawbanduration + " " + bandurationtype + ". __Ban-Reason:__ " + banreasontext)
+                    banchannel.send(banauthor + ": The user @" + banname + " was unbanned after " + rawbanduration + " " + bandurationtype + ". __Ban-Reason:__ " + banreasontext).catch(err => {
+                        console.log("Error: " + err)
+                    })
 
                     delete v.bot.bans[i];
                     v.fs.writeFile(v.banspath, JSON.stringify(v.bot.bans), err => {
@@ -243,15 +252,20 @@ v.bot.on("guildCreate", guild => {
         return;
     } else {
         guild.channels.find("id", guild.systemChannel.id).send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ". Get a list of my commands with `" + PREFIX + "help`. Type `" + PREFIX + "invite` to get an invite link.").catch(err => {
+            console.log("Error: " + err)
         })
     }
-    guild.owner.send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ".\nThanks for adding me to your server! To get a overlook of all my commands just type `" + PREFIX + "help`.\nThe greeting feature is enabled when a greeting channel is set in the server settings.\nIf you need help or something else join my server with `" + PREFIX + "invite!`\nHave fun!")
+    guild.owner.send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ".\nThanks for adding me to your server! To get a overlook of all my commands just type `" + PREFIX + "help`.\nThe greeting feature is enabled when a greeting channel is set in the server settings.\nIf you need help or something else join my server with `" + PREFIX + "invite!`\nHave fun!").catch(err => {
+        console.log("Error: " + err)
+    })
 });
 
 v.bot.on("guildDelete", guild => {
     // this event triggers when the bot is removed from a guild.
     console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-    guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/q3KXW2P")
+    guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/q3KXW2P").catch(err => {
+        console.log("Error: " + err)
+    })
 });
 
 v.bot.on("guildMemberAdd", async function(member) {
@@ -319,14 +333,16 @@ if (v.botconfig.debug === "true") {
 v.bot.on("message", async function(message) {
     if (message.author.bot) return;
 
-/*     if (message.mentions.users.first().id === v.bot.user.id) {
-        await message.react("🇭")
-        await message.react("🇮")
-    } */
-
+    //Add mention prefix.
     if (!message.content.startsWith(PREFIX)) {
         return;
     }
+
+    //Check if bot has permissions to send a message!
+/*     if (!message.channel.members.get(v.bot.user.id).permissions.has("SEND_MESSAGES", "ADMINISTRATOR")) {
+        console.log("No permission to send messages.")
+        return;
+    } */
 
     var cont = message.content.slice(PREFIX.length).split(" ");
     var args = cont.slice(1);

@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
-    const index = require("../../index.js")
+    const index = require("../index.js")
     const fs = v.fs;
     
     if (message.author.id === v.OWNERID) {
@@ -9,12 +9,16 @@ module.exports.run = async (bot, message, args) => {
         var newgame = newgametext;
         
         if (args[0] === "default") {
-            var newgametext = index.GAME
-            var newgame = v.DEFAULTGAME
-            
+            if (v.botloginmode === "test") { 
+                var newgametext = "testing beepBot..."
+                var newgame = v.DEFAULTGAME
+            } else {
+                var newgametext = v.DEFAULTGAME
+                var newgame = v.DEFAULTGAME
+            }
         }
 
-        bot.user.setGame(newgametext).catch(err => {
+        v.bot.user.setGame(newgametext).catch(err => {
             message.channel.send("Failed to set game.")
             console.log(err)
         })
@@ -32,7 +36,7 @@ module.exports.run = async (bot, message, args) => {
             debug: v.botconfig.debug
         }
 
-        fs.writeFile("./bin/config.json", JSON.stringify(v.botconfig, null, 4), err => {
+        fs.writeFile(v.configpath, JSON.stringify(v.botconfig, null, 4), err => {
             if(err) message.channel.send("Error: " + err); return;
         });
         console.log("New game written to config file.")

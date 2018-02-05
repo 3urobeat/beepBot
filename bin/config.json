@@ -1,10 +1,10 @@
 {
     "token": "",
     "testtoken": "",
-    "loginmode": "normal",
+    "loginmode": "test",
     "prefix": "*",
     "game": "*help | HerrEurobeat",
-    "version": "2.10.2",
+    "version": "2.10.3",
     "musicenable": "false",
     "debug": "false"
 }

@@ -32,6 +32,7 @@ module.exports.run = async (bot, message, args) => {
                 });
             } catch(err) {
                 message.channel.send("Error: " + err)
+                return;
             }
         }
 
