@@ -11,7 +11,9 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send("Please define what i should say!")
         return;
     }
-    message.delete();
+    message.delete().catch(err => {
+        message.channel.send("Error: " + err)
+    });
     message.channel.send(text);
 
 }

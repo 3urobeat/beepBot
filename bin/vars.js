@@ -1,4 +1,4 @@
-const index = require("../index.js")
+const index = require("./index.js")
 
 //Variables and definitions:
 const configpath = "./config.json";
@@ -6,9 +6,9 @@ const aliaspath = "./bin/help/aliases.txt"
 const helppath = "./bin/help/help.txt";
 const helppath2 = "./bin/help/help2.txt";
 const helppath3 = "./bin/help/help3.txt";
-const chatmutespath = "./bin/eventdata/chatmutes.json"
-const voicemutespath = "./bin/eventdata/voicemutes.json"
-const banspath = "./bin/eventdata/bans.json"
+const chatmutespath = "../eventdata/chatmutes.json"
+const voicemutespath = "../eventdata/voicemutes.json"
+const banspath = "../eventdata/bans.json"
 
 const Discord = require("discord.js");
 const os = require("os");
@@ -26,9 +26,9 @@ const servers = {};
 bot.commands = new Discord.Collection();
 bot.alias = new Discord.Collection();
 bot.alias2 = new Discord.Collection();
-bot.chatmutes = require("./eventdata/chatmutes.json")
-bot.voicemutes = require("./eventdata/voicemutes.json")
-bot.bans = require("./eventdata/bans.json")
+bot.chatmutes = require("../eventdata/chatmutes.json")
+bot.voicemutes = require("../eventdata/voicemutes.json")
+bot.bans = require("../eventdata/bans.json")
 
 var randomstring = arr => arr[Math.floor(Math.random() * arr.length)];
 

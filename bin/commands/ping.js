@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
-    const index = require("../../index.js")
+    const index = require("../index.js")
     
     const botping = v.round(v.bot.ping, 2)
     var cont = message.content.slice(index.PREFIX.length).split(" ");
