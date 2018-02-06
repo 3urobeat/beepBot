@@ -1,6 +1,6 @@
 {
 	"autoupdate": "false",
-	"shards": 1,
+    "shards": 1,
     "loginmode": "normal",
     "prefix": "*",
     "game": "*help | HerrEurobeat",

@@ -11,6 +11,7 @@ if (botconfig.autoupdate == "true") {
         exec('rm -rf /home/pi/Desktop/beepBot/bin')
         exec('svn checkout https://github.com/HerrEurobeat/beepBot/trunk/bin /home/pi/Desktop/beepBot/bin')
         bot.setTimeout(() => {
+            exec('rm -rf /home/pi/Desktop/beepBot/bin/.svn')
             Manager.spawn(botconfig.shards);
             console.log("Updater finished.")
         }, 5000)
