@@ -50,4 +50,5 @@ __Owner only:__
     ** *eval (code) ** - /
     ** *reload (module) ** - /
     ** *botrs ** - *botrestart
-    ** *botstop ** - 
+    ** *botstop ** - /
+    ** *update ** - *updater

@@ -15,7 +15,6 @@ if (botconfig.autoupdate == "true") {
             console.log("Updater finished.")
         }, 5000)
     } else {
-        console.log("Not linux.")
         Manager.spawn(botconfig.shards);
     }
 } else {
