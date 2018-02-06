@@ -15,3 +15,4 @@ __Owner only:__
     ** *reload (module) ** - Reloads the cache of an given module. Owner only.
     ** *botrs ** - Restarts the bot. Owner only.
     ** *botstop ** - Stops the bot when running on Linux. Owner only.
+    ** *update ** - Starts the updater from GitHub. Owner only.

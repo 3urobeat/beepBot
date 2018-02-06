@@ -1,5 +1,5 @@
 {
-	"autoupdate": "true",
+	"autoupdate": "false",
 	"shards": 1,
     "loginmode": "normal",
     "prefix": "*",
