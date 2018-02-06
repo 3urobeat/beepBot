@@ -21,10 +21,10 @@ function avatarinterval() {
 
 function botstartupmode() {
     if (v.botloginmode === "normal") {
-        var TOKEN = v.botconfig.token;
+        var TOKEN = v.tokenpath.token;
         v.bot.login(TOKEN)
     } else if (v.botloginmode === "test") {
-        var TOKEN = v.botconfig.testtoken;
+        var TOKEN = v.tokenpath.testtoken;
         v.bot.login(TOKEN)
     } else {
         console.log(v.LOGWARN + "Error logging in.")
@@ -98,7 +98,7 @@ v.bot.on("ready", async function() {
     }, 3600 * 6000); //1 hour in seconds to 6 hours in milliseconds.
 
     //Command reader
-    v.fs.readdir('./commands/', (err, files) => {
+    v.fs.readdir('./bin/commands/', (err, files) => {
         if (err) console.error(err);
         
         var jsfiles = files.filter(f => f.split('.').pop() === 'js');

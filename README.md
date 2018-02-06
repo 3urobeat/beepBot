@@ -14,5 +14,6 @@ Join my support server!
 https://discord.gg/q3KXW2P
 
 See the changelog in the changelog.txt file!
-Uncommented code is not working or test code.
+This repository does not have the bot config.json file.
+Uncommented code is not working or is test code.
 

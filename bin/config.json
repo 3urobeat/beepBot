@@ -1,6 +1,6 @@
 {
-    "token": "",
-    "testtoken": "",
+    "autoupdate": "true",
+    "shards": 1,
     "loginmode": "test",
     "prefix": "*",
     "game": "*help | HerrEurobeat",
