@@ -6,9 +6,9 @@ const aliaspath = "./bin/help/aliases.txt"
 const helppath = "./bin/help/help.txt";
 const helppath2 = "./bin/help/help2.txt";
 const helppath3 = "./bin/help/help3.txt";
-const chatmutespath = "../eventdata/chatmutes.json"
-const voicemutespath = "../eventdata/voicemutes.json"
-const banspath = "../eventdata/bans.json"
+const chatmutespath = "./eventdata/chatmutes.json"
+const voicemutespath = "./eventdata/voicemutes.json"
+const banspath = "./eventdata/bans.json"
 
 const Discord = require("discord.js");
 const os = require("os");
@@ -16,6 +16,7 @@ const YTDL = require("ytdl-core");
 const superagent = require("superagent");
 var exec = require('child_process').exec, child;
 var botconfig = require(configpath);
+var tokenpath = require("../../token.json")
 const fs = require("fs");
 const d = new Date();
 
@@ -80,6 +81,7 @@ module.exports={
     superagent,
     exec,
     botconfig,
+    tokenpath,
     fs,
     d,
     bot,

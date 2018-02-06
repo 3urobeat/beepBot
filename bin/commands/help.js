@@ -4,7 +4,7 @@ module.exports.run = async (bot, message, args) => {
 
     const help = v.fs.readFileSync(v.helppath, {"encoding": "utf-8"});
     const help2 = v.fs.readFileSync(v.helppath2, {"encoding": "utf-8"});
-    const help3 = v.fs.readFileSync(v.helppath2, {"encoding": "utf-8"});
+    const help3 = v.fs.readFileSync(v.helppath3, {"encoding": "utf-8"});
     message.author.send("\n" + help)
     message.author.send("\n" + help2)
     message.author.send("\n" + help3)

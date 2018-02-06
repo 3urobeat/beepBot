@@ -11,8 +11,8 @@ module.exports.run = async (bot, message, args) => {
         }
 
         v.botconfig = {
-            token: v.botconfig.token,
-            testtoken: v.botconfig.testtoken,
+            autoupdate: v.botconfig.autoupdate,
+            shards: v.botconfig.shards,
             loginmode: login,
             prefix: v.botconfig.prefix,
             game: v.botconfig.game,
