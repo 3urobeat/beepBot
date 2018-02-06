@@ -5,11 +5,12 @@ const bot = new Discord.Client();
 const botconfig = require("./bin/config.json")
 
 if (os.platform == "linux") {
-    async () => {
-        exec('rm -rf /home/pi/Desktop/beepBot/bin')
-        exec('svn checkout https://github.com/HerrEurobeat/beepBot/trunk/bin /home/pi/Desktop/beepBot/bin')
-        console.log("Linux updater started...")
-    } 
+    exec('rm -rf /home/pi/Desktop/beepBot/bin')
+    exec('svn checkout https://github.com/HerrEurobeat/beepBot/trunk/bin /home/pi/Desktop/beepBot/bin')
+    console.log("Linux updater started...")
+    bot.setTimeout(() => {
+        exec('pm2 restart bot')
+    }, 5000)
 } else {
     Manager.spawn(botconfig.shards);
 }
