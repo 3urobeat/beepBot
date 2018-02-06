@@ -1,7 +1,7 @@
 {
     "autoupdate": "true",
     "shards": 1,
-    "loginmode": "test",
+    "loginmode": "normal",
     "prefix": "*",
     "game": "*help | HerrEurobeat",
     "version": "2.10.3",
