@@ -319,8 +319,10 @@ v.bot.on("guildMemberRemove", function(member) {
 });
 
 v.bot.on("guildUnavailable", function(guild) {
-    // When a guild becomes unavailable, likely due to a server outage
-    guild.owner.send("Your server **" + guild.name + "** has become unavailable just in this moment. This can be caused by a server outage. For more information check the Discord Server Status: https://status.discordapp.com/")
+    // When a guild becomes unavailable, likely due to a server outage if the guild has less then 500 members.
+    if (member.guild.members.size < 500) {
+        guild.owner.send("Your server **" + guild.name + "** has become unavailable just in this moment. This can be caused by a server outage. For more information check the Discord Server Status: https://status.discordapp.com/")
+    }
 });
 
 v.bot.on("error", (e) => console.error(e));
@@ -338,11 +340,7 @@ v.bot.on("message", async function(message) {
         return;
     }
 
-    //Check if bot has permissions to send a message!
-/*     if (!message.channel.members.get(v.bot.user.id).permissions.has("SEND_MESSAGES", "ADMINISTRATOR")) {
-        console.log("No permission to send messages.")
-        return;
-    } */
+    //Add check if bot has permissions to send a message.
 
     var cont = message.content.slice(PREFIX.length).split(" ");
     var args = cont.slice(1);
