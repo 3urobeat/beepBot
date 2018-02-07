@@ -7,8 +7,8 @@ module.exports.run = async (bot, message, args) => {
         if (v.os.platform == "linux") {
             console.log("Manual updater started. Updating downloader.js...")
             message.channel.send("Manual updater started. Updating downloader.js...")
-            v.exec('svn export https://github.com/HerrEurobeat/beepBot/trunk/downloader.js /home/pi/Desktop/beepBot/downloader.js')
             v.exec('rm -rf /home/pi/Desktop/beepBot/downloader.js')
+            v.exec('svn export https://github.com/HerrEurobeat/beepBot/trunk/downloader.js /home/pi/Desktop/beepBot/downloader.js')
             v.bot.setTimeout(() => {
                 message.channel.send("Starting downloader.js...")
                 v.exec('node /home/pi/Desktop/beepBot/downloader.js')

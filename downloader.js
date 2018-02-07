@@ -9,7 +9,6 @@ if (os.platform == "linux") {
     exec('svn checkout https://github.com/HerrEurobeat/beepBot/trunk/bin /home/pi/Desktop/beepBot/bin')
     console.log("Linux updater started...")
     bot.setTimeout(() => {
-        exec('rm -rf /home/pi/Desktop/beepBot/bin/.svn')
         exec('pm2 restart bot')
     }, 5000)
 } else {
