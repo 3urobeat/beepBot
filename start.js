@@ -9,7 +9,9 @@ if (botconfig.autoupdate == "true") {
     if (os.platform == "linux") {
         console.log("Linux updater started...")
         exec('rm -rf /home/pi/Desktop/beepBot/bin')
+        exec('rm -rf /home/pi/Desktop/beepBot/downloader.js')
         exec('svn checkout https://github.com/HerrEurobeat/beepBot/trunk/bin /home/pi/Desktop/beepBot/bin')
+        exec('svn export https://github.com/HerrEurobeat/beepBot/trunk/downloader.js /home/pi/Desktop/beepBot/downloader.js')
         bot.setTimeout(() => {
             exec('rm -rf /home/pi/Desktop/beepBot/bin/.svn')
             Manager.spawn(botconfig.shards);
@@ -20,7 +22,7 @@ if (botconfig.autoupdate == "true") {
     }
 } else {
     console.log("Updater skipped.")
-    Manager.spawn(botconfig.shards);
+    Manager.spawn(botconfig.shards)
 }
 
 
