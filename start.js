@@ -24,5 +24,6 @@ if (botconfig.autoupdate == "true") {
     console.log("Updater skipped.")
     Manager.spawn(botconfig.shards)
 }
-
-
+if (botconfig.shards > 1) {
+    console.log("Starting with " + botconfig.shards + " shards!")
+}

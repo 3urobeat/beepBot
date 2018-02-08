@@ -1,11 +1,11 @@
 ﻿console.log(" ")
 const v = require("./vars.js")
-var bootstart = new Date();
+var bootstart = v.d()
 console.log("Loading...")
 
 //Functions:
 function avatarinterval() {
-    if (v.d.getMonth() == 11) {
+    if (v.d().getMonth() == 11) {
         v.bot.user.setUsername(v.BOTXMASNAME).catch(err => {
             console.log(v.LOGWARN + "Username fail. " + err + "\n ") })
         v.bot.user.setAvatar(v.botxmasavatar).catch(err => {
@@ -87,7 +87,7 @@ v.bot.on("ready", async function() {
     if (v.os.platform == "linux") console.log("I'm running on Linux...") 
     if (v.os.platform == "win32") console.log("I'm running on Windows...")
 
-    console.log("Time: " + v.d)
+    console.log("Time: " + v.d())
 
     //Checks if it is christmas and changes avatar & username at startup and then every 1 hour.
     avatarinterval();
@@ -117,7 +117,7 @@ v.bot.on("ready", async function() {
         if (v.botconfig.musicenable === "true" && v.os.platform == "win32") {
             console.log("*Music feature is enabled!*")
         }
-        var bootend = new Date() - bootstart
+        var bootend = v.d() - bootstart
         console.info("The Bot is ready after %dms!", bootend);
         console.log("*---------------------*")
         console.log(" ")
@@ -364,7 +364,7 @@ v.bot.on("message", async function(message) {
     } else {
         if(message.content.includes(PREFIX + "*")) return;            
         if(message.content.endsWith(PREFIX)) return;
-        //Disabled the message because of disturbing.
+        //Disabled the message because of disturbing the chat.
         if (message.channel.type === "dm") {
             message.channel.send(v.wrongcmd())
         }

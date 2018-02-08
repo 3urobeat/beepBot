@@ -1,6 +1,8 @@
+Version 1.0 - 2.0 missing changelog...
 Version 2.0: Complete rewrite of the bot structure.
 Version 2.1: Added a *dice command.
 
+Version 2.1 - 2.4 missing changelog...
 Version 2.4.9: Fixed the welcome message.
 Version 2.4.10: Fixed the *botrs command and added a quote for the wrongcmd message.
 Version 2.4.11: Fixed the *setstatus command because of a not working argument.
@@ -38,3 +40,4 @@ Version 2.10.2: Added a *github command to get link to my beepBot GitHub reposit
 Version 2.10.3: Added a *h alias to the *help command. Changed console error message when username or avatar settings fail. Changed storage folder for bans and mutes to make updates easier. Fixed an error that was caused if the bot does not have permission to create the muted role and then tried to find the role. Fixed a bug that caused the bot to set its "default" game to the current game and only set the new game on restart. Added *poll error catching. Added error catching to few events in my index.js file.
 Version 2.10.4: Token config is now outside of the beepBot folder to make github updating easier. Changed settings in config.json for a updater.js. Updater added and *update command added (owneronly).
 Version 2.10.5: Added downloader.js update ability and removed some comment code lines. Guilds owners with guilds with over 500 members will not recieve an guild unavailable message anymore if the guild is down due to server outage.
+Version 2.10.6: Fixed a bug that did not refresh the internal time, deleted the *time command, added a console logging feature if the bot is started with 2 or more shards and edited the *info command for an coming update. Fixed an bug that errored the bot when trying to fetch an invite link without permissions.

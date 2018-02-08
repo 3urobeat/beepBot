@@ -20,5 +20,5 @@ __Moderation:__
     ** *unmute (chat|voice|all) (mention) ** - Unmutes a user in voice channels. Only works with mute-members permission.
 
 __Info & User:__
-    ** *info [mention] ** - Some (useful) information about the bot, the user and the server.
+    ** *info ["bot|user|server"] [mention] ** - Some (useful) information about the bot, the user or/and the server. If you dont provide the infotype you will get the full info.
     ** *userid [mention] ** - Gets the user id from you or the mentioned user.
