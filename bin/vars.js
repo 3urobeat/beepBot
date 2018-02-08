@@ -18,7 +18,7 @@ var exec = require('child_process').exec, child;
 var botconfig = require(configpath);
 var tokenpath = require("../../token.json")
 const fs = require("fs");
-const d = new Date();
+const d = function d() { return new Date(); }
 
 const bot = new Discord.Client();
 const servers = {};

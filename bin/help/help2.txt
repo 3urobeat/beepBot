@@ -7,7 +7,6 @@ __Misc:__
     ** *poll [description] ** - Reacts with 👍 👎 🤷 to your message. A quick way to make a poll in the chat.
     ** *say (text) ** - Deletes your message and replies with the (text) from your message.
     ** *dice (number) ** - Returns with a random number between 1 and the given number.
-    ** *time ** - The current time of the bot.
-    ** *color [color code ]** - Gives you an random hex color code or your color with example. Given color code must not contain #'s. Example: *color 6861159
+    ** *color [color code]** - Gives you an random hex color code or your color with example. Given color code must not contain #'s. Example: *color 6861159
     ** *serverlist ** - Responds with names of all servers the bot is connected to.
     ** *github ** - Get a link to my GitHub repository.
