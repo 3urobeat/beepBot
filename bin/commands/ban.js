@@ -41,7 +41,7 @@ module.exports.run = async (bot, message, args) => {
 
         } else {
             let rawbanduration = args[1]
-            let bandurationtype = args[2]
+            let bandurationtype = args[2].toLowerCase()
 
             if (args[3] === undefined) {
                 var banreasontext = "/"

@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args) => {
     
     if (message.member.permissions.has("MUTE_MEMBERS", "ADMINISTRATOR")) {
 
-        let unmutetype = args[0]
+        let unmutetype = args[0].toLowerCase()
 
         if (unmutetype === "chat") {
             if (!unmuteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {

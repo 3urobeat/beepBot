@@ -7,7 +7,7 @@ module.exports.run = async (bot, message, args) => {
         return;
     }
 
-    const infotype = args[0]
+    const infotype = args[0].toLowerCase()
 
     if (message.mentions.members.first() === undefined) {
         var usermentioninfo = message.author
