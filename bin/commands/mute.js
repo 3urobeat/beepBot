@@ -37,10 +37,10 @@ module.exports.run = async (bot, message, args) => {
         }
 
         //vars:
-        let mutetype = args[0]
+        let mutetype = args[0].toLowerCase()
         let muteauthor = message.author
         let rawmuteduration = args[2]
-        let mutedurationtype = args[3]
+        let mutedurationtype = args[3].toLowerCase()
 
         if (rawmuteduration === undefined) {
 

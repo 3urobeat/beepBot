@@ -6,13 +6,13 @@ module.exports.run = async (bot, message, args, Discord) => {
 
     async function rpsgame() {
         collector.on('collect', message => {
-            if (message.content == "rock") {
+            if (message.content.toLowerCase() == "rock") {
                 message.channel.send(rpsrandom(['rock','paper','scissors']));
                 //rpsgameagain();
-            } else if (message.content == "paper") {
+            } else if (message.content.toLowerCase() == "paper") {
                 message.channel.send(rpsrandom(['rock','paper','scissors']));
                 //rpsgameagain();
-            } else if (message.content == "scissors") {
+            } else if (message.content.toLowerCase() == "scissors") {
                 message.channel.send(rpsrandom(['rock','paper','scissors']));
                 //rpsgameagain();
             }              
@@ -22,10 +22,10 @@ module.exports.run = async (bot, message, args, Discord) => {
 /*         function rpsgameagain() {
         message.channel.send("Play again `y/n`?")
         collector.on('collect', message => {
-            if (message.content == "y") {
+            if (message.content.toLowerCase() == "y") {
                 message.channel.send("Okay! Replie with `rock|paper|scissors`.")
                 return;
-            } else if (message.content == "n") {
+            } else if (message.content.toLowerCase() == "n") {
                 message.channel.send("Okay, we can play again anytime you want!")
                 return;
             }

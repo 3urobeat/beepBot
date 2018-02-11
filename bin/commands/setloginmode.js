@@ -3,7 +3,7 @@ module.exports.run = async (bot, message, args) => {
     const fs = v.fs
 
     if (message.author.id === v.OWNERID) {
-        var login = args[0]
+        var login = args[0].toLowerCase()
 
         if (login === v.botconfig.loginmode) {
             message.channel.send("The bot is already in " + v.botconfig.loginmode + " mode.")

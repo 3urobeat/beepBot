@@ -3,7 +3,7 @@ module.exports.run = async (bot, message, args) => {
     const fs = v.fs
 
     if (message.author.id === v.OWNERID) {
-        var debugmode = args[0]
+        var debugmode = args[0].toLowerCase()
 
         if (debugmode === v.botconfig.debug) {
             message.channel.send("The bot'S debug mode is already set to " + v.botconfig.debug + ".")

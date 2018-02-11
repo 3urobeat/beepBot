@@ -132,7 +132,7 @@ v.bot.on("ready", async function() {
                 let chatrawmuteduration = v.bot.chatmutes[i].rawmuteduration;
                 let chatmutedurationtype = v.bot.chatmutes[i].mutedurationtype;
 
-                let chatguild = v.bot.guilds.get(chatguildId);
+                let chatguild = v.bot.guilds.get(chatguildId)
                 let chatunmuteMember = chatguild.members.get(i);
                 let chatmutedRole = chatguild.roles.find(r => r.name === "beepBot Muted");
                 let chatchannel = chatguild.channels.find("id", chatmutechannelId)
@@ -140,7 +140,7 @@ v.bot.on("ready", async function() {
                 if (!chatmutedRole) continue;
 
                 if (Date.now() > chattime) {
-                    if (chatunmuteMember === undefined) {
+                    if ((Date.now() - chattime) > 10000 && chatunmuteMember === undefined) {
                         delete v.bot.chatmutes[i];
                         v.fs.writeFile(v.chatmutespath, JSON.stringify(v.bot.chatmutes), err => {
                             if (err) console.log("Error: " + err)
