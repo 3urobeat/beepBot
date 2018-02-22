@@ -6,8 +6,11 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send(v.dmerror())
         return;
     }
-
-    const infotype = args[0].toLowerCase()
+    if (args[0] === undefined) {
+        var infotype = undefined
+    } else {
+        var infotype = args[0].toLowerCase()
+    }
 
     if (message.mentions.members.first() === undefined) {
         var usermentioninfo = message.author
