@@ -1,12 +1,19 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
-    const fs = v.fs
 
-/*     const servers = v.fs.readFileSync("./../servers.txt", {"encoding": "utf-8"}); */
+    v.fs.writeFile("./bin/serverlist.txt", "", err => {
+        if (err) message.channel.send("Error: " + err)
+    })
     for (guilds of v.bot.guilds){
-        message.channel.send(guilds[1].name);
-      }
- 
+        v.fs.appendFile("./bin/serverlist.txt", "  " + guilds[1].name + "\n", err => {
+            if (err) message.channel.send("Error: " + err)
+        });
+    }
+    message.channel.startTyping()  
+    v.bot.setTimeout(() => {
+        message.channel.send("**Serverlist: `(" + v.bot.guilds.size + ")`**\n" + v.fs.readFileSync("./bin/serverlist.txt", {"encoding": "utf-8"}))
+        message.channel.stopTyping()
+    }, 1000)
 
 }
 
