@@ -4,7 +4,7 @@
     "loginmode": "normal",
     "prefix": "*",
     "game": "*help | HerrEurobeat",
-    "version": "2.10.8",
+    "version": "2.10.9",
     "musicenable": "false",
     "debug": "false"
 }

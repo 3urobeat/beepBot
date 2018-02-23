@@ -97,6 +97,11 @@ v.bot.on("ready", async function() {
         console.log(v.LOGINFO + "6 hours passed, updated name and avatar.")
     }, 3600 * 6000); //1 hour in seconds to 6 hours in milliseconds.
 
+    //Clear serverlist storage
+    v.fs.writeFile("./bin/serverlist.txt", "", err => {
+        if (err) message.channel.send("Error: " + err)
+    })
+
     //Command reader
     v.fs.readdir('./bin/commands/', (err, files) => {
         if (err) console.error(err);
