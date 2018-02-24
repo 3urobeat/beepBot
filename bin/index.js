@@ -306,7 +306,7 @@ v.bot.on("guildMemberRemove", function(member) {
         maxAge: false
     }
     if (member.guild.systemChannelID == null) {
-
+        member.send("Sadly you left **" + member.guild.name + "**.")
     } else {
         if (member.guild.members.size > 250) {
             member.guild.channels.find("id", member.guild.systemChannel.id).send(member.user.username + " left **" + member.guild.name + "**! :(").catch(err => {
@@ -317,7 +317,7 @@ v.bot.on("guildMemberRemove", function(member) {
             member.guild.channels.find("id", member.guild.systemChannel.id).createInvite(options).then(function(newInvite) {
                 member.send("Sadly you left **" + member.guild.name + "**. To join again use this link: https://discord.gg/" + newInvite.code)
             }).catch(err => {
-
+                member.send("Sadly you left **" + member.guild.name + "**. An error happened sending you an invite link.")
             })
         }
     }
