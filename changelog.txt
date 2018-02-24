@@ -44,4 +44,3 @@ Version 2.10.6: Fixed a bug that did not refresh the internal time, deleted the 
 Version 2.10.7: Added a permission check for the *invite command. Made *info, *loginmode, *debugmode, *rps-game argument, un-/mute/ban arguments toLowerCase().
 Version 2.10.8: Fixed a *info bug. Fixed the 'Crash when user leaves a server with only with one channel' bug, the bot will now send the systemChannel invite link which is only triggered if a systemChannel exists.
 Version 2.10.9: Edited *serverlist command. All servernames will now be send in just one message. Reload command for 'serverlist' will clear serverlist.txt.
-Version 2.10.10: Bot will not send any dm on guildMemberRemove if there is no systemChannel set in this server. Also if the bot has no permission to create an invite link on guildMemberRemove for a guild with less than 250 members no dm will be send anymore.
