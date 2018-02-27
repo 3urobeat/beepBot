@@ -42,7 +42,7 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send({embed:{
             author: {
                 name: usermentioninfo.username,
-                icon_url: usermentioninfo.avatarURL,
+                icon_url: usermentioninfo.displayAvatarURL,
                 url: v.botinvitelink
             },
             fields: [{
@@ -59,7 +59,7 @@ module.exports.run = async (bot, message, args) => {
               }
             ],
             footer: {
-                icon_url: message.author.avatarURL,
+                icon_url: message.author.displayAvatarURL,
                 text: "Requestet by " + message.author.username
             },
             color: 0x32CD32
@@ -70,7 +70,7 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send({embed:{
             author: {
                 name: usermentioninfo.username,
-                icon_url: usermentioninfo.avatarURL,
+                icon_url: usermentioninfo.displayAvatarURL,
                 url: v.botinvitelink
             },
             fields: [{
@@ -79,7 +79,7 @@ module.exports.run = async (bot, message, args) => {
               }
             ],
             footer: {
-                icon_url: message.author.avatarURL,
+                icon_url: message.author.displayAvatarURL,
                 text: "Requestet by " + message.author.username
             },
             color: 0x6c15d6
@@ -90,7 +90,7 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send({embed:{
             author: {
                 name: usermentioninfo.username,
-                icon_url: usermentioninfo.avatarURL,
+                icon_url: usermentioninfo.displayAvatarURL,
                 url: v.botinvitelink
             },
             fields: [{
@@ -99,7 +99,7 @@ module.exports.run = async (bot, message, args) => {
               }
             ],
             footer: {
-                icon_url: message.author.avatarURL,
+                icon_url: message.author.displayAvatarURL,
                 text: "Requestet by " + message.author.username
             },
             color: 0x32CD32
@@ -119,7 +119,7 @@ module.exports.run = async (bot, message, args) => {
               }
             ],
             footer: {
-                icon_url: message.author.avatarURL,
+                icon_url: message.author.displayAvatarURL,
                 text: "Requestet by " + message.author.username
             },
             color: 0x0b7bd6

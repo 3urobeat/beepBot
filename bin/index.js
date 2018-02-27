@@ -32,6 +32,17 @@ function botstartupmode() {
     }
 }
 
+function updateserverlist() {
+    v.fs.writeFile("./bin/serverlist.txt", "", err => {
+        if (err) console.log("Error clearing serverlist.txt! Error: " + err)
+    })
+    for (guilds of v.bot.guilds){
+        v.fs.appendFile("./bin/serverlist.txt", "  " + guilds[1].name + "\n", err => {
+            if (err) console.log("Error writing serverlist.txt! Error: " + err)
+        });
+    }
+}
+
 async function voiceunmute(voiceunmuteMember) {
     voiceunmuteMember.setMute(false).then(member => {
         }).catch(err => {
@@ -236,6 +247,12 @@ v.bot.on("ready", async function() {
                 }
             }
         }, 5000)
+
+        //serverlist.txt refresh once on startup than every hour:
+        updateserverlist();
+        v.bot.setTimeout(() => {
+            updateserverlist()
+        }, 3600 * 1000); //1 hour in milliseconds
 
         module.exports ={ 
             bootend,

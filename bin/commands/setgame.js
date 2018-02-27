@@ -36,7 +36,7 @@ module.exports.run = async (bot, message, args) => {
             debug: v.botconfig.debug
         }
 
-        fs.writeFile(v.configpath, JSON.stringify(v.botconfig, null, 4), err => {
+        fs.writeFile("./bin/config.json", JSON.stringify(v.botconfig, null, 4), err => {
             if(err) message.channel.send("Error: " + err); return;
         });
         console.log("New game written to config file.")

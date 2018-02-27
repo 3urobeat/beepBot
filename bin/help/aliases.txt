@@ -13,8 +13,9 @@ __Moderation:__
     ** *kick (mention) [reason] ** - /
     ** *ban (mention) [reason]/[duration + "minutes|hours|days"] [reason] ** - /
     ** *clear (amount) ** - *delete (amount)
-    ** *mute (mention) [duration + "minutes|hours"] ** - /
-    ** *unmute (mention) ** - /
+    ** *mute (chat|voice|all) (mention) [duration + "minutes|hours"] ** - /
+    ** *unmute (chat|voice|all) (mention) ** - /
+    ** *report (mention) (reason) ** - /
 
 __Info & User:__
     ** *info [mention] ** - *userinfo [mention], *me [mention]
@@ -28,8 +29,6 @@ __Misc:__
     ** *poll [description] ** - *vote [description], *survey [description]
     ** *say (text) ** - /
     ** *dice (number) ** - /
-    ** *time ** - *date, *bottime
-    ** *timer (duration + "minutes|hours") ** - *clock (duration + "minutes|hours")
     ** *color ** - *randomcolor
     ** *serverlist ** - *servers
     ** *github ** - /

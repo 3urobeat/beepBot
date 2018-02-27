@@ -19,7 +19,10 @@ module.exports.run = async (bot, message, args) => {
             message.channel.send(clean(evaled), {code:"xl"});
         } catch (err) {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+            message.react("❌")
+            return;
         }
+        message.react("✅")
     } else {
         message.channel.send(v.owneronlyerror())
         return;

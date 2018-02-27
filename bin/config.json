@@ -1,10 +1,10 @@
 {
-	"autoupdate": "false",
+    "autoupdate": "false",
     "shards": 1,
     "loginmode": "normal",
     "prefix": "*",
     "game": "*help | HerrEurobeat",
-    "version": "2.10.10",
+    "version": "2.11",
     "musicenable": "false",
     "debug": "false"
 }
