@@ -9,9 +9,6 @@ module.exports.run = async (bot, message, args) => {
         if (message.channel.type == "dm") {
             message.channel.send("Can't get a avatar from someone else in a dm! :no_good:")
             return; }
-        if (avatarmention.avatarURL === null) {
-            message.channel.send(message.author + " The user " + avatarmention + " has no custom avatar.")
-            return; }
         avatar();
     }
 
@@ -19,15 +16,15 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send({embed:{
             author:{
                 name: avatarmention.username,
-                icon_url: avatarmention.avatarURL,
-                url: message.member.user.avatarURL
+                icon_url: avatarmention.displayAvatarURL,
+                url: message.member.user.displayAvatarURL
             },
-            description: avatarmention.avatarURL,
+            description: avatarmention.displayAvatarURL,
             image: {
-                url: avatarmention.avatarURL
+                url: avatarmention.displayAvatarURL
             },
             footer:{
-                icon_url: message.author.avatarURL,
+                icon_url: message.author.displayAvatarURL,
                 text: "Requestet by " + message.author.username
             },
             color: v.randomhex()

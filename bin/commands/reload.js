@@ -12,7 +12,14 @@ module.exports.run = async (bot, message, args) => {
                 v.fs.writeFile("./bin/serverlist.txt", "", err => {
                     if (err) message.channel.send("Error: " + err)
                 })
-                message.channel.send("serverlist.txt has been cleared.")
+                for (guilds of v.bot.guilds){
+                    v.fs.appendFile("./bin/serverlist.txt", "  " + guilds[1].name + "\n", err => {
+                        if (err) message.channel.send("Error: " + err)
+                    });
+                }
+                v.bot.setTimeout(() => {
+                    message.channel.send("serverlist.txt has been cleared and refreshed.")
+                }, 1000) 
             }
             message.reply(`The command ${args[0]} has been reloaded.`);
         } catch (err) {
