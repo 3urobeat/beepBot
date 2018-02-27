@@ -24,29 +24,40 @@ module.exports.run = async (bot, message, args) => {
                 case "colors":
                     message.channel.send("Supported 'word' colors: black, gray, red, green, blue, yellow, purple, gold, cyan, white, pink.\nDisplay your color with *color (hex code).\nGet a random color by just typing *color")
                     return;
+                    break;
                 case "black":
                     var wantedcolor = 0x000000
+                    break;
                 case "gray":
                     var wantedcolor = 0x808080
+                    break;
                 case "red":
                     var wantedcolor = 0xFF0000
+                    break;
                 case "green":
                     var wantedcolor = 0x00FF00
+                    break;
                 case "blue":
                     var wantedcolor = 0x0000FF
+                    break;
                 case "yellow":
                     var wantedcolor = 0xFFFF00
+                    break;
                 case "purple":
                     var wantedcolor = 0x800080
+                    break;
                 case "gold":
                     var wantedcolor = 0xFFD700
+                    break;
                 case "cyan":
                     var wantedcolor = 0x00FFFF
+                    break;
                 case "white":
                     var wantedcolor = 0xFFFFFF
+                    break;
                 case "pink":
                     var wantedcolor = 0xFFC0CB
-
+                    break;
             }
             
             message.channel.send({embed:{
