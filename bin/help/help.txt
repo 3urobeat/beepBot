@@ -7,9 +7,7 @@ Prefix **--->** * **<---** Just wonderful. Get __alias__ commands with** *alias*
 __Help & Test:__
     ** *help ** - Brings up some help. You are reading it just in this moment. Wow.
     ** *alias ** - Brings up a message for all alias commands. 
-    ** *invite ** - Replies with the bot invite-link and server invite-link.
     ** *ping ** - Replies the ping of the bot at the moment.
-    ** *os ** - Detects the OS the bot is currently running on. Replies with "Windows" or "Linux".
     ** *privilegeerror ** - Explains the "Privilege is too low." error and how you can fix it.
 
 __Moderation:__
@@ -21,5 +19,6 @@ __Moderation:__
     ** *report (mention) (reason) ** - Reports the mentioned user with the given reason to the server owner.
 
 __Info & User:__
+    ** *invite ** - Replies with the bot invite-link and server invite-link.
     ** *info ["bot|user|server"] [mention] ** - Some (useful) information about the bot, the user or/and the server. If you dont provide the infotype you will get the full info.
     ** *userid [mention] ** - Gets the user id from you or the mentioned user.

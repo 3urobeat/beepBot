@@ -22,7 +22,7 @@ module.exports.run = async (bot, message, args) => {
             var wantedcolor = args[0]
             switch(args[0].toLowerCase()) {
                 case "colors":
-                    message.channel.send("Supported 'word' colors: black, gray, red, green, blue, yellow, purple, gold, cyan, white, pink.\nDisplay your color with *color (hex code).\nGet a random color by just typing *color")
+                    message.channel.send("Supported 'word' colors: black, gray, red, green, blue, yellow, purple, gold, cyan, white, pink, orange.\nDisplay your color with *color (hex code).\nGet a random color by just typing *color")
                     return;
                     break;
                 case "black":
@@ -57,6 +57,9 @@ module.exports.run = async (bot, message, args) => {
                     break;
                 case "pink":
                     var wantedcolor = 0xFFC0CB
+                    break;
+                case "orange":
+                    var wantedcolor = 0xFFA500
                     break;
             }
             
