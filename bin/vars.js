@@ -39,13 +39,14 @@ const botdefaultavatar = "https://i.imgur.com/64BkKW4.png";
 const botxmasavatar = "https://i.imgur.com/GgHBtkG.png";
 const testbotdefaultavatar = "https://i.imgur.com/gmP9eFn.png"
 const githublink = "https://github.com/HerrEurobeat/beepBot"
+const streamlink = "https://www.twitch.tv/discordapp"
 
 var botloginmode = botconfig.loginmode;
 
 const DEFAULTGAME = "*help | HerrEurobeat";
 var BOTXMASNAME = "beepBot🎅🎄";
 var BOTVERSION = botconfig.version;
-var STATUS = "dnd";
+var STATUS = botconfig.status;
 const BOTOWNER = "HerrEurobeat#0975";
 const OWNERID = "231827708198256642";
 const BOTID = "265162449441783808";
@@ -101,6 +102,7 @@ module.exports={
     botxmasavatar,
     testbotdefaultavatar,
     githublink,
+    streamlink,
     botloginmode,
     randomstring,
     owneronlyerror,
