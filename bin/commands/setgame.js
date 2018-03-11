@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
             }
         }
 
-        v.bot.user.setGame(newgametext).catch(err => {
+        v.bot.user.setActivity(newgametext, {type: v.botconfig.gametype}).catch(err => {
             message.channel.send("Failed to set game.")
             console.log(err)
         })
