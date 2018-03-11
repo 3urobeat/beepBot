@@ -36,6 +36,7 @@ __Fun:__
     ** *wikihow ** - /
     ** *cat ** - *meow
     ** *rps-game ** - /
+    ** *achievement (description) ** - / 
 
 __Owner only:__
     ** *setname (name)/("default|x-mas") ** - /

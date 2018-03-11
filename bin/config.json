@@ -6,7 +6,7 @@
     "game": "*help | HerrEurobeat",
     "gametype": "PLAYING",
     "status": "dnd",
-    "version": "2.11.3",
+    "version": "2.11.4",
     "musicenable": "false",
     "debug": "false"
 }
