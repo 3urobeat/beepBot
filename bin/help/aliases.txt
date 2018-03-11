@@ -4,9 +4,7 @@ Get a list of all commands with** *help**!
 
 __Help & Test:__
     ** *help ** - *commands
-    ** *invite ** - /
     ** *ping ** - *pong
-    ** *os ** - /
     ** *privilegeerror ** - /
 
 __Moderation:__
@@ -18,6 +16,7 @@ __Moderation:__
     ** *report (mention) (reason) ** - /
 
 __Info & User:__
+    ** *invite ** - /
     ** *info [mention] ** - *userinfo [mention], *me [mention]
     ** *id [mention] ** - *userid [mention]
     ** *avatar [mention] ** - *useravatar [mention]
@@ -41,6 +40,7 @@ __Fun:__
 __Owner only:__
     ** *setname (name)/("default|x-mas") ** - /
     ** *setgame [game]/["default"] ** - /
+    ** *gametype ("playing|streaming|listening|watching") ** -/
     ** *setstatus ("online|idle|dnd") ** - /
     ** *setavatar (url)/("default|x-mas|testbot") ** - /
     ** *setversion (number) ** - /

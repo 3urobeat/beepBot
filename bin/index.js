@@ -20,15 +20,19 @@ function avatarinterval() {
 }
 
 function botstartupmode() {
-    if (v.botloginmode === "normal") {
-        var TOKEN = v.tokenpath.token;
-        v.bot.login(TOKEN)
-    } else if (v.botloginmode === "test") {
-        var TOKEN = v.tokenpath.testtoken;
-        v.bot.login(TOKEN)
-    } else {
-        console.log(v.LOGWARN + "Error logging in.")
-        return;
+    try {
+        if (v.botloginmode === "normal") {
+            var TOKEN = v.tokenpath.token;
+            v.bot.login(TOKEN)
+        } else if (v.botloginmode === "test") {
+            var TOKEN = v.tokenpath.testtoken;
+            v.bot.login(TOKEN)
+        } else {
+            console.log(v.LOGWARN + "Error logging in.")
+            return;
+        }
+    } catch(err) {
+        console.log(v.LOGWARN + "Error logging in: " + err)
     }
 }
 
@@ -91,10 +95,9 @@ v.bot.on("ready", async function() {
     console.log("*---------------------*")
     if (v.botloginmode === "normal") { console.log("Started " + BOTNAME + " " + v.BOTVERSION + " by " + v.BOTOWNER + " in " + v.botloginmode + " mode.") } 
     if (v.botloginmode === "test") { console.log("Started " + BOTNAME + " " + v.BOTVERSION + " by " + v.BOTOWNER + " in *" + v.botloginmode + "ing mode.*") }
-    v.bot.user.setGame(GAME);
-    v.bot.user.setStatus(v.STATUS).catch(err => {
-        console.log("Status fail. " + err)
-    })
+    v.bot.user.setPresence({game: { name: GAME, type: v.botconfig.gametype, url: v.streamlink}, status: v.STATUS }).catch(err => {
+        console.log("Game/Status error: " + err)
+    }) 
     if (v.os.platform == "linux") console.log("I'm running on Linux...") 
     if (v.os.platform == "win32") console.log("I'm running on Windows...")
 
@@ -128,7 +131,7 @@ v.bot.on("ready", async function() {
             v.bot.alias2.set(cmds.config.alias2, cmds)
         })
         
-        console.log("Playing status was set to: " + GAME)
+        console.log("Set presence to: " + v.botconfig.status + " - " + v.botconfig.gametype.toLowerCase() + " " + GAME)
 
         if (v.botconfig.musicenable === "true" && v.os.platform == "win32") {
             console.log("*Music feature is enabled!*")
