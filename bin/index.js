@@ -361,9 +361,7 @@ v.bot.on("message", async function(message) {
     if (message.author.bot) return;
 
     //Add mention prefix.
-    if (!message.content.startsWith(PREFIX)) {
-        return;
-    }
+    if (!message.content.startsWith(PREFIX)) return;
 
     //Add check if bot has permissions to send a message.
 
