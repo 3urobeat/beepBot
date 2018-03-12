@@ -3,7 +3,7 @@ module.exports.run = async (bot, message, args) => {
     
     if (message.author.id === v.OWNERID) {
         if (v.os.platform == "win32") {
-            message.channel.send("You had to use the supervisor plugin so i cant do that.")
+            message.channel.send("You had to use the nodemon plugin so i cant do that.")
             return;
         }
         if (v.os.platform == "linux") {

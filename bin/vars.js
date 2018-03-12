@@ -38,7 +38,7 @@ const testbotinvitelink = "https://discordapp.com/oauth2/authorize?client_id=264
 const botdefaultavatar = "https://i.imgur.com/64BkKW4.png";
 const botxmasavatar = "https://i.imgur.com/GgHBtkG.png";
 const testbotdefaultavatar = "https://i.imgur.com/gmP9eFn.png"
-const githublink = "https://github.com/HerrEurobeat/beepBot"
+const githublink = "https://github.com/HerrEurobeat"
 const streamlink = "https://www.twitch.tv/discordapp"
 
 var botloginmode = botconfig.loginmode;

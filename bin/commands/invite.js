@@ -2,7 +2,6 @@ module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
     const index = require("../index.js")
 
-        
     var options = {
         maxAge: false
     }

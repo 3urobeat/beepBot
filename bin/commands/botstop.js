@@ -3,7 +3,7 @@ module.exports.run = async (bot, message, args) => {
     const collector = new v.Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 10000});
 
     if (message.author.id === v.OWNERID) {
-        if (v.os.platform() === "win32") {
+        if (v.os.platform === "win32") {
             message.channel.send("When i'm running on Windows i can't stop your programm because you had to use some sort of plugin and not the good old pm2. Your fault. :expressionless: ")
             return;
         }
