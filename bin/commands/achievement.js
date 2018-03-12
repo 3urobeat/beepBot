@@ -20,7 +20,9 @@ module.exports.run = async (bot, message, args) => {
     if(title.length > 22 || contents.length > 22) return message.channel.send("Max Length: 22 Characters. Soz.")
     const url = `https://www.minecraftskinstealer.com/achievement/a.php?i=${rnd}&h=${encodeURIComponent(title)}&t=${encodeURIComponent(contents)}`;
     snekfetch.get(url)
-     .then(r=>message.channel.send("", {files:[{attachment: r.body}]}));
+     .then(r=>message.channel.send("", {files:[{attachment: r.body}]})).catch(err => {
+         return;
+     })
 
     }
 
