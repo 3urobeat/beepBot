@@ -7,7 +7,7 @@ module.exports.run = async (bot, message, args) => {
     } else {
         var avatarmention = message.mentions.users.first()
         if (message.channel.type == "dm") {
-            message.channel.send("Can't get a avatar from someone else in a dm! :no_good:")
+            message.channel.send(v.dmerror())
             return; }
         avatar();
     }
@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args) => {
             author:{
                 name: avatarmention.username,
                 icon_url: avatarmention.displayAvatarURL,
-                url: message.member.user.displayAvatarURL
+                url: avatarmention.displayAvatarURL
             },
             description: avatarmention.displayAvatarURL,
             image: {

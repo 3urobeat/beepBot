@@ -1,5 +1,6 @@
 ﻿__Fun:__
     ** *wikihow ** - Posts a link to a random wikihow article.
+    ** *cat ** - Posts a random cat picture.
     ** *rps-game ** - Just a __very__ basic rock, paper, scissors game.
     ** *achievement (description) ** - Sends a minecraft achievement with your description.
 
@@ -8,7 +9,7 @@ __Owner only:__
     ** *setgame [game]/["default"] ** - Sets the playing status to the given argument or to default. Owner only.
     ** *gametype ("playing|streaming|listening|watching") ** - Sets the gametype. Owner only.
     ** *setstatus ("online|idle|dnd") ** - Sets the bot status to the given argument. Owner only.
-    ** *setavatar (url)/("default|x-mas|testbot") ** - Sets the avatar to the given url or to default/x-mas/testbot default. Owner only.
+    ** *setavatar (url)/("default|x-mas|testbot") ** - Sets the avatar to the given url or to default/x-mas/testbot. Owner only.
     ** *setversion (number) ** - Sets a new version number. Owner only.
     ** *loginmode ("normal|test") ** - Changes the loginmode. Owner only.
     ** *debugmode ("true|false") ** - Enable or Disable the debug mode. Owner only.

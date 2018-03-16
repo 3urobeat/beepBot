@@ -1,7 +1,5 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
-    const index = require("../index.js")
-    const fs = v.fs;
     
     if (message.author.id === v.OWNERID) {
         if (v.os.platform == "linux") {
