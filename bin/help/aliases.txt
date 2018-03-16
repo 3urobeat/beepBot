@@ -27,7 +27,7 @@ __Info & User:__
 __Misc:__
     ** *poll [description] ** - *vote [description], *survey [description]
     ** *say (text) ** - /
-    ** *dice (number) ** - /
+    ** *dice (number) ** - *roll (number)
     ** *color ** - *randomcolor
     ** *serverlist ** - *servers
     ** *github ** - /
