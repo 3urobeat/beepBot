@@ -23,7 +23,7 @@ module.exports.run = async (bot, message, args) => {
     if (message.member.permissions.has("BAN_MEMBERS", "ADMINISTRATOR")) {
         let banauthor = message.author
         //ban code
-        if (args[1] === undefined) {
+        if (isNaN(args[1]) === true) {
             if (args[1] === undefined) {
                 var banreasontext = "/"
                 var banreason = ""
