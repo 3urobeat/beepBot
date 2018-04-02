@@ -3,7 +3,9 @@ module.exports.run = async (bot, message, args) => {
 
     message.channel.startTyping()  
     v.bot.setTimeout(() => {
-        message.channel.send("**Serverlist: `(" + v.bot.guilds.size + ")`**\n" + v.fs.readFileSync("./bin/serverlist.txt", {"encoding": "utf-8"}))
+        message.channel.send("**Serverlist: `(" + v.bot.guilds.size + ")`**\n" + v.fs.readFileSync("./bin/serverlist.txt", {"encoding": "utf-8"})).catch(err => {
+            message.channel.send("Error: " + err)
+        })
         message.channel.stopTyping()
     }, 500)
 

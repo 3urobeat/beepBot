@@ -13,6 +13,7 @@ __Moderation:__
     ** *clear (amount) ** - *delete (amount)
     ** *mute (chat|voice|all) (mention) [duration + "minutes|hours"] ** - /
     ** *unmute (chat|voice|all) (mention) ** - /
+    ** *move (mention) (channel name) ** - /
     ** *report (mention) (reason) ** - /
 
 __Info & User:__
@@ -26,6 +27,7 @@ __Info & User:__
 
 __Misc:__
     ** *poll [description] ** - *vote [description], *survey [description]
+    ** *weather (city) ** - /
     ** *say (text) ** - /
     ** *dice (number) ** - *roll (number)
     ** *color ** - *randomcolor
@@ -35,6 +37,9 @@ __Misc:__
 __Fun:__
     ** *wikihow ** - /
     ** *cat ** - *meow
+    ** *dog ** - *woof, *bark
+    ** *birb ** - *bird, *yos
+    ** *bunny ** - *rabbit
     ** *rps-game ** - /
     ** *achievement (description) ** - / 
 

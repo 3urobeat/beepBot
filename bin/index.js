@@ -295,16 +295,12 @@ v.bot.on("guildDelete", guild => {
 
 v.bot.on("guildMemberAdd", async function(member) {
     // When a user joins the server message
+    if (v.botloginmode === "test" && member.guild.id === "231828052127121408") return;
     if (member.guild.systemChannelID == null) {
         return;
     } else {
-        if (member.guild.members.size > 250) {
-            member.guild.channels.find("id", member.guild.systemChannel.id).send(member.user.username + ": Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
-            })
-        } else {
-            member.guild.channels.find("id", member.guild.systemChannel.id).send(member.toString() + " Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
-            })
-        }  
+        member.guild.channels.find("id", member.guild.systemChannel.id).send(member.user.username + ": Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
+        })
     }
 
     if (!member.guild.id === 231828052127121408) {
@@ -322,22 +318,19 @@ v.bot.on("guildMemberAdd", async function(member) {
 
 v.bot.on("guildMemberRemove", function(member) {
     // When a user leaves the server direct message
+    if (v.botloginmode === "test" && member.guild.id === "231828052127121408") return;
     var options = {
         maxAge: false
     }
     if (member.guild.systemChannelID == null) {
 
     } else {
-        if (member.guild.members.size > 250) {
-            member.guild.channels.find("id", member.guild.systemChannel.id).send(member.user.username + " left **" + member.guild.name + "**! :(").catch(err => {
-            })
-        } else {
-            member.guild.channels.find("id", member.guild.systemChannel.id).send(member.toString() + " left **" + member.guild.name + "**! :(").catch(err => {
-            })
+        member.guild.channels.find("id", member.guild.systemChannel.id).send(member.user.username + " left **" + member.guild.name + "**! :(").catch(err => {
+        })
+        if (member.guild.size < 250) {
             member.guild.channels.find("id", member.guild.systemChannel.id).createInvite(options).then(function(newInvite) {
                 member.send("Sadly you left **" + member.guild.name + "**. To join again use this link: https://discord.gg/" + newInvite.code)
             }).catch(err => {
-
             })
         }
     }
@@ -359,6 +352,17 @@ if (v.botconfig.debug === "true") {
 //Command/Message Handler
 v.bot.on("message", async function(message) {
     if (message.author.bot) return;
+
+    if (message.channel.type != "dm") {
+        if (message.mentions.members.size > 0) {
+            if (message.mentions.members.get(v.bot.user.id) != undefined) {
+                await message.react("🇭").catch(err => {
+                    console.log("Error: " + err)
+                    return; })
+                await message.react("🇮").catch(err => {
+                    console.log("Error: " + err)
+                    return; })
+            }}}
 
     if (!message.content.startsWith(PREFIX)) return;
 
