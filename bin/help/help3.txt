@@ -1,6 +1,9 @@
 ﻿__Fun:__
     ** *wikihow ** - Posts a link to a random wikihow article.
     ** *cat ** - Posts a random cat picture.
+    ** *dog ** - Posts a random dog picture.
+    ** *birb ** - Posts a random birb picture.
+    ** *bunny ** - Posts a random bunny picture.
     ** *rps-game ** - Just a __very__ basic rock, paper, scissors game.
     ** *achievement (description) ** - Sends a minecraft achievement with your description.
 

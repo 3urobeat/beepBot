@@ -11,7 +11,6 @@ module.exports.run = async (bot, message, args) => {
         }
 
         v.botconfig = {
-            autoupdate: v.botconfig.autoupdate,
             shards: v.botconfig.shards,
             loginmode: login,
             prefix: v.botconfig.prefix,

@@ -16,6 +16,7 @@ __Moderation:__
     ** *clear (amount) ** - Deletes the amount of messages (1-100) in the channel. Only works with manage-messages or admin permission.
     ** *mute (chat|voice|all) (mention) [duration + "minutes|hours"] ** - Mutes a user in chat|voice channels permanent/for the given time in minutes or hours. Only works with mute-members permission.
     ** *unmute (chat|voice|all) (mention) ** - Unmutes a user in voice channels. Only works with mute-members permission.
+    ** *move (mention) (channel name) ** - Moves the mentioned user to the given channel.
     ** *report (mention) (reason) ** - Reports the mentioned user with the given reason to the server owner.
 
 __Info & User:__

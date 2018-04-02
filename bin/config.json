@@ -1,12 +1,11 @@
 {
-    "autoupdate": "false",
     "shards": 1,
     "loginmode": "normal",
     "prefix": "*",
     "game": "*help | HerrEurobeat",
     "gametype": "PLAYING",
     "status": "dnd",
-    "version": "2.11.6",
+    "version": "2.12",
     "musicenable": "false",
     "debug": "false"
 }
