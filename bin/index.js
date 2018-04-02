@@ -356,12 +356,7 @@ v.bot.on("message", async function(message) {
     if (message.channel.type != "dm") {
         if (message.mentions.members.size > 0) {
             if (message.mentions.members.get(v.bot.user.id) != undefined) {
-                await message.react("🇭").catch(err => {
-                    console.log("Error: " + err)
-                    return; })
-                await message.react("🇮").catch(err => {
-                    console.log("Error: " + err)
-                    return; })
+                message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","notification"))
             }}}
 
     if (!message.content.startsWith(PREFIX)) return;
