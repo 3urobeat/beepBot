@@ -11,7 +11,8 @@ module.exports.run = async (bot, message, args) => {
     if (message.mentions.users.size === 0) { message.channel.send("Please mention a valid user!"); return; }
     if (muteMember.id == v.BOTID) { message.channel.send(v.randomstring(["I won't mute myself what are you thinking?! :angry:","I don't like you anymore.","No. :angry:","Dont fight me with my own weapons!","Is there a way to block you?","Could someone kick this guy?"])); return; }
     if (muteMember.id == message.author.id) { message.channel.send("You can't mute yourself. :facepalm:"); return; }
-    if (muteMember.highestRole.position >= message.member.highestRole.position) { message.channel.send("You cannot mute a member who is higher or has the same role as you."); return; }
+    if (message.guild.owner.id !== message.author.id) {
+        if (muteMember.highestRole.position >= message.member.highestRole.position) { message.channel.send("You cannot mute a member who is higher or has the same role as you."); return; }}
 
     if (message.member.permissions.has("MUTE_MEMBERS", "ADMINISTRATOR")) {
 

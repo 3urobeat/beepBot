@@ -56,3 +56,5 @@ Version 2.11.6: *cat command is back! Removed two vars from *update that were no
 Version 2.11.6 hotfix: Permanent *ban with reason should now work again!
 
 Version 2.12: Added *move (mention) (channel name) command! Added *dog command! Added *weather (city) commmand! Added *birb command! Added *bunny command! Updated *update command! The Bot will react with a emoji when mentioned. Removed autoupdate on startup. The bot will not mention a new or left user anymore. Added error catch to *serverlist command. Edited *clear command code.
+
+Version 2.13: Added *urbandictionary (word) command! Added *softban (mention) [reason] command! Added *8ball (text) command! Rewrote *rps-game! Added *settopic command! Added *giverole [mention] (role name) command. Added *removerole [mention] (role name) command. Added *configreset command. *rps alias added for *rps-game. Edited README.md. Edited welcome and bye message. Added alias2.txt because of the Discord Message limit. Edited *help command. Added higher or same role check to ban, kick. Added owner exception to higher or same role check.

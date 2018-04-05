@@ -111,6 +111,9 @@ v.bot.on("ready", async function() {
         console.log(v.LOGINFO + "6 hours passed, updated name and avatar.")
     }, 3600 * 6000); //1 hour in seconds to 6 hours in milliseconds.
 
+    //Set 8ball askedbefore check to something at startup
+    askedbefore = "undefined"
+
     //Clear serverlist storage
     v.fs.writeFile("./bin/serverlist.txt", "", err => {
         if (err) message.channel.send("Error: " + err)
@@ -299,7 +302,7 @@ v.bot.on("guildMemberAdd", async function(member) {
     if (member.guild.systemChannelID == null) {
         return;
     } else {
-        member.guild.channels.find("id", member.guild.systemChannel.id).send(member.user.username + ": Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
+        member.guild.channels.find("id", member.guild.systemChannel.id).send("**" + member.user.username + "** joined! Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
         })
     }
 
@@ -325,7 +328,7 @@ v.bot.on("guildMemberRemove", function(member) {
     if (member.guild.systemChannelID == null) {
 
     } else {
-        member.guild.channels.find("id", member.guild.systemChannel.id).send(member.user.username + " left **" + member.guild.name + "**! :(").catch(err => {
+        member.guild.channels.find("id", member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
         })
         if (member.guild.size < 250) {
             member.guild.channels.find("id", member.guild.systemChannel.id).createInvite(options).then(function(newInvite) {

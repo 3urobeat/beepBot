@@ -1,0 +1,35 @@
+__Misc:__
+    ** *poll [description] ** - *vote [description], *survey [description]
+    ** *weather (city) ** - /
+    ** *say (text) ** - /
+    ** *dice (number) ** - *roll (number)
+    ** *color ** - *randomcolor
+    ** *serverlist ** - *servers
+    ** *github ** - /
+    ** *ud (word) ** - *urbandictionary (word)
+
+__Fun:__
+    ** *wikihow ** - /
+    ** *cat ** - *meow
+    ** *dog ** - *woof, *bark
+    ** *birb ** - *bird, *yos
+    ** *bunny ** - *rabbit
+    ** *rps ("rock|scissors|paper") ** - *rps-game ("rock|scissors|paper")
+    ** *8ball (text) ** - /
+    ** *achievement (description) ** - / 
+
+__Owner only:__
+    ** *setname (name)/("default|x-mas") ** - /
+    ** *setgame [game]/["default"] ** - /
+    ** *gametype ("playing|streaming|listening|watching") ** -/
+    ** *setstatus ("online|idle|dnd") ** - /
+    ** *setavatar (url)/("default|x-mas|testbot") ** - /
+    ** *setversion (number) ** - /
+    ** *loginmode ("normal|test") ** - /
+    ** *debugmode ("true|false") ** - /
+    ** *eval (code) ** - /
+    ** *reload (module) ** - /
+    ** *configreset ** - *confres
+    ** *botrs ** - *botrestart
+    ** *botstop ** - /
+    ** *update ** - *updater

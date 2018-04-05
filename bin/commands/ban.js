@@ -6,7 +6,11 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send(v.dmerror())
         return;
     }
+    
     let banMember = message.guild.member(message.mentions.members.first());
+    if (message.guild.owner.id !== message.author.id) {
+        if (banMember.highestRole.position >= message.member.highestRole.position) { message.channel.send("You cannot ban a member who is higher or has the same role as you."); return; }}
+
     if (message.mentions.users.size === 0) {
         message.channel.send("Please mention a valid user!")
         return;
@@ -22,7 +26,7 @@ module.exports.run = async (bot, message, args) => {
         return; }
     if (message.member.permissions.has("BAN_MEMBERS", "ADMINISTRATOR")) {
         let banauthor = message.author
-        //ban code
+        //perm ban code
         if (isNaN(args[1]) === true) {
             if (args[1] === undefined) {
                 var banreasontext = "/"
@@ -40,6 +44,7 @@ module.exports.run = async (bot, message, args) => {
             })
 
         } else {
+            //timed ban code
             let rawbanduration = args[1]
             let bandurationtype = args[2].toLowerCase()
 
