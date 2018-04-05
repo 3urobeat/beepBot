@@ -5,9 +5,12 @@ module.exports.run = async (bot, message, args) => {
     const help = v.fs.readFileSync(v.helppath, {"encoding": "utf-8"});
     const help2 = v.fs.readFileSync(v.helppath2, {"encoding": "utf-8"});
     const help3 = v.fs.readFileSync(v.helppath3, {"encoding": "utf-8"});
-    message.author.send("\n" + help)
-    message.author.send("\n" + help2)
-    message.author.send("\n" + help3)
+    const help4 = v.fs.readFileSync(v.helppath4, {"encoding": "utf-8"});
+    const help5 = v.fs.readFileSync(v.helppath5, {"encoding": "utf-8"});
+    const help6 = v.fs.readFileSync(v.helppath6, {"encoding": "utf-8"});
+    message.author.send("\n" + help + "\n" + help2)
+    message.author.send("\n" + help3 + "\n" + help4)
+    message.author.send("\n" + help5 + "\n" + help6)
     await message.author.send("Invite me to your server: ``" + index.botinvite + "``\nYou need help? English help and german chat: https://discord.gg/q3KXW2P");
     if (message.channel.type == "dm") {
         return;

@@ -9,17 +9,4 @@ __Help & Test:__
     ** *alias ** - Brings up a message for all alias commands. 
     ** *ping ** - Replies with bot heartbeat and ping.
     ** *privilegeerror ** - Explains the "Privilege is too low." error and how you can fix it.
-
-__Moderation:__
-    ** *kick (mention) [reason] ** - Kicks the mentioned user. Only works with kick or admin permission.
-    ** *ban (mention) [reason]/[duration + "minutes|hours|days"] [reason] ** - Bans the mentioned user/for the given time in minutes/hours/days. Only works with ban or admin permission.
-    ** *clear (amount) ** - Deletes the amount of messages (1-100) in the channel. Only works with manage-messages or admin permission.
-    ** *mute (chat|voice|all) (mention) [duration + "minutes|hours"] ** - Mutes a user in chat|voice channels permanent/for the given time in minutes or hours. Only works with mute-members permission.
-    ** *unmute (chat|voice|all) (mention) ** - Unmutes a user in voice channels. Only works with mute-members permission.
-    ** *move (mention) (channel name) ** - Moves the mentioned user to the given channel.
-    ** *report (mention) (reason) ** - Reports the mentioned user with the given reason to the server owner.
-
-__Info & User:__
-    ** *invite ** - Replies with the bot invite-link and server invite-link.
-    ** *info ["bot|user|server"] [mention] ** - Some (useful) information about the bot, the user or/and the server. If you dont provide the infotype you will get the full info.
-    ** *userid [mention] ** - Gets the user id from you or the mentioned user.
+    

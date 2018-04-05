@@ -10,10 +10,14 @@ __Help & Test:__
 __Moderation:__
     ** *kick (mention) [reason] ** - /
     ** *ban (mention) [reason]/[duration + "minutes|hours|days"] [reason] ** - /
+    ** *softban (mention) [reason] ** - /
     ** *clear (amount) ** - *delete (amount)
     ** *mute (chat|voice|all) (mention) [duration + "minutes|hours"] ** - /
     ** *unmute (chat|voice|all) (mention) ** - /
     ** *move (mention) (channel name) ** - /
+    ** *giverole [mention] (role name) ** - /
+    ** *removerole [mention] (role name) ** - *remrole [mention] (role name)
+    ** *settopic [text] ** - /
     ** *report (mention) (reason) ** - /
 
 __Info & User:__
@@ -24,36 +28,3 @@ __Info & User:__
     ** *servericon ** - *serveravatar
     ** *nick [mention] (nick) ** - *nickname [mention] (nick)
     ** *nickreset [mention] ** - /
-
-__Misc:__
-    ** *poll [description] ** - *vote [description], *survey [description]
-    ** *weather (city) ** - /
-    ** *say (text) ** - /
-    ** *dice (number) ** - *roll (number)
-    ** *color ** - *randomcolor
-    ** *serverlist ** - *servers
-    ** *github ** - /
-
-__Fun:__
-    ** *wikihow ** - /
-    ** *cat ** - *meow
-    ** *dog ** - *woof, *bark
-    ** *birb ** - *bird, *yos
-    ** *bunny ** - *rabbit
-    ** *rps-game ** - /
-    ** *achievement (description) ** - / 
-
-__Owner only:__
-    ** *setname (name)/("default|x-mas") ** - /
-    ** *setgame [game]/["default"] ** - /
-    ** *gametype ("playing|streaming|listening|watching") ** -/
-    ** *setstatus ("online|idle|dnd") ** - /
-    ** *setavatar (url)/("default|x-mas|testbot") ** - /
-    ** *setversion (number) ** - /
-    ** *loginmode ("normal|test") ** - /
-    ** *debugmode ("true|false") ** - /
-    ** *eval (code) ** - /
-    ** *reload (module) ** - /
-    ** *botrs ** - *botrestart
-    ** *botstop ** - /
-    ** *update ** - *updater

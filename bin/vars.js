@@ -3,9 +3,13 @@ const index = require("./index.js")
 //Variables and definitions:
 const configpath = "./config.json";
 const aliaspath = "./bin/help/aliases.txt"
+const aliaspath2 = "./bin/help/aliases2.txt"
 const helppath = "./bin/help/help.txt";
 const helppath2 = "./bin/help/help2.txt";
 const helppath3 = "./bin/help/help3.txt";
+const helppath4 = "./bin/help/help4.txt";
+const helppath5 = "./bin/help/help5.txt";
+const helppath6 = "./bin/help/help6.txt";
 const chatmutespath = "./eventdata/chatmutes.json"
 const voicemutespath = "./eventdata/voicemutes.json"
 const banspath = "./eventdata/bans.json"
@@ -70,9 +74,13 @@ const randomhex = function randomhex() {
 module.exports={
     configpath,
     aliaspath,
+    aliaspath2,
     helppath,
     helppath2,
     helppath3,
+    helppath4,
+    helppath5,
+    helppath6,
     chatmutespath,
     voicemutespath,
     banspath,

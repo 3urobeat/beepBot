@@ -2,7 +2,9 @@ module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
 
     const alias = v.fs.readFileSync(v.aliaspath, {"encoding": "utf-8"});
+    const alias2 = v.fs.readFileSync(v.aliaspath2, {"encoding": "utf-8"});
     message.author.send("Here is a list of all alias commands: :1234:\n\n" + alias)
+    message.author.send("\n" + alias2)
     
     await message.author.send("Invite me to your server: ``" + v.botinvitelink + "``\nYou need help? English help and german chat: https://discord.gg/q3KXW2P");
     if (message.channel.type == "dm") {

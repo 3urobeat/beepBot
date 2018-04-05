@@ -5,7 +5,11 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send(v.dmerror())
         return;
     }
+    
     let kickMember = message.guild.member(message.mentions.members.first());
+    if (message.guild.owner.id !== message.author.id) {
+        if (kickMember.highestRole.position >= message.member.highestRole.position) { message.channel.send("You cannot kick a member who is higher or has the same role as you."); return; }}
+
     if (message.mentions.users.size === 0) {
         message.channel.send("Please mention a valid user!")
         return;
