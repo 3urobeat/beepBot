@@ -60,13 +60,13 @@ async function chatunmute(chatunmuteMember, chatmutedRole) {
         return;
     }
     await chatunmuteMember.removeRole(chatmutedRole.id).catch(err => {
-        console.log("Error: " + err)
+        console.log("index function chatunmute Error: " + err)
     })
 }
 
 async function unban(banguild, unbanMember) {
     banguild.unban(unbanMember).catch(err => {
-        console.log("Error: " + err)
+        console.log("index function unban Error: " + err)
     })
 }
 
@@ -116,7 +116,7 @@ v.bot.on("ready", async function() {
 
     //Clear serverlist storage
     v.fs.writeFile("./bin/serverlist.txt", "", err => {
-        if (err) message.channel.send("Error: " + err)
+        if (err) message.channel.send("index clear serverlist Error: " + err)
     })
 
     //Command reader
@@ -165,18 +165,18 @@ v.bot.on("ready", async function() {
                     if ((Date.now() - chattime) > 10000 && chatunmuteMember === undefined) {
                         delete v.bot.chatmutes[i];
                         v.fs.writeFile(v.chatmutespath, JSON.stringify(v.bot.chatmutes), err => {
-                            if (err) console.log("Error: " + err)
+                            if (err) console.log("index timed chatmute erase from file undefined Error: " + err)
                         })
                         return;
                     }
                     chatunmute(chatunmuteMember, chatmutedRole)
                     chatchannel.send(chatunmuteMember + " was chat-unmuted after " + chatrawmuteduration + " " + chatmutedurationtype + " by " + chatmuteauthor + ".").catch(err => {
-                        console.log("Error: " + err)
+                        console.log("index timed chatmute send unmuted message Error: " + err)
                     })
                     
                     delete v.bot.chatmutes[i];
                     v.fs.writeFile(v.chatmutespath, JSON.stringify(v.bot.chatmutes), err => {
-                        if (err) console.log("Error: " + err)
+                        if (err) console.log("index timed chatmute erase from file Error: " + err)
                     })
                 }
             }
@@ -200,24 +200,24 @@ v.bot.on("ready", async function() {
                     if (voiceunmuteMember === undefined) {
                         delete v.bot.voicemutes[i];
                         v.fs.writeFile(v.voicemutespath, JSON.stringify(v.bot.voicemutes), err => {
-                            if (err) message.channel.send("Error: " + err)
+                            if (err) message.channel.send("index timed voicemute erase from file undefined Error: " + err)
                         })
                         return;
                     }
                     voiceunmute(voiceunmuteMember)
                     if (!voiceunmuteMember.voiceChannel) {
                         voicemuteauthor.send(voiceunmuteMember + " is now able to get voice-unmuted after " + voicerawmuteduration + " " + voicemutedurationtype + ". I can't unmute him if he is not in a voice channel so please do that yourself. Thanks! :)").catch(err => {
-                            console.log("Error: " + err)
+                            console.log("index timed voicemute send you can unmute message Error: " + err)
                         })
                     } else {
                         voicechannel.send(voiceunmuteMember + " was voice-unmuted after " + voicerawmuteduration + " " + voicemutedurationtype + " by " + voicemuteauthor + ".").catch(err => {
-                            console.log("Error: " + err)
+                            console.log("index timed voicemute send unmuted message Error: " + err)
                         })
                     }
 
                     delete v.bot.voicemutes[i];
                     v.fs.writeFile(v.voicemutespath, JSON.stringify(v.bot.voicemutes), err => {
-                        if (err) message.channel.send("Error: " + err)
+                        if (err) message.channel.send("index timed voicemute erase from file Error: " + err)
                     })
                 }
             }
@@ -243,12 +243,12 @@ v.bot.on("ready", async function() {
 
                     unban(banguild, unbanMember)
                     banchannel.send(banauthor + ": The user @" + banname + " was unbanned after " + rawbanduration + " " + bandurationtype + ". __Ban-Reason:__ " + banreasontext).catch(err => {
-                        console.log("Error: " + err)
+                        console.log("index timed ban send unbanned message Error: " + err)
                     })
 
                     delete v.bot.bans[i];
                     v.fs.writeFile(v.banspath, JSON.stringify(v.bot.bans), err => {
-                        if (err) message.channel.send("Error2: " + err)
+                        if (err) message.channel.send("index timed ban erase from file Error: " + err)
                     })
                 }
             }
@@ -280,11 +280,11 @@ v.bot.on("guildCreate", guild => {
         return;
     } else {
         guild.channels.find("id", guild.systemChannel.id).send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ". Get a list of my commands with `" + PREFIX + "help`. Type `" + PREFIX + "invite` to get an invite link.").catch(err => {
-            console.log("Error: " + err)
+            console.log("index send guildCreate systemChannel message Error: " + err)
         })
     }
     guild.owner.send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ".\nThanks for adding me to your server! To get a overlook of all my commands just type `" + PREFIX + "help`.\nThe greeting feature is enabled when a greeting channel is set in the server settings.\nIf you need help or something else join my server with `" + PREFIX + "invite!`\nHave fun!").catch(err => {
-        console.log("Error: " + err)
+        console.log("index send guildCreate owner message Error: " + err)
     })
 });
 
@@ -292,7 +292,7 @@ v.bot.on("guildDelete", guild => {
     // this event triggers when the bot is removed from a guild.
     console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
     guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/q3KXW2P").catch(err => {
-        console.log("Error: " + err)
+        console.log("index send guildDelete owner message Error: " + err)
     })
 });
 

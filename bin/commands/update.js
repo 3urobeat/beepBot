@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args) => {
                     res.on('data', function(chunk){
 
                         v.fs.writeFile("downloader.js", chunk, err => {
-                            if(err) message.channel.send("Error: " + err); return;
+                            if(err) message.channel.send("update write to downloader file Error: " + err); return;
                         });
 
                         v.bot.setTimeout(() => {
@@ -25,8 +25,8 @@ module.exports.run = async (bot, message, args) => {
                     });
                 });
             } catch (err) {
-                console.log("Birb API Error: " + err)
-                message.channel.send("Birb API Error: " + err)
+                console.log("update updating downloader Error: " + err)
+                message.channel.send("update updating downloader Error: " + err)
             }
         } else {
             message.channel.send("The bot is not running on Linux!")

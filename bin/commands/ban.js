@@ -88,11 +88,11 @@ module.exports.run = async (bot, message, args) => {
                 banMember.send("You got banned from **" + message.guild.name + "** by " + banauthor + " for " + rawbanduration + " " + bandurationtype + ". __Reason:__ " + banreasontext)
 
                 fs.writeFile(v.banspath, JSON.stringify(bot.bans, null, 4), err => {
-                    if(err) message.channel.send("Error: " + err); return;
+                    if(err) message.channel.send("ban write ban to file Error: " + err); return;
                 });
 
             }).catch(err => {
-                message.channel.send("Error: " + err)
+                message.channel.send("ban send ban message Error: " + err)
             })
         }
     } else {

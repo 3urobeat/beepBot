@@ -157,7 +157,7 @@ module.exports.run = async (bot, message, args) => {
             mutedurationtype: mutedurationtype
         }   
         fs.writeFile(v.chatmutespath, JSON.stringify(bot.chatmutes, null, 4), err => {
-            if(err) message.channel.send("Error: " + err); return;
+            if(err) message.channel.send("Error: " + err); console.log("mute write timedchatmute to file Error: " + err); return;
         });
         await muteMember.addRole(role);
     }
@@ -176,7 +176,7 @@ module.exports.run = async (bot, message, args) => {
             mutedurationtype: mutedurationtype
         }
         fs.writeFile(v.voicemutespath, JSON.stringify(bot.voicemutes, null, 4), err => {
-            if(err) message.channel.send("Error: " + err); return;
+            if(err) message.channel.send("Error: " + err); console.log("mute write timedvoicemute to file Error: " + err); return;
         });
         await muteMember.setMute(true);
     }
