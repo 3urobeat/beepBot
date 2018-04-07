@@ -14,6 +14,7 @@ __Moderation:__
     ** *clear (amount) ** - *delete (amount)
     ** *mute (chat|voice|all) (mention) [duration + "minutes|hours"] ** - /
     ** *unmute (chat|voice|all) (mention) ** - /
+    ** *deaf (mention) ** - /
     ** *move (mention) (channel name) ** - /
     ** *giverole [mention] (role name) ** - /
     ** *removerole [mention] (role name) ** - *remrole [mention] (role name)
