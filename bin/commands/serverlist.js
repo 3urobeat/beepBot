@@ -5,6 +5,7 @@ module.exports.run = async (bot, message, args) => {
     v.bot.setTimeout(() => {
         message.channel.send("**Serverlist: `(" + v.bot.guilds.size + ")`**\n" + v.fs.readFileSync("./bin/serverlist.txt", {"encoding": "utf-8"})).catch(err => {
             message.channel.send("Error: " + err)
+            console.log("serverlist send list Error: ")
         })
         message.channel.stopTyping()
     }, 500)

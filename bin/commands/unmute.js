@@ -73,7 +73,7 @@ module.exports.run = async (bot, message, args) => {
         
         delete v.bot.chatmutes[unmuteMember.id];
         v.fs.writeFile(v.chatmutespath, JSON.stringify(v.bot.chatmutes), err => {
-            if (err) message.channel.send("Error: " + err)
+            if (err) console.log("unmute remove chatmute from file Error: " + err)
         })
     }
 
@@ -84,7 +84,7 @@ module.exports.run = async (bot, message, args) => {
             })
         delete v.bot.voicemutes[unmuteMember.id];
         v.fs.writeFile(v.voicemutespath, JSON.stringify(v.bot.voicemutes), err => {
-            if (err) message.channel.send("Error: " + err)
+            if (err) message.channel.send("unmute remove voicemute from file Error: " + err)
         })
     }
 
