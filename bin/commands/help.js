@@ -9,7 +9,7 @@ module.exports.run = async (bot, message, args) => {
     const help5 = v.fs.readFileSync(v.helppath5, {"encoding": "utf-8"});
     const help6 = v.fs.readFileSync(v.helppath6, {"encoding": "utf-8"});
     message.author.send("\n" + help)
-    message.authot.send("\n" + help2)
+    message.author.send("\n" + help2)
     message.author.send("\n" + help3 + "\n" + help4)
     message.author.send("\n" + help5 + "\n" + help6)
     await message.author.send("Invite me to your server: ``" + index.botinvite + "``\nYou need help? English help and german chat: https://discord.gg/q3KXW2P");
