@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
                 message.channel.send("Error: " + err)
                 return;
             })
-            message.channel.send("Removed role " + role + ".")
+            message.channel.send("Removed role '" + role.name + "'.")
             return;
 
         } else {
@@ -35,7 +35,7 @@ module.exports.run = async (bot, message, args) => {
                 message.channel.send("Error: " + err)
                 return;
             })
-            message.channel.send("Removed " + memberMention.toString() + " the role " + role + ".")
+            message.channel.send("Removed " + memberMention.toString() + " the role '" + role.name + "'.")
             return;
         }
     } else {

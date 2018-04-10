@@ -12,7 +12,7 @@ __Moderation:__
     ** *ban (mention) [reason]/[duration + "minutes|hours|days"] [reason] ** - /
     ** *softban (mention) [reason] ** - /
     ** *clear (amount) ** - *delete (amount)
-    ** *mute (chat|voice|all) (mention) [duration + "minutes|hours"] ** - /
+    ** *mute (chat|voice|all) (mention) [duration + "seconds|minutes|hours|days"] ** - /
     ** *unmute (chat|voice|all) (mention) ** - /
     ** *deaf (mention) ** - /
     ** *move (mention) (channel name) ** - /
