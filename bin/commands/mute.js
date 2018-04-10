@@ -31,6 +31,11 @@ module.exports.run = async (bot, message, args) => {
                         ADD_REACTIONS: false
                     });
                 });
+
+                message.guild.roles.find("name", "beepBot Muted").setPosition(message.guild.roles.find("name", "beepBot").position - 1).catch(err => {
+                    message.channel.send("Error setting beepBot Muted role as high as possible: " + err)
+                })
+
             } catch(err) {
                 message.channel.send("Error: " + err)
                 return;
@@ -40,50 +45,58 @@ module.exports.run = async (bot, message, args) => {
         //vars:
         let mutetype = args[0].toLowerCase()
         let muteauthor = message.author
-        let rawmuteduration = args[2]
-        let mutedurationtype = args[3].toLowerCase()
 
-        if (rawmuteduration === undefined) {
+        if (args[3] === undefined) {
 
             //permanent:
             if (mutetype === "chat") {
                 if (muteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
-                    message.channel.send(muteMember + " is already chat-muted.")
+                    message.channel.send(muteMember.user.username + " is already chat-muted.")
                     return; }
 
                 chatmute();
                 await message.channel.send(muteMember + " was permanent chat-muted.")
+
             } else if (mutetype === "voice") {
                 if (!muteMember.voiceChannel) {
                     message.channel.send("I can't mute someone who is not in a voice channel...")
                     return; }
                 if (muteMember.serverMute === true) {
-                    message.channel.send(muteMember + " is already voice-muted.")
+                    message.channel.send(muteMember.user.username  + " is already voice-muted.")
                     return; }
 
                 voicemute();
                 await message.channel.send(muteMember + " was permanent voice-muted.")
-            } else if (mutetype === "all") {
-                if (!muteMember.voiceChannel) {
-                    message.channel.send("I can't mute someone who is not in a voice channel...")
-                    return; }
-                if (muteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
-                    message.channel.send(muteMember + " is already chat-muted.")
-                    return; }
-                if (muteMember.serverMute === true) {
-                    message.channel.send(muteMember + " is already voice-muted.")
-                    return; }
 
-                chatmute();
-                voicemute();
-                await message.channel.send(muteMember + " was chat and voice-muted.")
+            } else if (mutetype === "all") {
+                if (muteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
+                    message.channel.send(muteMember.user.username  + " is already chat-muted.")
+                } else {
+                    chatmute();
+                    await message.channel.send(muteMember + " was chat-muted.")
+                }
+
+                if (muteMember.serverMute === true) {
+                    message.channel.send(muteMember.user.username  + " is already voice-muted.")
+                } else {
+                    if (!muteMember.voiceChannel) {
+                        message.channel.send("I can't voice-mute someone who is not in a voice channel...")
+                    } else {
+                        voicemute();
+                        await message.channel.send(muteMember + " was voice-muted.")
+                    }
+                }
+
             } else {
-                message.channel.send("Please define where the user should be muted `chat|voice|all`!")
+                message.channel.send("Please define where the user should be unmuted `chat|voice|all`!")
                 return;
             }
 
         } else {
 
+            let rawmuteduration = args[2]
+            let mutedurationtype = args[3].toLowerCase()
+            
             //timed mute checks:
             if (isNaN(rawmuteduration) === true) { message.channel.send("It's something but not a clear number."); return; }
             if (rawmuteduration === undefined) { message.channel.send("Mute duration is not defined."); return; }
@@ -96,13 +109,13 @@ module.exports.run = async (bot, message, args) => {
             } else if (mutedurationtype === "days") {
                 var muteduration = rawmuteduration * 86400000;
             } else { 
-                message.channel.send("Please provide 'minutes' or 'hours'"); 
+                message.channel.send("Please provide 'seconds|minutes|hours|days'"); 
                     return; }      
 
             //timed:
             if (mutetype === "chat") {
                 if (muteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
-                    message.channel.send(muteMember + " is already chat-muted.")
+                    message.channel.send(muteMember.user.username + " is already chat-muted.")
                     return; }
 
                 timedchatmute(rawmuteduration, mutedurationtype, muteauthor);
@@ -113,26 +126,30 @@ module.exports.run = async (bot, message, args) => {
                     message.channel.send("I can't mute someone who is not in a voice channel...")
                     return; }
                 if (muteMember.serverMute === true) {
-                    message.channel.send(muteMember + " is already voice-muted.")
+                    message.channel.send(muteMember.user.username + " is already voice-muted.")
                     return; }
                 
                 timedvoicemute(rawmuteduration, mutedurationtype, muteauthor);
                 await message.channel.send(muteMember + " was voice-muted for " + rawmuteduration + " " + mutedurationtype + " by " + muteauthor + ".")
 
             } else if (mutetype === "all") {
-                if (!muteMember.voiceChannel) {
-                    message.channel.send("I can't mute someone who is not in a voice channel...")
-                    return; }
                 if (muteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
-                    message.channel.send(muteMember + " is already chat-muted.")
-                    return; }
-                if (muteMember.serverMute === true) {
-                    message.channel.send(muteMember + " is already voice-muted.")
-                    return; }
+                    message.channel.send(muteMember.user.username  + " is already chat-muted.")
+                } else {
+                    timedchatmute(rawmuteduration, mutedurationtype, muteauthor);
+                    await message.channel.send(muteMember + " was chat-muted for " + rawmuteduration + " " + mutedurationtype + " by " + muteauthor + ".")
+                }
 
-                timedchatmute(rawmuteduration, mutedurationtype, muteauthor);
-                timedvoicemute(rawmuteduration, mutedurationtype, muteauthor);
-                await message.channel.send(muteMember + " was chat and voice-muted.")
+                if (muteMember.serverMute === true) {
+                    message.channel.send(muteMember.user.username  + " is already voice-muted.")
+                } else {
+                    if (!muteMember.voiceChannel) {
+                        message.channel.send("I can't voice-mute someone who is not in a voice channel...")
+                    } else {
+                        timedvoicemute(rawmuteduration, mutedurationtype, muteauthor);
+                        await message.channel.send(muteMember + " was voice-muted for " + rawmuteduration + " " + mutedurationtype + " by " + muteauthor + ".")
+                    }
+                }
 
             } else {
                 message.channel.send("Please define where the user should be muted `chat|voice|all`!")
@@ -157,7 +174,11 @@ module.exports.run = async (bot, message, args) => {
             mutedurationtype: mutedurationtype
         }   
         fs.writeFile(v.chatmutespath, JSON.stringify(bot.chatmutes, null, 4), err => {
-            if(err) message.channel.send("Error: " + err); console.log("mute write timedchatmute to file Error: " + err); return;
+            if(err) {
+                message.channel.send("Error: " + err)
+                console.log("mute write timedchatmute to file Error: " + err);
+                return;
+            } 
         });
         await muteMember.addRole(role);
     }
@@ -176,7 +197,11 @@ module.exports.run = async (bot, message, args) => {
             mutedurationtype: mutedurationtype
         }
         fs.writeFile(v.voicemutespath, JSON.stringify(bot.voicemutes, null, 4), err => {
-            if(err) message.channel.send("Error: " + err); console.log("mute write timedvoicemute to file Error: " + err); return;
+            if(err) {
+                message.channel.send("Error: " + err)
+                console.log("mute write timedvoicemute to file Error: " + err);
+                return;
+            } 
         });
         await muteMember.setMute(true);
     }

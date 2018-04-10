@@ -3,7 +3,7 @@ __Moderation:__
     ** *ban (mention) [reason]/[duration + "minutes|hours|days"] [reason] ** - Bans the mentioned user/for the given time in minutes/hours/days. Only works with ban or admin permission.
     ** *softban (mention) [reason] ** - Bans and then unbans the mentioned user. Only works with ban or admin permission.
     ** *clear (amount) ** - Deletes the amount of messages (1-100) in the channel. Only works with manage-messages or admin permission.
-    ** *mute (chat|voice|all) (mention) [duration + "minutes|hours"] ** - Mutes a user in chat|voice channels permanent/for the given time in minutes or hours. Only works with mute-members permission.
+    ** *mute (chat|voice|all) (mention) [duration + "seconds|minutes|hours|days"] ** - Mutes a user in chat|voice channels permanent/for the given time in minutes or hours. Only works with mute-members permission.
     ** *unmute (chat|voice|all) (mention) ** - Unmutes a user in voice channels. Only works with mute-members permission.
     ** *deaf (mention) ** - Deafens the mentioned user. Only works with deafen-member permission.
     ** *move (mention) (channel name) ** - Moves the mentioned user to the given channel. Only works with move-members permission.

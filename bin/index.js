@@ -359,7 +359,9 @@ v.bot.on("message", async function(message) {
     if (message.channel.type != "dm") {
         if (message.mentions.members.size > 0) {
             if (message.mentions.members.get(v.bot.user.id) != undefined) {
-                message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","notification"))
+                message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","notification")).catch(err => {
+                    console.log("index mention reaction Error: " + err)
+                })
             }}}
 
     if (!message.content.startsWith(PREFIX)) return;
@@ -394,6 +396,12 @@ v.bot.on("message", async function(message) {
         }
         return;
     }
+    var message = message
+    
+    module.exports ={ 
+        message
+    }
+
     //The command reader in the 'ready' event imports the commands.
 });
 

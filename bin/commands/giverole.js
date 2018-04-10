@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
                 message.channel.send("Error: " + err)
                 return;
             })
-            message.channel.send("Added role " + role + ".")
+            message.channel.send("Added role '" + role.name + "'.")
             return;
 
         } else {
@@ -35,7 +35,7 @@ module.exports.run = async (bot, message, args) => {
                 message.channel.send("Error: " + err)
                 return;
             })
-            message.channel.send("Added " + memberMention.toString() + " the role " + role + ".")
+            message.channel.send("Added " + memberMention.toString() + " the role '" + role.name + "'.")
             return;
         }
     } else {

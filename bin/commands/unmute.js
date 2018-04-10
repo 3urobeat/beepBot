@@ -9,7 +9,8 @@ module.exports.run = async (bot, message, args) => {
     let unmuteMember = message.guild.member(message.mentions.members.first());
     if (message.mentions.users.size === 0) { message.channel.send("Please mention a valid user!"); return; }
     if (unmuteMember.id == message.author.id) { message.channel.send("You can't unmute yourself. :facepalm:"); return; }
-    if (unmuteMember.highestRole.position >= message.member.highestRole.position) { message.channel.send("You cannot unmute a member who is higher or has the same role as you."); return; }
+    if (message.guild.owner.id !== message.author.id) {
+        if (unmuteMember.highestRole.position >= message.member.highestRole.position) { message.channel.send("You cannot unmute a member who is higher or has the same role as you."); return; }}
     
     if (message.member.permissions.has("MUTE_MEMBERS", "ADMINISTRATOR")) {
 
@@ -17,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
 
         if (unmutetype === "chat") {
             if (!unmuteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
-                message.channel.send(unmuteMember + " is not chat-muted.")
+                message.channel.send(unmuteMember.user.username + " is not chat-muted.")
                 return;
             }
 
@@ -29,8 +30,7 @@ module.exports.run = async (bot, message, args) => {
                 message.channel.send("I can't unmute someone who is not in a voice channel...")
                 return; }
             if (unmuteMember.serverMute === false) {
-                if (unmuteMember === v.BOTID) { message.channel.send("I am not voice-muted. And thats good! :angry:") }
-                message.channel.send(unmuteMember + " is not voice-muted.")
+                message.channel.send(unmuteMember.user.username + " is not voice-muted.")
                 return;
             }
 
@@ -38,22 +38,25 @@ module.exports.run = async (bot, message, args) => {
             await message.channel.send(unmuteMember + " was voice-unmuted.")
 
         } else if (unmutetype === "all") {
-            if (!unmuteMember.voiceChannel) {
-                message.channel.send("I can't unmute someone who is not in a voice channel...")
-                return; }
             if (!unmuteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
-                message.channel.send(unmuteMember + " is not chat-muted.")
-                return;
-            }
-            if (unmuteMember.serverMute === false) {
-                if (unmuteMember === v.BOTID) { message.channel.send("I am not voice-muted. And thats good! :angry:") }
-                message.channel.send(unmuteMember + " is not voice-muted.")
-                return;
+                message.channel.send(unmuteMember.user.username + " is not chat-muted.")
+            } else {
+                chatunmute();
+                await message.channel.send(unmuteMember + " was chat-unmuted.")
             }
 
-            chatunmute();
-            voiceunmute();
-            await message.channel.send(unmuteMember + " was chat and voice-unmuted.")
+            if (unmuteMember.serverMute === false) {
+                message.channel.send(unmuteMember.user.username + " is not voice-muted.")
+                return;
+            } else {
+                if (!unmuteMember.voiceChannel) {
+                    message.channel.send("I can't unmute someone who is not in a voice channel...")
+                } else {
+                    voiceunmute();
+                    await message.channel.send(unmuteMember + " was voice-unmuted.")
+                }
+            }
+
         } else {
             message.channel.send("Please define where the user should be unmuted `chat|voice|all`!")
             return;
