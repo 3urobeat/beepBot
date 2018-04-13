@@ -1,6 +1,6 @@
 <div align="center">
 	<h1 align="center">~ beepBot ~</h1>
-	<strong>beepBot - A bot that gets frequently updated and is 24/7 online.</strong><br />Get an overview of 50+ commands with `*help`<br /><br />
+	<strong>beepBot - A bot that gets frequently updated and is 24/7 online.</strong><br />Get an overview of 60+ commands with `*help`<br /><br />
 </div>
 
 Invite my bot to your server: 

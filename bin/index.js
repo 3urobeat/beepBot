@@ -139,10 +139,13 @@ v.bot.on("ready", async function() {
         if (v.botconfig.musicenable === "true" && v.os.platform == "win32") {
             console.log("*Music feature is enabled!*")
         }
+
         var bootend = v.d() - bootstart
         console.info("The Bot is ready after %dms!", bootend);
         console.log("*---------------------*")
         console.log(" ")
+
+
 
         //Mute and Ban checker:
         v.bot.setInterval(() => {
