@@ -11,7 +11,6 @@ module.exports.run = async (bot, message, args) => {
 
         const { body } = await v.superagent
         .get('http://urbanscraper.herokuapp.com/define/' + word)
-        console.log('http://urbanscraper.herokuapp.com/define/' + word)
 
         var bodyurl = body.url.replace(/\s/g, '')
 
@@ -19,6 +18,7 @@ module.exports.run = async (bot, message, args) => {
             title: body.term.charAt(0).toUpperCase() + body.term.slice(1) + " - Urban Dictionary",
             url: bodyurl,
             color: v.randomhex(),
+            description: "** **",
             fields: [
                 {
                     name: "Definition:",
@@ -33,6 +33,7 @@ module.exports.run = async (bot, message, args) => {
                 text: "by " + body.author
               },
             timestamp: body.posted
+            
         }}).catch(err => {
             message.channel.send("Error sending message: " + err)
             console.log("urbandictionary sending message Error: " + err)

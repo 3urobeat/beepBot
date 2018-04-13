@@ -3,8 +3,9 @@ module.exports.run = async (bot, message, args) => {
 
     try {
         const { body } = await v.superagent
-        .get('https://dog.ceo/api/breeds/image/random')
-        message.channel.send(body.message)
+/*         .get('https://dog.ceo/api/breeds/image/random') */ //Old api
+        .get('https://random.dog/woof.json')
+        message.channel.send(body.url)
     } catch (err) {
         console.log("Dog API Error: " + err)
         message.channel.send("Dog API Error: " + err)

@@ -2,7 +2,7 @@ module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
     
     if (v.botconfig.musicenable === "false") {
-        message.channel.send("The music command is disabled due to heavy malfunction. :expressionless: ")
+        message.channel.send("The music command is disabled. :expressionless: ")
         return;
     }
     
