@@ -7,4 +7,5 @@ __Misc:__
     ** *serverlist ** - Responds with names of all servers the bot is connected to.
     ** *github ** - Get a link to my GitHub repository.
     ** *ud (word) ** - Searches the Urban Dictionary.
+    ** *ytsearch (word) ** - Searches for a video/livestream on youtube.
     

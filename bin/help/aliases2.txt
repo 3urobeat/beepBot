@@ -7,6 +7,7 @@ __Misc:__
     ** *serverlist ** - *servers
     ** *github ** - /
     ** *ud (word) ** - *urbandictionary (word)
+    ** *ytsearch (word) ** - /
 
 __Fun:__
     ** *wikihow ** - /
