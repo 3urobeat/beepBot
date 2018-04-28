@@ -9,7 +9,14 @@ module.exports.run = async (bot, message, args, Discord) => {
     var decision = function decision() { return v.randomstring(["rock","paper","scissors"]) }
     const rpsdecision = decision()
 
-    console.log(rpsdecision)
+    if (word === "r") {
+        var word = "rock"
+    } else if (word === "p") {
+        var word = "paper" 
+    } else if (word === "s") {
+        var word = "scissors"
+    }
+
     if (word === "rock") {
         if (rpsdecision === "rock") {
             message.channel.send(":rocket: vs :rocket: \nDraw!")

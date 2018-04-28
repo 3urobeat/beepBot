@@ -15,22 +15,14 @@ module.exports.run = async (bot, message, args) => {
     if (message.guild.voiceConnection && message.member.voiceChannel) if (message.member.voiceChannel.id != message.guild.voiceConnection.channel.id) {
         message.channel.send("The bot is not in your voice channel!") 
         return; }
-    
-    var volume = args[0]
-
-    if (volume === undefined) {
-        message.channel.send("Please provide a number. 1 is default.")
-        return;
-    }
 
     var server = v.servers[message.guild.id];
-    server.dispatcher.setVolume(volume)
-    server.volume = volume
-    message.channel.send("Set volume to " + volume)
+    if (server.dispatcher) server.dispatcher.resume()
+
+    message.channel.send("Music resumed.")
 
 }
 
 module.exports.config = {
-    command: "vol",
-    alias: "volume"
+    command: "resume"
 }

@@ -1,11 +1,6 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
 
-    if (v.botconfig.musicenable === "false") {
-        message.channel.send("The music command is disabled. :expressionless: ")
-        return;
-    }
-    
     function play(connection, message) {
         var server = v.servers[message.guild.id];
     
@@ -19,6 +14,7 @@ module.exports.run = async (bot, message, args) => {
                     })
                 });
                 play(connection, message)
+                server.dispatcher.setVolume(server.volume)
             } else { 
             connection.disconnect();
             message.channel.send("Stopped music and left voice channel.")
@@ -38,7 +34,7 @@ module.exports.run = async (bot, message, args) => {
     if (!message.member.voiceChannel) {
         message.channel.send("Please join a voice channel first.");
         return; }
-    if (message.guild.voiceConnection) if (message.member.voiceChannel.id != message.guild.voiceConnection.channel.id) {
+    if (message.guild.voiceConnection && message.member.voiceChannel) if (message.member.voiceChannel.id != message.guild.voiceConnection.channel.id) {
         message.channel.send("The bot is not in your voice channel!") 
         return; }
     if (message.member.voiceChannel.full) {
