@@ -136,10 +136,6 @@ v.bot.on("ready", async function() {
         
         console.log("Set presence to: " + v.botconfig.status + " - " + v.botconfig.gametype.toLowerCase() + " " + GAME)
 
-        if (v.botconfig.musicenable === "true" && v.os.platform == "win32") {
-            console.log("*Music feature is enabled!*")
-        }
-
         var bootend = v.d() - bootstart
         console.info("The Bot is ready after %dms!", bootend);
         console.log("*---------------------*")

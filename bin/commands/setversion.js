@@ -20,7 +20,6 @@ module.exports.run = async (bot, message, args) => {
             gametype: v.botconfig.gametype,
             status: v.botconfig.status,
             version: newversion,
-            musicenable: v.botconfig.musicenable,
             debug: v.botconfig.debug
         }
 
