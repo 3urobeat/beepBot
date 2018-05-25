@@ -108,8 +108,8 @@ v.bot.on("ready", async function() {
 
     v.bot.setInterval(() => {
         avatarinterval();
-        console.log(v.LOGINFO + "6 hours passed, updated name and avatar.")
-    }, 3600 * 6000); //1 hour in seconds to 6 hours in milliseconds.
+        console.log(v.LOGINFO + "6 hours passed, updated name and avatar. [" + v.d() + "]")
+    }, 21600000); //1 hour in seconds to 6 hours in milliseconds.
 
     //Set 8ball askedbefore check to something at startup
     askedbefore = "undefined"
