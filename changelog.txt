@@ -63,3 +63,4 @@ Version 2.13.2: Permanent *mute should now work again! Fixed a bug that printed 
 Version 2.13.3: Added *ytsearch (word) command! Changed *dog image provider api. Fixed music command and added livestream support. *play can now search for a video if no link was given. Added *volume (number) command. Added space between title and field in urbandictionary command. Updated readme.md
 Version 2.13.4: Added aliases "r", "p" and "s" for rock, paper, scissors! Removed musicenable from config. Set volume will now be saved for the active connection. Added more checking to music commands to prevent errors. Added *pause and *resume command for the music feature.
 Version 2.13.5: Added timestamp to 6 hours avatar and name update interval.
+Version 2.13.6: Server info "AFK Timeout" will now show "/" when no afk channel/timout is set.
