@@ -359,12 +359,13 @@ v.bot.on("message", async function(message) {
             }}}
 
     if (message.channel.type != "dm") {
-        if (message.content.includes != null) {
-            if (message.content.includes("oof")) {
-                message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","oof")).catch(err => {
-                    console.log("index oof reaction Error: " + err)
-                })
-            }}}
+        if (message.guild.id === "231828052127121408") {
+            if (message.content.includes != null) {
+                if (message.content.includes("oof")) {
+                    message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","oof")).catch(err => {
+                        console.log("index oof reaction Error: " + err)
+                    })
+                }}}}
 
     if (!message.content.startsWith(PREFIX)) return;
 
