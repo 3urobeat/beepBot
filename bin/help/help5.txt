@@ -1,5 +1,6 @@
 ﻿__Fun:__
     ** *wikihow ** - Posts a link to a random wikihow article.
+    ** *joke ** - Posts a random joke from www.icanhazdadjoke.com.
     ** *cat ** - Posts a random cat picture.
     ** *dog ** - Posts a random dog picture.
     ** *birb ** - Posts a random birb picture.
