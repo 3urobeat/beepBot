@@ -114,11 +114,6 @@ v.bot.on("ready", async function() {
     //Set 8ball askedbefore check to something at startup
     askedbefore = "undefined"
 
-    //Clear serverlist storage
-    v.fs.writeFile("./bin/serverlist.txt", "", err => {
-        if (err) message.channel.send("index clear serverlist Error: " + err)
-    })
-
     //Command reader
     v.fs.readdir('./bin/commands/', (err, files) => {
         if (err) console.error(err);
@@ -360,6 +355,14 @@ v.bot.on("message", async function(message) {
             if (message.mentions.members.get(v.bot.user.id) != undefined) {
                 message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","notification")).catch(err => {
                     console.log("index mention reaction Error: " + err)
+                })
+            }}}
+
+    if (message.channel.type != "dm") {
+        if (message.content.includes != null) {
+            if (message.content.includes("oof")) {
+                message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","oof")).catch(err => {
+                    console.log("index oof reaction Error: " + err)
                 })
             }}}
 

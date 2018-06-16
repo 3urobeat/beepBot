@@ -11,6 +11,7 @@ __Misc:__
 
 __Fun:__
     ** *wikihow ** - /
+    ** *joke ** - /
     ** *cat ** - *meow
     ** *dog ** - *woof, *bark
     ** *birb ** - *bird, *yos
