@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
             message.channel.send(banMember + " was permanently banned. __Reason:__ " + banreasontext)
             banMember.send("You got permanently banned from **" + message.guild.name + "** by " + banauthor + " for this reason: " + banreasontext)
             }).catch(err => {
-                message.channel.send("An error occured: " + err)
+                message.channel.send("An error occured banning a user: " + err)
             })
 
         } else {

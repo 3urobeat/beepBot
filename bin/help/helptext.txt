@@ -1,0 +1,73 @@
+﻿Here is a list of all commands: 🔢
+
+Prefix ---> * <--- Just wonderful. Get alias commands with *alias!
+( ) - needed argument
+[ ] - optional argument
+
+Help & Test:
+    *help - Brings up some help. You are reading it just in this moment. Wow.
+    *alias - Brings up a message for all alias commands. 
+    *ping - Replies with bot heartbeat and ping.
+    *privilegeerror - Explains the "Privilege is too low." error and how you can fix it.
+    
+Moderation:
+    *kick (mention) [reason] - Kicks the mentioned user. Only works with kick or admin permission.
+    *ban (mention) [reason]/[duration + "minutes|hours|days"] [reason] - Bans the mentioned user/for the given time in minutes/hours/days. Only works with ban or admin permission.
+    *softban (mention) [reason] - Bans and then unbans the mentioned user. Only works with ban or admin permission.
+    *clear (amount) - Deletes the amount of messages (1-100) in the channel. Only works with manage-messages or admin permission.
+    *mute (chat|voice|all) (mention) [duration + "seconds|minutes|hours|days"] - Mutes a user in chat|voice channels permanent/for the given time in minutes or hours. Only works with mute-members permission.
+    *unmute (chat|voice|all) (mention) - Unmutes a user in voice channels. Only works with mute-members permission.
+    *deaf (mention) - Deafens the mentioned user. Only works with deafen-member permission.
+    *move (mention) (channel name) - Moves the mentioned user to the given channel. Only works with move-members permission.
+    *giverole [mention] (role name) - Adds yourself or the mentioned user the given role.
+    *removerole [mention] (role name) - Removes yourself or the mentioned user the given role.
+    *settopic [text] - Sets a topic or removes it when no argument is given. Only works with manage-channels permission.
+    *report (mention) (reason) - Reports the mentioned user with the given reason to the server owner.
+    
+Info & User:
+    *invite - Replies with the bot invite-link and server invite-link.
+    *info ["bot|user|server"] [mention] - Some (useful) information about the bot, the user or/and the server. If you dont provide the infotype you will get the full info.
+    *userid [mention] - Gets the user id from you or the mentioned user.
+    *avatar [mention] - A link to your or to the mentioned users avatar.
+    *servericon - A link to the server icon of your current server.
+    *nick [mention] (nick) - Changes your nick/of the mentioned user. Only works with manage-nicknames or admin permission.
+    *nickreset [mention] - Resets your nick/the nick of the mentioned user. Only works with manage-nicknames or admin permission.
+
+Misc:
+     *poll [description]  - Reacts with 👍 👎 🤷 to your message. A quick way to make a poll in the chat.
+     *weather (city)  - Shows the weather for the provided city name.
+     *say (text)  - Deletes your message and replies with the (text) from your message.
+     *dice (number)  - Returns with a random number between 1 and the given number.
+     *color [color code|color word|"colors"] - Gives you an random hex color code or your color given by color code or word (red, green etc.) with example. Type "colors" to get a list of all "word" colors. Given color code must not contain #'s.
+     *serverlist  - Responds with names of all servers the bot is connected to.
+     *github  - Get a link to my GitHub repository.
+     *ud (word)  - Searches the Urban Dictionary.
+     *ytsearch (word)  - Searches for a video/livestream on youtube.
+    
+Fun:
+     *wikihow  - Posts a link to a random wikihow article.
+     *joke  - Posts a random joke from www.icanhazdadjoke.com.
+     *cat  - Posts a random cat picture.
+     *dog  - Posts a random dog picture.
+     *birb  - Posts a random birb picture.
+     *bunny  - Posts a random bunny picture.
+     *rps ("rock|scissors|paper")  - Just a __very__ basic rock, paper, scissors game.
+     *8ball (word)  - Yes or No? Let the bot decide.
+     *achievement (description)  - Sends a minecraft achievement with your description.
+    
+Owner only:
+     *setname (name)/("default|x-mas")  - Sets the bot username to the fiven argument (2-32) or to default or to x-mas. Owner only.
+     *setgame [game]/["default"]  - Sets the playing status to the given argument or to default. Owner only.
+     *gametype ("playing|streaming|listening|watching")  - Sets the gametype. Owner only.
+     *setstatus ("online|idle|dnd")  - Sets the bot status to the given argument. Owner only.
+     *setavatar (url)/("default|x-mas|testbot")  - Sets the avatar to the given url or to default/x-mas/testbot. Owner only.
+     *setversion (number)  - Sets a new version number. Owner only.
+     *loginmode ("normal|test")  - Changes the loginmode. Owner only.
+     *debugmode ("true|false")  - Enable or Disable the debug mode. Owner only.
+     *eval (code)  - Runs eval code. Owner only.
+     *reload (module)  - Reloads the cache of an given module. Owner only.
+     *configreset  - Resets the config to default setting. Owner only.
+     *botrs  - Restarts the bot. Owner only.
+     *botstop  - Stops the bot when running on Linux. Owner only.
+     *update  - Starts the updater from GitHub. Owner only.
+    

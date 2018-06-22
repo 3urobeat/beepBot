@@ -5,7 +5,9 @@ module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
 
     if (args[0] === undefined) {
-        message.channel.send("Please provide a argument that will be the achievement description!"); return;
+        message.channel.send("Please provide a argument that will be the achievement description!").catch(err => {
+            console.log("achievement send no args message error: " + err)
+        }); return;
     }
 
     let [title, contents] = args.join(" ").split("|");
@@ -21,7 +23,8 @@ module.exports.run = async (bot, message, args) => {
     const url = `https://www.minecraftskinstealer.com/achievement/a.php?i=${rnd}&h=${encodeURIComponent(title)}&t=${encodeURIComponent(contents)}`;
     snekfetch.get(url)
      .then(r=>message.channel.send("", {files:[{attachment: r.body}]})).catch(err => {
-         return;
+        console.log("achievement send image error: " + err)
+        return;
      })
 
     }
