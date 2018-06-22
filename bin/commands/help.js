@@ -8,11 +8,20 @@ module.exports.run = async (bot, message, args) => {
     const help4 = v.fs.readFileSync(v.helppath4, {"encoding": "utf-8"});
     const help5 = v.fs.readFileSync(v.helppath5, {"encoding": "utf-8"});
     const help6 = v.fs.readFileSync(v.helppath6, {"encoding": "utf-8"});
-    message.author.send("\n" + help)
-    message.author.send("\n" + help2)
-    message.author.send("\n" + help3 + "\n" + help4)
-    message.author.send("\n" + help5 + "\n" + help6)
-    await message.author.send("Invite me to your server: ``" + index.botinvite + "``\nYou need help? English help and german chat: https://discord.gg/q3KXW2P");
+    
+    try {
+        await message.author.send("\n" + help)
+        await message.author.send("\n" + help2)
+        await message.author.send("\n" + help3 + "\n" + help4)
+        await message.author.send("\n" + help5 + "\n" + help6)
+        await message.author.send("Invite me to your server: ``" + index.botinvite + "``\nYou need help? English help and german chat: https://discord.gg/q3KXW2P")
+    } catch (err) {
+        message.channel.send("An error occured sending you a DM with a list of all my commands, including a link to my support server. \nRead all commands here: https://github.com/HerrEurobeat/beepBot/blob/master/bin/help/helptext.txt \nIf you need help type *invite to get an invite to my server.").catch(err => {
+            console.log("help send error message error: " + err)
+        })
+        return;
+    }
+
     if (message.channel.type == "dm") {
         return;
     } else {

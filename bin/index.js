@@ -28,21 +28,21 @@ function botstartupmode() {
             var TOKEN = v.tokenpath.testtoken;
             v.bot.login(TOKEN)
         } else {
-            console.log(v.LOGWARN + "Error logging in.")
+            console.log(v.LOGWARN + "index function botstartupmode error logging in: ")
             return;
         }
     } catch(err) {
-        console.log(v.LOGWARN + "Error logging in: " + err)
+        console.log(v.LOGWARN + "index function botstartupmode error logging in: " + err)
     }
 }
 
 function updateserverlist() {
     v.fs.writeFile("./bin/serverlist.txt", "", err => {
-        if (err) console.log("Error clearing serverlist.txt! Error: " + err)
+        if (err) console.log("index function updateserverlist error clearing serverlist.txt: " + err)
     })
     for (guilds of v.bot.guilds){
         v.fs.appendFile("./bin/serverlist.txt", "  " + guilds[1].name + "\n", err => {
-            if (err) console.log("Error writing serverlist.txt! Error: " + err)
+            if (err) console.log("index function updateserverlist error writing serverlist.txt: " + err)
         });
     }
 }
@@ -50,7 +50,7 @@ function updateserverlist() {
 async function voiceunmute(voiceunmuteMember) {
     voiceunmuteMember.setMute(false).then(member => {
         }).catch(err => {
-            console.log("An error occured: " + err)
+            console.log("index function voiceunmute error: " + err)
         })
 }
 
@@ -277,7 +277,7 @@ v.bot.on("guildCreate", guild => {
             console.log("index send guildCreate systemChannel message Error: " + err)
         })
     }
-    guild.owner.send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ".\nThanks for adding me to your server! To get a overlook of all my commands just type `" + PREFIX + "help`.\nThe greeting feature is enabled when a greeting channel is set in the server settings.\nIf you need help or something else join my server with `" + PREFIX + "invite!`\nHave fun!").catch(err => {
+    guild.owner.send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ".\nThanks for adding me to your server! To get a overlook of all my commands just type `" + PREFIX + "help`.\nPlease make sure that the bot has all permissions and that the beepBot role is the highest one. Get more info with *privelegerror.\nThe greeting feature is enabled when a greeting channel is set in the server settings.\nIf you need help or something else join my server with `" + PREFIX + "invite!`\nHave fun!").catch(err => {
         console.log("index send guildCreate owner message Error: " + err)
     })
 });
@@ -313,7 +313,7 @@ v.bot.on("guildMemberAdd", async function(member) {
     }
 });
 
-v.bot.on("guildMemberRemove", function(member) {
+/* v.bot.on("guildMemberRemove", function(member) {
     // When a user leaves the server direct message
     if (v.botloginmode === "test" && member.guild.id === "231828052127121408") return;
     var options = {
@@ -331,14 +331,14 @@ v.bot.on("guildMemberRemove", function(member) {
             })
         }
     }
-});
+}); */
 
-v.bot.on("guildUnavailable", function(guild) {
+/* v.bot.on("guildUnavailable", function(guild) {
     // When a guild becomes unavailable, likely due to a server outage if the guild has less then 500 members.
     if (member.guild.members.size < 500) {
         guild.owner.send("Your server **" + guild.name + "** has become unavailable just in this moment. This can be caused by a server outage. For more information check the Discord Server Status: https://status.discordapp.com/")
     }
-});
+}); */
 
 v.bot.on("error", (e) => console.error(e));
 v.bot.on("warn", (e) => console.warn(e));
@@ -361,7 +361,7 @@ v.bot.on("message", async function(message) {
     if (message.channel.type != "dm") {
         if (message.guild.id === "231828052127121408") {
             if (message.content.includes != null) {
-                if (message.content.includes("oof")) {
+                if (message.content.toLowerCase().includes("oof")) {
                     message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","oof")).catch(err => {
                         console.log("index oof reaction Error: " + err)
                     })
@@ -370,7 +370,7 @@ v.bot.on("message", async function(message) {
     if (!message.content.startsWith(PREFIX)) return;
 
     //Add check if bot has permissions to send a message.
-
+    
     var cont = message.content.slice(PREFIX.length).split(" ");
     var args = cont.slice(1);
     
@@ -393,7 +393,7 @@ v.bot.on("message", async function(message) {
     } else {
         if(message.content.includes(PREFIX + "*")) return;            
         if(message.content.endsWith(PREFIX)) return;
-        //Disabled the message because of disturbing the chat.
+        //Disabled the error message because it was disturbing the chat.
         if (message.channel.type === "dm") {
             message.channel.send(v.wrongcmd())
         }

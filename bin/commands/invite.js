@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
             message.channel.createInvite(options).then(function(newInvite){
                 message.channel.send("Join this channel: https://discord.gg/" + newInvite.code + "\nInvite me! ``" + index.botinvite + "``\nNeed support or something else? Join my Server: https://discord.gg/q3KXW2P")
             }).catch(err => {
-                message.channel.send("Error: " + err + "\nInvite me! ``" + index.botinvite + "``\nNeed support or something else? Join my Server: https://discord.gg/q3KXW2P")
+                message.channel.send("Join this channel: " + err + "\nInvite me! ``" + index.botinvite + "``\nNeed support or something else? Join my Server: https://discord.gg/q3KXW2P")
             })
         } else {
             message.channel.send(v.usermissperm() +  "\nInvite me! ``" + index.botinvite + "``\nNeed support or something else? Join my Server: https://discord.gg/q3KXW2P")
