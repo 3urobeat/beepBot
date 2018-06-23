@@ -18,17 +18,13 @@ module.exports.run = async (bot, message, args) => {
             })
         } else {
             if (message.content.includes("#")) {
-                message.channel.send("Please remove any #'s.").catch(err => {
-                    console.log("color send remove #'s error message error: " + err)
-                })
+                message.channel.send("Please remove any #'s.")
                 return
             }
             var wantedcolor = args[0]
             switch(args[0].toLowerCase()) {
                 case "colors":
-                    message.channel.send("Supported 'word' colors: black, gray, red, green, blue, yellow, purple, gold, cyan, white, pink, orange.\nDisplay your color with *color (hex code).\nGet a random color by just typing *color").catch(err => {
-                        console.log("color send supported colors message error: " + err)
-                    })
+                    message.channel.send("Supported 'word' colors: black, gray, red, green, blue, yellow, purple, gold, cyan, white, pink, orange.\nDisplay your color with *color (hex code).\nGet a random color by just typing *color")
                     return;
                     break;
                 case "black":

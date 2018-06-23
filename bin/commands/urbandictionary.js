@@ -2,6 +2,11 @@ module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
 
     try {
+        if (message.channel.nsfw === false) {
+            message.channel.send("This command is nsfw-channel only because of the new changes to the Discord Community Guideline. :neutral_face:")
+            return;
+        }
+
         if (args[0] === undefined) {
             message.channel.send("Please provide a word to search!")
             return;

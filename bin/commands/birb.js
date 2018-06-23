@@ -6,9 +6,7 @@ module.exports.run = async (bot, message, args) => {
         http.get("http://random.birb.pw/tweet/", function(res){
             res.setEncoding('utf8');
             res.on('data', function(chunk){
-                message.channel.send("https://random.birb.pw/img/" + chunk).catch(err => {
-                    console.log("birb send link error: " + err)
-                })
+                message.channel.send("https://random.birb.pw/img/" + chunk)
             });
         });
     } catch (err) {
