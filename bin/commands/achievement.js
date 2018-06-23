@@ -5,9 +5,7 @@ module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
 
     if (args[0] === undefined) {
-        message.channel.send("Please provide a argument that will be the achievement description!").catch(err => {
-            console.log("achievement send no args message error: " + err)
-        }); return;
+        message.channel.send("Please provide a argument that will be the achievement description!"); return;
     }
 
     let [title, contents] = args.join(" ").split("|");

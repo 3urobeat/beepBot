@@ -4,9 +4,7 @@ module.exports.run = async (bot, message, args) => {
     try {
         const { body } = await v.superagent
         .get('http://aws.random.cat/meow')
-        message.channel.send(body.file).catch(err => {
-            console.log("cat send link error: " + err)
-        })
+        message.channel.send(body.file)
     } catch (err) {
         console.log("Cat API Error: " + err)
         message.channel.send("Cat API Error: " + err)

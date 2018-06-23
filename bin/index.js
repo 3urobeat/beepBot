@@ -340,8 +340,8 @@ v.bot.on("guildMemberAdd", async function(member) {
     }
 }); */
 
-v.bot.on("error", (e) => console.error(e));
-v.bot.on("warn", (e) => console.warn(e));
+v.bot.on("error", (e) => console.error("index error event: " + e));
+v.bot.on("warn", (e) => console.warn("index warn event: " + e));
 if (v.botconfig.debug === "true") {
     v.bot.on("debug", (e) => console.info(e));
 }
