@@ -14,6 +14,7 @@ const chatmutespath = "./eventdata/chatmutes.json"
 const voicemutespath = "./eventdata/voicemutes.json"
 const banspath = "./eventdata/bans.json"
 
+
 const Discord = require("discord.js");
 const os = require("os");
 const YTDL = require("ytdl-core");
@@ -22,10 +23,14 @@ var exec = require('child_process').exec, child;
 var botconfig = require(configpath);
 var tokenpath = require("../../token.json")
 const fs = require("fs");
+const bfd = require("bfd-api");
 const d = function d() { return new Date(); }
 
 const bot = new Discord.Client();
 const servers = {};
+
+var bfd_token = tokenpath.botsfordiscordcomapitoken;
+const BFD = new bfd(bfd_token);
 
 //Commands and aliases
 bot.commands = new Discord.Collection();
@@ -41,9 +46,9 @@ const botinvitelink = "https://discordapp.com/oauth2/authorize?client_id=2651624
 const testbotinvitelink = "https://discordapp.com/oauth2/authorize?client_id=264403059575095307&scope=bot&permissions=1610087551";
 const botdefaultavatar = "https://i.imgur.com/64BkKW4.png";
 const botxmasavatar = "https://i.imgur.com/GgHBtkG.png";
-const testbotdefaultavatar = "https://i.imgur.com/gmP9eFn.png"
-const githublink = "https://github.com/HerrEurobeat"
-const streamlink = "https://www.twitch.tv/discordapp"
+const testbotdefaultavatar = "https://i.imgur.com/gmP9eFn.png";
+const githublink = "https://github.com/HerrEurobeat";
+const streamlink = "https://www.twitch.tv/discordapp";
 
 var botloginmode = botconfig.loginmode;
 
@@ -95,6 +100,7 @@ module.exports={
     d,
     bot,
     servers,
+    BFD,
     botinvitelink,
     testbotinvitelink,
     DEFAULTGAME,
