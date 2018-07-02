@@ -319,13 +319,18 @@ v.bot.on("guildMemberAdd", async function(member) {
     }
 });
 
-/* v.bot.on("guildMemberRemove", function(member) {
+v.bot.on("guildMemberRemove", function(member) {
     // When a user leaves the server direct message
     if (v.botloginmode === "test" && member.guild.id === "231828052127121408") return;
     var options = {
         maxAge: false
     }
-    if (member.guild.systemChannelID == null) {
+    if (member.guild.systemChannelID != null) {
+        member.guild.channels.find("id", member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
+        })
+    }
+    
+/*     if (member.guild.systemChannelID == null) {
 
     } else {
         member.guild.channels.find("id", member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
@@ -336,8 +341,8 @@ v.bot.on("guildMemberAdd", async function(member) {
             }).catch(err => {
             })
         }
-    }
-}); */
+    } */
+});
 
 /* v.bot.on("guildUnavailable", function(guild) {
     // When a guild becomes unavailable, likely due to a server outage if the guild has less then 500 members.
@@ -404,11 +409,6 @@ v.bot.on("message", async function(message) {
             message.channel.send(v.wrongcmd())
         }
         return;
-    }
-    var message = message
-    
-    module.exports ={ 
-        message
     }
 
     //The command reader in the 'ready' event imports the commands.
