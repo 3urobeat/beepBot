@@ -9,8 +9,8 @@ module.exports.run = async (bot, message, args) => {
     
     let banMember = message.guild.member(message.mentions.members.first());
     if (message.guild.owner.id !== message.author.id) {
-        if (banMember.highestRole.position >= message.member.highestRole.position) { message.channel.send("You cannot ban a member who is higher or has the same role as you."); return; }}
-
+        if (banMember.highestRole.position >= message.member.highestRole.position) { message.channel.send("You cannot ban a member who is higher or has the same role as you."); 
+        return; }}
     if (message.mentions.users.size === 0) {
         message.channel.send("Please mention a valid user!")
         return;

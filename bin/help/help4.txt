@@ -6,6 +6,6 @@ __Misc:__
     ** *color [color code|color word|"colors"]** - Gives you an random hex color code or your color given by color code or word (red, green etc.) with example. Type "colors" to get a list of all "word" colors. Given color code must not contain #'s.
     ** *serverlist ** - Responds with names of all servers the bot is connected to.
     ** *github ** - Get a link to my GitHub repository.
-    ** *ud (word) ** - Searches the Urban Dictionary.
+    ** *ud (word) ** - Searches the Urban Dictionary. Only works in #nsfw channels.
     ** *ytsearch (word) ** - Searches for a video/livestream on youtube.
     
