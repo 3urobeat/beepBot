@@ -69,3 +69,4 @@ Version 2.13.8: Added a error message to *help if the bot cant send a DM. Change
 Version 2.13.9: The *urbandictionary (*ud) command is now nsfw-channel only because of the new changes to the Discord Community Guideline. Removed error catching of normal messages that were added in Version 2.13.8 to a few commands. Added aliasestext.txt to have all aliases as plain text. Added a error message to *alias if the bot cant send a DM. Added description to error and warn event in index.js.
 Version 2.13.9 addition: Added botsfordiscord.com widget updater in index.js in events ready, guildCreate and guildDelete.
 Version 2.13.9 fix: The bot will send guildMemberRemove messages to the systemChannel again. Updated *help command list.
+Version 2.13.9 fix: *wikihow had a german url and is now english.
