@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
         await message.author.send("\n" + help2)
         await message.author.send("\n" + help3 + "\n" + help4)
         await message.author.send("\n" + help5 + "\n" + help6)
-        await message.author.send("Invite me to your server: ``" + index.botinvite + "``\nYou need help? English help and german chat: https://discord.gg/q3KXW2P")
+        await message.author.send("Invite me to your server: ``" + index.botinvite + "``\nYou need help? English help and german chat: https://discord.gg/" + v.ssinvitecode)
     } catch (err) {
         message.channel.send("An error occured sending you a DM with a list of all my commands, including a link to my support server. \nRead all commands here: https://github.com/HerrEurobeat/beepBot/blob/master/bin/help/helptext.txt \nIf you need help type *invite to get an invite to my server.").catch(err => {
             console.log("help send error message error: " + err)
