@@ -1,6 +1,6 @@
 {
     "shards": 1,
-    "loginmode": "normal",
+    "loginmode": "test",
     "prefix": "*",
     "game": "*help | HerrEurobeat",
     "gametype": "PLAYING",

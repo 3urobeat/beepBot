@@ -70,3 +70,4 @@ Version 2.13.9: The *urbandictionary (*ud) command is now nsfw-channel only beca
 Version 2.13.9 addition: Added botsfordiscord.com widget updater in index.js in events ready, guildCreate and guildDelete.
 Version 2.13.9 fix: The bot will send guildMemberRemove messages to the systemChannel again. Updated *help command list.
 Version 2.13.9 fix: *wikihow had a german url and is now english.
+Version 2.13.9 fix: Discord decided to delete my support server invite link so i had to replace it everywhere. New: https://discord.gg/AyWxpKb

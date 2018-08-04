@@ -49,6 +49,7 @@ const botxmasavatar = "https://i.imgur.com/GgHBtkG.png";
 const testbotdefaultavatar = "https://i.imgur.com/gmP9eFn.png";
 const githublink = "https://github.com/HerrEurobeat";
 const streamlink = "https://www.twitch.tv/discordapp";
+const ssinvitecode = "AyWxpKb";
 
 var botloginmode = botconfig.loginmode;
 
@@ -117,6 +118,7 @@ module.exports={
     testbotdefaultavatar,
     githublink,
     streamlink,
+    ssinvitecode,
     botloginmode,
     randomstring,
     owneronlyerror,
