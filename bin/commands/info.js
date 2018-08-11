@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
-    const index = require("../index.js")
+    var index = require("../index.js")
 
     if (message.channel.type == "dm") {
         message.channel.send(v.dmerror())

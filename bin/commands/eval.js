@@ -1,5 +1,6 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
+    const index = require("../index.js")
 
     const clean = text => {
         if (typeof(text) === "string")

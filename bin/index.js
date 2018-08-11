@@ -1,4 +1,4 @@
-﻿console.log(" ")
+﻿﻿console.log(" ")
 const v = require("./vars.js")
 var bootstart = v.d()
 console.log("Loading...")
@@ -252,15 +252,14 @@ v.bot.on("ready", async function() {
             v.BFD.postCount(v.bot.guilds.size, v.bot.user.id);
         }
 
-        //Upate CPU Temperature every 10 seconds if the os is Linux
         if (v.os.platform == "linux") {
             v.bot.setInterval(() => {
                 var tempc = v.round(v.fs.readFileSync("/sys/class/thermal/thermal_zone0/temp") / 1000, 0);
                 var tempf = v.round(tempc * 1.8 + 32, 0);
             }, 10000)
         } else {
-            var tempc = "null";
-            var tempf = "null";
+            var tempc = "null"
+            var tempf = "null"
         }
 
         var bootend = v.d() - bootstart
@@ -370,6 +369,10 @@ v.bot.on("warn", (e) => console.warn("index warn event: " + e));
 if (v.botconfig.debug === "true") {
     v.bot.on("debug", (e) => console.info(e));
 }
+
+v.bot.on("unhandledRejection", error => {
+    console.error(`Uncaught Promise Error: \n${error.stack}`);
+});
 
 //Command/Message Handler
 v.bot.on("message", async function(message) {
