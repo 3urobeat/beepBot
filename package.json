@@ -1,0 +1,44 @@
+{
+  "name": "beepbot",
+  "version": "2.13.9",
+  "description": "<div align=\"center\">\r \t<h1 align=\"center\">~ beepBot ~</h1>\r \t<strong>beepBot - A bot that gets frequently updated and is 24/7 online.</strong><br />Get an overview of 60+ commands with `*help`<br /><br />\r </div>",
+  "main": "start.js",
+  "bin": {
+    "beepbot": "index.js"
+  },
+  "dependencies": {
+    "acorn": "^5.7.1",
+    "bfd-api": "^0.2.6",
+    "child_process": "^1.0.2",
+    "concat-stream": "^1.6.2",
+    "discord.js": "^11.3.2",
+    "eslint-scope": "^3.7.3",
+    "espree": "^3.5.4",
+    "esquery": "^1.0.1",
+    "formidable": "^1.2.1",
+    "fs": "^0.0.1-security",
+    "globals": "^11.7.0",
+    "ignore": "^3.3.10",
+    "js-yaml": "^3.12.0",
+    "lodash": "^4.17.10",
+    "opusscript": "^0.0.4",
+    "request": "^2.87.0",
+    "snekfetch": "^4.0.4",
+    "superagent": "^3.8.3",
+    "table": "^4.0.3",
+    "ytdl-core": "^0.20.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HerrEurobeat/beepBot.git"
+  },
+  "author": "HerrEurobeat",
+  "bugs": {
+    "url": "https://github.com/HerrEurobeat/beepBot/issues"
+  },
+  "homepage": "https://github.com/HerrEurobeat/beepBot#readme"
+}

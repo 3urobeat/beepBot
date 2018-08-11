@@ -130,14 +130,7 @@ v.bot.on("ready", async function() {
         })
         
         console.log("Set presence to: " + v.botconfig.status + " - " + v.botconfig.gametype.toLowerCase() + " " + GAME)
-
-        var bootend = v.d() - bootstart
-        console.info("The Bot is ready after %dms!", bootend);
-        console.log("*---------------------*")
-        console.log(" ")
-
-
-
+        
         //Mute and Ban checker:
         v.bot.setInterval(() => {
             for(let i in v.bot.chatmutes) {
@@ -254,18 +247,39 @@ v.bot.on("ready", async function() {
             updateserverlist()
         }, 3600 * 1000); //1 hour in milliseconds
 
+        //Update server count for botsfordiscord.com widget
+        if (v.botloginmode === "normal") {
+            v.BFD.postCount(v.bot.guilds.size, v.bot.user.id);
+        }
+
+        //Upate CPU Temperature every 10 seconds if the os is Linux
+        if (v.os.platform == "linux") {
+            v.bot.setInterval(() => {
+                var tempc = v.round(v.fs.readFileSync("/sys/class/thermal/thermal_zone0/temp") / 1000, 0);
+                var tempf = v.round(tempc * 1.8 + 32, 0);
+            }, 10000)
+        } else {
+            var tempc = "null";
+            var tempf = "null";
+        }
+
+        var bootend = v.d() - bootstart
+        console.info("The Bot is ready after %dms!", bootend);
+        console.log("*---------------------*")
+        console.log(" ")
+
         module.exports ={ 
             bootend,
             BOTNAME,
             PREFIX,
             botavatar,
             botinvite,
-            GAME
+            GAME,
+            tempc,
+            tempf
         }
     });
 
-    //Update server count for botsfordiscord.com widget
-    v.BFD.postCount(v.bot.guilds.size, v.bot.user.id);
 });
 
 //Events
@@ -410,7 +424,6 @@ v.bot.on("message", async function(message) {
         }
         return;
     }
-
     //The command reader in the 'ready' event imports the commands.
 });
 

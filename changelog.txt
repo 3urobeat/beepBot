@@ -71,3 +71,5 @@ Version 2.13.9 addition: Added botsfordiscord.com widget updater in index.js in 
 Version 2.13.9 fix: The bot will send guildMemberRemove messages to the systemChannel again. Updated *help command list.
 Version 2.13.9 fix: *wikihow had a german url and is now english.
 Version 2.13.9 fix: Discord decided to delete my support server invite link so i had to replace it everywhere. New: https://discord.gg/AyWxpKb
+Version 2.13.9 fix: Added a package.json. Fixed a error with the bfd-api when the bot was in testing mode.
+Version 2.13.10: Added CPU Temperature to the info command. Changed userinfo.js to info.js
