@@ -258,8 +258,8 @@ v.bot.on("ready", async function() {
 
         if (v.os.platform == "linux") {
             v.bot.setInterval(() => {
-                var tempc = v.round(v.fs.readFileSync("/sys/class/thermal/thermal_zone0/temp") / 1000, 0);
-                var tempf = v.round(tempc * 1.8 + 32, 0);
+                tempc = v.round(v.fs.readFileSync("/sys/class/thermal/thermal_zone0/temp") / 1000, 0);
+                tempf = v.round(tempc * 1.8 + 32, 0);
             }, 5000)
         }
 
