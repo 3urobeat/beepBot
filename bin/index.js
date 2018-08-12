@@ -252,19 +252,14 @@ v.bot.on("ready", async function() {
             v.BFD.postCount(v.bot.guilds.size, v.bot.user.id);
         }
 
-	    //Upate CPU Temperature every 10 seconds if the os is Linux
-        var tempc = "null"
-        var tempf = "null"
+        //Upate CPU Temperature every 10 seconds if the os is Linux
+        tempc = "null"
+        tempf = "null"
 
         if (v.os.platform == "linux") {
             v.bot.setInterval(() => {
                 var tempc = v.round(v.fs.readFileSync("/sys/class/thermal/thermal_zone0/temp") / 1000, 0);
                 var tempf = v.round(tempc * 1.8 + 32, 0);
-
-                module.exports ={
-                    tempc,
-                    tempf
-                }
             }, 5000)
         }
 
@@ -279,9 +274,7 @@ v.bot.on("ready", async function() {
             PREFIX,
             botavatar,
             botinvite,
-            GAME,
-	        tempc,
-	        tempf
+            GAME
         }
     });
 
