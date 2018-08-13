@@ -74,3 +74,4 @@ Version 2.13.9 fix: Discord decided to delete my support server invite link so i
 Version 2.13.9 fix: Added a package.json. Fixed a error with the bfd-api when the bot was in testing mode.
 Version 2.13.10: Added CPU Temperature to the info command. Changed userinfo.js to info.js
 Version 2.13.10 addition: Added index variable to eval command. Fixed temperature sensor.
+Version 2.13.11: *update will change game in update process.

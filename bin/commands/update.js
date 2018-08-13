@@ -6,6 +6,9 @@ module.exports.run = async (bot, message, args) => {
         if (v.os.platform == "linux") {
             console.log("Manual updater started. Updating downloader.js...")
             message.channel.send("Manual updater started. Updating downloader.js...")
+            v.bot.user.setPresence({game: { name: "updating...", type: "WATCHING"}, status: "idle" }).catch(err => {
+                console.log("update setPresence error: " + err)
+            }) 
 
             try {
                 https.get("https://raw.githubusercontent.com/HerrEurobeat/beepBot/master/downloader.js", function(res){

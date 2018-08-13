@@ -2,7 +2,7 @@
     "shards": 1,
     "loginmode": "normal",
     "prefix": "*",
-    "game": "*help | HerrEurobeat",
+    "game": "test123",
     "gametype": "PLAYING",
     "status": "dnd",
     "version": "2.13.10",
