@@ -6,6 +6,7 @@ module.exports.run = async (bot, message, args) => {
             message.channel.send("You had to use the nodemon plugin so i cant do that.")
             return;
         }
+
         if (v.os.platform == "linux") {
             message.channel.send("Restarting bot...")
             v.exec('pm2 restart bot')
