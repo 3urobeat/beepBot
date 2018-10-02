@@ -33,7 +33,6 @@ __Info & User:__
 __Misc:__
     ** *poll [description] ** - *vote [description], *survey [description]
     ** *weather (city) ** - /
-    ** *say (text) ** - /
     ** *dice (number) ** - *roll (number)
     ** *color ** - *randomcolor
     ** *serverlist ** - *servers

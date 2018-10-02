@@ -18,7 +18,7 @@ On GitHub you can find the newest version of my Discord.js Bot.
 </div>
 
 <div align="center">
-	<a href="https://botsfordiscord.com/bot/265162449441783808">
+	<a href="https://botsfordiscord.com/bots/265162449441783808">
 	  <img src="https://botsfordiscord.com/api/v1/bots/265162449441783808/embed?theme=dark" />
 	</a>
 </div>

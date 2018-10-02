@@ -1,8 +1,0 @@
-__Info & User:__
-    ** *invite ** - Replies with the bot invite-link and server invite-link.
-    ** *info ["bot|user|server"] [mention] ** - Some (useful) information about the bot, the user or/and the server. If you dont provide the infotype you will get the full info.
-    ** *userid [mention] ** - Gets the user id from you or the mentioned user.
-    ** *avatar [mention] ** - A link to your or to the mentioned users avatar.
-    ** *servericon ** - A link to the server icon of your current server.
-    ** *nick [mention] (nick) ** - Changes your nick/of the mentioned user. Only works with manage-nicknames or admin permission.
-    ** *nickreset [mention] ** - Resets your nick/the nick of the mentioned user. Only works with manage-nicknames or admin permission.
