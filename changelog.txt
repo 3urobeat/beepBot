@@ -75,3 +75,4 @@ Version 2.13.9 fix: Added a package.json. Fixed a error with the bfd-api when th
 Version 2.13.10: Added CPU Temperature to the info command. Changed userinfo.js to info.js
 Version 2.13.10 addition: Added index variable to eval command. Fixed temperature sensor.
 Version 2.13.11: *update will change game in update process.
+Version 2.13.12: Removed Bot ID from *info. Added users current game to *info. *help will now send a link to github instead of spamming dm's.
