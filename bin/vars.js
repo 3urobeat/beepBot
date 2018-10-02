@@ -2,14 +2,6 @@ const index = require("./index.js")
 
 //Variables and definitions:
 const configpath = "./config.json";
-const aliaspath = "./bin/help/aliases.txt"
-const aliaspath2 = "./bin/help/aliases2.txt"
-const helppath = "./bin/help/help.txt";
-const helppath2 = "./bin/help/help2.txt";
-const helppath3 = "./bin/help/help3.txt";
-const helppath4 = "./bin/help/help4.txt";
-const helppath5 = "./bin/help/help5.txt";
-const helppath6 = "./bin/help/help6.txt";
 const chatmutespath = "./eventdata/chatmutes.json"
 const voicemutespath = "./eventdata/voicemutes.json"
 const banspath = "./eventdata/bans.json"
@@ -64,10 +56,10 @@ const BOTID = "265162449441783808";
 const LOGINFO = "[INFO] ";
 const LOGWARN = "[WARN] ";
 
-var owneronlyerror = function owneronlyerror() { return randomstring(["This command is owner only. What did you think?!","You are not the owner. Check your id with *userid","I'm not dumb.","I'm secure. Secure as hell.","Security does not let you in.","Gotcha! You are not going to harm anyone!"]) + " (Owner-Error)" }
-var usermissperm = function usermissperm() { return randomstring(["You do not have enough permission to do this.","Argh, you can't do this.","Sorry but no. The owner of this server does not want to let you do this.","You are not allowed to do this.","Blame the server owner!"]) + " (Perm-Error)" }
+var owneronlyerror = function owneronlyerror() { return randomstring(["This command is owner only. What did you think?!","You are not the owner. Check your id with *userid","I'm not dumb.","I'm secure. Secure as hell.","Security does not let you in.","Gotcha! You are not going to harm anyone!"]) + " (Bot Owner only-Error)" }
+var usermissperm = function usermissperm() { return randomstring(["You do not have enough permission to do this.","Argh, you can't do this.","Sorry but no. The owner of this server does not want to let you do this.","You are not allowed to do this.","Blame the server owner!"]) + " (Role permission-Error)" }
 var dmerror = function dmerror() { return randomstring(["That cannot work in a dm. :face_palm::skin-tone-2:","That won't work in a DM...","This command in a DM? No.","Sorry but no. Try it on a server.","You need to be on a server!"]) + " (DM-Error)" }
-var wrongcmd = function wrongcmd() { return randomstring(["Invalid command! :neutral_face:","You got something wrong there!","Something is wrong... :thinking:","Oh shit you have to correct something!","This error should not have happened.","I'm sorry but i catched an error that was thrown by you.","Whoops - I didn't wanted this to happen.","Trust me. Something is wrong with your command.","Windows would have been crashed now!","That is not right."]) + " (Cmd-Error)" }
+var wrongcmd = function wrongcmd() { return randomstring(["Invalid command! :neutral_face:","You got something wrong there!","Something is wrong... :thinking:","Oh shit you have to correct something!","This error should not have happened.","I'm sorry but i catched an error that was thrown by you.","Whoops - I didn't wanted this to happen.","Trust me. Something is wrong with your command.","Windows would have been crashed now!","That is not right."]) + " (Wrong command-Error)" }
 
 const round = function round(value, decimals) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
@@ -79,14 +71,6 @@ const randomhex = function randomhex() {
 //Exporting var's:
 module.exports={
     configpath,
-    aliaspath,
-    aliaspath2,
-    helppath,
-    helppath2,
-    helppath3,
-    helppath4,
-    helppath5,
-    helppath6,
     chatmutespath,
     voicemutespath,
     banspath,
