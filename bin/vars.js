@@ -15,14 +15,10 @@ var exec = require('child_process').exec, child;
 var botconfig = require(configpath);
 var tokenpath = require("../../token.json")
 const fs = require("fs");
-const bfd = require("bfd-api");
 const d = function d() { return new Date(); }
 
 const bot = new Discord.Client();
 const servers = {};
-
-var bfd_token = tokenpath.botsfordiscordcomapitoken;
-const BFD = new bfd(bfd_token);
 
 //Commands and aliases
 bot.commands = new Discord.Collection();
@@ -85,7 +81,6 @@ module.exports={
     d,
     bot,
     servers,
-    BFD,
     botinvitelink,
     testbotinvitelink,
     DEFAULTGAME,

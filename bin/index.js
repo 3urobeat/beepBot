@@ -247,11 +247,6 @@ v.bot.on("ready", async function() {
             updateserverlist()
         }, 3600 * 1000); //1 hour in milliseconds
 
-        //Update server count for botsfordiscord.com widget
-        if (v.botloginmode === "normal") {
-            v.BFD.postCount(v.bot.guilds.size, v.bot.user.id);
-        }
-
         //Upate CPU Temperature every 10 seconds if the os is Linux
         tempc = "null"
         tempf = "null"
@@ -294,8 +289,6 @@ v.bot.on("guildCreate", guild => {
     guild.owner.send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ".\nThanks for adding me to your server! To get a overlook of all my commands just type `" + PREFIX + "help`.\nPlease make sure that the bot has all permissions and that the beepBot role is the highest one. Get more info with *privelegerror.\nThe greeting feature is enabled when a greeting channel is set in the server settings.\nIf you need help or something else join my server with `" + PREFIX + "invite!`\nHave fun!").catch(err => {
         console.log("index send guildCreate owner message Error: " + err)
     })
-    //Update server count for botsfordiscord.com widget
-    v.BFD.postCount(v.bot.guilds.size, v.bot.user.id)
 });
 
 v.bot.on("guildDelete", guild => {
@@ -304,8 +297,6 @@ v.bot.on("guildDelete", guild => {
     guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/" + v.ssinvitecode).catch(err => {
         console.log("index send guildDelete owner message Error: " + err)
     })
-    //Update server count for botsfordiscord.com widget
-    v.BFD.postCount(v.bot.guilds.size, v.bot.user.id)
 });
 
 v.bot.on("guildMemberAdd", async function(member) {
@@ -369,8 +360,9 @@ if (v.botconfig.debug === "true") {
     v.bot.on("debug", (e) => console.info(e));
 }
 
-v.bot.on("unhandledRejection", error => {
-    console.error(`Uncaught Promise Error: \n${error.stack}`);
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+    // application specific logging, throwing an error, or other logic here
 });
 
 //Command/Message Handler

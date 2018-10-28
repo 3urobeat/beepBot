@@ -77,3 +77,4 @@ Version 2.13.10 addition: Added index variable to eval command. Fixed temperatur
 Version 2.13.11: *update will change game in update process.
 Version 2.13.12: Removed Bot ID from *info. Added users current game to *info. *help will now send a link to github instead of spamming dm's.
 Version 2.13.13: Removed *say command from official command list and made it owner only. Deleted help.txt parts because they are not needed anymore from the filesystem. *alias will now send a link to github instead of sending dm's. Edited error messages in help.js and alias.js. Removed the now not anymore needed vars from vars.js. Extended the error description of the four errors in vars.js. *update will not change the bot status anymore.
+Version 2.13.14: Corrected spelling mistake in the *privilegeerror message. Removed BFD Widget updates because of errors. Trying something new to find one unhandled promise rejection error.
