@@ -38,8 +38,12 @@ module.exports.run = async (bot, message, args) => {
             }
 
             banMember.ban(banreason).then(member => {
-            message.channel.send(banMember + " was permanently banned. __Reason:__ " + banreasontext)
-            banMember.send("You got permanently banned from **" + message.guild.name + "** by " + banauthor + " for this reason: " + banreasontext)
+                message.channel.send(banMember + " was permanently banned. __Reason:__ " + banreasontext)
+                if (!banMember.bot) {
+                    banMember.send("You got permanently banned from **" + message.guild.name + "** by " + banauthor + " for this reason: " + banreasontext).catch(err => {
+                    })
+                }
+                banMember.send("You got permanently banned from **" + message.guild.name + "** by " + banauthor + " for this reason: " + banreasontext)
             }).catch(err => {
                 message.channel.send("An error occured banning a user: " + err)
             })
@@ -86,7 +90,10 @@ module.exports.run = async (bot, message, args) => {
 
             banMember.ban(banreason).then(member => {
                 message.channel.send(banMember + " was banned for " + rawbanduration + " " + bandurationtype + " by " + banauthor + ". __Reason:__ " + banreasontext)
-                banMember.send("You got banned from **" + message.guild.name + "** by " + banauthor + " for " + rawbanduration + " " + bandurationtype + ". __Reason:__ " + banreasontext)
+                if (!banMember.bot) {
+                    banMember.send("You got banned from **" + message.guild.name + "** by " + banauthor + " for " + rawbanduration + " " + bandurationtype + ". __Reason:__ " + banreasontext).catch(err => {
+                    })
+                }  
 
                 fs.writeFile(v.banspath, JSON.stringify(bot.bans, null, 4), err => {
                     if(err) message.channel.send("ban write ban to file Error: " + err); return;

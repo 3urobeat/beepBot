@@ -9,14 +9,18 @@ module.exports.run = async (bot, message, args) => {
 
     try {
         let moveMember = message.guild.member(message.mentions.members.first())
-        let channel = message.guild.channels.find("name", args.slice(1).join(" ")).id
+        let channel = message.guild.channels.find(channel => channel.name === args.slice(1).join(" "))
 
         if (message.mentions.users.size === 0) { message.channel.send("Please mention a valid user!"); return; }
-        if (channel === undefined) { message.channel.send("Please provide a valid channel name!"); return; }
-        if (!moveMember.voiceChannel) { message.channel.send("The mentioned user is not in a voice Channel!"); return; }
+        if (channel.id === undefined) { message.channel.send("Please provide a valid channel name!"); return; }
+        if (!moveMember.voiceChannel) { message.channel.send("The mentioned user is not in a voice channel!"); return; }
+        if (moveMember.voiceChannel.id === channel.id) { message.channel.send("The mentioned user is already in that channel!"); return; }
     
         if (message.member.permissions.has("MOVE_MEMBERS", "ADMINISTRATOR")) {
-            moveMember.setVoiceChannel(channel)
+            moveMember.setVoiceChannel(channel.id).catch(err => {
+                message.channel.send("Error: " + err)
+            })
+            await message.channel.send("Moved **" + moveMember.user.username + "** to **" + channel.name + "**!")
         } else {
             message.channel.send(v.usermissperm())
         }

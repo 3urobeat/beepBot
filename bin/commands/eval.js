@@ -17,7 +17,9 @@ module.exports.run = async (bot, message, args) => {
             if (typeof evaled !== "string")
             evaled = require("util").inspect(evaled);
 
-            message.channel.send(clean(evaled), {code:"xl"});
+            message.channel.send(clean(evaled), {code:"xl"}).catch(err => {
+                message.channel.send("Error: " + err)
+            })
         } catch (err) {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
             message.react("❌")
@@ -28,8 +30,6 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send(v.owneronlyerror())
         return;
     }
- 
-
 }
 
 module.exports.config = {

@@ -51,6 +51,7 @@ const BOTID = "265162449441783808";
 
 const LOGINFO = "[INFO] ";
 const LOGWARN = "[WARN] ";
+const CMDUSE = "[CMDUSE] ";
 
 var owneronlyerror = function owneronlyerror() { return randomstring(["This command is owner only. What did you think?!","You are not the owner. Check your id with *userid","I'm not dumb.","I'm secure. Secure as hell.","Security does not let you in.","Gotcha! You are not going to harm anyone!"]) + " (Bot Owner only-Error)" }
 var usermissperm = function usermissperm() { return randomstring(["You do not have enough permission to do this.","Argh, you can't do this.","Sorry but no. The owner of this server does not want to let you do this.","You are not allowed to do this.","Blame the server owner!"]) + " (Role permission-Error)" }
@@ -92,6 +93,7 @@ module.exports={
     BOTID,
     LOGINFO,
     LOGWARN,
+    CMDUSE,
     botdefaultavatar,
     botxmasavatar,
     testbotdefaultavatar,

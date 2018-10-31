@@ -2,3 +2,4 @@ node_modules
 nodemon.json
 beepBot.code-workspace
 bin/serverlist.txt
+bin/cmduse.txt

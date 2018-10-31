@@ -8,7 +8,7 @@ module.exports.run = async (bot, message, args) => {
 
     if (message.member.permissions.has("MANAGE_ROLES", "ADMINISTRATOR")) {
         if (message.mentions.users.size === 0) {
-            let role = message.guild.roles.find("name", args.slice(0).join(" "))
+            let role = message.guild.roles.find(role => role.name === args.slice(0).join(" "))
             if (args[0] === undefined) { message.channel.send("Please provide a valid role name!"); return; }
             if (!role) { message.channel.send("That role does not seem valid."); return; }
             if (message.guild.owner.id !== message.author.id) {
@@ -24,7 +24,7 @@ module.exports.run = async (bot, message, args) => {
 
         } else {
             let memberMention = message.mentions.members.first()
-            let role = message.guild.roles.find("name", args.slice(1).join(" "))
+            let role = message.guild.roles.find(role => role.name === args.slice(1).join(" "))
             if (args[1] === undefined) { message.channel.send("Please provide a valid role name!"); return; }
             if (!role) { message.channel.send("That role does not seem valid."); return; }
             if (message.guild.owner.id !== message.author.id) {
