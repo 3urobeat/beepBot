@@ -70,6 +70,12 @@ async function unban(banguild, unbanMember) {
     })
 }
 
+function cmdusetofile(cmdtype, cont, guildid) {
+    v.fs.appendFile("./bin/cmduse.txt", v.CMDUSE + cmdtype + " " + cont + " got used! [" + v.d().getHours() + ":" + v.d().getMinutes() + ":" + v.d().getSeconds() + "] (" + guildid + ")\n", err => {
+        if (err) console.log("index function cmdusetofile writing cmduse.txt error: " + err)
+    });
+}
+
 if (v.botloginmode === "test") { 
     var PREFIX = "**";
     var BOTNAME = "beepTestBot";
@@ -114,6 +120,11 @@ v.bot.on("ready", async function() {
     //Set 8ball askedbefore check to something at startup
     askedbefore = "undefined"
 
+    //Log the startup in the cmduse.txt file
+    v.fs.appendFile("./bin/cmduse.txt", " \nStarting " + v.BOTVERSION + " in " + v.botloginmode + " mode. [" + v.d() + "]\n", err => {
+        if (err) console.log("index writing startup to cmduse.txt error: " + err)
+    });
+
     //Command reader
     v.fs.readdir('./bin/commands/', (err, files) => {
         if (err) console.error(err);
@@ -144,8 +155,8 @@ v.bot.on("ready", async function() {
                 let chatguild = v.bot.guilds.get(chatguildId)
                 let chatunmuteMember = chatguild.members.get(i);
                 let chatmutedRole = chatguild.roles.find(r => r.name === "beepBot Muted");
-                let chatchannel = chatguild.channels.find("id", chatmutechannelId)
-                let chatmuteauthor = chatguild.members.find("id", chatmuteauthorId)
+                let chatchannel = chatguild.channels.find(channel => channel.id === chatmutechannelId)
+                let chatmuteauthor = chatguild.members.find(member => member.id === chatmuteauthorId)
                 if (!chatmutedRole) continue;
 
                 if (Date.now() > chattime) {
@@ -180,8 +191,8 @@ v.bot.on("ready", async function() {
 
                 let voiceguild = v.bot.guilds.get(voiceguildId);
                 let voiceunmuteMember = voiceguild.members.get(i);
-                let voicechannel = voiceguild.channels.find("id", voicemutechannelId)
-                let voicemuteauthor = voiceguild.members.find("id", voicemuteauthorId)
+                let voicechannel = voiceguild.channels.find(channel => channel.id === voicemutechannelId)
+                let voicemuteauthor = voiceguild.members.find(member => member.id === voicemuteauthorId)
 
                 if (Date.now() > voicetime) {
                     if (voiceunmuteMember === undefined) {
@@ -223,8 +234,8 @@ v.bot.on("ready", async function() {
 
                 let banguild = v.bot.guilds.get(banguildId);
                 let unbanMember = i;
-                let banchannel = banguild.channels.find("id", banchannelId)
-                let banauthor = banguild.members.find("id", banauthorId)
+                let banchannel = banguild.channels.find(channel => channel.id === banchannelId)
+                let banauthor = banguild.members.find(member => member.id, banauthorId)
 
                 if (Date.now() > bantime) {
 
@@ -282,11 +293,11 @@ v.bot.on("guildCreate", guild => {
     if (guild.systemChannelID == null) {
         return;
     } else {
-        guild.channels.find("id", guild.systemChannel.id).send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ". Get a list of my commands with `" + PREFIX + "help`. Type `" + PREFIX + "invite` to get an invite link.").catch(err => {
+        guild.channels.find(channel => channel.id === guild.systemChannel.id).send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ". Get a list of my commands with `" + PREFIX + "help`. Type `" + PREFIX + "invite` to get an invite link.").catch(err => {
             console.log("index send guildCreate systemChannel message Error: " + err)
         })
     }
-    guild.owner.send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ".\nThanks for adding me to your server! To get a overlook of all my commands just type `" + PREFIX + "help`.\nPlease make sure that the bot has all permissions and that the beepBot role is the highest one. Get more info with *privelegerror.\nThe greeting feature is enabled when a greeting channel is set in the server settings.\nIf you need help or something else join my server with `" + PREFIX + "invite!`\nHave fun!").catch(err => {
+    guild.owner.send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ".\nThanks for adding me to your server! To get a overlook of all my commands just type `" + PREFIX + "help`.\nPlease make sure that the bot has all permissions and that the beepBot role is the highest one. Get more info with `" + PREFIX + "privelegerror`.\nThe greeting feature is enabled when a greeting channel is set in the server settings.\nIf you need help or something else join my server with `" + PREFIX + "invite!`\nHave fun!").catch(err => {
         console.log("index send guildCreate owner message Error: " + err)
     })
 });
@@ -294,7 +305,7 @@ v.bot.on("guildCreate", guild => {
 v.bot.on("guildDelete", guild => {
     // this event triggers when the bot is removed from a guild.
     console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-    guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/" + v.ssinvitecode).catch(err => {
+    guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` in this DM channel and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/" + v.ssinvitecode).catch(err => {
         console.log("index send guildDelete owner message Error: " + err)
     })
 });
@@ -305,7 +316,7 @@ v.bot.on("guildMemberAdd", async function(member) {
     if (member.guild.systemChannelID == null) {
         return;
     } else {
-        member.guild.channels.find("id", member.guild.systemChannel.id).send("**" + member.user.username + "** joined! Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
+        member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).send("**" + member.user.username + "** joined! Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
         })
     }
 
@@ -314,10 +325,10 @@ v.bot.on("guildMemberAdd", async function(member) {
     if (!member.guild.id === 232550371191554051) {
         return; }
     if (member.user.bot) {
-        member.addRole(member.guild.roles.find("name", "Bot's")).catch(err => {
+        member.addRole(member.guild.roles.find(role => role.name === "Bot's")).catch(err => {
         })
     } else {
-        member.addRole(member.guild.roles.find("name", "Member")).catch(err => {
+        member.addRole(member.guild.roles.find(role => role.name === "Member")).catch(err => {
         })
     }
 });
@@ -329,17 +340,17 @@ v.bot.on("guildMemberRemove", function(member) {
         maxAge: false
     }
     if (member.guild.systemChannelID != null) {
-        member.guild.channels.find("id", member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
+        member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
         })
     }
     
 /*     if (member.guild.systemChannelID == null) {
 
     } else {
-        member.guild.channels.find("id", member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
+        member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
         })
         if (member.guild.size < 250) {
-            member.guild.channels.find("id", member.guild.systemChannel.id).createInvite(options).then(function(newInvite) {
+            member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).createInvite(options).then(function(newInvite) {
                 member.send("Sadly you left **" + member.guild.name + "**. To join again use this link: https://discord.gg/" + newInvite.code)
             }).catch(err => {
             })
@@ -354,15 +365,14 @@ v.bot.on("guildMemberRemove", function(member) {
     }
 }); */
 
-v.bot.on("error", (e) => console.error("index error event: " + e));
+v.bot.on("error", (error) => console.error("index error event: " + error));
 v.bot.on("warn", (e) => console.warn("index warn event: " + e));
 if (v.botconfig.debug === "true") {
     v.bot.on("debug", (e) => console.info(e));
 }
 
 process.on('unhandledRejection', (reason, p) => {
-    console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-    // application specific logging, throwing an error, or other logic here
+    console.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
 //Command/Message Handler
@@ -372,7 +382,7 @@ v.bot.on("message", async function(message) {
     if (message.channel.type != "dm") {
         if (message.mentions.members.size > 0) {
             if (message.mentions.members.get(v.bot.user.id) != undefined) {
-                message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","notification")).catch(err => {
+                message.react(v.bot.guilds.get("231828052127121408").emojis.find(emoji => emoji.name === "notification")).catch(err => {
                     console.log("index mention reaction Error: " + err)
                 })
             }}}
@@ -381,7 +391,7 @@ v.bot.on("message", async function(message) {
         if (message.guild.id === "231828052127121408") {
             if (message.content.includes != null) {
                 if (message.content.toLowerCase().includes("oof")) {
-                    message.react(v.bot.guilds.get("231828052127121408").emojis.find("name","oof")).catch(err => {
+                    message.react(v.bot.guilds.get("231828052127121408").emojis.find(emoji => emoji.name === "oof")).catch(err => {
                         console.log("index oof reaction Error: " + err)
                     })
                 }}}}
@@ -398,15 +408,18 @@ v.bot.on("message", async function(message) {
     var alias2 = v.bot.alias2.get(cont[0].toLowerCase())
 
     if (cmd) { 
-        cmd.run(v.bot, message, args); 
+        cmd.run(v.bot, message, args);
+        cmdusetofile("Cmd", cont, message.guild.id)
         return;
          
     } else if (alias) {
         alias.run(v.bot, message, args);
+        cmdusetofile("Alias", cont, message.guild.id)
         return;
 
     } else if (alias2) {
         alias2.run(v.bot, message, args);
+        cmdusetofile("Alias2", cont, message.guild.id)
         return;
 
     } else {

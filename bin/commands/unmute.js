@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args) => {
         let unmutetype = args[0].toLowerCase()
 
         if (unmutetype === "chat") {
-            if (!unmuteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
+            if (!unmuteMember.roles.has(message.guild.roles.find(role => role.name === "beepBot Muted").id)) {
                 message.channel.send(unmuteMember.user.username + " is not chat-muted.")
                 return;
             }
@@ -38,7 +38,7 @@ module.exports.run = async (bot, message, args) => {
             await message.channel.send(unmuteMember + " was voice-unmuted.")
 
         } else if (unmutetype === "all") {
-            if (!unmuteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
+            if (!unmuteMember.roles.has(message.guild.roles.find(role => role.name === "beepBot Muted").id)) {
                 message.channel.send(unmuteMember.user.username + " is not chat-muted.")
             } else {
                 chatunmute();

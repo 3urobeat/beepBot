@@ -9,7 +9,7 @@ module.exports.run = async (bot, message, args) => {
     let muteMember = message.guild.member(message.mentions.members.first());
 
     if (message.mentions.users.size === 0) { message.channel.send("Please mention a valid user!"); return; }
-    if (muteMember.id == v.BOTID) { message.channel.send(v.randomstring(["I won't mute myself what are you thinking?! :angry:","I don't like you anymore.","No. :angry:","Dont fight me with my own weapons!","Is there a way to block you?","Could someone kick this guy?"])); return; }
+    if (muteMember.id == v.bot.user.id) { message.channel.send(v.randomstring(["I won't mute myself what are you thinking?! :angry:","I don't like you anymore.","No. :angry:","Dont fight me with my own weapons!","Is there a way to block you?","Could someone kick this guy?"])); return; }
     if (muteMember.id == message.author.id) { message.channel.send("You can't mute yourself. :facepalm:"); return; }
     if (message.guild.owner.id !== message.author.id) {
         if (muteMember.highestRole.position >= message.member.highestRole.position) { message.channel.send("You cannot mute a member who is higher or has the same role as you."); return; }}
@@ -32,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
                     });
                 });
 
-                message.guild.roles.find("name", "beepBot Muted").setPosition(message.guild.roles.find("name", "beepBot").position - 1).catch(err => {
+                message.guild.roles.find(role => role.name === "beepBot Muted").setPosition(message.guild.roles.find(role => role.name === "beepBot").position - 1).catch(err => {
                     message.channel.send("Error setting beepBot Muted role as high as possible: " + err)
                 })
 
@@ -50,7 +50,7 @@ module.exports.run = async (bot, message, args) => {
 
             //permanent:
             if (mutetype === "chat") {
-                if (muteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
+                if (muteMember.roles.has(message.guild.roles.find(role => role.name === "beepBot Muted").id)) {
                     message.channel.send(muteMember.user.username + " is already chat-muted.")
                     return; }
 
@@ -69,7 +69,7 @@ module.exports.run = async (bot, message, args) => {
                 await message.channel.send(muteMember + " was permanent voice-muted.")
 
             } else if (mutetype === "all") {
-                if (muteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
+                if (muteMember.roles.has(message.guild.roles.find(roles => role.name === "beepBot Muted").id)) {
                     message.channel.send(muteMember.user.username  + " is already chat-muted.")
                 } else {
                     chatmute();
@@ -114,7 +114,7 @@ module.exports.run = async (bot, message, args) => {
 
             //timed:
             if (mutetype === "chat") {
-                if (muteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
+                if (muteMember.roles.has(message.guild.roles.find(role => role.name === "beepBot Muted").id)) {
                     message.channel.send(muteMember.user.username + " is already chat-muted.")
                     return; }
 
@@ -133,7 +133,7 @@ module.exports.run = async (bot, message, args) => {
                 await message.channel.send(muteMember + " was voice-muted for " + rawmuteduration + " " + mutedurationtype + " by " + muteauthor + ".")
 
             } else if (mutetype === "all") {
-                if (muteMember.roles.has(message.guild.roles.find("name", "beepBot Muted").id)) {
+                if (muteMember.roles.has(message.guild.roles.find(role => role.name === "beepBot Muted").id)) {
                     message.channel.send(muteMember.user.username  + " is already chat-muted.")
                 } else {
                     timedchatmute(rawmuteduration, mutedurationtype, muteauthor);
