@@ -7,7 +7,7 @@ Invite my bot to your server:
 https://discordapp.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=1610087551
 
 Join my support server!
-https://discord.gg/AyWxpKb
+https://discord.gg/YPDPPWT
 
 On GitHub you can find the newest version of my Discord.js Bot.
 

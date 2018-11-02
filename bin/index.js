@@ -398,8 +398,6 @@ v.bot.on("message", async function(message) {
 
     if (!message.content.startsWith(PREFIX)) return;
 
-    //Add check if bot has permissions to send a message.
-    
     var cont = message.content.slice(PREFIX.length).split(" ");
     var args = cont.slice(1);
     

@@ -37,7 +37,7 @@ const botxmasavatar = "https://i.imgur.com/GgHBtkG.png";
 const testbotdefaultavatar = "https://i.imgur.com/gmP9eFn.png";
 const githublink = "https://github.com/HerrEurobeat";
 const streamlink = "https://www.twitch.tv/discordapp";
-const ssinvitecode = "AyWxpKb";
+const ssinvitecode = "YPDPPWT";
 
 var botloginmode = botconfig.loginmode;
 
