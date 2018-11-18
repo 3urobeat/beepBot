@@ -382,16 +382,16 @@ v.bot.on("message", async function(message) {
     if (message.channel.type != "dm") {
         if (message.mentions.members.size > 0) {
             if (message.mentions.members.get(v.bot.user.id) != undefined) {
-                message.react(v.bot.guilds.get("231828052127121408").emojis.find(emoji => emoji.name === "notification")).catch(err => {
+                message.react(v.bot.guilds.get("331822220051611648").emojis.find(emoji => emoji.name === "notification")).catch(err => {
                     console.log("index mention reaction Error: " + err)
                 })
             }}}
 
     if (message.channel.type != "dm") {
-        if (message.guild.id === "231828052127121408") {
+        if (message.guild.id === "331822220051611648") {
             if (message.content.includes != null) {
                 if (message.content.toLowerCase().includes("oof")) {
-                    message.react(v.bot.guilds.get("231828052127121408").emojis.find(emoji => emoji.name === "oof")).catch(err => {
+                    message.react(v.bot.guilds.get("331822220051611648").emojis.find(emoji => emoji.name === "oof")).catch(err => {
                         console.log("index oof reaction Error: " + err)
                     })
                 }}}}
