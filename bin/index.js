@@ -319,18 +319,6 @@ v.bot.on("guildMemberAdd", async function(member) {
         member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).send("**" + member.user.username + "** joined! Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
         })
     }
-
-    if (!member.guild.id === 231828052127121408) {
-        return; }
-    if (!member.guild.id === 232550371191554051) {
-        return; }
-    if (member.user.bot) {
-        member.addRole(member.guild.roles.find(role => role.name === "Bot's")).catch(err => {
-        })
-    } else {
-        member.addRole(member.guild.roles.find(role => role.name === "Member")).catch(err => {
-        })
-    }
 });
 
 v.bot.on("guildMemberRemove", function(member) {
