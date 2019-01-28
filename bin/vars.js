@@ -45,7 +45,7 @@ const DEFAULTGAME = "*help | HerrEurobeat";
 var BOTXMASNAME = "beepBot🎅🎄";
 var BOTVERSION = botconfig.version;
 var STATUS = botconfig.status;
-const BOTOWNER = "HerrEurobeat#0975";
+const BOTOWNER = "3urobeat#0975";
 const OWNERID = "231827708198256642";
 const BOTID = "265162449441783808";
 
