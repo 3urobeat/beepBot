@@ -3,10 +3,14 @@ module.exports.run = async (bot, message, args) => {
 
     message.channel.startTyping()  
     v.bot.setTimeout(() => {
-        message.channel.send("**Serverlist: `(" + v.bot.guilds.size + ")`**\n" + v.fs.readFileSync("./bin/serverlist.txt", {"encoding": "utf-8"})).catch(err => {
-            message.channel.send("Error: " + err)
-            console.log("serverlist send list Error: ")
-        })
+        var str = "**Serverlist: `(" + v.bot.guilds.size + ")`**\n" + v.fs.readFileSync("./bin/serverlist.txt", {"encoding": "utf-8"})
+        for(let i = 0; i < str.length; i += 2000) {
+            const toSend = str.substring(i, Math.min(str.length, i + 2000));
+            message.channel.send(toSend).catch(err => {
+                message.channel.send("Error: " + err)
+                console.log("serverlist send list Error: ")
+            })
+        }    
         message.channel.stopTyping()
     }, 500)
 

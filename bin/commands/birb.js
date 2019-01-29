@@ -1,14 +1,10 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
-    var http = require("http")
 
     try {
-        http.get("http://random.birb.pw/tweet/", function(res){
-            res.setEncoding('utf8');
-            res.on('data', function(chunk){
-                message.channel.send("https://random.birb.pw/img/" + chunk)
-            });
-        });
+        const { body } = await v.superagent
+        .get('https://some-random-api.ml/birbimg')
+        message.channel.send(body.link)
     } catch (err) {
         console.log("Birb API Error: " + err)
         message.channel.send("Birb API Error: " + err)
