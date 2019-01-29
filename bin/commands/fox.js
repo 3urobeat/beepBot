@@ -3,17 +3,15 @@ module.exports.run = async (bot, message, args) => {
 
     try {
         const { body } = await v.superagent
-        .get('https://some-random-api.ml/birbimg')
+        .get('https://some-random-api.ml/foximg')
         message.channel.send(body.link)
     } catch (err) {
-        console.log("Birb API Error: " + err)
-        message.channel.send("Birb API Error: " + err)
+        console.log("Fox API Error: " + err)
+        message.channel.send("Fox API Error: " + err)
     }
 
     }
 
 module.exports.config = {
-    command: "birb",
-    alias: "bird",
-    alias2: "yos"
+    command: "fox"
 }

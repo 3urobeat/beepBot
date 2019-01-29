@@ -34,39 +34,45 @@ Info & User:
     *nickreset [mention] - Resets your nick/the nick of the mentioned user. Only works with manage-nicknames or admin permission.
 
 Misc:
-     *poll [description]  - Reacts with 👍 👎 🤷 to your message. A quick way to make a poll in the chat.
-     *weather (city)  - Shows the weather for the provided city name.
-     *dice (number)  - Returns with a random number between 1 and the given number.
-     *color [color code|color word|"colors"] - Gives you an random hex color code or your color given by color code or word (red, green etc.) with example. Type "colors" to get a list of all "word" colors. Given color code must not contain #'s.
-     *serverlist  - Responds with names of all servers the bot is connected to.
-     *github  - Get a link to my GitHub repository.
-     *ud (word)  - Searches the Urban Dictionary.
-     *ytsearch (word)  - Searches for a video/livestream on youtube.
+    *poll [description]  - Reacts with 👍 👎 🤷 to your message. A quick way to make a poll in the chat.
+    *weather (city)  - Shows the weather for the provided city name.
+    *dice (number)  - Returns with a random number between 1 and the given number.
+    *color [color code|color word|"colors"] - Gives you an random hex color code or your color given by color code or word (red, green etc.) with example. Type "colors" to get a list of all "word" colors. Given color code must not contain #'s.
+    *serverlist  - Responds with names of all servers the bot is connected to.
+    *github  - Get a link to my GitHub repository.
+    *ud (word)  - Searches the Urban Dictionary.
+    *ytsearch (word)  - Searches for a video/livestream on youtube.
+    *lyrics (title)  - Searches for song lyrics on genius.com.
     
 Fun:
-     *wikihow  - Posts a link to a random wikihow article.
-     *joke  - Posts a random joke from www.icanhazdadjoke.com.
-     *cat  - Posts a random cat picture.
-     *dog  - Posts a random dog picture.
-     *birb  - Posts a random birb picture.
-     *bunny  - Posts a random bunny picture.
-     *rps ("rock|scissors|paper")  - Just a __very__ basic rock, paper, scissors game.
-     *8ball (word)  - Yes or No? Let the bot decide.
-     *achievement (description)  - Sends a minecraft achievement with your description.
+    *wikihow  - Posts a link to a random wikihow article.
+    *facts (dog|cat|panda)  - Posts a random fact about the animal.
+    *joke  - Posts a random joke from www.icanhazdadjoke.com.
+    *cat  - Posts a random cat picture.
+    *dog  - Posts a random dog picture.
+    *birb  - Posts a random birb picture.
+    *bunny  - Posts a random bunny picture.
+    *shibainu  - Posts a random shiba inu picture.
+    *panda  - Posts a random panda picture.
+    *redpanda  - Posts a random red panda picture.
+    *fox  - Posts a random fox picture.
+    *rps ("rock|scissors|paper")  - Just a __very__ basic rock, paper, scissors game.
+    *8ball (word)  - Yes or No? Let the bot decide.
+    *achievement (description)  - Sends a minecraft achievement with your description.
     
 Owner only:
-     *setname (name)/("default|x-mas")  - Sets the bot username to the fiven argument (2-32) or to default or to x-mas. Owner only.
-     *setgame [game]/["default"]  - Sets the playing status to the given argument or to default. Owner only.
-     *gametype ("playing|streaming|listening|watching")  - Sets the gametype. Owner only.
-     *setstatus ("online|idle|dnd")  - Sets the bot status to the given argument. Owner only.
-     *setavatar (url)/("default|x-mas|testbot")  - Sets the avatar to the given url or to default/x-mas/testbot. Owner only.
-     *setversion (number)  - Sets a new version number. Owner only.
-     *loginmode ("normal|test")  - Changes the loginmode. Owner only.
-     *debugmode ("true|false")  - Enable or Disable the debug mode. Owner only.
-     *eval (code)  - Runs eval code. Owner only.
-     *reload (module)  - Reloads the cache of an given module. Owner only.
-     *configreset  - Resets the config to default setting. Owner only.
-     *botrs  - Restarts the bot. Owner only.
-     *botstop  - Stops the bot when running on Linux. Owner only.
-     *update  - Starts the updater from GitHub. Owner only.
+    *setname (name)/("default|x-mas")  - Sets the bot username to the fiven argument (2-32) or to default or to x-mas. Owner only.
+    *setgame [game]/["default"]  - Sets the playing status to the given argument or to default. Owner only.
+    *gametype ("playing|streaming|listening|watching")  - Sets the gametype. Owner only.
+    *setstatus ("online|idle|dnd")  - Sets the bot status to the given argument. Owner only.
+    *setavatar (url)/("default|x-mas|testbot")  - Sets the avatar to the given url or to default/x-mas/testbot. Owner only.
+    *setversion (number)  - Sets a new version number. Owner only.
+    *loginmode ("normal|test")  - Changes the loginmode. Owner only.
+    *debugmode ("true|false")  - Enable or Disable the debug mode. Owner only.
+    *eval (code)  - Runs eval code. Owner only.
+    *reload (module)  - Reloads the cache of an given module. Owner only.
+    *configreset  - Resets the config to default setting. Owner only.
+    *botrs  - Restarts the bot. Owner only.
+    *botstop  - Stops the bot when running on Linux. Owner only.
+    *update  - Starts the updater from GitHub. Owner only.
     
