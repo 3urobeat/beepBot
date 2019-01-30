@@ -13,6 +13,10 @@ module.exports.run = async (bot, message, args) => {
         const { body } = await v.superagent
         .get('https://some-random-api.ml/lyrics?title=' + title)
 
+        if (body.error) {
+            message.channel.send(body.error)
+            return;
+        }
         var str = body.lyrics;
         for(let i = 0; i < str.length; i += 2000) {
             var counter = counter + 1;
