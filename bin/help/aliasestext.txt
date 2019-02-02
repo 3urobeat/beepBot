@@ -33,6 +33,7 @@ Info & User:
 Misc:
     *poll [description]  - *vote [description], *survey [description]
     *weather (city)  - /
+    *calc (math problem)  - *calculate, *calculator
     *dice (number)  - *roll (number)
     *color  - *randomcolor
     *serverlist  - *servers
@@ -42,7 +43,7 @@ Misc:
     *lyrics (title)  - *l, *songtext
 
 Fun:
-    *wikihow  - /
+    *wikihow [language|"languages"]  - *wh
     *facts  - *fact
     *joke  - /
     *cat  - *meow

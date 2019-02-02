@@ -36,6 +36,7 @@ Info & User:
 Misc:
     *poll [description]  - Reacts with 👍 👎 🤷 to your message. A quick way to make a poll in the chat.
     *weather (city)  - Shows the weather for the provided city name.
+    *calc (math problem)  - Solves a math problem. You can also calculate currencies or units.
     *dice (number)  - Returns with a random number between 1 and the given number.
     *color [color code|color word|"colors"] - Gives you an random hex color code or your color given by color code or word (red, green etc.) with example. Type "colors" to get a list of all "word" colors. Given color code must not contain #'s.
     *serverlist  - Responds with names of all servers the bot is connected to.
@@ -45,7 +46,7 @@ Misc:
     *lyrics (title)  - Searches for song lyrics on genius.com.
     
 Fun:
-    *wikihow  - Posts a link to a random wikihow article.
+    *wikihow [language|"languages"]  - Posts a link to a random wikihow article. Type "languages" to get all supported languages.
     *facts (dog|cat|panda)  - Posts a random fact about the animal.
     *joke  - Posts a random joke from www.icanhazdadjoke.com.
     *cat  - Posts a random cat picture.
@@ -56,7 +57,7 @@ Fun:
     *panda  - Posts a random panda picture.
     *redpanda  - Posts a random red panda picture.
     *fox  - Posts a random fox picture.
-    *rps ("rock|scissors|paper")  - Just a __very__ basic rock, paper, scissors game.
+    *rps ("rock|scissors|paper")  - Just a very basic rock, paper, scissors game.
     *8ball (word)  - Yes or No? Let the bot decide.
     *achievement (description)  - Sends a minecraft achievement with your description.
     
