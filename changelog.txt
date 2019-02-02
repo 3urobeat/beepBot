@@ -84,4 +84,5 @@ Version 2.13.15 addition: YouTube API key is now private and changed. Removed au
 Version 2.13.15 fix: Changed owner discord name.
 
 Version 2.14: Removed markdown from aliastext.txt. *serverlist will not fail if message is 2000+ chars. Changed birb api because the old one does not work anymore. Added *shibainu command. Added *panda command. Added *redpanda command. Added *fox command. Added *lyrics (title) command. Added *fact (dog|cat|panda) command.
-Version 2.14 fix: If no lyrics can be found for the given title it will respond with a message rather than an error.
+Version 2.14 fix: If no lyrics can be found for the given title it will respond with a message rather than an error. 
+Version 2.14.1: Added *calc command using the mathjs plugin! Added *radio (station) command (only available when the bot is not running on my raspberry pi, therefore not included in the command list). *wikihow will now send a random article instead of a link to the randomizer. *wikihow has now the *wh alias. Fixed key error in musicplay.js. Removed youtube video view count from *play message. The bot will not attempt anymore to send the guildOwner a message when the bot has been removed because of errors. Fixed mistakes where the *info user @mention game, creation date and avatar was the authors one and not of the mentioned user.

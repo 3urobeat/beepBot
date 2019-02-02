@@ -305,9 +305,9 @@ v.bot.on("guildCreate", guild => {
 v.bot.on("guildDelete", guild => {
     // this event triggers when the bot is removed from a guild.
     console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-    guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` in this DM channel and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/" + v.ssinvitecode).catch(err => {
+    /* guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` in this DM channel and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/" + v.ssinvitecode).catch(err => {
         console.log("index send guildDelete owner message Error: " + err)
-    })
+    }) */
 });
 
 v.bot.on("guildMemberAdd", async function(member) {

@@ -61,7 +61,7 @@ module.exports.run = async (bot, message, args) => {
             var searchword = args.slice(0).join(" ")
             var maxResults = "1"
             var safeSearch = "none"
-            var key = "AIzaSyBYOgEG_8iYu3XP6DgDqSH_ErCE93egTQQ"
+            var key = v.tokenpath.youtubeapikey
 
             const { body } = await v.superagent
             .get('https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + searchword + '&type=' + kind + '&maxResults=' + maxResults + '&safeSearch=' + safeSearch + '&key=' + key)
@@ -92,7 +92,7 @@ module.exports.run = async (bot, message, args) => {
         });        
 
     v.YTDL.getInfo(urltoplay, function(err, info) {
-        message.channel.send("Added to queue: `" + info.title + " (" + info.length_seconds + " seconds)" + " by " + info.author.name + " with " + info.view_count + " Views `").catch(err => {
+        message.channel.send("Added to queue: `" + info.title + " (" + info.length_seconds + " seconds)" + " by " + info.author.name + "`").catch(err => {
             message.channel.send("Error: " + err)
         })
     });
