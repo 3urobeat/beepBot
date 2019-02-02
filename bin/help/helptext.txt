@@ -36,7 +36,7 @@ Info & User:
 Misc:
     *poll [description]  - Reacts with 👍 👎 🤷 to your message. A quick way to make a poll in the chat.
     *weather (city)  - Shows the weather for the provided city name.
-    *calc (math problem)  - Solves a math problem. You can also calculate currencies or units.
+    *calc (math problem)  - You can calculate with numbers, big numbers, complex numbers, fractions, units, strings, arrays, and matrices.
     *dice (number)  - Returns with a random number between 1 and the given number.
     *color [color code|color word|"colors"] - Gives you an random hex color code or your color given by color code or word (red, green etc.) with example. Type "colors" to get a list of all "word" colors. Given color code must not contain #'s.
     *serverlist  - Responds with names of all servers the bot is connected to.
