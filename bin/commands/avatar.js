@@ -13,20 +13,22 @@ module.exports.run = async (bot, message, args) => {
     }
 
     function avatar() {
+        var avatarurl = avatarmention.displayAvatarURL
         message.channel.send({embed:{
             author:{
                 name: avatarmention.username,
-                icon_url: avatarmention.displayAvatarURL,
-                url: avatarmention.displayAvatarURL
+                icon_url: avatarurl,
+                url: avatarurl
             },
-            description: avatarmention.displayAvatarURL,
+            description: avatarurl,
             image: {
-                url: avatarmention.displayAvatarURL
+                url: avatarurl
             },
             footer:{
                 icon_url: message.author.displayAvatarURL,
                 text: "Requestet by " + message.author.username
             },
+            timestamp: message.createdAt,
             color: v.randomhex()
         }})
     }

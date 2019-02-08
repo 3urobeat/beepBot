@@ -1,9 +1,23 @@
 ﻿console.log(" ")
+console.log("Loading...")
 const v = require("./vars.js")
 var bootstart = v.d()
-console.log("Loading...")
+talkedRecently = new Set();
 
 //Functions:
+process.on('unhandledRejection', (reason, p) => {
+    console.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
+//not needed right now
+/* console.log = function(d) {
+    //save console.log to a file:
+    process.stdout.write(d + '\n');
+    v.fs.appendFile("./bin/consolelog.txt", d + "\n", err => {
+        if (err) console.log("index function console.log error writing consolelog.txt: " + err)
+    });
+}; */
+
 function avatarinterval() {
     if (v.d().getMonth() == 11) {
         v.bot.user.setUsername(v.BOTXMASNAME).catch(err => {
@@ -109,7 +123,7 @@ v.bot.on("ready", async function() {
 
     console.log("Time: " + v.d())
 
-    //Checks if it is christmas and changes avatar & username at startup and then every 1 hour.
+    //Checks if it is christmas and changes avatar & username at startup and then every 6 hours.
     avatarinterval();
 
     v.bot.setInterval(() => {
@@ -358,10 +372,6 @@ v.bot.on("warn", (e) => console.warn("index warn event: " + e));
 if (v.botconfig.debug === "true") {
     v.bot.on("debug", (e) => console.info(e));
 }
-
-process.on('unhandledRejection', (reason, p) => {
-    console.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 //Command/Message Handler
 v.bot.on("message", async function(message) {

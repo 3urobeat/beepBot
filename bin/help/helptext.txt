@@ -41,7 +41,7 @@ Misc:
     *color [color code|color word|"colors"] - Gives you an random hex color code or your color given by color code or word (red, green etc.) with example. Type "colors" to get a list of all "word" colors. Given color code must not contain #'s.
     *serverlist  - Responds with names of all servers the bot is connected to.
     *github  - Get a link to my GitHub repository.
-    *ud (word)  - Searches the Urban Dictionary.
+    *ud (word)  - Searches the Urban Dictionary. (needs nsfw channel)
     *ytsearch (word)  - Searches for a video/livestream on youtube.
     *lyrics (title)  - Searches for song lyrics on genius.com.
     
@@ -57,10 +57,19 @@ Fun:
     *panda  - Posts a random panda picture.
     *redpanda  - Posts a random red panda picture.
     *fox  - Posts a random fox picture.
+    *owl  - Posts a random owl picture.
+    *lion  - Posts a random lion picture.
     *rps ("rock|scissors|paper")  - Just a very basic rock, paper, scissors game.
     *8ball (word)  - Yes or No? Let the bot decide.
     *achievement (description)  - Sends a minecraft achievement with your description.
-    
+
+NSFW:
+    *boobs  - Posts a random picture with boobs. (NSFW)
+    *butts  - Posts a random picture with butts. (NSFW)
+    *pgif  - Posts a random porn gif. (NSFW)
+    *anal  - Posts random anal gifs and pics. (NSFW)
+    *4k  - Posts 4k porn pics. (NSFW)
+
 Owner only:
     *setname (name)/("default|x-mas")  - Sets the bot username to the fiven argument (2-32) or to default or to x-mas. Owner only.
     *setgame [game]/["default"]  - Sets the playing status to the given argument or to default. Owner only.

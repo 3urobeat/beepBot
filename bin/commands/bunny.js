@@ -4,7 +4,19 @@ module.exports.run = async (bot, message, args) => {
     try {
         const { body } = await v.superagent
         .get('https://api.bunnies.io/v2/loop/random/?media=gif')
-        message.channel.send(body.media.gif)
+        var imageurl = body.media.gif
+        message.channel.send({embed:{
+            title: imageurl,
+            image: {
+                url: imageurl
+            },
+            footer:{
+                icon_url: message.author.displayAvatarURL,
+                text: "Requestet by " + message.author.username
+            },
+            timestamp: message.createdAt,
+            color: v.randomhex()
+        }})
     } catch (err) {
         console.log("Bunny API Error: " + err)
         message.channel.send("Bunny API Error: " + err)

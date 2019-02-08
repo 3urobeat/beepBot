@@ -3,9 +3,20 @@ module.exports.run = async (bot, message, args) => {
 
     try {
         const { body } = await v.superagent
-/*         .get('https://dog.ceo/api/breeds/image/random') */ //Old api
         .get('https://random.dog/woof.json')
-        message.channel.send(body.url)
+        var imageurl = body.url
+        message.channel.send({embed:{
+            title: imageurl,
+            image: {
+                url: imageurl
+            },
+            footer:{
+                icon_url: message.author.displayAvatarURL,
+                text: "Requestet by " + message.author.username
+            },
+            timestamp: message.createdAt,
+            color: v.randomhex()
+        }})
     } catch (err) {
         console.log("Dog API Error: " + err)
         message.channel.send("Dog API Error: " + err)
