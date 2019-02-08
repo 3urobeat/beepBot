@@ -54,9 +54,18 @@ Fun:
     *panda  - /
     *redpanda  - /
     *fox  - /
+    *owl  - /
+    *lion  - /
     *rps ("rock|scissors|paper")  - *rps-game ("rock|scissors|paper")
     *8ball (text)  - /
-    *achievement (description)  - / 
+    *achievement (description)  - /
+
+NSFW:
+    *boobs  - /
+    *butts  - /
+    *pgif  - *porngif
+    *anal  - /
+    *4k  - /
 
 Owner only:
     *setname (name)/("default|x-mas")  - /

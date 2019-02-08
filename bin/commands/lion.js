@@ -1,10 +1,10 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
-
+    
     try {
         const { body } = await v.superagent
-        .get('https://api.bunnies.io/v2/loop/random/?media=gif')
-        var imageurl = body.media.gif
+        .get('https://animals.anidiots.guide/lion')
+        var imageurl = body.link
         message.channel.send({embed:{
             title: imageurl,
             image: {
@@ -18,13 +18,12 @@ module.exports.run = async (bot, message, args) => {
             color: v.randomhex()
         }})
     } catch (err) {
-        console.log("Bunny API Error: " + err)
-        message.channel.send("Bunny API Error: " + err)
+        console.log("lion API Error: " + err)
+        message.channel.send("lion API Error: " + err)
     }
 
 }
 
 module.exports.config = {
-    command: "bunny",
-    alias: "rabbit"
+    command: "lion"
 }

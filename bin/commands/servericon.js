@@ -7,7 +7,20 @@ module.exports.run = async (bot, message, args) => {
     if (message.guild.iconURL === null) {
         message.channel.send(message.author + " This server does not have an custom icon. :neutral_face:")
         return; }
-    message.channel.send(message.author + "\n" + message.guild.iconURL);
+    
+    var imageurl = message.guild.iconURL
+    message.channel.send({embed:{
+        title: imageurl,
+        image: {
+            url: imageurl
+        },
+        footer:{
+            icon_url: message.author.displayAvatarURL,
+            text: "Requestet by " + message.author.username
+        },
+        timestamp: message.createdAt,
+        color: v.randomhex()
+    }})
 
 }
 

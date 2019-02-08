@@ -1,10 +1,12 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
+    
+    if (!message.channel.nsfw) return message.channel.send("🔞 You have to use this in a nsfw channel!");
 
     try {
         const { body } = await v.superagent
-        .get('https://api.bunnies.io/v2/loop/random/?media=gif')
-        var imageurl = body.media.gif
+        .get('https://nekobot.xyz/api/image?type=anal')
+        var imageurl = body.message
         message.channel.send({embed:{
             title: imageurl,
             image: {
@@ -18,13 +20,12 @@ module.exports.run = async (bot, message, args) => {
             color: v.randomhex()
         }})
     } catch (err) {
-        console.log("Bunny API Error: " + err)
-        message.channel.send("Bunny API Error: " + err)
+        console.log("anal API Error: " + err)
+        message.channel.send("nekobot.xyz anal API Error: " + err)
     }
 
 }
 
 module.exports.config = {
-    command: "bunny",
-    alias: "rabbit"
+    command: "anal"
 }
