@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args) => {
-    const v = require("../vars.js")
-    const i = require("../index.js")
+  const v = require("../vars.js")
+  const i = require("../index.js")
 
 }
 

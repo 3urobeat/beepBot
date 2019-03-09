@@ -1,6 +1,6 @@
 <div align="center">
 	<h1 align="center">~ beepBot ~</h1>
-	<strong>beepBot - A bot that gets frequently updated and is 24/7 online.</strong><br />Get an overview of 70+ commands with `*help`<br /><br />
+	<strong>beepBot - A bot that gets frequently updated and is 24/7 online.</strong><br />Get an overview of 80+ commands with `*help`<br /><br />
 </div>
 
 Invite my bot to your server: 
@@ -9,7 +9,8 @@ https://discordapp.com/oauth2/authorize?client_id=265162449441783808&scope=bot&p
 Join my support server!
 https://discord.gg/YPDPPWT
 
-On GitHub you can find the newest version of my Discord.js Bot.
+This bot is not intended to be downloaded and used privatly. This repo will miss some important files you would need to run it on your computer.
+Instead, add the bot to your server with the invite link above.
 
 <div align="center">
 	<a href="https://discordbots.org/bot/265162449441783808">
@@ -18,8 +19,8 @@ On GitHub you can find the newest version of my Discord.js Bot.
 </div>
 
 <div align="center">
-	<a href="https://botsfordiscord.com/bots/265162449441783808">
-	  <img src="https://botsfordiscord.com/api/v1/bots/265162449441783808/embed?theme=dark" />
+	<a href="https://botsfordiscord.com/bots/265162449441783808" >
+		<img src="https://botsfordiscord.com/api/bot/265162449441783808/widget" title="Visit beepBot listed on Bots for Discord!" alt="beepBot's Widget Failed to Load" />
 	</a>
 </div>
 

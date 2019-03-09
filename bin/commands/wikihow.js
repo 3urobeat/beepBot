@@ -59,7 +59,8 @@ module.exports.run = async (bot, message, args) => {
         }
     }
 
-    var r = request.get('https://' + language + '.wikihow.com/Special:Randomizer', function (err, res, body) {
+    var r = request.get('https://' + language + '.wikihow.com/Special:Randomizer', function (err) {
+        if (err) { message.channel.send("Error: " + err); console.log("Error: " + err); return; }
         message.channel.send(r.uri.href);
     })
 

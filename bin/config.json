@@ -2,9 +2,9 @@
     "shards": 1,
     "loginmode": "normal",
     "prefix": "*",
-    "game": "*help | HerrEurobeat",
+    "game": "*help | 3urobeat",
     "gametype": "PLAYING",
     "status": "dnd",
-    "version": "2.15",
+    "version": "2.15.1",
     "debug": "false"
 }

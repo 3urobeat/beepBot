@@ -41,7 +41,7 @@ const ssinvitecode = "YPDPPWT";
 
 var botloginmode = botconfig.loginmode;
 
-const DEFAULTGAME = "*help | HerrEurobeat";
+const DEFAULTGAME = "*help | 3urobeat";
 var BOTXMASNAME = "beepBot🎅🎄";
 var BOTVERSION = botconfig.version;
 var STATUS = botconfig.status;
