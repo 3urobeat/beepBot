@@ -17,8 +17,6 @@ module.exports.run = async (bot, message, args) => {
       var { body } = await v.superagent
       .get('https://www.reddit.com/' + subreddit + '/' + sort + '.json')
   
-      console.log('https://www.reddit.com/r/' + subreddit + '/' + sort + '.json')
-  
       //posts loading message
       const msg = await message.channel.send("`Loading from Reddit...`")
 
