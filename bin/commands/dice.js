@@ -8,7 +8,7 @@ module.exports.run = async (bot, message, args) => {
     if (isNaN(messagecount) === true) { message.channel.send("It's something but not a clear number. `2-∞`"); return; }
     if (messagecount < 2) { message.channel.send("You have to give the endless dice a valid minimum! `2-∞`"); return; }
 
-    message.channel.send(v.randomstring(['Rolling... Stop! Its a','The dice stopped rolling:','Your Number:','...and its a','Dont become addicted!','Its like lottery! Did you won?']) + " **" + randomnumber + "**")
+    message.channel.send(':game_die: ' + v.randomstring(['Rolling... Stop! Its a','The dice stopped rolling:','Your Number:','...and its a','Dont become addicted!','Its like lottery! Did you won?']) + " **" + randomnumber + "**")
     return;
 }
 

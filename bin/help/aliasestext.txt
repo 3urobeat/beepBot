@@ -35,12 +35,15 @@ Misc:
     *weather (city)  - /
     *calc (math problem)  - *calculate, *calculator
     *dice (number)  - *roll (number)
+    *flip  - *coin, *coinflip
+    *sweep  - *randomuser
     *color  - *randomcolor
     *serverlist  - *servers
     *github  - /
     *ud (word)  - *urbandictionary (word)
     *ytsearch (word)  - /
     *lyrics (title)  - *l, *songtext
+    *reddit [subreddit] [hot|new|top|random]  - /
 
 Fun:
     *wikihow [language|"languages"]  - *wh

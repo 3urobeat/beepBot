@@ -38,12 +38,15 @@ Misc:
     *weather (city)  - Shows the weather for the provided city name.
     *calc (math problem)  - You can calculate with numbers, big numbers, complex numbers, fractions, units, strings, arrays, and matrices.
     *dice (number)  - Returns with a random number between 1 and the given number.
+    *flip  - Lets you flip a coin and responds with 'Head' or 'Tale'.
+    *sweep  - Selects a random user from the server and returns with name, tag and user id.
     *color [color code|color word|"colors"] - Gives you an random hex color code or your color given by color code or word (red, green etc.) with example. Type "colors" to get a list of all "word" colors. Given color code must not contain #'s.
     *serverlist  - Responds with names of all servers the bot is connected to.
     *github  - Get a link to my GitHub repository.
     *ud (word)  - Searches the Urban Dictionary. (needs nsfw channel)
     *ytsearch (word)  - Searches for a video/livestream on youtube.
     *lyrics (title)  - Searches for song lyrics on genius.com.
+    *reddit [subreddit] [hot|new|top|random]  - Posts a random post from reddit. If no subreddit name has been provided, a random subreddit will be chosen. If no sort has been provided it will be random.
     
 Fun:
     *wikihow [language|"languages"]  - Posts a link to a random wikihow article. Type "languages" to get all supported languages.

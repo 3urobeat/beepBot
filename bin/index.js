@@ -326,7 +326,7 @@ v.bot.on("guildDelete", guild => {
 
 v.bot.on("guildMemberAdd", async function(member) {
     // When a user joins the server message
-    if (v.botloginmode === "test" && member.guild.id === "231828052127121408") return;
+    if (v.botloginmode === "test" && member.guild.id === "331822220051611648") return;
     if (member.guild.systemChannelID == null) {
         return;
     } else {
@@ -337,7 +337,7 @@ v.bot.on("guildMemberAdd", async function(member) {
 
 v.bot.on("guildMemberRemove", function(member) {
     // When a user leaves the server direct message
-    if (v.botloginmode === "test" && member.guild.id === "231828052127121408") return;
+    if (v.botloginmode === "test" && member.guild.id === "331822220051611648") return;
     var options = {
         maxAge: false
     }
@@ -395,6 +395,8 @@ v.bot.on("message", async function(message) {
                 }}}}
 
     if (!message.content.startsWith(PREFIX)) return;
+    if(message.content.includes(PREFIX + "*")) return;            
+    if(message.content.endsWith(PREFIX)) return;
 
     var cont = message.content.slice(PREFIX.length).split(" ");
     var args = cont.slice(1);
@@ -419,8 +421,6 @@ v.bot.on("message", async function(message) {
         return;
 
     } else {
-        if(message.content.includes(PREFIX + "*")) return;            
-        if(message.content.endsWith(PREFIX)) return;
         //Disabled the error message because it was disturbing the chat.
         if (message.channel.type === "dm") {
             message.channel.send(v.wrongcmd())
