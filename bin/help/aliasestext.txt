@@ -65,7 +65,7 @@ Fun:
 
 NSFW:
     *boobs  - /
-    *butts  - /
+    *butts  - *butt, *ass
     *pgif  - *porngif
     *anal  - /
     *4k  - /

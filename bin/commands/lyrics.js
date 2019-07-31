@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args) => {
     const v = require("../vars.js")
-
+  
     if (args[0] === undefined) {
         message.channel.send("Please provide a title!")
         return;
@@ -10,6 +10,7 @@ module.exports.run = async (bot, message, args) => {
     var counter = 0;
 
     try {
+        //Getting lyrics
         const { body } = await v.superagent
         .get('https://some-random-api.ml/lyrics?title=' + title)
 
@@ -21,10 +22,16 @@ module.exports.run = async (bot, message, args) => {
         }
         var str = body.lyrics;
 
+        //sending messages
         if (str.length < 2000) {
-            message.channel.send({embed:{
+            msg.edit({embed:{
+                title: "Lyrics for " + body.title + ":",
+                url: body.links.genius,
                 color: 65280,
                 description: str,
+                thumbnail: {
+                    url: body.thumbnail.genius
+                },
                 timestamp: message.createdAt,
                 footer: {
                     text: "Requested by " + message.author.username,

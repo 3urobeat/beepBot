@@ -17,16 +17,11 @@ module.exports.run = async (bot, message, args) => {
                 console.log("color random color embed message error: " + err)
             })
         } else {
-            if (message.content.includes("#")) {
-                message.channel.send("Please remove any #'s.")
-                return
-            }
             var wantedcolor = args[0]
             switch(args[0].toLowerCase()) {
                 case "colors":
-                    message.channel.send("Supported 'word' colors: black, gray, red, green, blue, yellow, purple, gold, cyan, white, pink, orange.\nDisplay your color with *color (hex code).\nGet a random color by just typing *color")
+                    message.channel.send("Supported predefined colors: black, gray, red, green, blue, yellow, purple, gold, cyan, white, pink, orange.\nDisplay a color with *color (predefined color)\nGet a random color by just typing *color")
                     return;
-                    break;
                 case "black":
                     var wantedcolor = 0x000000
                     break;
@@ -63,6 +58,9 @@ module.exports.run = async (bot, message, args) => {
                 case "orange":
                     var wantedcolor = 0xFFA500
                     break;
+                default:
+                    message.channel.send('To get a random color just type: `*color`\nSee all predefined colors with `*color colors`\nSee the color code of a predefined color with `*color red` (example)')
+                    return;
             }
             
             message.channel.send({embed:{

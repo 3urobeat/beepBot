@@ -5,6 +5,6 @@
     "game": "*help | 3urobeat",
     "gametype": "PLAYING",
     "status": "dnd",
-    "version": "2.15.1",
+    "version": "2.15.2",
     "debug": "false"
 }
