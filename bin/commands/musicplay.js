@@ -84,6 +84,8 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send("YouTube API Error: " + err)
     }
 
+    console.log(urltoplay)
+    
     var server = v.servers[message.guild.id];
 
     server.queue.push(urltoplay);

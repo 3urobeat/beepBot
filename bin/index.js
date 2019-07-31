@@ -119,7 +119,7 @@ v.bot.on("ready", async function() {
         console.log("Game/Status error: " + err)
     }) 
     if (v.os.platform == "linux") console.log("I'm running on Linux...") 
-    if (v.os.platform == "win32") console.log("I'm running on Windows...")
+    if (v.os.platform == "win32") console.log("I'm running on Windows... CPU Temps unavailable.")
 
     console.log("Time: " + v.d())
 
@@ -272,15 +272,17 @@ v.bot.on("ready", async function() {
             updateserverlist()
         }, 3600 * 1000); //1 hour in milliseconds
 
-        //Upate CPU Temperature every 10 seconds if the os is Linux
+        //Upate CPU Temperature every 10 seconds if the loginmode is normal
         tempc = "null"
         tempf = "null"
 
-        if (v.os.platform == "linux") {
-            v.bot.setInterval(() => {
-                tempc = v.round(v.fs.readFileSync("/sys/class/thermal/thermal_zone0/temp") / 1000, 0);
-                tempf = v.round(tempc * 1.8 + 32, 0);
-            }, 5000)
+        if (v.botloginmode == "normal") {
+            if (v.os.platform == "linux") {
+                v.bot.setInterval(() => {
+                    tempc = v.round(v.fs.readFileSync("/sys/class/thermal/thermal_zone0/temp") / 1000, 0);
+                    tempf = v.round(tempc * 1.8 + 32, 0);
+                }, 5000)
+            }
         }
 
         var bootend = v.d() - bootstart

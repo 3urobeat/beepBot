@@ -27,5 +27,7 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.config = {
-    command: "butts"
+    command: "butts",
+    alias: "butt",
+    alias2: "ass"
 }

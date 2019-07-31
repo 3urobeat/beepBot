@@ -44,8 +44,18 @@ module.exports.run = async (bot, message, args) => {
       if (post.title.length >= 250) { var title = post.title.substring(0, 250) + '...' } else { var title = post.title }
   
       //Calculates date
-      var posted = (v.d() - new Date(post.created_utc *1000)) / 60000;
-      if (posted > 60) { var posted = v.round(posted / 60, 0) + " hours" } else if (posted > 2880) { var posted = v.round(posted / 24, 0) + " days" } else { var posted = v.round(posted, 0) + " min"}
+      var posted = (v.d() - new Date(post.created_utc * 1000)) / 60000;
+      if (posted > 525949) {
+        var posted = v.round(posted / 525949, 0) + " year(s)"
+      } else if (posted > 43829) {
+        var posted = v.round(posted / 43829, 0) + " month(s)"
+      } else if (posted > 1440) {
+        var posted = v.round(posted / 1440, 0) + " day(s)" 
+      } else if (posted > 60) { 
+        var posted = v.round(posted / 60, 0) + " hour(s)" 
+      } else { 
+        var posted = v.round(posted, 0) + " min"
+      }
   
       //gets one random color for all messages if more than one is being send and sets the additional info to the description
       var color = v.randomhex();
