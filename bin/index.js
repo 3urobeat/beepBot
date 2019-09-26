@@ -145,7 +145,7 @@ v.bot.on("ready", async function() {
         
         var jsfiles = files.filter(f => f.split('.').pop() === 'js');
         if (jsfiles.length <= 0) { return console.log("No commands found...")}
-        else { console.log("-> " + jsfiles.length + " commands found.") }
+        else { console.log("-> " + jsfiles.length + " commands found. Prefix: " + PREFIX) }
         
         jsfiles.forEach((f, i) => {
             var cmds = require(`./commands/${f}`);
@@ -396,11 +396,23 @@ v.bot.on("message", async function(message) {
                     })
                 }}}}
 
-    if (!message.content.startsWith(PREFIX)) return;
-    if(message.content.includes(PREFIX + "*")) return;            
-    if(message.content.endsWith(PREFIX)) return;
+    //slice message and extract prefix, cmd and args (probably bad solution, but it works!)
+    if (message.content.startsWith(PREFIX)) { //check for normal prefix
+        /* seems like these two aren't needed anymore and cause more trouble than fixing anything when the 'command not found' error is disabled but i will keep them here just in case idk
+        if(message.content.startsWith(PREFIX + PREFIX)) return; //check for double prefix because of possible conflict with markdown etc.           
+        if(message.content.endsWith(PREFIX)) return; //also conflict check bot would otherwise react to eg. *message* 
+        */
+    
+        var cont = message.content.slice(PREFIX.length).split(" ");
+    } else if (message.mentions.members.get(v.bot.user.id)) { //if no prefix given, check for mention
+        var cont = message.content.slice(message.mentions.members.get(v.bot.user.id).toString().length).split(" ");
 
-    var cont = message.content.slice(PREFIX.length).split(" ");
+        if (cont[0] == "") { var cont = cont.slice(1) } //check for space between mention and command
+        if (cont.toString().startsWith(PREFIX)) { var cont = cont.toString().slice(PREFIX.length).split(" "); } //the user even added a prefix between mention and cmd? get rid of it.
+    } else { //normal message? stop.
+        return;
+    }
+
     var args = cont.slice(1);
     
     var cmd = v.bot.commands.get(cont[0].toLowerCase())

@@ -6,7 +6,8 @@ module.exports.run = async (bot, message, args) => {
         .get('http://aws.random.cat/meow')
         var imageurl = body.file
         message.channel.send({embed:{
-            title: imageurl,
+            title: "Image doesn't load? Click here!",
+            url: imageurl,
             image: {
                 url: imageurl
             },

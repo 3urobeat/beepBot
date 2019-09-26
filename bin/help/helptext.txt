@@ -61,7 +61,6 @@ Fun:
     *redpanda  - Posts a random red panda picture.
     *fox  - Posts a random fox picture.
     *owl  - Posts a random owl picture.
-    *lion  - Posts a random lion picture.
     *rps ("rock|scissors|paper")  - Just a very basic rock, paper, scissors game.
     *8ball (word)  - Yes or No? Let the bot decide.
     *achievement (description)  - Sends a minecraft achievement with your description.

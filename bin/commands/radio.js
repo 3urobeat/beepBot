@@ -34,7 +34,7 @@ module.exports.run = async (bot, message, args) => {
                 message.channel.send("Supported radio stations:\n   dlf (Deutschlandfunk)\n   next (Bremen NEXT)\n   njoy (N-JOY)\n   ndrinfo (NDR Info)\n   radio21 (Radio 21)\n   ndr2 (NDR 2)\n   ndr1 (NDR 1)")
                 return;
             case "dlf":
-                var station = "http://dg-dradio-http-fra-dtag-cdn.cast.addradio.de/dlf/01/128/mp3/stream.mp3"
+                var station = "http://dradio-edge-2096.fra-lg.cdn.addradio.net/dradio/dlf/live/mp3/128/stream.mp3"
                 var stationname = "Deutschlandfunk"
                 break;
             case "next":

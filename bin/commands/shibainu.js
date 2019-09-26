@@ -6,7 +6,8 @@ module.exports.run = async (bot, message, args) => {
         .get('http://shibe.online/api/shibes')
         var imageurl = body[0]
         message.channel.send({embed:{
-            title: imageurl,
+            title: "Image doesn't load? Click here!",
+            url: imageurl,
             image: {
                 url: imageurl
             },

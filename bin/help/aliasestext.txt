@@ -58,7 +58,6 @@ Fun:
     *redpanda  - /
     *fox  - /
     *owl  - /
-    *lion  - /
     *rps ("rock|scissors|paper")  - *rps-game ("rock|scissors|paper")
     *8ball (text)  - /
     *achievement (description)  - /
