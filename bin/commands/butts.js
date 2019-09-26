@@ -8,7 +8,8 @@ module.exports.run = async (bot, message, args) => {
         .get('http://api.obutts.ru/butts/0/1/random')
         var imageurl = "http://media.obutts.ru/" + body[0].preview
         message.channel.send({embed:{
-            title: imageurl,
+            title: "Image doesn't load? Click here!",
+            url: imageurl,
             image: {
                 url: imageurl
             },

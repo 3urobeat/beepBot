@@ -3,10 +3,11 @@ module.exports.run = async (bot, message, args) => {
 
     try {
         const { body } = await v.superagent
-        .get('https://some-random-api.ml/birbimg')
+        .get('https://some-random-api.ml/img/birb')
         var imageurl = body.link
         message.channel.send({embed:{
-            title: imageurl,
+            title: "Image doesn't load? Click here!",
+            url: imageurl,
             image: {
                 url: imageurl
             },

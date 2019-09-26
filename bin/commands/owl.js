@@ -6,7 +6,8 @@ module.exports.run = async (bot, message, args) => {
         .get('http://pics.floofybot.moe/owl')
         var imageurl = body.image
         message.channel.send({embed:{
-            title: imageurl,
+            title: "Image doesn't load? Click here!",
+            url: imageurl,
             image: {
                 url: imageurl
             },

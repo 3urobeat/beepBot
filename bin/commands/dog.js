@@ -6,7 +6,8 @@ module.exports.run = async (bot, message, args) => {
         .get('https://random.dog/woof.json')
         var imageurl = body.url
         message.channel.send({embed:{
-            title: imageurl,
+            title: "Image doesn't load? Click here!",
+            url: imageurl,
             image: {
                 url: imageurl
             },

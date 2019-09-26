@@ -6,7 +6,8 @@ module.exports.run = async (bot, message, args) => {
         .get('https://some-random-api.ml/redpandaimg')
         var imageurl = body.link
         message.channel.send({embed:{
-            title: imageurl,
+            title: "Image doesn't load? Click here!",
+            url: imageurl,
             image: {
                 url: imageurl
             },

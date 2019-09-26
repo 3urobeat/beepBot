@@ -6,7 +6,8 @@ module.exports.run = async (bot, message, args) => {
         .get('https://api.bunnies.io/v2/loop/random/?media=gif')
         var imageurl = body.media.gif
         message.channel.send({embed:{
-            title: imageurl,
+            title: "Image doesn't load? Click here!",
+            url: imageurl,
             image: {
                 url: imageurl
             },

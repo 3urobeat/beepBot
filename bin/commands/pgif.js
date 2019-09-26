@@ -8,7 +8,8 @@ module.exports.run = async (bot, message, args) => {
         .get('https://nekobot.xyz/api/image?type=pgif')
         var imageurl = body.message
         message.channel.send({embed:{
-            title: imageurl,
+            title: "Image doesn't load? Click here!",
+            url: imageurl,
             image: {
                 url: imageurl
             },
