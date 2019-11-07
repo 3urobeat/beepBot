@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args) => {
         if (!message.content.includes("https://www.yout")) {
 
             var searchword = args.slice(0).join(" ")
-            message.channel.send("Searching for " + searchword + "...");
+            message.channel.send("Searching for `" + searchword + "`...");
             
             var kind = "video"
             var searchword = args.slice(0).join(" ")

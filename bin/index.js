@@ -31,6 +31,7 @@ function avatarinterval() {
         v.bot.user.setAvatar(botavatar).catch(err => {
             console.log(v.LOGWARN + "Avatar fail. " + err + "\n ") })
     }
+    lastavatarinterval = Date.now() + (3600000 * 6);
 }
 
 function botstartupmode() {
@@ -59,6 +60,7 @@ function updateserverlist() {
             if (err) console.log("index function updateserverlist error writing serverlist.txt: " + err)
         });
     }
+    console.log('Updated serverlist.txt.')
 }
 
 async function voiceunmute(voiceunmuteMember) {
@@ -127,9 +129,11 @@ v.bot.on("ready", async function() {
     avatarinterval();
 
     v.bot.setInterval(() => {
-        avatarinterval();
-        console.log(v.LOGINFO + "6 hours passed, updated name and avatar. [" + v.d() + "]")
-    }, 21600000); //1 hour in seconds to 6 hours in milliseconds.
+        if (Date.now() > lastavatarinterval) {
+            avatarinterval();
+            console.log(v.LOGINFO + "6 hours passed, updated name and avatar. [" + v.d() + "]")
+        }
+    }, 30000); //check every 30 seconds
 
     //Set 8ball askedbefore check to something at startup
     askedbefore = "undefined"
@@ -348,9 +352,7 @@ v.bot.on("guildMemberRemove", function(member) {
         })
     }
     
-/*     if (member.guild.systemChannelID == null) {
-
-    } else {
+/*   if (member.guild.systemChannelID != null) { //send the user an invite when he leaves the guild
         member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
         })
         if (member.guild.size < 250) {
@@ -359,9 +361,10 @@ v.bot.on("guildMemberRemove", function(member) {
             }).catch(err => {
             })
         }
-    } */
+    } */ 
 });
 
+//message to server owner when his guild becomes unavailable
 /* v.bot.on("guildUnavailable", function(guild) {
     // When a guild becomes unavailable, likely due to a server outage if the guild has less then 500 members.
     if (member.guild.members.size < 500) {
@@ -369,7 +372,10 @@ v.bot.on("guildMemberRemove", function(member) {
     }
 }); */
 
-v.bot.on("error", (error) => console.error("index error event: " + error));
+v.bot.on("error", (error) => {
+    console.log('index error event: '); 
+    console.error(error);
+});
 v.bot.on("warn", (e) => console.warn("index warn event: " + e));
 if (v.botconfig.debug === "true") {
     v.bot.on("debug", (e) => console.info(e));

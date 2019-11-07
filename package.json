@@ -22,13 +22,14 @@
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
     "mathjs": "^5.10.3",
-    "nodemon": "^1.19.1",
+    "miniget": "^1.6.0",
+    "nodemon": "^1.19.2",
     "opusscript": "^0.0.4",
     "request": "^2.88.0",
     "snekfetch": "^4.0.4",
     "superagent": "^3.8.3",
     "table": "^4.0.3",
-    "ytdl-core": "^0.20.4"
+    "ytdl-core": "^0.29.7"
   },
   "devDependencies": {},
   "scripts": {

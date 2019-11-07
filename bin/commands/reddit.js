@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
       .get('https://www.reddit.com/' + subreddit + '/' + sort + '.json')
   
       //posts loading message
-      const msg = await message.channel.send("`Loading from Reddit...`")
+      const msg = await message.channel.send("`Searching in " + sort + " from " + subreddit + "...`")
 
       //Randomizer made by https://github.com/NotAWeebDev/Misaki/blob/master/commands/fun/reddit.js
       let post;
@@ -39,10 +39,12 @@ module.exports.run = async (bot, message, args) => {
       if (post.over_18) { var over18 = "🔞 "; }
   
       //checks if no thumbnail is being provided to prevent errors, checks for missing post description and if the title length is above the embed limit
+      msg.edit("`Getting data from reddit...`")
       if (post.thumbnail == "self") { var thumbnail = null } else { var thumbnail = post.thumbnail; }
       if (post.selftext == "") { var selftext = "No Description." } else { var selftext = post.selftext }
       if (post.title.length >= 250) { var title = post.title.substring(0, 250) + '...' } else { var title = post.title }
   
+      msg.edit("`Loading message...`")
       //Calculates date
       var posted = (v.d() - new Date(post.created_utc * 1000)) / 60000;
       if (posted > 525949) {
