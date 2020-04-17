@@ -7,7 +7,7 @@
     "beepbot": "index.js"
   },
   "dependencies": {
-    "acorn": "^5.7.3",
+    "acorn": "^5.7.4",
     "bfd-api": "^0.2.6",
     "child_process": "^1.0.2",
     "concat-stream": "^1.6.2",
