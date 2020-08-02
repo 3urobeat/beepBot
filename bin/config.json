@@ -1,10 +1,8 @@
 {
     "shards": 1,
-    "loginmode": "normal",
-    "prefix": "*",
-    "game": "*help | 3urobeat",
-    "gametype": "PLAYING",
+    "loginmode": "test",
     "status": "dnd",
-    "version": "2.15.4",
-    "debug": "false"
+    "gametype": "playing",
+    "game": "*help | 3urobeat",
+    "version": "BETA 3.0 b1"
 }

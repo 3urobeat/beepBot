@@ -1,453 +1,219 @@
-﻿console.log(" ")
-console.log("Loading...")
-const v = require("./vars.js")
-var bootstart = v.d()
-talkedRecently = new Set();
+﻿var v = require("./vars.js")
+v.checkm8();
+var bootstart = 0;
+var bootstart = v.d() //set time for bootup
+var logger    = v.logger //make it more simple to interact with it
+const ascii   = v.randomstring(v.asciipath.ascii) //set random ascii for this bootup
 
-//Functions:
+if (v.botconfig.shards > 1) { logger(v.LOGINFO() + "Starting with " + v.botconfig.shards + " shards!") }
+logger(`${v.LOGINFO()} Initiating bootup sequence...`)
+logger(`\n${ascii}\n`, true)
+
+/* ------------ Functions: ------------ */
 process.on('unhandledRejection', (reason, p) => {
-    console.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
-//not needed right now
-/* console.log = function(d) {
-    //save console.log to a file:
-    process.stdout.write(d + '\n');
-    v.fs.appendFile("./bin/consolelog.txt", d + "\n", err => {
-        if (err) console.log("index function console.log error writing consolelog.txt: " + err)
-    });
-}; */
-
-function avatarinterval() {
-    if (v.d().getMonth() == 11) {
-        v.bot.user.setUsername(v.BOTXMASNAME).catch(err => {
-            console.log(v.LOGWARN + "Username fail. " + err + "\n ") })
-        v.bot.user.setAvatar(v.botxmasavatar).catch(err => {
-            console.log(v.LOGWARN + "Avatar fail. " + err + "\n ") })
-    }else{
-        v.bot.user.setUsername(BOTNAME).catch(err => {
-            console.log(v.LOGWARN + "Username fail. " + err + "\n ") })
-            
-        v.bot.user.setAvatar(botavatar).catch(err => {
-            console.log(v.LOGWARN + "Avatar fail. " + err + "\n ") })
-    }
-    lastavatarinterval = Date.now() + (3600000 * 6);
-}
+    logger(`${v.LOGERR()}Unhandled Rejection! Reason: ${reason.stack}`) });
 
 function botstartupmode() {
     try {
-        if (v.botloginmode === "normal") {
-            var TOKEN = v.tokenpath.token;
-            v.bot.login(TOKEN)
-        } else if (v.botloginmode === "test") {
-            var TOKEN = v.tokenpath.testtoken;
-            v.bot.login(TOKEN)
+        logger(v.LOGINFO() + 'Logging in...', true)
+        if (v.botconfig.loginmode === "normal") {
+            v.bot.login(v.tokenpath.token) //login with normal token
+            //setting appearance variables:
+            BOTNAME   = "beepBot";
+            GAME      = v.botconfig.game;
+            BOTAVATAR = v.botdefaultavatar;
+        } else if (v.botconfig.loginmode === "test") {
+            v.bot.login(v.tokenpath.testtoken) //login with testbot token
+            //setting appearance variables:
+            BOTNAME   = "beepTestBot";
+            if (v.botconfig.game === v.DEFAULTGAME) { GAME = "testing beepBot..." } else { GAME = v.botconfig.game }
+            BOTAVATAR = v.testbotdefaultavatar;
         } else {
-            console.log(v.LOGWARN + "index function botstartupmode error logging in: ")
-            return;
-        }
-    } catch(err) {
-        console.log(v.LOGWARN + "index function botstartupmode error logging in: " + err)
-    }
-}
+            logger(v.LOGERR() + "Specified loginmode in config is invalid! Aborting..."); v.bot.destroy(); }
+    } catch(err) { logger(v.LOGERR() + "function botstartupmode error logging in: " + err) }}
+
+function avatarinterval(cb) {
+    if (v.d().getMonth() == 11) {
+        if (v.botconfig.loginmode === "normal") v.bot.user.setUsername(v.BOTXMASNAME).catch(err => { logger(v.LOGWARN() + `XMAS Username error: ${err}`) })
+            else v.bot.user.setUsername("beepTestBot").catch(err => { logger(v.LOGWARN() + `(testmode) XMAS Username error: ${err}`) })
+        if (v.botconfig.loginmode === "normal") v.bot.user.setAvatar(v.botxmasavatar).catch(err => { logger(v.LOGWARN() + `XMAS Avatar error: ${err}`) })
+            else v.bot.user.setAvatar(v.testbotdefaultavatar).catch(err => { logger(v.LOGWARN() + `(testmode) XMAS Avatar error: ${err}`) })
+        cb("XMAS");
+    } else {
+        v.bot.user.setUsername(BOTNAME).catch(err => { logger(v.LOGWARN() + `Username error: ${err}`) })
+        v.bot.user.setAvatar(BOTAVATAR).catch(err => { logger(v.LOGWARN() + `Avatar error: ${err}`) })
+        cb("normal"); }
+    lastavatarinterval = Date.now() + (3600000 * 6) }
 
 function updateserverlist() {
-    v.fs.writeFile("./bin/serverlist.txt", "", err => {
-        if (err) console.log("index function updateserverlist error clearing serverlist.txt: " + err)
-    })
-    for (guilds of v.bot.guilds){
-        v.fs.appendFile("./bin/serverlist.txt", "  " + guilds[1].name + "\n", err => {
-            if (err) console.log("index function updateserverlist error writing serverlist.txt: " + err)
-        });
+    serverlist = []
+    v.bot.guilds.cache.array().forEach((e, i) => {
+        serverlist.push(e.name + "\n")
+
+        if (i + 1 == v.bot.guilds.cache.array().length) {
+            v.fs.writeFile("./bin/serverlist.txt", serverlist.join(""), err => { //join() removes commas from array
+                if (err) logger(v.LOGERR() + "function updateserverlist error writing serverlist.txt: " + err) }) } })
+
+    lastserverlistinterval = Date.now() + (1800000) }
+
+function servertosettings(guild) {
+    v.bot.settings[guild.id] = {
+        prefix: v.DEFAULTPREFIX,
+        lang: "english",
+        adminroles: [],
+        moderatorroles: [],
+        systemchannel: null,
+        greetmsg: null,
+        byemsg: null,
+        memberaddroles: []
     }
-    console.log('Updated serverlist.txt.')
-}
-
-async function voiceunmute(voiceunmuteMember) {
-    voiceunmuteMember.setMute(false).then(member => {
-        }).catch(err => {
-            console.log("index function voiceunmute error: " + err)
-        })
-}
-
-async function chatunmute(chatunmuteMember, chatmutedRole) {
-    if (!chatmutedRole) {
-        console.log("The 'beepBot Muted' role does not exist on this server.")
-        return;
-    }
-    await chatunmuteMember.removeRole(chatmutedRole.id).catch(err => {
-        console.log("index function chatunmute Error: " + err)
-    })
-}
-
-async function unban(banguild, unbanMember) {
-    banguild.unban(unbanMember).catch(err => {
-        console.log("index function unban Error: " + err)
-    })
-}
+    v.fs.writeFile(v.settingspath, JSON.stringify(v.bot.settings, null, 4), err => {
+        if(err) logger(v.LOGERR() + `writing server (${guild.id}) to settings.json: ${err}`) })
+       
+    //adding prefix to server nickname    
+    if (v.bot.guilds.get(guild.id).members.get(v.bot.user.id).nickname === null) { var nickname = v.bot.user.username } else { var nickname = v.bot.guilds.get(guild.id).members.get(v.bot.user.id).nickname }
+    v.bot.guilds.get(guild.id).members.get(v.bot.user.id).setNickname(`${nickname} [${v.DEFAULTPREFIX}]`).catch(err => {}) }
 
 function cmdusetofile(cmdtype, cont, guildid) {
-    v.fs.appendFile("./bin/cmduse.txt", v.CMDUSE + cmdtype + " " + cont + " got used! [" + v.d().getHours() + ":" + v.d().getMinutes() + ":" + v.d().getSeconds() + "] (" + guildid + ")\n", err => {
-        if (err) console.log("index function cmdusetofile writing cmduse.txt error: " + err)
-    });
-}
+    v.fs.appendFile("./bin/cmduse.txt",`${cmdtype} ${cont} got used! [${v.d().getHours()}:${v.d().getMinutes()}:${v.d().getSeconds()}] (${guildid})\n`, err => {
+        if (err) logger(v.LOGERR() + `writing cmduse to cmduse.txt: ${err}`) }) }
 
-if (v.botloginmode === "test") { 
-    var PREFIX = "**";
-    var BOTNAME = "beepTestBot";
-    if (v.botconfig.game === v.DEFAULTGAME) {
-        var GAME = "testing beepBot...";
-    } else {
-        var GAME = v.botconfig.game
-    }
-    var botavatar = v.testbotdefaultavatar;
-    var botinvite = v.testbotinvitelink;
-} else {
-    var PREFIX = v.botconfig.prefix;
-    var BOTNAME = "beepBot";
-    var GAME = v.botconfig.game;
-    var botavatar = v.botdefaultavatar;
-    var botinvite = v.botinvitelink;
-}
 
-//BOT Startup
+/* ------------ Startup: ------------ */
 v.bot.on("ready", async function() {
+    logger(v.LOGINFO() + "Loading...", true)
 
-    console.log(" ")
-    console.log("*---------------------*")
-    if (v.botloginmode === "normal") { console.log("Started " + BOTNAME + " " + v.BOTVERSION + " by " + v.BOTOWNER + " in " + v.botloginmode + " mode.") } 
-    if (v.botloginmode === "test") { console.log("Started " + BOTNAME + " " + v.BOTVERSION + " by " + v.BOTOWNER + " in *" + v.botloginmode + "ing mode.*") }
-    v.bot.user.setPresence({game: { name: GAME, type: v.botconfig.gametype, url: v.streamlink}, status: v.STATUS }).catch(err => {
-        console.log("Game/Status error: " + err)
-    }) 
-    if (v.os.platform == "linux") console.log("I'm running on Linux...") 
-    if (v.os.platform == "win32") console.log("I'm running on Windows... CPU Temps unavailable.")
+    logger(`\n                ${v.LOGINFO()}         `, true)
+    logger("*-----------------------------------------------*", true)
+    logger(`> Started ${BOTNAME} ${v.botconfig.version} by ${v.BOTOWNER}`, true)
+    if (v.botconfig.shards > 1) logger(`> ${v.botconfig.shards} shards running in \x1b[32m${v.botconfig.loginmode}\x1b[0m mode on ${process.platform}`, true); 
+        else logger(`> Running in \x1b[32m${v.botconfig.loginmode}\x1b[0m mode on ${process.platform}.`, true);
 
-    console.log("Time: " + v.d())
+    v.bot.user.setPresence({game: { name: GAME, type: v.botconfig.gametype, url: v.streamlink}, status: v.botconfig.status }).catch(err => { //game switching loop todo
+        logger(v.LOGERR() + "setPresence Game/Status error: " + err)}) 
 
-    //Checks if it is christmas and changes avatar & username at startup and then every 6 hours.
-    avatarinterval();
-
+    //Calls avatarinterval once and then every 6 hours by checking when the last interval happened.
+    avatarinterval(function(type) { 
+        logger(`> Presence: ${v.botconfig.status} - ${v.botconfig.gametype} '${GAME}' (${type})`, true) }); //log avatarinterval combined with game, status etc.
     v.bot.setInterval(() => {
         if (Date.now() > lastavatarinterval) {
-            avatarinterval();
-            console.log(v.LOGINFO + "6 hours passed, updated name and avatar. [" + v.d() + "]")
-        }
+            avatarinterval(function(type) {
+                logger(v.LOGINFO() + `Updated name and avatar to ${type}. [${v.d()}]`, true) })}
     }, 30000); //check every 30 seconds
 
-    //Set 8ball askedbefore check to something at startup
-    askedbefore = "undefined"
+    //serverlist.txt refresh once on startup than every hour:
+    updateserverlist();
+    v.bot.setInterval(() => {
+        if (Date.now() > lastserverlistinterval) {
+            updateserverlist();
+            //logger(v.LOGINFO() + `Updated serverlist.txt. [${v.d()}]`) 
+        }
+    }, 30000);
 
     //Log the startup in the cmduse.txt file
-    v.fs.appendFile("./bin/cmduse.txt", " \nStarting " + v.BOTVERSION + " in " + v.botloginmode + " mode. [" + v.d() + "]\n", err => {
-        if (err) console.log("index writing startup to cmduse.txt error: " + err)
-    });
+    v.fs.appendFile("./bin/cmduse.txt", ` \nStarting ${v.botconfig.version} in ${v.botconfig.loginmode} mode. ${v.d()}]\n`, err => {
+        if (err) logger(v.LOGERR() + "writing startup to cmduse.txt error: " + err) });
 
-    //Command reader
-    v.fs.readdir('./bin/commands/', (err, files) => {
-        if (err) console.error(err);
-        
-        var jsfiles = files.filter(f => f.split('.').pop() === 'js');
-        if (jsfiles.length <= 0) { return console.log("No commands found...")}
-        else { console.log("-> " + jsfiles.length + " commands found. Prefix: " + PREFIX) }
-        
-        jsfiles.forEach((f, i) => {
-            var cmds = require(`./commands/${f}`);
-            v.bot.commands.set(cmds.config.command, cmds);
-            v.bot.alias.set(cmds.config.alias, cmds)
-            v.bot.alias2.set(cmds.config.alias2, cmds)
-        })
-        
-        console.log("Set presence to: " + v.botconfig.status + " - " + v.botconfig.gametype.toLowerCase() + " " + GAME)
-        
-        //Mute and Ban checker:
-        v.bot.setInterval(() => {
-            for(let i in v.bot.chatmutes) {
-                let chattime = v.bot.chatmutes[i].time;
-                let chatguildId = v.bot.chatmutes[i].guild;
-                let chatmuteauthorId = v.bot.chatmutes[i].muteauthor;
-                let chatmutechannelId = v.bot.chatmutes[i].mutechannel;
-                let chatrawmuteduration = v.bot.chatmutes[i].rawmuteduration;
-                let chatmutedurationtype = v.bot.chatmutes[i].mutedurationtype;
+    //Command reader:
+    const { readdirSync, statSync } = require('fs')
+    const { join } = require('path')
 
-                let chatguild = v.bot.guilds.get(chatguildId)
-                let chatunmuteMember = chatguild.members.get(i);
-                let chatmutedRole = chatguild.roles.find(r => r.name === "beepBot Muted");
-                let chatchannel = chatguild.channels.find(channel => channel.id === chatmutechannelId)
-                let chatmuteauthor = chatguild.members.find(member => member.id === chatmuteauthorId)
-                if (!chatmutedRole) continue;
+    const dirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory())
+    cmdssize = 0;
 
-                if (Date.now() > chattime) {
-                    if ((Date.now() - chattime) > 10000 && chatunmuteMember === undefined) {
-                        delete v.bot.chatmutes[i];
-                        v.fs.writeFile(v.chatmutespath, JSON.stringify(v.bot.chatmutes), err => {
-                            if (err) console.log("index timed chatmute erase from file undefined Error: " + err)
-                        })
-                        return;
-                    }
-                    chatunmute(chatunmuteMember, chatmutedRole)
-                    chatchannel.send(chatunmuteMember + " was chat-unmuted after " + chatrawmuteduration + " " + chatmutedurationtype + " by " + chatmuteauthor + ".").catch(err => {
-                        console.log("index timed chatmute send unmuted message Error: " + err)
-                    })
-                    
-                    delete v.bot.chatmutes[i];
-                    v.fs.writeFile(v.chatmutespath, JSON.stringify(v.bot.chatmutes), err => {
-                        if (err) console.log("index timed chatmute erase from file Error: " + err)
-                    })
-                }
-            }
-        }, 5000)
-        
-        v.bot.setInterval(() => {
-            for(let i in v.bot.voicemutes) {
-                let voicetime = v.bot.voicemutes[i].time;
-                let voiceguildId = v.bot.voicemutes[i].guild;
-                let voicemuteauthorId = v.bot.voicemutes[i].muteauthor;
-                let voicemutechannelId = v.bot.voicemutes[i].mutechannel;
-                let voicerawmuteduration = v.bot.voicemutes[i].rawmuteduration;
-                let voicemutedurationtype = v.bot.voicemutes[i].mutedurationtype;
+    dirs('./bin/commands').forEach((k, i) => {
+        v.fs.readdir(`./bin/commands/${k}`, (err, files) => {
+            if (err) logger(v.LOGERR() + err);
+            var jsfiles = files.filter(p => p.split('.').pop() === 'js');
+            
+            jsfiles.forEach((f) => {
+                var cmds = require(`./commands/${k}/${f}`);
 
-                let voiceguild = v.bot.guilds.get(voiceguildId);
-                let voiceunmuteMember = voiceguild.members.get(i);
-                let voicechannel = voiceguild.channels.find(channel => channel.id === voicemutechannelId)
-                let voicemuteauthor = voiceguild.members.find(member => member.id === voicemuteauthorId)
-
-                if (Date.now() > voicetime) {
-                    if (voiceunmuteMember === undefined) {
-                        delete v.bot.voicemutes[i];
-                        v.fs.writeFile(v.voicemutespath, JSON.stringify(v.bot.voicemutes), err => {
-                            if (err) message.channel.send("index timed voicemute erase from file undefined Error: " + err)
-                        })
-                        return;
-                    }
-                    voiceunmute(voiceunmuteMember)
-                    if (!voiceunmuteMember.voiceChannel) {
-                        voicemuteauthor.send(voiceunmuteMember + " is now able to get voice-unmuted after " + voicerawmuteduration + " " + voicemutedurationtype + ". I can't unmute him if he is not in a voice channel so please do that yourself. Thanks! :)").catch(err => {
-                            console.log("index timed voicemute send you can unmute message Error: " + err)
-                        })
-                    } else {
-                        voicechannel.send(voiceunmuteMember + " was voice-unmuted after " + voicerawmuteduration + " " + voicemutedurationtype + " by " + voicemuteauthor + ".").catch(err => {
-                            console.log("index timed voicemute send unmuted message Error: " + err)
-                        })
-                    }
-
-                    delete v.bot.voicemutes[i];
-                    v.fs.writeFile(v.voicemutespath, JSON.stringify(v.bot.voicemutes), err => {
-                        if (err) message.channel.send("index timed voicemute erase from file Error: " + err)
-                    })
-                }
-            }
-        }, 5000)
-
-        v.bot.setInterval(() => {
-            for(let i in v.bot.bans) {
-                let banname = v.bot.bans[i].name;
-                let bantime = v.bot.bans[i].time;
-                let banguildId = v.bot.bans[i].guild;
-                let banauthorId = v.bot.bans[i].banauthor;
-                let banchannelId = v.bot.bans[i].banchannel;
-                let rawbanduration = v.bot.bans[i].rawbanduration;
-                let bandurationtype = v.bot.bans[i].bandurationtype;
-                let banreasontext = v.bot.bans[i].banreason;
-
-                let banguild = v.bot.guilds.get(banguildId);
-                let unbanMember = i;
-                let banchannel = banguild.channels.find(channel => channel.id === banchannelId)
-                let banauthor = banguild.members.find(member => member.id, banauthorId)
-
-                if (Date.now() > bantime) {
-
-                    unban(banguild, unbanMember)
-                    banchannel.send(banauthor + ": The user @" + banname + " was unbanned after " + rawbanduration + " " + bandurationtype + ". __Ban-Reason:__ " + banreasontext).catch(err => {
-                        console.log("index timed ban send unbanned message Error: " + err)
-                    })
-
-                    delete v.bot.bans[i];
-                    v.fs.writeFile(v.banspath, JSON.stringify(v.bot.bans), err => {
-                        if (err) message.channel.send("index timed ban erase from file Error: " + err)
-                    })
-                }
-            }
-        }, 5000)
-
-        //serverlist.txt refresh once on startup than every hour:
-        updateserverlist();
-        v.bot.setTimeout(() => {
-            updateserverlist()
-        }, 3600 * 1000); //1 hour in milliseconds
-
-        //Upate CPU Temperature every 10 seconds if the loginmode is normal
-        tempc = "null"
-        tempf = "null"
-
-        if (v.botloginmode == "normal") {
-            if (v.os.platform == "linux") {
-                v.bot.setInterval(() => {
-                    tempc = v.round(v.fs.readFileSync("/sys/class/thermal/thermal_zone0/temp") / 1000, 0);
-                    tempf = v.round(tempc * 1.8 + 32, 0);
-                }, 5000)
-            }
-        }
-
-        var bootend = v.d() - bootstart
-        console.info("The Bot is ready after %dms!", bootend);
-        console.log("*---------------------*")
-        console.log(" ")
-
-        module.exports ={ 
-            bootend,
-            BOTNAME,
-            PREFIX,
-            botavatar,
-            botinvite,
-            GAME
-        }
-    });
-
-});
-
-//Events
-v.bot.on("guildCreate", guild => {
-    // This event triggers when the bot joins a guild.
-    console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-    if (guild.systemChannelID == null) {
-        return;
-    } else {
-        guild.channels.find(channel => channel.id === guild.systemChannel.id).send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ". Get a list of my commands with `" + PREFIX + "help`. Type `" + PREFIX + "invite` to get an invite link.").catch(err => {
-            console.log("index send guildCreate systemChannel message Error: " + err)
-        })
-    }
-    guild.owner.send("Hi im " + BOTNAME + " Version " + v.BOTVERSION + " by " + v.BOTOWNER + ".\nThanks for adding me to your server! To get a overlook of all my commands just type `" + PREFIX + "help`.\nPlease make sure that the bot has all permissions and that the beepBot role is the highest one. Get more info with `" + PREFIX + "privelegerror`.\nThe greeting feature is enabled when a greeting channel is set in the server settings.\nIf you need help or something else join my server with `" + PREFIX + "invite!`\nHave fun!").catch(err => {
-        console.log("index send guildCreate owner message Error: " + err)
-    })
-});
-
-v.bot.on("guildDelete", guild => {
-    // this event triggers when the bot is removed from a guild.
-    console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-    /* guild.owner.send("You removed me from your server :( ... \nIf you want me to come back just type `" + PREFIX + "invite` in this DM channel and i would be glad to be back!\nIf something didn't work out as you wanted let it me know on my server!\nhttps://discord.gg/" + v.ssinvitecode).catch(err => {
-        console.log("index send guildDelete owner message Error: " + err)
-    }) */
-});
-
-v.bot.on("guildMemberAdd", async function(member) {
-    // When a user joins the server message
-    if (v.botloginmode === "test" && member.guild.id === "331822220051611648") return;
-    if (member.guild.systemChannelID == null) {
-        return;
-    } else {
-        member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).send("**" + member.user.username + "** joined! Welcome on **" + member.guild.name + "**! :) Get all of my commands with `" + PREFIX + "help`!").catch(err => {
-        })
-    }
-});
-
-v.bot.on("guildMemberRemove", function(member) {
-    // When a user leaves the server direct message
-    if (v.botloginmode === "test" && member.guild.id === "331822220051611648") return;
-    var options = {
-        maxAge: false
-    }
-    if (member.guild.systemChannelID != null) {
-        member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
-        })
-    }
-    
-/*   if (member.guild.systemChannelID != null) { //send the user an invite when he leaves the guild
-        member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).send("**" + member.user.username + "** left **" + member.guild.name + "**! :(").catch(err => {
-        })
-        if (member.guild.size < 250) {
-            member.guild.channels.find(channel => channel.id === member.guild.systemChannel.id).createInvite(options).then(function(newInvite) {
-                member.send("Sadly you left **" + member.guild.name + "**. To join again use this link: https://discord.gg/" + newInvite.code)
-            }).catch(err => {
+                for(j = 0; j < Object.keys(cmds.aliases).length; j++) { //get all aliases of each command
+                    v.bot.commands.set(Object.values(cmds.aliases)[j], cmds) }
             })
-        }
-    } */ 
+            cmdssize = cmdssize + jsfiles.length
+
+            if (dirs('./bin/commands').length === i + 1) { //ready event continues here because i didn't find a better way to wait for the end of the loop
+                if (cmdssize <= 0) { logger("\x1b[41m> No commands found...\x1b[0m", true) } else { logger("> " + cmdssize + " commands found.", true) }
+
+                var bootend = 0;
+                var bootend = v.d() - bootstart
+                logger(`> The Bot is \x1b[32mready\x1b[0m after ${bootend}ms!`, true)
+                logger("*-----------------------------------------------*\n ", true)
+
+                module.exports ={
+                    bootend
+                }
+    }})})
 });
 
-//message to server owner when his guild becomes unavailable
-/* v.bot.on("guildUnavailable", function(guild) {
-    // When a guild becomes unavailable, likely due to a server outage if the guild has less then 500 members.
-    if (member.guild.members.size < 500) {
-        guild.owner.send("Your server **" + guild.name + "** has become unavailable just in this moment. This can be caused by a server outage. For more information check the Discord Server Status: https://status.discordapp.com/")
-    }
-}); */
+/* ------------ Event Handlers: ------------ */
 
-v.bot.on("error", (error) => {
-    console.log('index error event: '); 
-    console.error(error);
-});
-v.bot.on("warn", (e) => console.warn("index warn event: " + e));
-if (v.botconfig.debug === "true") {
-    v.bot.on("debug", (e) => console.info(e));
-}
 
-//Command/Message Handler
-v.bot.on("message", async function(message) {
+/* ------------ Message Handler: ------------ */
+v.bot.on('message', async function(message) {
     if (message.author.bot) return;
 
-    if (message.channel.type != "dm") {
+    if (message.channel.type !== "dm") {
         if (message.mentions.members.size > 0) {
             if (message.mentions.members.get(v.bot.user.id) != undefined) {
                 message.react(v.bot.guilds.get("331822220051611648").emojis.find(emoji => emoji.name === "notification")).catch(err => {
-                    console.log("index mention reaction Error: " + err)
-                })
-            }}}
+                    logger(v.LOGERR() + "mention reaction Error: " + err)})}}}
 
-    if (message.channel.type != "dm") {
-        if (message.guild.id === "331822220051611648") {
-            if (message.content.includes != null) {
-                if (message.content.toLowerCase().includes("oof")) {
-                    message.react(v.bot.guilds.get("331822220051611648").emojis.find(emoji => emoji.name === "oof")).catch(err => {
-                        console.log("index oof reaction Error: " + err)
-                    })
-                }}}}
+    if (message.channel.type !== "dm")
+        if (!v.bot.settings[message.guild.id]) { servertosettings(message.guild) } //check if guild is not in settings.json and add it
 
-    //slice message and extract prefix, cmd and args (probably bad solution, but it works!)
+    if (v.botconfig.loginmode == "normal") { //get prefix for this guild or set default prefix if channel is dm
+        if (message.channel.type !== "dm") { var PREFIX = v.bot.settings[message.guild.id].prefix } else { var PREFIX = v.DEFAULTPREFIX }
+    } else { //set prefix for testbot
+        var PREFIX = v.DEFAULTTESTPREFIX }
+
     if (message.content.startsWith(PREFIX)) { //check for normal prefix
-        /* seems like these two aren't needed anymore and cause more trouble than fixing anything when the 'command not found' error is disabled but i will keep them here just in case idk
-        if(message.content.startsWith(PREFIX + PREFIX)) return; //check for double prefix because of possible conflict with markdown etc.           
-        if(message.content.endsWith(PREFIX)) return; //also conflict check bot would otherwise react to eg. *message* 
-        */
-    
         var cont = message.content.slice(PREFIX.length).split(" ");
-    } else if (message.mentions.members.get(v.bot.user.id)) { //if no prefix given, check for mention
-        var cont = message.content.slice(message.mentions.members.get(v.bot.user.id).toString().length).split(" ");
+    } else if (message.mentions.users.get(v.bot.user.id)) { //if no prefix given, check for mention
+        var cont = message.content.slice(23).split(" "); //split off the mention <@id>
 
         if (cont[0] == "") { var cont = cont.slice(1) } //check for space between mention and command
         if (cont.toString().startsWith(PREFIX)) { var cont = cont.toString().slice(PREFIX.length).split(" "); } //the user even added a prefix between mention and cmd? get rid of it.
     } else { //normal message? stop.
-        return;
-    }
+        return; }
 
     var args = cont.slice(1);
-    
-    var cmd = v.bot.commands.get(cont[0].toLowerCase())
-    var alias = v.bot.alias.get(cont[0].toLowerCase())
-    var alias2 = v.bot.alias2.get(cont[0].toLowerCase())
+    var cmd  = v.bot.commands.get(cont[0].toLowerCase())
 
-    if (cmd) { 
-        cmd.run(v.bot, message, args);
-        cmdusetofile("Cmd", cont, message.guild.id)
-        return;
-         
-    } else if (alias) {
-        alias.run(v.bot, message, args);
-        cmdusetofile("Alias", cont, message.guild.id)
-        return;
+    if (message.channel.type === "dm") {
+        if (cmd.info.allowedindm === false) return message.channel.send(v.randomstring(["That cannot work in a dm. :face_palm::skin-tone-2:","That won't work in a DM...","This command in a DM? No.","Sorry but no. Try it on a server.","You need to be on a server!"]) + " (DM-Error)")}
 
-    } else if (alias2) {
-        alias2.run(v.bot, message, args);
-        cmdusetofile("Alias2", cont, message.guild.id)
-        return;
+    if (cmd) { //check if command is existing and run it
+        var ab = cmd.info.accessableby
 
-    } else {
-        //Disabled the error message because it was disturbing the chat.
+        if (!ab.includes("all")) { //check if user is allowed to use this command
+            if (ab.includes("botowner")) {
+                if (message.author.id !== '231827708198256642') return message.channel.send(v.owneronlyerror(guildid))
+            } else if (message.author.id === message.guild.owner.id) {
+                //nothing to do here, just not returning an error message and let the server owner do what he wants
+            } else if (ab.includes("admins")) {
+                if(!v.bot.settings[guildid].adminroles.filter(element => message.member.roles.keyArray().includes(element)).length > 0) return message.channel.send(v.usermissperm(guildid))
+            } else if (ab.includes("moderators")) {
+                if(!v.bot.settings[guildid].moderatorroles.filter(element => message.member.roles.keyArray().includes(element)).length > 0) return message.channel.send(v.usermissperm(guildid))
+            } else {
+                return logger(v.LOGWARN() + `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${cont[0]}'\x1b[0m to prevent safety issues.`)
+            }}
+
+        if (message.channel.type === "dm") cmd.run(v.bot, message, args, v.englishlang)
+            else cmd.run(v.bot, message, args, v.lang(message.guild.id))
+        
         if (message.channel.type === "dm") {
-            message.channel.send(v.wrongcmd())
-        }
+            cmdusetofile("Cmd (DM)", cont, message.member) } else { cmdusetofile("Cmd", cont, message.guild.id) } //log cmd usage
         return;
-    }
-    //The command reader in the 'ready' event imports the commands.
+    } else { //cmd not recognized? check if channel is dm and send error message
+        if (message.channel.type === "dm") {
+            message.channel.send(v.randomstring(["Invalid command! :neutral_face:","You got something wrong there!","Something is wrong... :thinking:","Oh shit you have to correct something!","This error should not have happened.","I'm sorry but i catched an error that was thrown by you.","Whoops - I didn't wanted this to happen.","Trust me. Something is wrong with your command.","Windows would have been crashed now!","That is not right."]) + " (Wrong command-Error)") }
+        return; }
 });
 
 botstartupmode();
+module.exports = {
+    ascii
+}
