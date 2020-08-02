@@ -1,17 +1,19 @@
 {
   "name": "beepbot",
-  "version": "2.14.2",
+  "version": "3.0.0",
   "description": "beepBot - A bot that gets frequently updated and is 24/7 online.",
   "main": "start.js",
   "bin": {
     "beepbot": "index.js"
   },
   "dependencies": {
-    "acorn": "^5.7.4",
+    "acorn": "^5.7.3",
+    "adm-zip": "^0.4.13",
     "bfd-api": "^0.2.6",
+    "callsites": "^3.1.0",
     "child_process": "^1.0.2",
     "concat-stream": "^1.6.2",
-    "discord.js": "^11.5.1",
+    "discord.js": "^12.2.0",
     "eslint-scope": "^3.7.3",
     "espree": "^3.5.4",
     "esquery": "^1.0.1",
@@ -22,12 +24,12 @@
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
     "mathjs": "^5.10.3",
-    "miniget": "^1.6.0",
-    "nodemon": "^1.19.2",
+    "miniget": "^1.6.1",
+    "node-fetch": "^2.6.0",
     "opusscript": "^0.0.4",
     "request": "^2.88.0",
-    "snekfetch": "^4.0.4",
     "superagent": "^3.8.3",
+    "systeminformation": "^4.16.1",
     "table": "^4.0.3",
     "ytdl-core": "^0.29.7"
   },
