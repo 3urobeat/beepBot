@@ -56,7 +56,7 @@ function updateserverlist() {
 
     lastserverlistinterval = Date.now() + (1800000) }
 
-function servertosettings(guild) {
+var servertosettings = function servertosettings(guild) {
     v.bot.settings[guild.id] = {
         prefix: v.DEFAULTPREFIX,
         lang: "english",
@@ -70,9 +70,11 @@ function servertosettings(guild) {
     v.fs.writeFile(v.settingspath, JSON.stringify(v.bot.settings, null, 4), err => {
         if(err) logger(v.LOGERR() + `writing server (${guild.id}) to settings.json: ${err}`) })
        
-    //adding prefix to server nickname    
-    if (v.bot.guilds.get(guild.id).members.get(v.bot.user.id).nickname === null) { var nickname = v.bot.user.username } else { var nickname = v.bot.guilds.get(guild.id).members.get(v.bot.user.id).nickname }
-    v.bot.guilds.get(guild.id).members.get(v.bot.user.id).setNickname(`${nickname} [${v.DEFAULTPREFIX}]`).catch(err => {}) }
+    //adding prefix to server nickname
+    if (v.bot.guilds.cache.get(String(guild.id)).members.cache.get(String(v.bot.user.id)).nickname === null) { var nickname = v.bot.user.username } else { var nickname = v.bot.guilds.cache.get(String(guild.id)).members.cache.get(String(v.bot.user.id)).nickname }
+    v.bot.guilds.cache.get(String(guild.id)).members.cache.get(String(v.bot.user.id)).setNickname(`${nickname} [${v.DEFAULTPREFIX}]`).catch(err => {}) }
+
+v.bot.servertosettings = servertosettings //exporting function doesn't work because of circular dependency when accessing it from a cmd, so I am just adding it to the bot obj
 
 function cmdusetofile(cmdtype, cont, guildid) {
     v.fs.appendFile("./bin/cmduse.txt",`${cmdtype} ${cont} got used! [${v.d().getHours()}:${v.d().getMinutes()}:${v.d().getSeconds()}] (${guildid})\n`, err => {
@@ -139,17 +141,58 @@ v.bot.on("ready", async function() {
 
                 var bootend = 0;
                 var bootend = v.d() - bootstart
-                logger(`> The Bot is \x1b[32mready\x1b[0m after ${bootend}ms!`, true)
+                logger(`> The Bot is \x1b[32mready\x1b[0m after ${v.round(bootend / 1000, 2)} sec!`, true)
                 logger("*-----------------------------------------------*\n ", true)
 
                 module.exports ={
-                    bootend
-                }
+                    bootend }
     }})})
 });
 
 /* ------------ Event Handlers: ------------ */
+v.bot.on("guildCreate", guild => {
+    servertosettings(guild)
+    logger(`${v.LOGINFO()}New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount-1} other members!`)
+    
+    //welcome message mit help link und settings setup aufforderung
+})
 
+v.bot.on("guildDelete", guild => {
+    logger(`${v.LOGINFO()}I have been removed from: ${guild.name} (id: ${guild.id})`)
+
+    delete v.bot.settings[guild.id]
+    v.fs.writeFile(v.settingspath, JSON.stringify(v.bot.settings, null, 4), err => {
+        if (err) logger(v.LOGERR() + `deleting guild (${guild.id}) from settings.json: ${err}`); return;
+    }) });
+
+v.bot.on("guildMemberAdd", async function(member) {
+    if (v.botconfig.loginmode == "test") return;
+
+    //take care of greetmsg
+    if (v.bot.settings[member.guild.id].systemchannel != null && v.bot.settings[member.guild.id].greetmsg != null) {
+        //check settings.json for greetmsg, replace username and servername and send it into setting's systemchannel
+        let msgtosend = String(v.bot.settings[member.guild.id].greetmsg)
+        msgtosend = msgtosend.replace("username", member.user.username)
+        msgtosend = msgtosend.replace("servername", member.guild.name)
+
+        member.guild.channels.cache.get(String(v.bot.settings[member.guild.id].systemchannel)).send(msgtosend) }
+
+    //take care of memberaddrole
+    if (v.bot.settings[member.guild.id].memberaddroles.length > 0) {
+        member.roles.add(v.bot.settings[member.guild.id].memberaddroles) } //add all roles at once (memberaddroles is an array)
+});
+
+v.bot.on("guildMemberRemove", async function(member) {
+    if (v.botconfig.loginmode == "test") return;
+    if (v.bot.settings[member.guild.id].systemchannel == null) return;
+    if (v.bot.settings[member.guild.id].byemsg == null) return;
+
+    let msgtosend = String(v.bot.settings[member.guild.id].byemsg)
+    msgtosend = msgtosend.replace("username", member.user.username)
+    msgtosend = msgtosend.replace("servername", member.guild.name)
+
+    member.guild.channels.cache.get(String(v.bot.settings[member.guild.id].systemchannel)).send(msgtosend)
+})
 
 /* ------------ Message Handler: ------------ */
 v.bot.on('message', async function(message) {
@@ -158,8 +201,8 @@ v.bot.on('message', async function(message) {
     if (message.channel.type !== "dm") {
         if (message.mentions.members.size > 0) {
             if (message.mentions.members.get(v.bot.user.id) != undefined) {
-                message.react(v.bot.guilds.get("331822220051611648").emojis.find(emoji => emoji.name === "notification")).catch(err => {
-                    logger(v.LOGERR() + "mention reaction Error: " + err)})}}}
+                message.react(v.bot.guilds.cache.get("331822220051611648").emojis.cache.find(emoji => emoji.name === "notification")).catch(err => {
+                    logger(v.LOGERR() + "mention reaction Error: " + err) }) }}}
 
     if (message.channel.type !== "dm")
         if (!v.bot.settings[message.guild.id]) { servertosettings(message.guild) } //check if guild is not in settings.json and add it
@@ -179,24 +222,26 @@ v.bot.on('message', async function(message) {
     } else { //normal message? stop.
         return; }
 
+    if (!cont[0]) return; //message is empty after prefix I guess
+
     var args = cont.slice(1);
     var cmd  = v.bot.commands.get(cont[0].toLowerCase())
 
     if (message.channel.type === "dm") {
-        if (cmd.info.allowedindm === false) return message.channel.send(v.randomstring(["That cannot work in a dm. :face_palm::skin-tone-2:","That won't work in a DM...","This command in a DM? No.","Sorry but no. Try it on a server.","You need to be on a server!"]) + " (DM-Error)")}
+        if (cmd.info.allowedindm === false) return message.channel.send(v.randomstring(["That cannot work in a dm. :face_palm:","That won't work in a DM...","This command in a DM? No.","Sorry but no. Try it on a server.","You need to be on a server!"]) + " (DM-Error)")}
 
     if (cmd) { //check if command is existing and run it
         var ab = cmd.info.accessableby
 
         if (!ab.includes("all")) { //check if user is allowed to use this command
             if (ab.includes("botowner")) {
-                if (message.author.id !== '231827708198256642') return message.channel.send(v.owneronlyerror(guildid))
+                if (message.author.id !== '231827708198256642') return message.channel.send(v.owneronlyerror(message.guild.id))
             } else if (message.author.id === message.guild.owner.id) {
                 //nothing to do here, just not returning an error message and let the server owner do what he wants
             } else if (ab.includes("admins")) {
-                if(!v.bot.settings[guildid].adminroles.filter(element => message.member.roles.keyArray().includes(element)).length > 0) return message.channel.send(v.usermissperm(guildid))
+                if(!v.bot.settings[message.guild.id].adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(v.usermissperm(message.guild.id))
             } else if (ab.includes("moderators")) {
-                if(!v.bot.settings[guildid].moderatorroles.filter(element => message.member.roles.keyArray().includes(element)).length > 0) return message.channel.send(v.usermissperm(guildid))
+                if(!v.bot.settings[message.guild.id].moderatorroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(v.usermissperm(message.guild.id))
             } else {
                 return logger(v.LOGWARN() + `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${cont[0]}'\x1b[0m to prevent safety issues.`)
             }}

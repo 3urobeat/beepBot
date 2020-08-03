@@ -36,7 +36,7 @@ module.exports.run = async (bot, message, args, lang) => {
     } else { var memberaddroles = none }
 
     //systemchannel
-    if (v.bot.settings[guildid].systemchannel !== null) var systemchannel = "#" + message.guild.channels.get(v.bot.settings[guildid].systemchannel).name
+    if (v.bot.settings[guildid].systemchannel !== null) var systemchannel = "#" + message.guild.channels.cache.get(v.bot.settings[guildid].systemchannel).name
         else {  if (message.guild.systemChannel !== null) {
                     var systemchannel = `${none} - ${lang.recommendation}: \`#${message.guild.systemChannel.name}\``
                 } else {
@@ -70,6 +70,7 @@ module.exports.run = async (bot, message, args, lang) => {
             var PREFIX = v.bot.settings[guildid].prefix
 
             //indentation looks stupid because otherwise the resulting message would have a ton spaces infront of every cmd
+            // \` is to apply markdown to message without using some kind of string feature (like \n)
             message.channel.send(`
 ${lang.help}: 
 \`${PREFIX}settings\` - ${lang.settingshelpview}
@@ -82,6 +83,7 @@ ${lang.help}:
 \`${PREFIX}settings greetmsg [set/remove] "${lang.message}"\` - ${lang.settingshelpgreetmsgset}
 \`${PREFIX}settings byemsg [set/remove] "${lang.message}"\`- ${lang.settingshelpbyemsgset}
 \`${PREFIX}settings joinroles [add/remove/removeall] "${lang.rolename}"\` - ${lang.settingshelpjoinrolesset}
+\`${PREFIX}settings reset\` - ${lang.settingshelpsettingsreset}
 
 ${lang.settingshelpadvice}
             `)
@@ -193,11 +195,11 @@ ${lang.settingshelpadvice}
                         if (!args[2]) { return message.channel.send(lang.systemchannelusage) }
                         if (args[2].length === 18 && /^\d+$/.test(args[2])) { //Check if the arg is 18 chars long and if it is a number
                             var channelid = args[2].toString() 
-                        } else { var channelid = message.guild.channels.find(channel => channel.name.toLowerCase() === args.slice(2).join(" ").toLowerCase()).id } //not a roleid so try and find by name
+                        } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args.slice(2).join(" ").toLowerCase()).id } //not a roleid so try and find by name
                     } catch (err) { return message.channel.send(`${lang.systemchannelerror}.\n||\`${err}\`||`) }
                     v.bot.settings[guildid].systemchannel = channelid;
                     writenewsettings();
-                    message.channel.send(`${lang.systemchannelset}: ${message.guild.channels.get(channelid).name} (${channelid})`)
+                    message.channel.send(`${lang.systemchannelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
                     break;
                 case "remove":
                     if (v.bot.settings[guildid].systemchannel === null) return message.channel.send(lang.systemchannelnotset)
@@ -211,12 +213,11 @@ ${lang.settingshelpadvice}
             break;
         case "greetmessage":
         case "greetmsg":
-            if (v.bot.settings[guildid].systemchannel == null) return message.channel.send(lang.systemchannelnotset)
+            if (v.bot.settings[guildid].systemchannel == null) return message.channel.send(lang.greetmsgsystemchannelnotset)
 
             if (!args[1]) { args[1] = "" }
             switch(args[1].toLowerCase()) {
                 case "set":
-                    logger(args, true)
                     if (!args[2]) return message.channel.send(lang.greetmsgusage)
                     if (message.content.length > 150) return message.channel.send(lang.argtoolong)
 
@@ -243,7 +244,6 @@ ${lang.settingshelpadvice}
             if (!args[1]) { args[1] = "" }
             switch(args[1].toLowerCase()) {
                 case "set":
-                    logger(args, true)
                     if (!args[2]) return message.channel.send(lang.byemsgusage)
                     if (message.content.length > 150) return message.channel.send(lang.argtoolong)
 
@@ -294,6 +294,14 @@ ${lang.settingshelpadvice}
                 default:
                     message.channel.send(lang.memberaddroleusage)
                     return; }
+            break;
+        case "reset":
+            const collector = new v.Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 10000});
+            message.channel.send(lang.areyousure)
+            collector.on('collect', message => {
+                if (message.content == "y") {
+                    v.bot.servertosettings(message.guild)
+                    message.channel.send(lang.settingsreset) } });
             break;
 
 

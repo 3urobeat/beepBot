@@ -1,5 +1,3 @@
-const index = require("./index.js")
-
 const configpath   = "./config.json"
 const settingspath = "./bin/data/settings.json"
 
