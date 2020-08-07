@@ -337,16 +337,14 @@ ${lang.settingshelpadvice}
                     {
                         name: `${lang.addroleonjoin}:`,
                         value: memberaddroles }],
-                footer: { icon_url: message.author.displayAvatarURL, text: `${lang.requestedby} ${message.author.username}` },
-                timestamp: message.createdAt
-            }})
+                footer: { icon_url: message.author.displayAvatarURL, text: `${lang.requestedby} ${message.author.username} • ${lang.help}: ${v.bot.settings[guildid].prefix}settings help` }
+            } })
             return; }
-        
 }
 
 module.exports.aliases = {
     1: "settings",
-    2: "einstellungen"
+    2: "set"
 }
 module.exports.info = {
     name: "settings",

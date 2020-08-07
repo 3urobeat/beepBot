@@ -25,7 +25,7 @@ bot.commands = new Discord.Collection()
 setInterval(() => {
   delete require.cache[require.resolve("./data/settings.json")]
   bot.settings = require("./data/settings.json")
-},1000)
+}, 1000)
 
 const DEFAULTPREFIX     = "*" 
 const DEFAULTTESTPREFIX = "**"
@@ -52,11 +52,10 @@ var owneronlyerror = function owneronlyerror(guildid) { return randomstring(lang
 var usermissperm   = function usermissperm(guildid) { return randomstring(lang(guildid).usermissperm) + " (Role permission-Error)" }
 
 const round = function round(value, decimals) {
-  return Number(Math.round(value+'e'+decimals)+'e-'+decimals)
-}
+  return Number(Math.round(value+'e'+decimals)+'e-'+decimals) }
+
 const randomhex = function randomhex() {
-  return Math.floor(Math.random() * 16777214) + 1
-}
+  return Math.floor(Math.random() * 16777214) + 1 }
 
 Object.defineProperty(global, '__stack', { //Straight from Stack Overflow (https://stackoverflow.com/a/14172822) copied code to get the filename of a variable caller
   get: function() {
