@@ -65,6 +65,14 @@
     "addroleonjoin": "Role added when user joins",
     "requestedby": "Requested by",
 
+    "coinflipped": "The coin flipped to ",
+    "coinfliprandommsg": ["Head", "Number"],
+
+    "clearinvalidamount": "Please enter a valid amount. `1-100`",
+
+    "dicenomaxprovided": "You have to give the endless dice a valid maximum! `2-∞`",
+    "dicerandommsg": ["Rolling... Stop! Its a","The dice stopped rolling:","Your Number:","...and its a","Dont become addicted!","Its like lottery! Did you win?"],
+
     "owneronlyerror": ["This command is owner only. What did you think?!","You are not the owner.","I'm not dumb.","I'm secure. Secure as hell.","Security does not let you in.","Gotcha! You are not going to harm anyone!"],
     "usermissperm": ["You do not have enough permission to do this.","Argh, you can't do this.","Sorry but no. The owner of this server does not want to let you do this.","You are not allowed to do this.","Blame the server owner!"]
 }

@@ -65,6 +65,14 @@
     "addroleonjoin": "Bei Beitritt zugewiesene Rolle",
     "requestedby": "Angefordert von",
 
+    "coinflipped": "Die Münze ist gefallen:",
+    "coinfliprandommsg": ["Kopf", "Zahl"],
+
+    "clearinvalidamount": "Bitte gib eine gültige Menge an. `1-100`",
+
+    "dicenomaxprovided": "Du musst dem endlosen Würfel ein Maximum geben! `2-∞`",
+    "dicerandommsg": ["Der Würfel rollt... Stopp! Es ist eine","Der Würfel ist stehengeblieben:","Deine Zahl:","...und es ist eine","Werde nicht süchtig!","Es ist wie Lotto! Hast du gewonnen?"],
+
     "owneronlyerror": ["Dieser Befehl ist nur dem Botowner gestattet. Was hast du erwartet?!","Du bist nicht der Botowner.","Ich bin nicht dumm.","Ich bin sicher. Sicher wie sonst was.","Die Security lässt dich nicht rein.","Hab dich! Du wirst niemandem Schaden zufügen!"],
     "usermissperm": ["Du hast nicht die nötigen Berechtigungen um dies zu tun.","Hm, du darfst das nicht tun.","Sorry aber das lässt der Besitzer dieses Servers dich nicht tun.","Du darfst das nicht tun.","Mach den Serverbesitzer verantwortlich!"]
 }
