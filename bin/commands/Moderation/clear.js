@@ -23,5 +23,6 @@ module.exports.info = {
     description: "Deletes an amount of recent messages.",
     accessableby: ['moderators'],
     allowedindm: false,
+    nsfwonly: false,
     aliases: this.aliases
 }

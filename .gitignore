@@ -3,3 +3,5 @@ nodemon.json
 beepBot.code-workspace
 bin/serverlist.txt
 bin/cmduse.txt
+bin/output.txt
+sync.ffs_db

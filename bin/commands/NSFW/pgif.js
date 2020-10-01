@@ -1,0 +1,35 @@
+module.exports.run = async (bot, message, args, lang) => {
+    const v = require("../../vars.js")
+    var logger = v.logger
+        
+    try {
+        let { body } = await v.superagent.get('https://nekobot.xyz/api/image?type=pgif')
+
+        message.channel.send({embed:{
+            title: "Image doesn't load? Click here!",
+            url: body.message,
+            image: {
+                url: body.message },
+            footer: {
+                icon_url: message.author.displayAvatarURL,
+                text: "Requestet by " + message.author.username },
+            timestamp: message.createdAt,
+            color: v.randomhex() } })
+
+    } catch (err) {
+        logger("error", "pgif.js", "API Error: " + err)
+        message.channel.send("pgif API Error: " + err) }
+}
+
+module.exports.aliases = {
+    1: "pgif",
+    2: "porngif"
+}
+module.exports.info = {
+    name: "pgif",
+    description: "Posts porn gifs. (NSFW)",
+    accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
+    allowedindm: true,
+    nsfwonly: true,
+    aliases: this.aliases
+}

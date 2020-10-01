@@ -38,5 +38,6 @@ module.exports.info = {
     description: "Displays a link to your avatar or of the user you mentioned.",
     accessableby: ['all'],
     allowedindm: false,
+    nsfwonly: false,
     aliases: this.aliases
 }

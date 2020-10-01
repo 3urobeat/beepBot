@@ -1,5 +1,3 @@
-const Discord   = require('discord.js');
-const Manager   = new Discord.ShardingManager('./bin/index.js');
-const botconfig = require("./bin/config.json")
+//This file can restart the bot without restarting the node process
 
-Manager.spawn(botconfig.shards)
+require("./bin/controller.js")
