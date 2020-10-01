@@ -15,5 +15,6 @@ module.exports.info = {
     description: "Flips a coin.",
     accessableby: ['all'],
     allowedindm: true,
+    nsfwonly: false,
     aliases: this.aliases
 }

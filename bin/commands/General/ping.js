@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args, lang) => {
     const v = require("../../vars.js")
-    const index = require("../../index.js")
+    const index = require("../../shard.js")
     var logger = v.logger
    
     const m = await message.channel.send({embed:{
@@ -36,5 +36,6 @@ module.exports.info = {
     description: "Returns the ping and heartbeat of the bot.",
     accessableby: ['all'],
     allowedindm: true,
+    nsfwonly: false,
     aliases: this.aliases
 }

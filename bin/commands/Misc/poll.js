@@ -24,5 +24,6 @@ module.exports.info = {
     description: "Reacts with thumbs up/down to your message.",
     accessableby: ['all'],
     allowedindm: false,
+    nsfwonly: false,
     aliases: this.aliases
 }

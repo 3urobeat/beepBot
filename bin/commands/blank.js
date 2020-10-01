@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args, lang) => {
     const v = require("../../vars.js")
-    const index = require("../../index.js")
+    const shard = require("../../shard.js")
     var logger = v.logger
     
 }
@@ -13,5 +13,6 @@ module.exports.info = {
     description: "",
     accessableby: [''], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
+    nsfwonly: false,
     aliases: this.aliases
 }

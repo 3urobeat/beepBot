@@ -1,51 +1,22 @@
 {
   "name": "beepbot",
   "version": "3.0.0",
-  "description": "beepBot - A bot that gets frequently updated and is 24/7 online.",
+  "description": "beepBot - 24/7 online, customizeable and feature rich Discord Bot.",
   "main": "start.js",
-  "bin": {
-    "beepbot": "index.js"
-  },
   "dependencies": {
-    "acorn": "^5.7.3",
-    "adm-zip": "^0.4.13",
-    "bfd-api": "^0.2.6",
-    "callsites": "^3.1.0",
-    "child_process": "^1.0.2",
-    "concat-stream": "^1.6.2",
-    "discord.js": "^12.2.0",
-    "eslint-scope": "^3.7.3",
-    "espree": "^3.5.4",
-    "esquery": "^1.0.1",
-    "formidable": "^1.2.1",
-    "fs": "^0.0.1-security",
-    "globals": "^11.12.0",
-    "ignore": "^3.3.10",
-    "js-yaml": "^3.13.1",
-    "lodash": "^4.17.15",
-    "mathjs": "^5.10.3",
-    "miniget": "^1.6.1",
-    "node-fetch": "^2.6.0",
-    "opusscript": "^0.0.4",
-    "request": "^2.88.0",
-    "superagent": "^3.8.3",
-    "systeminformation": "^4.16.1",
-    "table": "^4.0.3",
-    "ytdl-core": "^0.29.7"
+    "discord.js": "^12.3.1",
+    "superagent": "^6.1.0",
+    "systeminformation": "^4.27.5"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node start.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node start.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/HerrEurobeat/beepBot.git"
-  },
-  "author": "HerrEurobeat",
+  "author": "3urobeat",
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/HerrEurobeat/beepBot/issues"
   },
-  "homepage": "https://github.com/HerrEurobeat/beepBot#readme"
+  "homepage": "https://github.com/HerrEurobeat",
+  "repository": "https://github.com/HerrEurobeat/beepBot"
 }
