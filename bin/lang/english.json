@@ -2,6 +2,19 @@
     "thislang": "English",
 
     "help": "Help",
+    "commandlist": "Command-list",
+    "aliases": "Aliases",
+    "cmdnoaliases": "This command has no aliases.",
+    "category": "Category",
+    "restrictions": "Restrictions",
+    "cmdaccessableby": "Restriction Level",
+    "cmdaccessablebyall": "No restriction",
+    "cmdallowedindm": "Allowed in DM",
+    "cmdnsfwonly": "NSFW-Channel-Only",
+    "helpdetailedcommandinfo": "Type prefixsettings name_of_command to get detailed information and aliases on that specific command!",
+    "helpcmdnotfound": "Sorry but I couldn't find that command.",
+    "setrestrictionsinsettings": "Set Admin & Mod roles in settings",
+
     "message": "Message",
 
     "settingshelpview": "Displays the current settings.",

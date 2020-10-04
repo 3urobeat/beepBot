@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args, lang) => {
-    const v = require("../../vars.js")
-    var logger = v.logger
+    const v      = require("../../vars.js")
+    const logger = v.logger
     
     if (!args[0]) { message.channel.send(lang.clearinvalidamount); return; }
 
@@ -14,15 +14,10 @@ module.exports.run = async (bot, message, args, lang) => {
             logger("clear delete msg error: " + err) })
 }
 
-module.exports.aliases = {
-    1: "clear",
-    2: "delete"
-}
 module.exports.info = {
-    name: "clear",
+    names: ["clear", "delete"],
     description: "Deletes an amount of recent messages.",
     accessableby: ['moderators'],
     allowedindm: false,
-    nsfwonly: false,
-    aliases: this.aliases
+    nsfwonly: false
 }

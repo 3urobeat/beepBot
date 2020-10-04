@@ -1,9 +1,9 @@
 module.exports.run = async (bot, message, args, lang) => {
-    const v = require("../../vars.js")
-    const shard = require("../../shard.js")
-    var logger = v.logger 
-    var guildid = message.guild.id
-    var none = "**/**"
+    const v      = require("../../vars.js")
+    const botjs  = require("../../bot.js")
+    const logger = v.logger
+    var guildid  = message.guild.id
+    var none     = "**/**"
 
     function writenewsettings() {
         v.fs.writeFile(v.settingspath, JSON.stringify(v.bot.settings, null, 4), err => {
@@ -341,15 +341,10 @@ ${lang.settingshelpadvice}
             return; }
 }
 
-module.exports.aliases = {
-    1: "settings",
-    2: "set"
-}
 module.exports.info = {
-    name: "settings",
+    names: ["settings", "set"],
     description: "Configure the bot for your server!",
     accessableby: ['admins'],
     allowedindm: false,
-    nsfwonly: false,
-    aliases: this.aliases
+    nsfwonly: false
 }

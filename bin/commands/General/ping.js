@@ -1,11 +1,10 @@
 module.exports.run = async (bot, message, args, lang) => {
-    const v = require("../../vars.js")
-    const index = require("../../shard.js")
-    var logger = v.logger
-   
-    const m = await message.channel.send({embed:{
+    const v      = require("../../vars.js")
+    const logger = v.logger
+  
+    var m = await message.channel.send({embed:{
                         author:{
-                            name: index.BOTNAME,
+                            name: v.BOTNAME,
                             icon_url: v.bot.user.avatarURL
                         },
                         title: "Ping" + "?",
@@ -17,7 +16,7 @@ module.exports.run = async (bot, message, args, lang) => {
 
     m.edit(({embed:{
                 author:{
-                    name: index.BOTNAME,
+                    name: v.BOTNAME,
                     icon_url: v.bot.user.avatarURL
                 },
                 title: "Pong" + "!",
@@ -27,15 +26,10 @@ module.exports.run = async (bot, message, args, lang) => {
     
 }
 
-module.exports.aliases = {
-    1: "ping",
-    2: "pong"
-}
 module.exports.info = {
-    name: "ping",
-    description: "Returns the ping and heartbeat of the bot.",
+    names: ['ping', 'pong'],
+    description: 'Returns the ping and heartbeat of the bot.',
     accessableby: ['all'],
     allowedindm: true,
-    nsfwonly: false,
-    aliases: this.aliases
+    nsfwonly: false
 }

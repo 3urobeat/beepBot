@@ -2,6 +2,19 @@
     "thislang": "Deutsch",
 
     "help": "Hilfe",
+    "commandlist": "Befehlsliste",
+    "aliases": "Aliases",
+    "cmdnoaliases": "Dieser Befehl hat keine Alternativen.",
+    "category": "Kategorie",
+    "restrictions": "Einschränkungen",
+    "cmdaccessableby": "Beschränkungs-Level",
+    "cmdaccessablebyall": "Keine Beschränkung",
+    "cmdallowedindm": "In DMs erlaubt",
+    "cmdnsfwonly": "Nur in NSFW-Kanal",
+    "helpdetailedcommandinfo": "Tippe prefixsettings Name_des_Befehls um detaillierte Informationen und Aliases zu dem spezifischen Befehl zu erhalten!",
+    "helpcmdnotfound": "Ich konnte diesen Befehl leider nicht finden.",
+    "setrestrictionsinsettings": "Stelle Admin & Mod Rollen in den Einstellungen ein",
+
     "message": "Nachricht",
 
     "settingshelpview": "Zeigt die aktuellen Einstellungen an.",

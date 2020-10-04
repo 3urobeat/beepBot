@@ -12,16 +12,10 @@ module.exports.run = async (bot, message, args, lang) => {
     return;
 }
 
-
-module.exports.aliases = {
-    1: "dice",
-    2: "roll"
-}
 module.exports.info = {
-    name: "dice",
+    names: ["dice", "roll"],
     description: "Roll a dice with a custom limit.",
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
-    nsfwonly: false,
-    aliases: this.aliases
+    nsfwonly: false
 }

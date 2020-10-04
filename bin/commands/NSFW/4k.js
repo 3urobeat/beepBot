@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args, lang) => {
-    const v = require("../../vars.js")
-    var logger = v.logger
+    const v      = require("../../vars.js")
+    const logger = v.logger
 
     try {
         let { body } = await v.superagent.get('https://nekobot.xyz/api/image?type=4k')
@@ -21,14 +21,10 @@ module.exports.run = async (bot, message, args, lang) => {
         message.channel.send("nekobot.xyz 4k API Error: " + err) }
 }
 
-module.exports.aliases = {
-    1: "4k"
-}
 module.exports.info = {
-    name: "4k",
+    names: ["4k"],
     description: "Posts 4k porn pictures. (NSFW)",
     accessableby: ['all'],
     allowedindm: true,
-    nsfwonly: true,
-    aliases: this.aliases
+    nsfwonly: true
 }

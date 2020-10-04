@@ -29,15 +29,10 @@ module.exports.run = async (bot, message, args, lang) => {
         avatar(); }
 }
 
-module.exports.aliases = {
-    1: "avatar",
-    2: "useravatar"
-}
 module.exports.info = {
-    name: "avatar",
+    names: ["avatar", "useravatar"],
     description: "Displays a link to your avatar or of the user you mentioned.",
     accessableby: ['all'],
     allowedindm: false,
-    nsfwonly: false,
-    aliases: this.aliases
+    nsfwonly: false
 }

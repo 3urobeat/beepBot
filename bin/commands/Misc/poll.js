@@ -14,16 +14,10 @@ module.exports.run = async (bot, message, args, lang) => {
         return; })
 }
 
-module.exports.aliases = {
-    1: "poll",
-    2: "vote",
-    3: "survey"
-}
 module.exports.info = {
-    name: "poll",
+    names: ["poll", "vote", "survey"],
     description: "Reacts with thumbs up/down to your message.",
     accessableby: ['all'],
     allowedindm: false,
-    nsfwonly: false,
-    aliases: this.aliases
+    nsfwonly: false
 }

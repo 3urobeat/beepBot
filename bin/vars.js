@@ -38,6 +38,13 @@ const botxmasavatar        = "https://i.imgur.com/GgHBtkG.png";
 const testbotdefaultavatar = "https://i.imgur.com/gmP9eFn.png";
 const githublink           = "https://github.com/HerrEurobeat";
 
+if (config.loginmode === "normal") {
+  BOTNAME   = "beepBot";
+  BOTAVATAR = botdefaultavatar;
+} else { 
+  BOTNAME   = "beepTestBot";
+  BOTAVATAR = testbotdefaultavatar; }
+
 /**
  * Returns a random String from an array
  * @param {Array<String>} arr An Array with Strings to choose from
@@ -95,8 +102,8 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
 
   //Add date or don't
   if (nodate) var date = '';
-    else { //Only add date to message if it gets called at least 7.5 sec after bootup. This makes the startup cleaner.
-      if (d() - bootstart > 7500) var date = `\x1b[34m[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}]\x1b[0m `
+    else { //Only add date to message if it gets called at least 5 sec after bootup. This makes the startup cleaner.
+      if (d() - bootstart > 5000) var date = `\x1b[34m[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}]\x1b[0m `
         else var date = '' }
 
   //Add filers
@@ -154,6 +161,37 @@ var checkm8 = async function checkm8() {
       if (process.platform === "win32") { exec('taskkill /f /im node.exe') } else { exec('killall node') }
     },500) }
 
+var servertosettings = function servertosettings(guild) {
+  //adding prefix to server nickname
+  if (bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id)).nickname === null) { 
+    var nickname = bot.user.username 
+  } else { 
+    if (bot.settings[guild.id] == undefined) var nickname = bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id).nickname) //get nickname without trying to replace old prefix if server has no entry in settings.json yet
+      else var nickname = bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id)).nickname.replace(` [${bot.settings[guild.id].prefix}]`, "") 
+  }
+
+  if (config.loginmode == "test") var prefix = DEFAULTTESTPREFIX
+      else var prefix = DEFAULTPREFIX
+
+  bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id)).setNickname(`${nickname} [${DEFAULTPREFIX}]`).catch(err => {})
+
+  bot.settings[guild.id] = {
+      prefix: prefix,
+      lang: "english",
+      adminroles: [],
+      moderatorroles: [],
+      systemchannel: null,
+      greetmsg: null,
+      byemsg: null,
+      memberaddroles: []
+  }
+  fs.writeFile(settingspath, JSON.stringify(bot.settings, null, 4), err => {
+      if(err) logger('error', 'vars.js', `writing server (${guild.id}) to settings.json: ${err}`) }) }
+
+var cmdusetofile = function cmdusetofile(cmdtype, cont, guildid) {
+  fs.appendFile("./bin/cmduse.txt",`${cmdtype} ${cont} got used! [${d().getHours()}:${d().getMinutes()}:${d().getSeconds()}] (${guildid})\n`, err => {
+      if (err) logger('error', 'vars.js', `writing cmduse to cmduse.txt: ${err}`) }) }
+
 //Exporting var's:
 module.exports={
     configpath,
@@ -182,6 +220,8 @@ module.exports={
     botxmasavatar,
     testbotdefaultavatar,
     githublink,
+    BOTNAME,
+    BOTAVATAR,
     randomstring,
     owneronlyerror,
     usermissperm,
@@ -189,5 +229,7 @@ module.exports={
     randomhex,
     logger,
     lang,
-    checkm8
+    checkm8,
+    servertosettings,
+    cmdusetofile
 }
