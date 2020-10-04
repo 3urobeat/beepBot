@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args, lang) => {
-    const v = require("../../vars.js")
-    var logger = v.logger
+    const v      = require("../../vars.js")
+    const logger = v.logger
  
     try {
         let { body } = await v.superagent.get('http://api.obutts.ru/butts/0/1/random')
@@ -22,15 +22,10 @@ module.exports.run = async (bot, message, args, lang) => {
         message.channel.send("butts API Error: " + err) }
 }
 
-module.exports.aliases = {
-    1: "butts",
-    2: "ass"
-}
 module.exports.info = {
-    name: "butts",
+    names: ["butts"],
     description: "Posts porn pictures of butts. (NSFW)",
     accessableby: ['all'],
     allowedindm: true,
-    nsfwonly: true,
-    aliases: this.aliases
+    nsfwonly: true
 }

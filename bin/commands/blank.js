@@ -1,18 +1,14 @@
 module.exports.run = async (bot, message, args, lang) => {
-    const v = require("../../vars.js")
-    const shard = require("../../shard.js")
-    var logger = v.logger
+    const v      = require("../../vars.js")
+    const botjs  = require("../../bot.js")
+    const logger = v.logger
     
 }
 
-module.exports.aliases = {
-    1: ""
-}
-module.exports.info = {
-    name: "",
+module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
+    names: [], //Array<String> with all aliases
     description: "",
     accessableby: [''], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
-    nsfwonly: false,
-    aliases: this.aliases
+    nsfwonly: false
 }

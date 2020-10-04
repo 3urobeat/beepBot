@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args, lang) => {
-    const v = require("../../vars.js")
-    var logger = v.logger
+    const v      = require("../../vars.js")
+    const logger = v.logger
  
     try {
         let { body } = await v.superagent.get('https://nekobot.xyz/api/image?type=anal')
@@ -20,14 +20,10 @@ module.exports.run = async (bot, message, args, lang) => {
         message.channel.send("nekobot.xyz anal API Error: " + err) }
 }
 
-module.exports.aliases = {
-    1: "anal"
-}
 module.exports.info = {
-    name: "anal",
+    names: ["anal"],
     description: "Posts anal porn pictures.",
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
-    nsfwonly: true,
-    aliases: this.aliases
+    nsfwonly: true
 }
