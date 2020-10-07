@@ -1,20 +1,17 @@
 ﻿//This file controls one shard
-const v      = require("./vars.js")
-const fs     = require("fs")
-const path   = require("path")
+const v      = require("./vars.js");
 const logger = v.logger
 const shardArgs = process.argv //ignore index 0 and 1
 
 process.on('unhandledRejection', (reason, p) => {
     logger('error', 'bot.js', `Unhandled Rejection! Reason: ${reason.stack}`) });
 
-
 /* -------------- Command reader -------------- */
-const dirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory())
+const dirs = p => v.fs.readdirSync(p).filter(f => v.fs.statSync(v.path.join(p, f)).isDirectory())
 
 dirs('./bin/commands').forEach((k, i) => {
     v.fs.readdir(`./bin/commands/${k}`, (err, files) => {
-        if (err) logger('error', 'controller.js', err);
+        if (err) logger('error', 'bot.js', err);
         var jsfiles = files.filter(p => p.split('.').pop() === 'js');
         
         jsfiles.forEach((f) => {
@@ -25,8 +22,12 @@ dirs('./bin/commands').forEach((k, i) => {
                 tempcmd["run"] = cmd.run //Add command code to new deep copy because that got lost somehow
                 tempcmd.info.category = k
 
+                if (v.bot.commands.get(tempcmd.info.names[j])) return logger("warn", "bot.js", `Duplicate command name found! Command: ${tempcmd.info.names[j]}`, true)
+
                 if (j != 0) tempcmd.info.thisisanalias = true //seems like this is an alias
-                    else tempcmd.info.thisisanalias = false
+                    else { 
+                        v.commandcount++
+                        tempcmd.info.thisisanalias = false }
 
                 v.bot.commands.set(tempcmd.info.names[j], tempcmd) }
         })
@@ -39,8 +40,10 @@ v.bot.on("ready", async function() {
     v.bot.user.setPresence({activity: { name: v.config.gamerotation[0] }, status: v.config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
 
     let currentgameindex = 1
-    var gamerotationloop = setInterval(() => { //interval has a name to be able to clear it (for what ever reason): clearInterval(gamerotationloop)
-        v.bot.user.setPresence({activity: { name: v.config.gamerotation[currentgameindex].replace("servercount", v.bot.guilds.cache.size) }, status: v.config.status }).catch(err => { return logger("warn", "bot.js", "Woops! Couldn't set presence: " + err); })
+    var gamerotationloop = setInterval(async () => { //interval has a name to be able to clear it (for what ever reason): clearInterval(gamerotationloop)
+        if (String(v.config.gamerotation[currentgameindex]).includes("servercount")) var allshardsservercount = (await v.bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)
+
+        v.bot.user.setPresence({activity: { name: v.config.gamerotation[currentgameindex].replace("servercount", allshardsservercount) }, status: v.config.status }).catch(err => { return logger("warn", "bot.js", "Woops! Couldn't set presence: " + err); })
     
         currentgameindex++
         if (currentgameindex == v.config.gamerotation.length) currentgameindex = 0
@@ -100,7 +103,7 @@ v.bot.on('message', async function(message) {
     if (message.channel.type !== "dm") {
         if (message.mentions.members.size > 0) {
             if (message.mentions.members.get(v.bot.user.id) != undefined) {
-                message.react(v.bot.guilds.cache.get("331822220051611648").emojis.cache.find(emoji => emoji.name === "notification")).catch(err => {
+                message.react(v.bot.guilds.cache.get("232550371191554051").emojis.cache.find(emoji => emoji.name === "notification")).catch(err => {
                     logger('error', 'bot.js', "mention reaction Error: " + err) }) }}}
 
     if (message.channel.type !== "dm")
@@ -121,7 +124,7 @@ v.bot.on('message', async function(message) {
     if (!cont[0]) return; //message is empty after prefix I guess
 
     var args = cont.slice(1);
-    var cmd = v.bot.commands.get(cont[0].toLowerCase())
+    var cmd  = v.bot.commands.get(cont[0].toLowerCase())
 
     if (message.channel.type === "dm") {
         if (cmd && cmd.info.allowedindm === false) return message.channel.send(v.randomstring(["That cannot work in a dm. :face_palm:","That won't work in a DM...","This command in a DM? No.","Sorry but no. Try it on a server.","You need to be on a server!"]) + " (DM-Error)") }
@@ -141,7 +144,7 @@ v.bot.on('message', async function(message) {
             } else if (ab.includes("moderators")) {
                 if(!v.bot.settings[message.guild.id].moderatorroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(v.usermissperm(message.guild.id))
             } else {
-                message.channel.send("This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n3urobeat#0975 will probably see this error and fix it.")
+                message.channel.send(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${v.BOTOWNER} will probably see this error and fix it.`)
                 logger('warn', 'bot.js', `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${cont[0]}'\x1b[0m to prevent safety issues.`)
                 return;
             }}

@@ -17,6 +17,7 @@ module.exports.run = async (bot, message, args, lang) => {
 module.exports.info = {
     names: ["poll", "vote", "survey"],
     description: "Reacts with thumbs up/down to your message.",
+    usage: "[poll description]",
     accessableby: ['all'],
     allowedindm: false,
     nsfwonly: false

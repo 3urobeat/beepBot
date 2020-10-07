@@ -17,6 +17,7 @@ module.exports.run = async (bot, message, args, lang) => {
 module.exports.info = {
     names: ["clear", "delete"],
     description: "Deletes an amount of recent messages.",
+    usage: "(amount of messages)",
     accessableby: ['moderators'],
     allowedindm: false,
     nsfwonly: false

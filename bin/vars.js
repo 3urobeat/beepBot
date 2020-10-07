@@ -1,8 +1,6 @@
-const configpath   = "./config.json"
-const settingspath = "./bin/data/settings.json"
-
+const configpath      = "./config.json"
+const settingspath    = "./bin/data/settings.json"
 const englishlangpath = "./lang/english.json"
-const germanlangpath  = "./lang/german.json"
 
 const Discord    = require("discord.js")
 const si         = require("systeminformation")
@@ -12,12 +10,13 @@ var   config     = require(configpath)
 const tokenpath  = require("../../token.json")
 const asciipath  = require("./ascii.js")
 const fs         = require("fs")
+const path       = require("path")
 const readline   = require("readline")
 const d          = function d() { return new Date() }
 const bootstart  = d()
+var commandcount = 0;
 
 const englishlang = require(englishlangpath) 
-const germanlang  = require(germanlangpath)
 
 const bot     = new Discord.Client()
 const servers = {}
@@ -44,6 +43,11 @@ if (config.loginmode === "normal") {
 } else { 
   BOTNAME   = "beepTestBot";
   BOTAVATAR = testbotdefaultavatar; }
+
+//Get all supported languages
+fs.readdir(`./bin/lang/`, (err, files) => {
+  if (err) logger('error', 'vars.js', "Error reading all supported languages: " + err);
+  module.exports.supportedlangs = files.filter(p => p.split('.').pop() === 'json') })
 
 /**
  * Returns a random String from an array
@@ -143,8 +147,11 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
  */
 var lang = function lang(guildid) {
   if (!guildid) { logger('error', 'vars.js', "function lang: guildid not specified!"); return; }
-  if (bot.settings[guildid].lang === "english") return englishlang; 
-  if (bot.settings[guildid].lang === "german") return germanlang; }
+  let serverlang = bot.settings[guildid].lang
+  if (!module.exports.supportedlangs.includes(serverlang + ".json")) { 
+    logger("warn", "vars.js", `Guild ${guildid} has an invalid language! Returning english language...`)
+    return englishlang; }
+  return require(`./lang/${serverlang}.json`) }
 
 var checkm8 = async function checkm8() {
     const errormsg = '\x1b[31m\x1b[7mERROR\x1b[0m \x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m' + botinvitelink;
@@ -196,6 +203,7 @@ var cmdusetofile = function cmdusetofile(cmdtype, cont, guildid) {
 module.exports={
     configpath,
     settingspath,
+    englishlang,
     Discord,
     si,
     superagent,
@@ -204,11 +212,12 @@ module.exports={
     tokenpath,
     asciipath,
     fs,
+    path,
     d,
-    englishlang,
-    germanlang,
+    bootstart,
     bot,
     servers,
+    commandcount,
     DEFAULTPREFIX,
     DEFAULTTESTPREFIX,
     BOTXMASNAME,

@@ -15,6 +15,7 @@ module.exports.run = async (bot, message, args, lang) => {
 module.exports.info = {
     names: ["dice", "roll"],
     description: "Roll a dice with a custom limit.",
+    usage: "(limit)",
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
     nsfwonly: false

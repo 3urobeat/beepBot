@@ -24,6 +24,7 @@ module.exports.run = async (bot, message, args, lang) => {
 module.exports.info = {
     names: ["4k"],
     description: "Posts 4k porn pictures. (NSFW)",
+    usage: "",
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: true

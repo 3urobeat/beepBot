@@ -24,6 +24,7 @@ module.exports.run = async (bot, message, args, lang) => {
 module.exports.info = {
     names: ["pgif", "porngif"],
     description: "Posts porn gifs. (NSFW)",
+    usage: "",
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
     nsfwonly: true

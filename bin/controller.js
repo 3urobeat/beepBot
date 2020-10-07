@@ -24,6 +24,20 @@ if (process.platform == "win32") { //set node process name to find it in task ma
     process.stdout.write(`${String.fromCharCode(27)}]0;3urobeat's beepBot v${v.config.version} | ${process.platform}${String.fromCharCode(7)}`) //sets terminal title (thanks: https://stackoverflow.com/a/30360821/12934162)
     process.title = `beepBot` } //sets process title in task manager etc.
 
+var commandcount = 0;
+const dirs = p => v.fs.readdirSync(p).filter(f => v.fs.statSync(v.path.join(p, f)).isDirectory())
+
+dirs('./bin/commands').forEach((k, i) => { //I sadly couldn't export commandcount from bot.js to log it here so I had to copy the code
+    v.fs.readdir(`./bin/commands/${k}`, (err, files) => {
+        if (err) logger('error', 'controller.js', err);
+        var jsfiles = files.filter(p => p.split('.').pop() === 'js');
+        
+        jsfiles.forEach((f) => {
+            var cmd = require(`./commands/${k}/${f}`);
+
+            for(j = 0; j < cmd.info.names.length; j++) { //get all aliases of each command
+                if (j == 0) commandcount++ }
+        }) }) })
 
 /* -------------- Start needed shards -------------- */
 if (v.config.loginmode === "normal") {
@@ -48,24 +62,26 @@ Manager.on('shardCreate', (shard) => {
     logger('info', 'controller.js', `Spawned shard ${shard.id}!`, false, true)
 
     if (shard.id == 0 || shard.id == 1) {
-        /* -------------- All shards started -------------- */
+        setTimeout(() => {
+            /* -------------- All shards started -------------- */
 
-        logger("", "", "\n*---------=----------[\x1b[34mINFO | controller.js\x1b[0m]---------=----------*", true)
-        logger("", "", `> Started ${BOTNAME} ${v.config.version} by ${v.BOTOWNER}`, true)
+            logger("", "", "\n*---------=----------[\x1b[34mINFO | controller.js\x1b[0m]---------=----------*", true)
+            logger("", "", `> Started ${BOTNAME} ${v.config.version} by ${v.BOTOWNER}`, true)
 
-        if (v.config.shards > 1) logger(`> ${v.config.shards} shards running in \x1b[32m${v.config.loginmode}\x1b[0m mode on ${process.platform}`, true); 
-            else logger("", "", `> Running in \x1b[32m${v.config.loginmode}\x1b[0m mode on ${process.platform}.`, true);
+            if (v.config.shards > 1) logger(`> ${v.config.shards} shards running in \x1b[32m${v.config.loginmode}\x1b[0m mode on ${process.platform}`, true); 
+                else logger("", "", `> Running in \x1b[32m${v.config.loginmode}\x1b[0m mode on ${process.platform}.`, true);
 
-        if (Manager.totalShards == "auto") logger("", "", `> ShardManager is running in automatic mode...`)
-            else logger("", "", `> ShardManager is running with ${Manager.totalShards - 1} shards...`)
+            if (Manager.totalShards == "auto") logger("", "", `> ShardManager is running in automatic mode...`)
+                else logger("", "", `> ShardManager is running with ${Manager.totalShards - 1} shards...`)
 
-        if (v.config.status == "online") var configstatus = "\x1b[32monline\x1b[0m"
-        if (v.config.status == "idle")   var configstatus = "\x1b[33midle\x1b[0m"
-        if (v.config.status == "dnd")    var configstatus = "\x1b[91mdnd\x1b[0m"
-        logger("", "", `> Set Presence to ${configstatus} - Game Rotation every ${v.config.gamerotateseconds} sec`)
+            if (v.config.status == "online") var configstatus = "\x1b[32monline\x1b[0m"
+            if (v.config.status == "idle")   var configstatus = "\x1b[33midle\x1b[0m"
+            if (v.config.status == "dnd")    var configstatus = "\x1b[91mdnd\x1b[0m"
+            logger("", "", `> Set Presence to ${configstatus} - Game Rotation every ${v.config.gamerotateseconds} sec`)
 
-        logger("", "", "*--------------------------------------------------------------*\n ", true)
+            logger("", "", `> ${commandcount} commands found!`)
 
-
+            logger("", "", "*--------------------------------------------------------------*\n ", true)
+        }, 1000);
     }
 });

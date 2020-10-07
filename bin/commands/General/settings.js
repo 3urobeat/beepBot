@@ -101,24 +101,12 @@ ${lang.settingshelpadvice}
         case "language":
         case "lang":
             if (!args[1]) { args[1] = "" }
-            switch(args[1].toLowerCase()) {
-                case "english":
-                    v.bot.settings[guildid].lang = "english";
-                    writenewsettings();
-                    message.channel.send(`${v.englishlang.newlangsaved}.`)
-                    break;
-                case "german":
-                case "deutsch":
-                    v.bot.settings[guildid].lang = "german";
-                    writenewsettings();
-                    message.channel.send(`${v.germanlang.newlangsaved}.`)
-                    break;
-                default:
-                    v.fs.readdir('./bin/lang', (err, files) => {
-                        if (err) logger('error', 'settings.js', "read supported langs error: " + err);
-                        var langs = files.filter(f => f.split('.').pop() === 'json').join("\n")              
-                        message.channel.send(`${lang.supportedlang}: \n${langs}`) })
-                    return; }
+            if (!v.supportedlangs.includes(args[1].toLowerCase() + ".json")) {
+                message.channel.send(`${lang.supportedlang}: \n${v.supportedlangs.join("\n").split(".json").join("") }`)
+            } else {
+                v.bot.settings[guildid].lang = args[1].toLowerCase();
+                writenewsettings();
+                message.channel.send(`${lang.newlangsaved}.`) }
             break;
         case "adminroles":
         case "adminrole":
@@ -336,7 +324,7 @@ ${lang.settingshelpadvice}
                     {
                         name: `${lang.addroleonjoin}:`,
                         value: memberaddroles }],
-                footer: { icon_url: message.author.displayAvatarURL, text: `${lang.requestedby} ${message.author.username} • ${lang.help}: ${v.bot.settings[guildid].prefix}settings help` }
+                footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.requestedby} ${message.author.username} • ${lang.help}: ${v.bot.settings[guildid].prefix}settings help` }
             } })
             return; }
 }
@@ -344,6 +332,7 @@ ${lang.settingshelpadvice}
 module.exports.info = {
     names: ["settings", "set"],
     description: "Configure the bot for your server!",
+    usage: '["help"]',
     accessableby: ['admins'],
     allowedindm: false,
     nsfwonly: false
