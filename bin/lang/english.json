@@ -2,16 +2,20 @@
     "thislang": "English",
 
     "help": "Help",
-    "commandlist": "Command-list",
+    "commandlist": "Command List",
     "aliases": "Aliases",
     "cmdnoaliases": "This command has no aliases.",
     "category": "Category",
+    "usage": "Usage",
+    "optionalargument": "Optional argument",
+    "requiredargument": "Required argument",
     "restrictions": "Restrictions",
     "cmdaccessableby": "Restriction Level",
     "cmdaccessablebyall": "No restriction",
     "cmdallowedindm": "Allowed in DM",
     "cmdnsfwonly": "NSFW-Channel-Only",
-    "helpdetailedcommandinfo": "Type prefixsettings name_of_command to get detailed information and aliases on that specific command!",
+    "overviewofxcmds": "Overview of commandcount commands",
+    "helpdetailedcommandinfo": "Type `prefixsettings [name_of_command]` to get detailed information and aliases on that specific command!",
     "helpcmdnotfound": "Sorry but I couldn't find that command.",
     "setrestrictionsinsettings": "Set Admin & Mod roles in settings",
 
@@ -69,8 +73,21 @@
     "addroleonjoin": "Role added when user joins",
     "requestedby": "Requested by",
 
+    "info": "Info",
+    "bot": "Bot",
+    "infobotshowmore": "Type `prefixinfo bot` to get detailed information about the bot.",
+    "user": "User",
+    "infousershowmore": "Type `prefixinfo user` to get detailed information about yourself.",
+    "server": "Server",
+    "infoservershowmore": "Type `prefixinfo server` to get detailed information about this server.",
+
+    "magic8missingargs": "magic8 can't decide if you don't provide a question...",
+    "magic8responses": ["Yes","Yep.","Outlook good","Most definitely yes","My sources say yes","I think yes","No","Definitely no","Probably not","Nope","My sources say no","Dont even think about it","Most likely no","Not sure","Maybe","I'll think about it..."],
+
     "coinflipped": "The coin flipped to ",
     "coinfliprandommsg": ["Head", "Number"],
+
+    "paidrespects": "username has paid their respects",
 
     "clearinvalidamount": "Please enter a valid amount. `1-100`",
 

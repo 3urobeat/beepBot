@@ -23,6 +23,7 @@ module.exports.run = async (bot, message, args, lang) => {
 module.exports.info = {
     names: ["anal"],
     description: "Posts anal porn pictures.",
+    usage: "",
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
     nsfwonly: true

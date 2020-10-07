@@ -6,12 +6,16 @@
     "aliases": "Aliases",
     "cmdnoaliases": "Dieser Befehl hat keine Alternativen.",
     "category": "Kategorie",
+    "usage": "Verwendung",
+    "optionalargument": "Optionelles Argument",
+    "requiredargument": "Verpflichtenes Argument",
     "restrictions": "Einschränkungen",
     "cmdaccessableby": "Beschränkungs-Level",
     "cmdaccessablebyall": "Keine Beschränkung",
     "cmdallowedindm": "In DMs erlaubt",
     "cmdnsfwonly": "Nur in NSFW-Kanal",
-    "helpdetailedcommandinfo": "Tippe prefixsettings Name_des_Befehls um detaillierte Informationen und Aliases zu dem spezifischen Befehl zu erhalten!",
+    "overviewofxcmds": "Übersicht über commandcount Befehle",
+    "helpdetailedcommandinfo": "Tippe `prefixsettings [Name_des_Befehls]` um detaillierte Informationen und Aliases zu dem spezifischen Befehl zu erhalten!",
     "helpcmdnotfound": "Ich konnte diesen Befehl leider nicht finden.",
     "setrestrictionsinsettings": "Stelle Admin & Mod Rollen in den Einstellungen ein",
 
@@ -69,8 +73,21 @@
     "addroleonjoin": "Bei Beitritt zugewiesene Rolle",
     "requestedby": "Angefordert von",
 
+    "info": "Info",
+    "bot": "Bot",
+    "infobotshowmore": "Tippe `prefixinfo bot` um detaillierte Informationen über den Bot zu erhalten.",
+    "user": "Nutzer",
+    "infousershowmore": "Tippe `prefixinfo user` um detaillierte Informationen über dich zu erhalten.",
+    "server": "Server",
+    "infoservershowmore": "Tippe `prefixinfo server` um detaillierte Informationen über diesen Server zu erhalten.",
+
+    "magic8missingargs": "magic8 kann sich nicht entscheiden wenn du keine Frage angibst...",
+    "magic8responses": ["Ja","Jup.","Sieht danach aus","Höchstwahrscheinlich Ja","Meine Quellen sagen Ja","Ich würde Ja sagen","Nein","Ganz sicher Nein","Wahrscheinlich Nein","Nö","Meine Quellen sagen Nein","Denk garnicht erst drüber nach","Höchstwahrscheinlich Nein","Ich bin mir unsicher","Eventuell","Ich werde drüber nachdenken..."],
+
     "coinflipped": "Die Münze ist gefallen:",
     "coinfliprandommsg": ["Kopf", "Zahl"],
+
+    "paidrespects": "username hat seinen/ihren Respekt gezollt",
 
     "clearinvalidamount": "Bitte gib eine gültige Menge an. `1-100`",
 

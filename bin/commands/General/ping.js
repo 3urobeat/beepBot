@@ -29,6 +29,7 @@ module.exports.run = async (bot, message, args, lang) => {
 module.exports.info = {
     names: ['ping', 'pong'],
     description: 'Returns the ping and heartbeat of the bot.',
+    usage: "",
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

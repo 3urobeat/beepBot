@@ -30,12 +30,16 @@ module.exports.run = async (bot, message, args, lang) => {
                         inline: true
                     },
                     {
+                        name: `${lang.usage}:`,
+                        value: `\`${v.bot.settings[message.guild.id].prefix}${cmd.info.names[0]} ${cmd.info.usage}\`\n*[] <- ${lang.optionalargument}, () <- ${lang.requiredargument}*`
+                    },
+                    {
                         name: `${lang.restrictions}:`,
                         value: `${lang.cmdaccessableby}: ${String(cmd.info.accessableby).replace("all", lang.cmdaccessablebyall)}
                                 ${lang.cmdallowedindm}: ${replaceBool(cmd.info.allowedindm)}
                                 ${lang.cmdnsfwonly}: ${replaceBool(cmd.info.nsfwonly)}`
                     }],
-                    footer: { icon_url: message.author.displayAvatarURL, text: `${lang.requestedby} ${message.author.username} • ${lang.setrestrictionsinsettings}: ${v.bot.settings[message.guild.id].prefix}settings` }
+                    footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.requestedby} ${message.author.username} • ${lang.setrestrictionsinsettings}: ${v.bot.settings[message.guild.id].prefix}settings` }
                 }
             })
         } else {
@@ -54,9 +58,9 @@ module.exports.run = async (bot, message, args, lang) => {
                 title: `${lang.help} - ${lang.commandlist}`,
                 color: v.randomhex(),
                 thumbnail: { url: bot.user.avatarURL() },
-                description: lang.helpdetailedcommandinfo.replace("prefix", v.bot.settings[message.guild.id].prefix),
+                description: `__${lang.overviewofxcmds.replace("commandcount", `**${v.commandcount}**`)}__:\n${lang.helpdetailedcommandinfo.replace("prefix", v.bot.settings[message.guild.id].prefix)}`,
                 fields: [],
-                footer: { icon_url: message.author.displayAvatarURL, text: `${lang.requestedby} ${message.author.username}` },
+                footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.requestedby} ${message.author.username}` },
                 timestamp: v.d()
             }
         }
@@ -99,7 +103,8 @@ module.exports.run = async (bot, message, args, lang) => {
 
 module.exports.info = {
     names: ["help", "h", "commands"],
-    description: "List of all commands and information.",
+    description: "List of all commands or information of a specific command.",
+    usage: "[command name]",
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false
