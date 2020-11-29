@@ -1,13 +1,10 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const logger = v.logger
- 
+module.exports.run = async (bot, message, args, lang, v, logger) => {
     try {
         let { body } = await v.superagent.get('http://api.oboobs.ru/boobs/0/1/random')
         
         let imageurl = "http://media.oboobs.ru/" + body[0].preview
         message.channel.send({embed:{
-            title: "Image doesn't load? Click here!",
+            title: lang.general.imagehyperlink,
             url: imageurl,
             image: {
                 url: imageurl },

@@ -1,8 +1,5 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const logger = v.logger
-    
-    message.channel.send(`${lang.coinflipped} **${v.randomstring(lang.coinfliprandommsg)}**!`)
+module.exports.run = async (bot, message, args, lang, v, logger) => {   
+    message.channel.send(`${lang.cmd.othermisc.coinflipped} **${v.randomstring(lang.cmd.othermisc.coinfliprandommsg)}**!`)
 }
 
 module.exports.info = {

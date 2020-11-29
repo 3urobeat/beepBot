@@ -1,6 +1,4 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v = require("../../vars.js")
-    
+module.exports.run = async (bot, message, args, lang, v, logger) => {   
     await message.react("👍").catch(err => {
         message.channel.send("poll react error: " + err)
         return; })

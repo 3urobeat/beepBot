@@ -1,0 +1,19 @@
+{
+    "help": "Hilfe",
+    "commandlist": "Befehlsliste",
+    "aliases": "Aliases",
+    "noaliases": "Dieser Befehl hat keine Alternativen.",
+    "category": "Kategorie",
+    "usage": "Verwendung",
+    "optionalargument": "Optionelles Argument",
+    "requiredargument": "Verpflichtenes Argument",
+    "restrictions": "Einschränkungen",
+    "cmdaccessableby": "Beschränkungs-Level",
+    "cmdaccessablebyall": "Keine Beschränkung",
+    "cmdallowedindm": "In DMs erlaubt",
+    "cmdnsfwonly": "Nur in NSFW-Kanal",
+    "overviewofxcmds": "Übersicht über commandcount Befehle",
+    "detailedcommandinfo": "Tippe `prefixsettings [Name_des_Befehls]` um detaillierte Informationen und Aliases zu dem spezifischen Befehl zu erhalten!",
+    "cmdnotfound": "Ich konnte diesen Befehl leider nicht finden.",
+    "setrestrictionsinsettings": "Stelle Admin & Mod Rollen in den Einstellungen ein"
+}

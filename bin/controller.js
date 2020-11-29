@@ -4,6 +4,7 @@ const v         = require('./vars.js')
 v.checkm8();
 
 const Discord   = require('discord.js');
+const path      = require("path")
 
 var logger      = v.logger //make it more simple to interact with it
 const ascii     = v.randomstring(v.asciipath.ascii) //set random ascii for this bootup
@@ -29,10 +30,8 @@ const dirs = p => v.fs.readdirSync(p).filter(f => v.fs.statSync(v.path.join(p, f
 
 dirs('./bin/commands').forEach((k, i) => { //I sadly couldn't export commandcount from bot.js to log it here so I had to copy the code
     v.fs.readdir(`./bin/commands/${k}`, (err, files) => {
-        if (err) logger('error', 'controller.js', err);
-        var jsfiles = files.filter(p => p.split('.').pop() === 'js');
-        
-        jsfiles.forEach((f) => {
+        if (err) logger('error', 'controller.js', "Command Reader: " + err);
+        files.filter(p => p.split('.').pop() === 'js').forEach((f) => {
             var cmd = require(`./commands/${k}/${f}`);
 
             for(j = 0; j < cmd.info.names.length; j++) { //get all aliases of each command
@@ -55,7 +54,7 @@ const Manager = new Discord.ShardingManager('./bin/bot.js', {
     totalShards: "auto",
     token: token });
 
-Manager.spawn(Manager.totalShards).catch(err => { logger("error", "controller.js", `Failed to start shard: ${err}`) }) //10000 is the delay before trying to respawn a shard
+Manager.spawn(Manager.totalShards).catch(err => { logger("error", "controller.js", `Failed to start shard: ${Object.entries(err)}`) }) //10000 is the delay before trying to respawn a shard
 
 /* -------------- shardCreate Event -------------- */
 Manager.on('shardCreate', (shard) => { 
@@ -79,7 +78,7 @@ Manager.on('shardCreate', (shard) => {
             if (v.config.status == "dnd")    var configstatus = "\x1b[91mdnd\x1b[0m"
             logger("", "", `> Set Presence to ${configstatus} - Game Rotation every ${v.config.gamerotateseconds} sec`)
 
-            logger("", "", `> ${commandcount} commands found!`)
+            logger("", "", `> ${commandcount} commands & ${Object.keys(v.langObj).length} languages found!`)
 
             logger("", "", "*--------------------------------------------------------------*\n ", true)
         }, 1000);

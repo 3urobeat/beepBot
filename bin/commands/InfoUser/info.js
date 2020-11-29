@@ -1,16 +1,12 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const botjs  = require("../../bot.js")
-    const logger = v.logger
-
+module.exports.run = async (bot, message, args, lang, v, logger) => {
     var infofields = []
     var thumbnailurl = ""
 
     //Small function to avoid repeating code
     function quickInfoField(index, name, value, inline) {
         return infofields[index] = {
-            name: lang[name],
-            value: String(lang[value]).replace("prefix", v.bot.settings[message.guild.id].prefix),
+            name: lang.cmd.info[name],
+            value: String(lang.cmd.info[value]).replace("prefix", v.bot.settings[message.guild.id].prefix),
             inline: inline
         } }
 
@@ -18,62 +14,69 @@ module.exports.run = async (bot, message, args, lang) => {
     if (!args[1]) { args[1] = "" }
     switch(args[0].toLowerCase()) {
         case "user":
-            thumbnailurl = message.author.displayAvatarURL()
+            if (!args[1]) var whichuser = message.author
+            else if (message.guild.members.cache.find(member => member.user.username == args[1])) var whichuser = message.guild.members.cache.find(member => member.user.username == args[1]).user
+            else if (message.guild.members.cache.find(member => member.nickname == args[1])) var whichuser = message.guild.members.cache.find(member => member.nickname == args[1]).user
+            else if (message.guild.members.cache.get(args[1])) var whichuser = message.guild.members.cache.get(args[1]).user
+            else if (message.mentions.users.first()) var whichuser = message.mentions.users.first()
+            else return message.channel.send(lang.cmd.info.usernotfound)
+
+            thumbnailurl = whichuser.displayAvatarURL()
             var alluseractivites = ""
             var usernickname = ""
 
-            message.author.presence.activities.forEach((e, i) => {
+            whichuser.presence.activities.forEach((e, i) => {
                 if (i == 0) alluseractivites += `${e.name}`
                     else alluseractivites += `, ${e.name}`
 
-                if (i + 1 == Object.keys(message.author.presence.activities).length) { 
+                if (i + 1 == Object.keys(whichuser.presence.activities).length && alluseractivites.length >= 25) { 
                     alluseractivites = alluseractivites.slice(0, 25) + "..." } })
 
-            if (message.guild.members.cache.get(message.author.id).nickname == null) usernickname = "/"
-                    else usernickname = message.guild.members.cache.get(message.author.id).nickname
+            if (message.guild.members.cache.get(whichuser.id).nickname == null) usernickname = "/"
+                    else usernickname = message.guild.members.cache.get(whichuser.id).nickname
 
             if (args[1].toLowerCase() == "mobile") { //Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
                 //Mobile version
                 infofields[0] = {
-                    name: lang.user,
-                    value: `**Username:** ${message.author.name}#${message.author.discriminator}\n` +
+                    name: lang.cmd.info.user,
+                    value: `**Username:** ${whichuser.name}#${whichuser.discriminator}\n` +
                            `**Nickname:** ${usernickname}\n` +
-                           `**Status:** ${message.author.presence.status}\n` +
-                           `**Games:** (${Object.keys(message.author.presence.activities).length}) ${alluseractivites}\n` +
-                           `**ID:** ${message.author.id}\n` +
-                           `**Creation Date:** ${(new Date(message.author.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
+                           `**Status:** ${whichuser.presence.status}\n` +
+                           `**Games:** (${Object.keys(whichuser.presence.activities).length}) ${alluseractivites}\n` +
+                           `**ID:** ${whichuser.id}\n` +
+                           `**Creation Date:** ${(new Date(whichuser.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
                     inline: true }
                 
-                quickInfoField(1, "bot", "infobotshowmore", false)
-                quickInfoField(2, "server", "infoservershowmore", false)
+                quickInfoField(1, "bot", "botshowmore", false)
+                quickInfoField(2, "server", "servershowmore", false)
             } else {
                 //Desktop version
                 infofields[0] = {
-                    name: lang.user,
+                    name: lang.cmd.info.user,
                     value: `Username:\n` +
                            `Nickname:\n` +
                            `Status:\n` +
-                           `Games: (${Object.keys(message.author.presence.activities).length})\n` +
+                           `Games: (${Object.keys(whichuser.presence.activities).length})\n` +
                            `ID:\n` +
                            `Creation Date:`,
                     inline: true }
 
                 infofields[1] = {
                     name: "\u200b",
-                    value: `${message.author.username}#${message.author.discriminator}\n` +
+                    value: `${whichuser.username}#${whichuser.discriminator}\n` +
                            `${usernickname}\n` +
-                           `${message.author.presence.status}\n` +
+                           `${whichuser.presence.status}\n` +
                            `${alluseractivites}\n` +
-                           `${message.author.id}\n` +
-                           `${(new Date(message.author.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
+                           `${whichuser.id}\n` +
+                           `${(new Date(whichuser.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
                     inline: true }
 
                 infofields[2] = {
                     name: "\u200b",
                     value: "\u200b" }
 
-                quickInfoField(3, "bot", "infobotshowmore", true)
-                quickInfoField(4, "server", "infoservershowmore", true) }
+                quickInfoField(3, "bot", "botshowmore", true)
+                quickInfoField(4, "server", "servershowmore", true) }
             break;
         case "server":
             thumbnailurl = message.guild.iconURL()
@@ -81,7 +84,7 @@ module.exports.run = async (bot, message, args, lang) => {
             if (args[1].toLowerCase() == "mobile") {
                 //Mobile version
                 infofields[0] = {
-                    name: lang.server,
+                    name: lang.cmd.info.server,
                     value: `**Name:** ${message.guild.name}\n` +
                            `**ID:** ${message.guild.id}\n` +
                            `**Owner:** ${message.guild.owner}\n` +
@@ -92,12 +95,12 @@ module.exports.run = async (bot, message, args, lang) => {
                            `**Creation Date:** ${(new Date(message.guild.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
                     inline: true }
 
-                quickInfoField(1, "bot", "infobotshowmore", false)
-                quickInfoField(2, "user", "infousershowmore", false)
+                quickInfoField(1, "bot", "botshowmore", false)
+                quickInfoField(2, "user", "usershowmore", false)
             } else {
                 //Desktop version
                 infofields[0] = {
-                    name: lang.server,
+                    name: lang.cmd.info.server,
                     value: `Name:\n` +
                            `ID:\n` +
                            `Owner:\n` +
@@ -124,8 +127,8 @@ module.exports.run = async (bot, message, args, lang) => {
                     name: "\u200b",
                     value: "\u200b" }
 
-                quickInfoField(3, "bot", "infobotshowmore", true)
-                quickInfoField(4, "user", "infousershowmore", true) }
+                quickInfoField(3, "bot", "botshowmore", true)
+                quickInfoField(4, "user", "usershowmore", true) }
             break;
         default:
             thumbnailurl = v.bot.user.displayAvatarURL()
@@ -135,7 +138,7 @@ module.exports.run = async (bot, message, args, lang) => {
             if (args[1].toLowerCase() == "mobile") {
                 //Mobile version
                 infofields[0] = {
-                    name: `**${lang.bot}** - Mobile`,
+                    name: `**${lang.cmd.info.bot}** - Mobile`,
                     value: `**Uptime:** ${v.round(v.bot.uptime / 3600000, 2)} hours\n` +
                            `**Heartbeat:** ${v.round(v.bot.ws.ping, 2)} ms\n` +
                            `**RAM Usage:** ${Math.round(process.memoryUsage()["rss"] / 1024 / 1024 * 100) / 100} MB (RSS)\n` +
@@ -148,12 +151,12 @@ module.exports.run = async (bot, message, args, lang) => {
                            `**Invite:** [Click here!](${v.botinvitelink})\n`,
                     inline: true }
 
-                quickInfoField(3, "user", "infousershowmore", false)
-                quickInfoField(4, "server", "infoservershowmore", false)
+                quickInfoField(3, "user", "usershowmore", false)
+                quickInfoField(4, "server", "servershowmore", false)
             } else {
                 //Desktop version
                 infofields[0] = {
-                    name: lang.bot,
+                    name: lang.cmd.info.bot,
                     value: `Uptime:\n` +
                            `Heartbeat:\n` +
                            `RAM Usage:\n` +
@@ -185,18 +188,18 @@ module.exports.run = async (bot, message, args, lang) => {
                     value: "\u200b",
                     inline: true } 
                 
-                quickInfoField(3, "user", "infousershowmore", true)
-                quickInfoField(4, "server", "infoservershowmore", true) }
+                quickInfoField(3, "user", "usershowmore", true)
+                quickInfoField(4, "server", "servershowmore", true) }
     }
 
     message.channel.send({ 
         embed: {
-            title: `${v.BOTNAME} - ${lang.info}`,
+            title: `${v.BOTNAME} - ${lang.cmd.info.info}`,
             color: v.randomhex(),
             thumbnail: { url: thumbnailurl },
             description: `${v.BOTNAME} version ${v.config.version} made by ${v.BOTOWNER}\n${v.githublink}`,
             fields: infofields,
-            footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.requestedby} ${message.author.username} • If you are on mobile type ${v.bot.settings[message.guild.id].prefix}info bot mobile` }
+            footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • If you are on mobile type ${v.bot.settings[message.guild.id].prefix}info bot mobile` }
         }
     })
     

@@ -1,0 +1,7 @@
+{
+    "coinflipped": "Die Münze ist gefallen:",
+    "coinfliprandommsg": ["Kopf", "Zahl"],
+
+    "dicenomaxprovided": "Du musst dem endlosen Würfel ein Maximum geben! `2-∞`",
+    "dicerandommsg": ["Der Würfel rollt... Stopp! Es ist eine","Der Würfel ist stehengeblieben:","Deine Zahl:","...und es ist eine","Werde nicht süchtig!","Es ist wie Lotto! Hast du gewonnen?"]
+}

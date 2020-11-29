@@ -1,7 +1,4 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const logger = v.logger
-  
+module.exports.run = async (bot, message, args, lang, v, logger) => {  
     var m = await message.channel.send({embed:{
                         author:{
                             name: v.BOTNAME,

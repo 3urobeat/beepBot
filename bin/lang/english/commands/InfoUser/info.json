@@ -1,0 +1,9 @@
+{
+    "info": "Info",
+    "bot": "Bot",
+    "botshowmore": "Type `prefixinfo bot` to get detailed information about the bot.",
+    "user": "User",
+    "usershowmore": "Type `prefixinfo user` to get detailed information about yourself.",
+    "server": "Server",
+    "servershowmore": "Type `prefixinfo server` to get detailed information about this server."
+}

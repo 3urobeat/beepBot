@@ -1,12 +1,9 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const logger = v.logger
-        
+module.exports.run = async (bot, message, args, lang, v, logger) => {       
     try {
         let { body } = await v.superagent.get('https://nekobot.xyz/api/image?type=pgif')
 
         message.channel.send({embed:{
-            title: "Image doesn't load? Click here!",
+            title: lang.general.imagehyperlink,
             url: body.message,
             image: {
                 url: body.message },

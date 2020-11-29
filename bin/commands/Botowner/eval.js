@@ -1,7 +1,4 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const logger = v.logger
-
+module.exports.run = async (bot, message, args, lang, v, logger) => {
     const clean = text => {
         if (typeof(text) === "string") return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
             else return text; }
