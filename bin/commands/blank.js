@@ -1,7 +1,6 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const botjs  = require("../../bot.js")
-    const logger = v.logger
+module.exports.run = async (bot, message, args, lang, v, logger) => {
+    const botjs  = require("../../bot.js") //remove if not needed
+    let lf       = lang //Should this file use his lang file path often use this var as shorthand
     
 }
 

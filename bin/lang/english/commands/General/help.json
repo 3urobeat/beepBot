@@ -1,0 +1,19 @@
+{
+    "help": "Help",
+    "commandlist": "Command List",
+    "aliases": "Aliases",
+    "noaliases": "This command has no aliases.",
+    "category": "Category",
+    "usage": "Usage",
+    "optionalargument": "Optional argument",
+    "requiredargument": "Required argument",
+    "restrictions": "Restrictions",
+    "cmdaccessableby": "Restriction Level",
+    "cmdaccessablebyall": "No restriction",
+    "cmdallowedindm": "Allowed in DM",
+    "cmdnsfwonly": "NSFW-Channel-Only",
+    "overviewofxcmds": "Overview of commandcount commands",
+    "detailedcommandinfo": "Type `prefixsettings [name_of_command]` to get detailed information and aliases on that specific command!",
+    "cmdnotfound": "Sorry but I couldn't find that command.",
+    "setrestrictionsinsettings": "Set Admin & Mod roles in settings"
+}

@@ -1,0 +1,4 @@
+general.json holds translations of non command specific translations and information about this language
+
+The command categories contain command specific translations. The file name is always the first alias of an cmd.
+Some folders may contain an other.json file. This file holds translations for more than one command.

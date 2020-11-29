@@ -1,0 +1,7 @@
+{
+    "coinflipped": "The coin flipped to ",
+    "coinfliprandommsg": ["Head", "Number"],
+
+    "dicenomaxprovided": "You have to give the endless dice a valid maximum! `2-∞`",
+    "dicerandommsg": ["Rolling... Stop! Its a","The dice stopped rolling:","Your Number:","...and its a","Dont become addicted!","Its like lottery! Did you win?"]
+}

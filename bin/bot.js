@@ -73,7 +73,9 @@ v.bot.on("guildMemberAdd", async function(member) {
     if (v.bot.settings[member.guild.id].systemchannel != null && v.bot.settings[member.guild.id].greetmsg != null) {
         //check settings.json for greetmsg, replace username and servername and send it into setting's systemchannel
         let msgtosend = String(v.bot.settings[member.guild.id].greetmsg)
-        msgtosend = msgtosend.replace("username", member.user.username)
+
+        if (msgtosend.includes("@username")) msgtosend = msgtosend.replace("@username", `<@${member.user.id}>`)
+            else msgtosend = msgtosend.replace("username", member.user.username)
         msgtosend = msgtosend.replace("servername", member.guild.name)
 
         member.guild.channels.cache.get(String(v.bot.settings[member.guild.id].systemchannel)).send(msgtosend) }
@@ -98,6 +100,8 @@ v.bot.on("guildMemberRemove", async function(member) {
 /* ------------ Message Handler: ------------ */
 v.bot.on('message', async function(message) {
     if (message.author.bot) return;
+
+    //if (message.guild.id != "232550371191554051" && message.guild.id != "331822220051611648") return; //don't respond to other guilds when testing with normal loginmode
     if (message.channel.type == "text" && v.config.loginmode == "test") logger("info", "bot.js", `Shard ${message.guild.shardID}: ${message}`)
 
     if (message.channel.type !== "dm") {
@@ -150,7 +154,7 @@ v.bot.on('message', async function(message) {
             }}
 
         if (message.channel.type === "dm") cmd.run(v.bot, message, args, v.englishlang)
-            else cmd.run(v.bot, message, args, v.lang(message.guild.id)) //run the command
+            else cmd.run(v.bot, message, args, v.lang(message.guild.id), v, v.logger) //run the command
         
         return;
     } else { //cmd not recognized? check if channel is dm and send error message

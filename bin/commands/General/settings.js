@@ -1,9 +1,7 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const botjs  = require("../../bot.js")
-    const logger = v.logger
+module.exports.run = async (bot, message, args, lang, v, logger) => {
     var guildid  = message.guild.id
     var none     = "**/**"
+    let lf       = lang.cmd.settings
 
     function writenewsettings() {
         v.fs.writeFile(v.settingspath, JSON.stringify(v.bot.settings, null, 4), err => {
@@ -37,7 +35,7 @@ module.exports.run = async (bot, message, args, lang) => {
     //systemchannel
     if (v.bot.settings[guildid].systemchannel !== null) var systemchannel = "#" + message.guild.channels.cache.get(v.bot.settings[guildid].systemchannel).name
         else {  if (message.guild.systemChannel !== null) {
-                    var systemchannel = `${none} - ${lang.recommendation}: \`#${message.guild.systemChannel.name}\``
+                    var systemchannel = `${none} - ${lf.recommendation}: \`#${message.guild.systemChannel.name}\``
                 } else {
                     var systemchannel = none } }
     
@@ -54,12 +52,12 @@ module.exports.run = async (bot, message, args, lang) => {
         
     function roleid() {
         try { //get and set roleid once to make code cleaner
-            if (!args[2]) { return message.channel.send(lang.adminmodmemberaddroleusage) }
+            if (!args[2]) { return message.channel.send(lf.adminmodmemberaddroleusage) }
             if (args[2].length === 18 && /^\d+$/.test(args[2])) { //Check if the arg is 18 chars long and if it is a number
                 return roleid = args[2].toString() 
             } else { return roleid = message.guild.roles.cache.find(role => role.name.toLowerCase() === args.slice(2).join(" ").toLowerCase()).id } //not a roleid so try and find by name
         } catch (err) { 
-            message.channel.send(`${lang.settingsroleerror}.\n||\`${err}\`||`)
+            message.channel.send(`${lf.roleerror}.\n||\`${err}\`||`)
             return
         }}
 
@@ -71,42 +69,42 @@ module.exports.run = async (bot, message, args, lang) => {
             //indentation looks stupid because otherwise the resulting message would have a ton spaces infront of every cmd
             // \` is to apply markdown to message without using some kind of string feature (like ending the ` String message)
             message.channel.send(`
-${lang.help}: 
-\`${PREFIX}settings\` - ${lang.settingshelpview}
+${lang.cmd.help.help}: 
+\`${PREFIX}settings\` - ${lf.helpview}
 
-\`${PREFIX}settings prefix "prefix"\` - ${lang.settingshelpprefixset}
-\`${PREFIX}settings lang "${lang.language}"\` - ${lang.settingshelplangset}
-\`${PREFIX}settings adminroles [add/remove/removeall] "${lang.rolename}"\` - ${lang.settingshelpadminrolesset}
-\`${PREFIX}settings modroles [add/remove/removeall] "${lang.rolename}"\` - ${lang.settingshelpmodrolesset}
-\`${PREFIX}settings systemchannel [set/remove] "${lang.channelname}"\` - ${lang.settingshelpsystemchannelset}
-\`${PREFIX}settings greetmsg [set/remove] "${lang.message}"\` - ${lang.settingshelpgreetmsgset}
-\`${PREFIX}settings byemsg [set/remove] "${lang.message}"\`- ${lang.settingshelpbyemsgset}
-\`${PREFIX}settings joinroles [add/remove/removeall] "${lang.rolename}"\` - ${lang.settingshelpjoinrolesset}
-\`${PREFIX}settings reset\` - ${lang.settingshelpsettingsreset}
+\`${PREFIX}settings prefix "prefix"\` - ${lf.helpprefixset}
+\`${PREFIX}settings lang "${lang.general.language}"\` - ${lf.helplangset}
+\`${PREFIX}settings adminroles [add/remove/removeall] "${lf.rolename}"\` - ${lf.helpadminrolesset}
+\`${PREFIX}settings modroles [add/remove/removeall] "${lf.rolename}"\` - ${lf.helpmodrolesset}
+\`${PREFIX}settings systemchannel [set/remove] "${lf.channelname}"\` - ${lf.helpsystemchannelset}
+\`${PREFIX}settings greetmsg [set/remove] "${lang.general.message}"\` - ${lf.helpgreetmsgset}
+\`${PREFIX}settings byemsg [set/remove] "${lang.general.message}"\`- ${lf.helpbyemsgset}
+\`${PREFIX}settings joinroles [add/remove/removeall] "${lf.rolename}"\` - ${lf.helpjoinrolesset}
+\`${PREFIX}settings reset\` - ${lf.helpsettingsreset}
 
-${lang.settingshelpadvice}
+${lf.helpadvice}
             `)
             break;
         case "prefix":
-            //check for not supported prefixes! error msg: lang.prefixnotsupported
-            if (args[1] === undefined || args[1] === " ") return message.channel.send(`${lang.prefixmissingargs}.`)
+            //are there unsupported prefixes? use this! error msg: lf.prefixnotsupported
+            if (args[1] === undefined || args[1] === " ") return message.channel.send(`${lf.prefixmissingargs}.`)
             if (message.guild.members.cache.get(v.bot.user.id).nickname === null) var nickname = v.bot.user.username 
                 else var nickname = message.guild.members.cache.get(v.bot.user.id).nickname.replace(` [${v.bot.settings[guildid].prefix}]`, "")
 
             v.bot.settings[guildid].prefix = args[1];
             message.guild.members.cache.get(v.bot.user.id).setNickname(`${nickname} [${args[1]}]`).catch(err => { message.channel.send("I couldn't add my new Prefix to my nickname. Tip: You can also mention me instead of using a prefix if you should forget it.\nError: " + err) })
             writenewsettings();
-            message.channel.send(`${lang.newprefixset}: ${args[1]}`)
+            message.channel.send(`${lf.newprefixset}: ${args[1]}`)
             break;
         case "language":
         case "lang":
             if (!args[1]) { args[1] = "" }
-            if (!v.supportedlangs.includes(args[1].toLowerCase() + ".json")) {
-                message.channel.send(`${lang.supportedlang}: \n${v.supportedlangs.join("\n").split(".json").join("") }`)
+            if (!Object.keys(v.langObj).includes(args[1].toLowerCase())) {
+                message.channel.send(`${lf.supportedlang}: \n${Object.keys(v.langObj).join("\n").split(".json").join("") }`)
             } else {
                 v.bot.settings[guildid].lang = args[1].toLowerCase();
                 writenewsettings();
-                message.channel.send(`${lang.newlangsaved}.`) }
+                message.channel.send(`${v.langObj[args[1].toLowerCase()].cmd.settings.newlangsaved}.`) }
             break;
         case "adminroles":
         case "adminrole":
@@ -114,30 +112,30 @@ ${lang.settingshelpadvice}
             switch(args[1].toLowerCase()) {
                 case "add":
                     var roleid = roleid();
-                    if (v.bot.settings[guildid].adminroles.includes(roleid)) return message.channel.send(lang.rolealreadyadded)
+                    if (v.bot.settings[guildid].adminroles.includes(roleid)) return message.channel.send(lf.rolealreadyadded)
                     v.bot.settings[guildid].adminroles.push(roleid)
                     writenewsettings();
-                    message.channel.send(`${lang.roleadded}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
+                    message.channel.send(`${lf.roleadded}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
                     break;
                 case "remove":
                     var roleid = roleid();
-                    if (!v.bot.settings[guildid].adminroles.includes(roleid)) return message.channel.send(lang.rolenotincluded)
+                    if (!v.bot.settings[guildid].adminroles.includes(roleid)) return message.channel.send(lf.rolenotincluded)
                     v.bot.settings[guildid].adminroles = v.bot.settings[guildid].adminroles.filter(f => f !== roleid)
                     writenewsettings();
-                    message.channel.send(`${lang.roleremoved}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
+                    message.channel.send(`${lf.roleremoved}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
                     break;
                 case "removeall":
-                    if (v.bot.settings[guildid].adminroles.length === 0) return message.channel.send(lang.rolearrayempty)
+                    if (v.bot.settings[guildid].adminroles.length === 0) return message.channel.send(lf.rolearrayempty)
                     const collector = new v.Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 10000});
-                    message.channel.send(lang.areyousure)
+                    message.channel.send(lang.general.areyousure)
                     collector.on('collect', message => {
                         if (message.content == "y") {
                             v.bot.settings[guildid].adminroles = []
                             writenewsettings(); 
-                            message.channel.send(lang.rolearraycleared) } });
+                            message.channel.send(lf.rolearraycleared) } });
                     break;
                 default:
-                    message.channel.send(lang.adminmodmemberaddroleusage)
+                    message.channel.send(lf.adminmodmemberaddroleusage)
                     return; }
             break;
         case "moderatorroles":
@@ -148,30 +146,30 @@ ${lang.settingshelpadvice}
             switch(args[1].toLowerCase()) {
                 case "add":
                     var roleid = roleid();
-                    if (v.bot.settings[guildid].moderatorroles.includes(roleid)) return message.channel.send(lang.rolealreadyadded)
+                    if (v.bot.settings[guildid].moderatorroles.includes(roleid)) return message.channel.send(lf.rolealreadyadded)
                     v.bot.settings[guildid].moderatorroles.push(roleid)
                     writenewsettings();
-                    message.channel.send(`${lang.roleadded}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
+                    message.channel.send(`${lf.roleadded}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
                     break;
                 case "remove":
                     var roleid = roleid();
-                    if (!v.bot.settings[guildid].moderatorroles.includes(roleid)) return message.channel.send(lang.rolenotincluded)
+                    if (!v.bot.settings[guildid].moderatorroles.includes(roleid)) return message.channel.send(lf.rolenotincluded)
                     v.bot.settings[guildid].moderatorroles = v.bot.settings[guildid].moderatorroles.filter(f => f !== roleid)
                     writenewsettings();
-                    message.channel.send(`${lang.roleremoved}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
+                    message.channel.send(`${lf.roleremoved}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
                     break;
                 case "removeall":
-                    if (v.bot.settings[guildid].moderatorroles.length === 0) return message.channel.send(lang.rolearrayempty)
+                    if (v.bot.settings[guildid].moderatorroles.length === 0) return message.channel.send(lf.rolearrayempty)
                     const collector = new v.Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 10000});
-                    message.channel.send(lang.areyousure)
+                    message.channel.send(lang.general.areyousure)
                     collector.on('collect', message => {
                         if (message.content == "y") {
                             v.bot.settings[guildid].moderatorroles = []
                             writenewsettings(); 
-                            message.channel.send(lang.rolearraycleared) } });
+                            message.channel.send(lf.rolearraycleared) } });
                     break;
                 default:
-                    message.channel.send(lang.adminmodmemberaddroleusage)
+                    message.channel.send(lf.adminmodmemberaddroleusage)
                     return; }
             break;
         case "systemchannel":
@@ -179,75 +177,75 @@ ${lang.settingshelpadvice}
             switch(args[1].toLowerCase()) {
                 case "set":
                     try {
-                        if (!args[2]) { return message.channel.send(lang.systemchannelusage) }
+                        if (!args[2]) { return message.channel.send(lf.systemchannelusage) }
                         if (args[2].length === 18 && /^\d+$/.test(args[2])) { //Check if the arg is 18 chars long and if it is a number
                             var channelid = args[2].toString() 
                         } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args.slice(2).join(" ").toLowerCase()).id } //not a roleid so try and find by name
-                    } catch (err) { return message.channel.send(`${lang.systemchannelerror}.\n||\`${err}\`||`) }
+                    } catch (err) { return message.channel.send(`${lf.systemchannelerror}.\n||\`${err}\`||`) }
                     v.bot.settings[guildid].systemchannel = channelid;
                     writenewsettings();
-                    message.channel.send(`${lang.systemchannelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
+                    message.channel.send(`${lf.systemchannelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
                     break;
                 case "remove":
-                    if (v.bot.settings[guildid].systemchannel === null) return message.channel.send(lang.systemchannelnotset)
+                    if (v.bot.settings[guildid].systemchannel === null) return message.channel.send(lf.systemchannelnotset)
                     v.bot.settings[guildid].systemchannel = null
                     writenewsettings();
-                    message.channel.send(lang.systemchannelremoved)
+                    message.channel.send(lf.systemchannelremoved)
                     break;
                 default:
-                    message.channel.send(lang.systemchannelusage)
+                    message.channel.send(lf.systemchannelusage)
                     return; }
             break;
         case "greetmessage":
         case "greetmsg":
-            if (v.bot.settings[guildid].systemchannel == null) return message.channel.send(lang.greetmsgsystemchannelnotset)
+            if (v.bot.settings[guildid].systemchannel == null) return message.channel.send(lf.greetmsgsystemchannelnotset)
 
             if (!args[1]) { args[1] = "" }
             switch(args[1].toLowerCase()) {
                 case "set":
-                    if (!args[2]) return message.channel.send(lang.greetmsgusage)
-                    if (message.content.length > 150) return message.channel.send(lang.argtoolong)
+                    if (!args[2]) return message.channel.send(lf.greetmsgusage)
+                    if (message.content.length > 150) return message.channel.send(lf.argtoolong)
 
                     args.splice(0, 2) //remove "greetmsg" and "set" from array
 
                     v.bot.settings[guildid].greetmsg = String(args.join(" ")); //join everything together
                     writenewsettings();
-                    message.channel.send(lang.msgset)
+                    message.channel.send(lf.msgset)
                     break;
                 case "remove":
-                    if (v.bot.settings[guildid].greetmsg === null) return message.channel.send(lang.msgnotset)
+                    if (v.bot.settings[guildid].greetmsg === null) return message.channel.send(lf.msgnotset)
                     v.bot.settings[guildid].greetmsg = null
                     writenewsettings();
-                    message.channel.send(lang.msgremoved)
+                    message.channel.send(lf.msgremoved)
                     break;
                 default:
-                    message.channel.send(lang.greetmsgusage)
+                    message.channel.send(lf.greetmsgusage)
                     return; }
             break;
         case "byemessage":
         case "byemsg":
-            if (v.bot.settings[guildid].systemchannel == null) return message.channel.send(lang.greetmsgsystemchannelnotset)
+            if (v.bot.settings[guildid].systemchannel == null) return message.channel.send(lf.greetmsgsystemchannelnotset)
 
             if (!args[1]) { args[1] = "" }
             switch(args[1].toLowerCase()) {
                 case "set":
-                    if (!args[2]) return message.channel.send(lang.byemsgusage)
-                    if (message.content.length > 150) return message.channel.send(lang.argtoolong)
+                    if (!args[2]) return message.channel.send(lf.byemsgusage)
+                    if (message.content.length > 150) return message.channel.send(lf.argtoolong)
 
                     args.splice(0, 2) //remove "byemsg" and "set" from array
 
                     v.bot.settings[guildid].byemsg = String(args.join(" ")); //join everything together
                     writenewsettings();
-                    message.channel.send(lang.msgset)
+                    message.channel.send(lf.msgset)
                     break;
                 case "remove":
-                    if (v.bot.settings[guildid].byemsg === null) return message.channel.send(lang.msgnotset)
+                    if (v.bot.settings[guildid].byemsg === null) return message.channel.send(lf.msgnotset)
                     v.bot.settings[guildid].byemsg = null
                     writenewsettings();
-                    message.channel.send(lang.msgremoved)
+                    message.channel.send(lf.msgremoved)
                     break;
                 default:
-                    message.channel.send(lang.byemsgusage)
+                    message.channel.send(lf.byemsgusage)
                     return; }
             break;
         case "memberaddroles":
@@ -256,46 +254,46 @@ ${lang.settingshelpadvice}
             switch(args[1].toLowerCase()) {
                 case "add":
                     var roleid = roleid();
-                    if (v.bot.settings[guildid].memberaddroles.includes(roleid)) return message.channel.send(lang.rolealreadyadded)
+                    if (v.bot.settings[guildid].memberaddroles.includes(roleid)) return message.channel.send(lf.rolealreadyadded)
                     v.bot.settings[guildid].memberaddroles.push(roleid)
                     writenewsettings();
-                    message.channel.send(`${lang.roleadded}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
+                    message.channel.send(`${lf.roleadded}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
                     break;
                 case "remove":
                     var roleid = roleid();
-                    if (!v.bot.settings[guildid].memberaddroles.includes(roleid)) return message.channel.send(lang.rolenotincluded)
+                    if (!v.bot.settings[guildid].memberaddroles.includes(roleid)) return message.channel.send(lf.rolenotincluded)
                     v.bot.settings[guildid].memberaddroles = v.bot.settings[guildid].memberaddroles.filter(f => f !== roleid)
                     writenewsettings();
-                    message.channel.send(`${lang.roleremoved}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
+                    message.channel.send(`${lf.roleremoved}: ${message.guild.roles.cache.get(roleid).name} (${roleid})`)
                     break;
                 case "removeall":
-                    if (v.bot.settings[guildid].memberaddroles.length === 0) return message.channel.send(lang.rolearrayempty)
+                    if (v.bot.settings[guildid].memberaddroles.length === 0) return message.channel.send(lf.rolearrayempty)
                     const collector = new v.Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 10000});
-                    message.channel.send(lang.areyousure)
+                    message.channel.send(lang.general.areyousure)
                     collector.on('collect', message => {
                         if (message.content == "y") {
                             v.bot.settings[guildid].memberaddroles = []
                             writenewsettings(); 
-                            message.channel.send(lang.rolearraycleared) } });
+                            message.channel.send(lf.rolearraycleared) } });
                     break;
                 default:
-                    message.channel.send(lang.memberaddroleusage)
+                    message.channel.send(lf.memberaddroleusage)
                     return; }
             break;
         case "reset":
             const collector = new v.Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 10000});
-            message.channel.send(lang.areyousure)
+            message.channel.send(lang.general.areyousure)
             collector.on('collect', message => {
                 if (message.content == "y") {
                     v.bot.servertosettings(message.guild)
-                    message.channel.send(lang.settingsreset) } });
+                    message.channel.send(lf.settingsreset) } });
             break;
 
 
         /* --------------- Display current settings --------------- */
         default:
             message.channel.send({embed:{
-                title: `${lang.settingsfor} '${message.guild.name}'`,
+                title: `${lf.settingsfor} '${message.guild.name}'`,
                 color: v.randomhex(),
                 thumbnail: { url: message.guild.iconURL },
                 fields: [{ 
@@ -303,28 +301,28 @@ ${lang.settingshelpadvice}
                         value: `\`${v.bot.settings[guildid].prefix}\``, 
                         inline: true }, 
                     { 
-                        name: `${lang.language}:`, 
-                        value: lang.thislang, 
+                        name: `${lang.general.language}:`, 
+                        value: lang.general.thislang, 
                         inline: true },
                     { 
-                        name: `${lang.adminroles}:`, 
+                        name: `${lf.adminroles}:`, 
                         value: adminroles },
                     { 
-                        name: `${lang.moderatorroles}:`, 
+                        name: `${lf.moderatorroles}:`, 
                         value: moderatorroles },
                     { 
-                        name: `${lang.systemchannel}:`,
+                        name: `${lf.systemchannel}:`,
                         value: systemchannel },
                     {
-                        name: `${lang.greetmsg}:`,
+                        name: `${lf.greetmsg}:`,
                         value: greetmsg },
                     {
-                        name: `${lang.byemsg}:`,
+                        name: `${lf.byemsg}:`,
                         value: byemsg },
                     {
-                        name: `${lang.addroleonjoin}:`,
+                        name: `${lf.addroleonjoin}:`,
                         value: memberaddroles }],
-                footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.requestedby} ${message.author.username} • ${lang.help}: ${v.bot.settings[guildid].prefix}settings help` }
+                footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • ${lang.cmd.help.help}: ${v.bot.settings[guildid].prefix}settings help` }
             } })
             return; }
 }

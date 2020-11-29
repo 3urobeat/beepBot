@@ -1,12 +1,10 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const logger = v.logger
-    
-    if (!args[0]) { message.channel.send(lang.clearinvalidamount); return; }
+module.exports.run = async (bot, message, args, lang, v, logger) => {
+    let invalidamount = lang.cmd.othermoderation.clearinvalidamount
+    if (!args[0]) { message.channel.send(invalidamount); return; }
 
     var messagecount = parseInt(args[0]);
-    if (isNaN(messagecount)) { message.channel.send(lang.clearinvalidamount); return; }
-    if (messagecount > 100 || messagecount < 1) { message.channel.send(lang.clearinvalidamount); return; }
+    if (isNaN(messagecount)) { message.channel.send(invalidamount); return; }
+    if (messagecount > 100 || messagecount < 1) { message.channel.send(invalidamount); return; }
 
     message.channel.messages.fetch({limit: messagecount + 1}).then(messages => 
         message.channel.bulkDelete(messages)).catch(err => {

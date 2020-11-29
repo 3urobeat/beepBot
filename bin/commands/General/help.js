@@ -1,49 +1,48 @@
-module.exports.run = async (bot, message, args, lang) => {
-    const v      = require("../../vars.js")
-    const logger = v.logger
-
+module.exports.run = async (bot, message, args, lang, v, logger) => {
     if (!args[0]) { args[0] = "" }
     args[0].replace(v.bot.settings[message.guild.id].prefix, "") //remove prefix from argument if the user should have provided one
+
+    let lf = lang.cmd.help //lc for lang-file
 
     if (args[0]) { //user wants detailed information to one command?
         let cmd = v.bot.commands.get(args[0].toLowerCase())
         
         if (cmd) {
             if (cmd.info.names.length > 1) var cmdaliases = cmd.info.names.filter((_, i) => i !== 0); //Remove first entry - Credit: https://stackoverflow.com/a/27396779/12934162
-                else var cmdaliases = [lang.cmdnoaliases] //return as array so that .join doesn't throw error
+                else var cmdaliases = [lf.noaliases] //return as array so that .join doesn't throw error
             
             function replaceBool(value) { return String(value).replace("true", "✅").replace("false", "❌") }
 
             message.channel.send({ 
                 embed: {
-                    title: `${lang.help} - ${cmd.info.names[0]}`,
+                    title: `${lf.help} - ${cmd.info.names[0]}`,
                     color: v.randomhex(),
                     description: `${cmd.info.description}`,
                     fields: [{
-                        name: `${lang.aliases}:`,
+                        name: `${lf.aliases}:`,
                         value: cmdaliases.join(", "),
                         inline: true
                     },
                     {
-                        name: `${lang.category}:`,
+                        name: `${lf.category}:`,
                         value: cmd.info.category,
                         inline: true
                     },
                     {
-                        name: `${lang.usage}:`,
-                        value: `\`${v.bot.settings[message.guild.id].prefix}${cmd.info.names[0]} ${cmd.info.usage}\`\n*[] <- ${lang.optionalargument}, () <- ${lang.requiredargument}*`
+                        name: `${lf.usage}:`,
+                        value: `\`${v.bot.settings[message.guild.id].prefix}${cmd.info.names[0]} ${cmd.info.usage}\`\n*[] <- ${lf.optionalargument}, () <- ${lf.requiredargument}*`
                     },
                     {
-                        name: `${lang.restrictions}:`,
-                        value: `${lang.cmdaccessableby}: ${String(cmd.info.accessableby).replace("all", lang.cmdaccessablebyall)}
-                                ${lang.cmdallowedindm}: ${replaceBool(cmd.info.allowedindm)}
-                                ${lang.cmdnsfwonly}: ${replaceBool(cmd.info.nsfwonly)}`
+                        name: `${lf.restrictions}:`,
+                        value: `${lf.cmdaccessableby}: ${String(cmd.info.accessableby).replace("all", lf.cmdaccessablebyall)}
+                                ${lf.cmdallowedindm}: ${replaceBool(cmd.info.allowedindm)}
+                                ${lf.cmdnsfwonly}: ${replaceBool(cmd.info.nsfwonly)}`
                     }],
-                    footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.requestedby} ${message.author.username} • ${lang.setrestrictionsinsettings}: ${v.bot.settings[message.guild.id].prefix}settings` }
+                    footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • ${lf.setrestrictionsinsettings}: ${v.bot.settings[message.guild.id].prefix}settings` }
                 }
             })
         } else {
-            return message.channel.send(lang.helpcmdnotfound) }
+            return message.channel.send(lf.cmdnotfound) }
 
     } else { //No argument given, construct full list of commands
 
@@ -55,12 +54,12 @@ module.exports.run = async (bot, message, args, lang) => {
         //Pre-configure message
         msg = { 
             embed: {
-                title: `${lang.help} - ${lang.commandlist}`,
+                title: `${lf.help} - ${lf.commandlist}`,
                 color: v.randomhex(),
                 thumbnail: { url: bot.user.avatarURL() },
-                description: `__${lang.overviewofxcmds.replace("commandcount", `**${v.commandcount}**`)}__:\n${lang.helpdetailedcommandinfo.replace("prefix", v.bot.settings[message.guild.id].prefix)}`,
+                description: `__${lf.overviewofxcmds.replace("commandcount", `**${v.commandcount}**`)}__:\n${lf.detailedcommandinfo.replace("prefix", v.bot.settings[message.guild.id].prefix)}`,
                 fields: [],
-                footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.requestedby} ${message.author.username}` },
+                footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username}` },
                 timestamp: v.d()
             }
         }

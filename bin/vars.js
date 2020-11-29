@@ -1,6 +1,5 @@
 const configpath      = "./config.json"
 const settingspath    = "./bin/data/settings.json"
-const englishlangpath = "./lang/english.json"
 
 const Discord    = require("discord.js")
 const si         = require("systeminformation")
@@ -15,8 +14,6 @@ const readline   = require("readline")
 const d          = function d() { return new Date() }
 const bootstart  = d()
 var commandcount = 0;
-
-const englishlang = require(englishlangpath) 
 
 const bot     = new Discord.Client()
 const servers = {}
@@ -44,11 +41,6 @@ if (config.loginmode === "normal") {
   BOTNAME   = "beepTestBot";
   BOTAVATAR = testbotdefaultavatar; }
 
-//Get all supported languages
-fs.readdir(`./bin/lang/`, (err, files) => {
-  if (err) logger('error', 'vars.js', "Error reading all supported languages: " + err);
-  module.exports.supportedlangs = files.filter(p => p.split('.').pop() === 'json') })
-
 /**
  * Returns a random String from an array
  * @param {Array<String>} arr An Array with Strings to choose from
@@ -58,6 +50,21 @@ var randomstring = arr => arr[Math.floor(Math.random() * arr.length)]
 
 var owneronlyerror = function owneronlyerror(guildid) { return randomstring(lang(guildid).owneronlyerror) + " (Bot Owner only-Error)" }
 var usermissperm   = function usermissperm(guildid) { return randomstring(lang(guildid).usermissperm) + " (Role permission-Error)" }
+
+/**
+ * Attempts to get a user object from a message
+ * @param {Object} message The message object
+ * @param {Array} args The args array
+ * @param {Boolean} allowauthorreturn Specifies if the function should return the author if no args is given
+ * @returns {Object} The retrieved user object
+ */
+const getuserfrommsg = function getuserfrommsg(message, args, allowauthorreturn) {
+  if (!args[0] && allowauthorreturn) return message.author
+  else if (message.guild.members.cache.find(member => member.user.username == args[0])) return message.guild.members.cache.find(member => member.user.username == args[0]).user
+  else if (message.guild.members.cache.find(member => member.nickname == args[0])) return message.guild.members.cache.find(member => member.nickname == args[0]).user
+  else if (message.guild.members.cache.get(args[0])) return message.guild.members.cache.get(args[0]).user
+  else if (message.mentions.users.first()) return message.mentions.users.first()
+  else return {} }
 
 /**
  * Rounds a number with x decimals
@@ -140,19 +147,6 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
   
   return string; } //Return String, maybe it is useful for the calling file
 
-/**
- * Returns the language file the specified server has set
- * @param {Number} guildid The id of the guild
- * @returns Language file
- */
-var lang = function lang(guildid) {
-  if (!guildid) { logger('error', 'vars.js', "function lang: guildid not specified!"); return; }
-  let serverlang = bot.settings[guildid].lang
-  if (!module.exports.supportedlangs.includes(serverlang + ".json")) { 
-    logger("warn", "vars.js", `Guild ${guildid} has an invalid language! Returning english language...`)
-    return englishlang; }
-  return require(`./lang/${serverlang}.json`) }
-
 var checkm8 = async function checkm8() {
     const errormsg = '\x1b[31m\x1b[7mERROR\x1b[0m \x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m' + botinvitelink;
     const filewrite = `console.log('\x1b[31m\x1b[7mERROR\x1b[0m \x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${botinvitelink}')\nprocess.kill(0)\n`
@@ -199,11 +193,58 @@ var cmdusetofile = function cmdusetofile(cmdtype, cont, guildid) {
   fs.appendFile("./bin/cmduse.txt",`${cmdtype} ${cont} got used! [${d().getHours()}:${d().getMinutes()}:${d().getSeconds()}] (${guildid})\n`, err => {
       if (err) logger('error', 'vars.js', `writing cmduse to cmduse.txt: ${err}`) }) }
 
+/* -------------- Create lang object -------------- */
+/**
+ * Function to construct the language object
+ * @param {String} dir Language Folder Root Path
+ */
+function langFiles(dir) { //Idea from https://stackoverflow.com/a/63111390/12934162
+  fs.readdirSync(dir).forEach(file => {
+      const absolute = path.join(dir, file);
+      if (fs.statSync(absolute).isDirectory()) return langFiles(absolute);
+      else {
+          if (!file.includes(".json")) return; //ignore all files that aren't .json
+          let result = absolute.replace(".json", "").split("\\"); //remove file ending and split path into array
+
+          result.splice(0, 2); //remove "bin" and "lang"
+          result.splice(2, 1); //remove category name
+
+          if (!langObj[result[0]]) langObj[result[0]] = {} //create language key
+          if (!langObj[result[0]]["cmd"]) langObj[result[0]]["cmd"] = {} //create cmd key
+
+          try {
+            if (result[1] == "commands") {
+              langObj[result[0]]["cmd"][result[2]] = require(absolute.replace("bin", "."))
+            } else {
+              langObj[result[0]][result[1]] = require(absolute.replace("bin", ".")) }
+          } catch(err) {
+            if (err) logger("warn", "vars.js", `langFiles function: lang ${result[0]} has an invalid file: ${err}`) }
+          
+          return; }
+  }) }
+
+var langObj = {}
+logger("info", "vars.js", "Loading language files...", true, true)
+langFiles("./bin/lang/"); //RECURSION TIME!
+logger("info", "vars.js", `Found ${Object.keys(langObj).length} language(s)!`, true, true)
+
+/**
+* Returns the language obj the specified server has set
+* @param {Number} guildid The id of the guild
+* @returns Language file
+*/
+var lang = function lang(guildid) {
+if (!guildid) { logger('error', 'vars.js', "function lang: guildid not specified!"); return; }
+let serverlang = bot.settings[guildid].lang
+if (!Object.keys(langObj).includes(serverlang)) {
+  logger("warn", "vars.js", `Guild ${guildid} has an invalid language! Returning english language...`)
+  return langObj["english"]; }
+return langObj[serverlang] }
+
 //Exporting var's:
 module.exports={
     configpath,
     settingspath,
-    englishlang,
     Discord,
     si,
     superagent,
@@ -235,8 +276,10 @@ module.exports={
     owneronlyerror,
     usermissperm,
     round,
+    getuserfrommsg,
     randomhex,
     logger,
+    langObj,
     lang,
     checkm8,
     servertosettings,
