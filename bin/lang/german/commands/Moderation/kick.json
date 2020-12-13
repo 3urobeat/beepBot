@@ -1,3 +1,10 @@
 {
-    "highestRoleError": "Error"
+    "highestRoleError": "Fehler: Der Nutzer, den du kicken möchtest, hat eine höhere Rolle als du.",
+    "botRoleTooLow": "Fehler: Die Rolle des Bots ist tiefer als die des zu kickenden Nutzers.\nBitte ziehe die 'beepBot' Rolle in den Servereinstellungen ganz nach oben.",
+    "selfkick": "Du kannst dich nicht selber kicken. :facepalm:",
+    "serverownerkick": "Du kannst den Serverbesitzer nicht kicken. :facepalm:",
+    "botkick": ["Ich kick mich doch nicht selber, was denkst du?! :angry:","Dich mag ich nicht mehr.","Nein. :angry:","Versuche nicht mich mit meinen eigenen Waffen zu schlagen!","Kann ich dich irgendwie blockieren?","Wie wärs wenn ich lieber dich kicke?"],
+    "missingkickperm": "Du benötigst entweder die Mitglieder kicken oder Administrator Berechtigung.",
+    "kickmsg": "username wurde gekickt. Begründung: kickreasontext",
+    "kicknotifymsg": "Du wurdest von **servername** gekickt. Begründung: kickreasontext"
 }
