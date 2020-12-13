@@ -11,5 +11,5 @@
 
     "nsfwonlyerror": "🔞 Dieser Befehl kann nur in einem NSFW-Kanal genutzt werden!",
     "owneronlyerror": ["Dieser Befehl ist nur dem Botowner gestattet. Was hast du erwartet?!","Du bist nicht der Botowner.","Ich bin nicht dumm.","Ich bin sicher. Sicher wie sonst was.","Die Security lässt dich nicht rein.","Hab dich! Du wirst niemandem Schaden zufügen!"],
-    "usermissperm": ["Du hast nicht die nötigen Berechtigungen um dies zu tun.","Hm, du darfst das nicht tun.","Sorry aber das lässt der Besitzer dieses Servers dich nicht tun.","Du darfst das nicht tun.","Mach den Serverbesitzer verantwortlich!"]
+    "usermissperm": ["Du hast nicht die nötigen Berechtigungen um dies zu tun.","Hm, du darfst das nicht tun.","Sorry aber das lässt der Besitzer dieses Servers dich nicht tun.","Du darfst das nicht tun.","Das darfst du nicht. Mach den Serverbesitzer verantwortlich!"]
 }

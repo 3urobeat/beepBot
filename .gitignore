@@ -5,3 +5,4 @@ bin/serverlist.txt
 bin/cmduse.txt
 bin/output.txt
 sync.ffs_db
+bin/commands/General/test.js

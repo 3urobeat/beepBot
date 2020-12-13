@@ -1,0 +1,10 @@
+{
+    "highestRoleError": "Error: The user you are trying to ban has a higher role than you.",
+    "botRoleTooLow": "Error: The role of the bot is lower than the user you are trying to ban.\nPlease move the 'beepBot' role to the top in the server settings.",
+    "selfban": "You can't ban yourself. :facepalm:",
+    "serverownerban": "You can't ban the server owner. :facepalm:",
+    "botban": ["I won't ban myself - what are you thinking?! :angry:","I don't like you anymore.","No. :angry:","Dont fight me with my own weapons!","Is there a way to block you?","How about I ban you instead?"],
+    "missingbanperm": "You either need the ban Members or Administrator permission.",
+    "banmsg": "username was banned. Reason: banreasontext",
+    "bannotifymsg": "You got banned from **servername**. Reason: banreasontext"
+}

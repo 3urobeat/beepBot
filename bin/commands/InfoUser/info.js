@@ -6,7 +6,7 @@ module.exports.run = async (bot, message, args, lang, v, logger) => {
     function quickInfoField(index, name, value, inline) {
         return infofields[index] = {
             name: lang.cmd.info[name],
-            value: String(lang.cmd.info[value]).replace("prefix", v.bot.settings[message.guild.id].prefix),
+            value: String(lang.cmd.info[value]).replace("prefix", v.beepBot.settings[message.guild.id].prefix),
             inline: inline
         } }
 
@@ -131,7 +131,7 @@ module.exports.run = async (bot, message, args, lang, v, logger) => {
                 quickInfoField(4, "user", "usershowmore", true) }
             break;
         default:
-            thumbnailurl = v.bot.user.displayAvatarURL()
+            thumbnailurl = bot.user.displayAvatarURL()
             let cpuTemp = await v.si.cpuTemperature(async (cb) => { return cb })
             let cpuUsage = await v.si.currentLoad(async (cb) => { return cb })
 
@@ -139,15 +139,15 @@ module.exports.run = async (bot, message, args, lang, v, logger) => {
                 //Mobile version
                 infofields[0] = {
                     name: `**${lang.cmd.info.bot}** - Mobile`,
-                    value: `**Uptime:** ${v.round(v.bot.uptime / 3600000, 2)} hours\n` +
-                           `**Heartbeat:** ${v.round(v.bot.ws.ping, 2)} ms\n` +
+                    value: `**Uptime:** ${v.round(bot.uptime / 3600000, 2)} hours\n` +
+                           `**Heartbeat:** ${v.round(bot.ws.ping, 2)} ms\n` +
                            `**RAM Usage:** ${Math.round(process.memoryUsage()["rss"] / 1024 / 1024 * 100) / 100} MB (RSS)\n` +
                            `**CPU Temp:** ${cpuTemp.main} °C\n` +
                            `**CPU Usage:** ${v.round(cpuUsage.currentload, 2)} %\n` +
                            `**Node.js:** ${process.version}\n` +
                            `**Discord.js:** v${v.Discord.version}\n` +
-                           `**Server Count:** ${(await v.bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
-                           `**Shard Count:** ${v.bot.shard.count}\n` +
+                           `**Server Count:** ${(await bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
+                           `**Shard Count:** ${bot.shard.count}\n` +
                            `**Invite:** [Click here!](${v.botinvitelink})\n`,
                     inline: true }
 
@@ -171,15 +171,15 @@ module.exports.run = async (bot, message, args, lang, v, logger) => {
 
                 infofields[1] = {
                     name: "\u200b",
-                    value: `${v.round(v.bot.uptime / 3600000, 2)} hours\n` +
-                           `${v.round(v.bot.ws.ping, 2)} ms\n` +
+                    value: `${v.round(bot.uptime / 3600000, 2)} hours\n` +
+                           `${v.round(bot.ws.ping, 2)} ms\n` +
                            `${Math.round(process.memoryUsage()["rss"] / 1024 / 1024 * 100) / 100} MB (RSS)\n` +
                            `${cpuTemp.main} °C\n` +
                            `${v.round(cpuUsage.currentload, 2)} %\n` +
                            `${process.version}\n` +
                            `v${v.Discord.version}\n` +
-                           `${(await v.bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
-                           `${v.bot.shard.count}\n` +
+                           `${(await bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
+                           `${bot.shard.count}\n` +
                            `[Click here!](${v.botinvitelink})`,
                     inline: true }
 
@@ -199,7 +199,7 @@ module.exports.run = async (bot, message, args, lang, v, logger) => {
             thumbnail: { url: thumbnailurl },
             description: `${v.BOTNAME} version ${v.config.version} made by ${v.BOTOWNER}\n${v.githublink}`,
             fields: infofields,
-            footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • If you are on mobile type ${v.bot.settings[message.guild.id].prefix}info bot mobile` }
+            footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • If you are on mobile type ${v.beepBot.settings[message.guild.id].prefix}info bot mobile` }
         }
     })
     

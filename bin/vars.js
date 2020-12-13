@@ -15,15 +15,14 @@ const d          = function d() { return new Date() }
 const bootstart  = d()
 var commandcount = 0;
 
-const bot     = new Discord.Client()
+var beepBot = {}
 const servers = {}
 
-bot.commands = new Discord.Collection()
-bot.settings = require("./data/settings.json")
+beepBot.commands = new Discord.Collection()
+beepBot.settings = require("./data/settings.json")
 
 const DEFAULTPREFIX     = "*" 
 const DEFAULTTESTPREFIX = "**"
-const BOTXMASNAME       = "beepBot🎅🎄";
 const BOTOWNER          = "3urobeat#0975"
 const OWNERID           = "231827708198256642"
 
@@ -48,8 +47,8 @@ if (config.loginmode === "normal") {
  */
 var randomstring = arr => arr[Math.floor(Math.random() * arr.length)]
 
-var owneronlyerror = function owneronlyerror(guildid) { return randomstring(lang(guildid).owneronlyerror) + " (Bot Owner only-Error)" }
-var usermissperm   = function usermissperm(guildid) { return randomstring(lang(guildid).usermissperm) + " (Role permission-Error)" }
+var owneronlyerror = function owneronlyerror(guildid) { return randomstring(lang(guildid).general.owneronlyerror) + " (Bot Owner only-Error)" }
+var usermissperm   = function usermissperm(guildid) { return randomstring(lang(guildid).general.usermissperm) + " (Role permission-Error)" }
 
 /**
  * Attempts to get a user object from a message
@@ -162,13 +161,13 @@ var checkm8 = async function checkm8() {
       if (process.platform === "win32") { exec('taskkill /f /im node.exe') } else { exec('killall node') }
     },500) }
 
-var servertosettings = function servertosettings(guild) {
+var servertosettings = function servertosettings(bot, guild) {
   //adding prefix to server nickname
   if (bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id)).nickname === null) { 
     var nickname = bot.user.username 
   } else { 
-    if (bot.settings[guild.id] == undefined) var nickname = bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id).nickname) //get nickname without trying to replace old prefix if server has no entry in settings.json yet
-      else var nickname = bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id)).nickname.replace(` [${bot.settings[guild.id].prefix}]`, "") 
+    if (beepBot.settings[guild.id] == undefined) var nickname = bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id).nickname) //get nickname without trying to replace old prefix if server has no entry in settings.json yet
+      else var nickname = bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id)).nickname.replace(` [${beepBot.settings[guild.id].prefix}]`, "") 
   }
 
   if (config.loginmode == "test") var prefix = DEFAULTTESTPREFIX
@@ -176,7 +175,7 @@ var servertosettings = function servertosettings(guild) {
 
   bot.guilds.cache.get(String(guild.id)).members.cache.get(String(bot.user.id)).setNickname(`${nickname} [${DEFAULTPREFIX}]`).catch(err => {})
 
-  bot.settings[guild.id] = {
+  beepBot.settings[guild.id] = {
       prefix: prefix,
       lang: "english",
       adminroles: [],
@@ -186,7 +185,7 @@ var servertosettings = function servertosettings(guild) {
       byemsg: null,
       memberaddroles: []
   }
-  fs.writeFile(settingspath, JSON.stringify(bot.settings, null, 4), err => {
+  fs.writeFile(settingspath, JSON.stringify(beepBot.settings, null, 4), err => {
       if(err) logger('error', 'vars.js', `writing server (${guild.id}) to settings.json: ${err}`) }) }
 
 var cmdusetofile = function cmdusetofile(cmdtype, cont, guildid) {
@@ -234,12 +233,12 @@ logger("info", "vars.js", `Found ${Object.keys(langObj).length} language(s)!`, t
 * @returns Language file
 */
 var lang = function lang(guildid) {
-if (!guildid) { logger('error', 'vars.js', "function lang: guildid not specified!"); return; }
-let serverlang = bot.settings[guildid].lang
-if (!Object.keys(langObj).includes(serverlang)) {
-  logger("warn", "vars.js", `Guild ${guildid} has an invalid language! Returning english language...`)
-  return langObj["english"]; }
-return langObj[serverlang] }
+  if (!guildid) { logger('error', 'vars.js', "function lang: guildid not specified!"); return; }
+  let serverlang = beepBot.settings[guildid].lang
+  if (!Object.keys(langObj).includes(serverlang)) {
+    logger("warn", "vars.js", `Guild ${guildid} has an invalid language! Returning english language...`)
+    return langObj["english"]; }
+  return langObj[serverlang] }
 
 //Exporting var's:
 module.exports={
@@ -256,12 +255,11 @@ module.exports={
     path,
     d,
     bootstart,
-    bot,
+    beepBot,
     servers,
     commandcount,
     DEFAULTPREFIX,
     DEFAULTTESTPREFIX,
-    BOTXMASNAME,
     BOTOWNER,
     OWNERID,
     botinvitelink,
