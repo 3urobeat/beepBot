@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, v, logger) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
 message.channel.send(`__
 
 

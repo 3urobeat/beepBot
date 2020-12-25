@@ -5,7 +5,7 @@
     "helpadminrolesset": "Adds, removes or removes all roles that have access to admin features of the bot.",
     "helpmodrolesset": "Adds, removes or removes all roles that have access to moderator features of the bot.",
     "helpsystemchannelset": "Sets the channel for broadcast (e.g. user-join/leave) messages.",
-    "helpgreetmsgset": "Sets the message that will be sent in the systemchanel when a new user joins the server.",
+    "helpgreetmsgset": "Sets the message that will be sent in the systemchanel when a new user joins the server. Markdown supported!",
     "helpbyemsgset": "Sets the message that will be sent in the systemchannel when a user leaves the server.",
     "helpjoinrolesset": "Adds, removes or removes all roles a new user will get when joining the server.",
     "helpsettingsreset": "Resets your settings.",

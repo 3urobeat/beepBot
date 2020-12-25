@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, v, logger) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     const botjs  = require("../../bot.js") //remove if not needed
     let lf       = lang //Should this file use his lang file path often use this var as shorthand
     

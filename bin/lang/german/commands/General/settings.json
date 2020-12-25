@@ -5,7 +5,7 @@
     "helpadminrolesset": "Fügt hinzu, entfernt oder entfernt alle Rollen, die auf Zugriff auf Admin-Funktionen des Bots haben.",
     "helpmodrolesset": "Fügt hinzu, entfernt oder entfernt alle Rollen, die auf Zugriff auf Moderator-Funktionen des Bots haben.",
     "helpsystemchannelset": "Setzt den Kanal für Durchsagen (z.B. Beitritt-Begrüßungs-Nachrichten) fest.",
-    "helpgreetmsgset": "Setzt die Nachricht fest, die im Kanal für Durchsagen gesendet wird, wenn ein neuer Nutzer den Server betritt.",
+    "helpgreetmsgset": "Setzt die Nachricht fest, die im Kanal für Durchsagen gesendet wird, wenn ein neuer Nutzer den Server betritt. Unterstützt Markdown!",
     "helpbyemsgset": "Setzt die Nachricht fest, die im Kanal für Durchsagen gesendet wird, wenn ein Nutzer den Server verlässt.",
     "helpjoinrolesset": "Fügt hinzu, entfernt oder entfernt alle Rollen, die ein neuer Nutzer zugewiesen bekommt.",
     "helpsettingsreset": "Setzt deine Einstellungen zurück.",
