@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, v, logger) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     let invalidamount = lang.cmd.othermoderation.clearinvalidamount
     if (!args[0]) { message.channel.send(invalidamount); return; }
 

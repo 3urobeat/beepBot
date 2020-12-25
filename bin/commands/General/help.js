@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, v, logger) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     if (!args[0]) { args[0] = "" }
     args[0].replace(v.beepBot.settings[message.guild.id].prefix, "") //remove prefix from argument if the user should have provided one
 

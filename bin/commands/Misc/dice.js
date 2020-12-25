@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, v, logger) => {   
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     var messagecount = parseInt(args[0]);
     var randomnumber = Math.floor((Math.random() * messagecount) + 1);
 

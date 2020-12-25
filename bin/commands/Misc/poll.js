@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, v, logger) => {   
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     await message.react("👍").catch(err => {
         message.channel.send("poll react error: " + err)
         return; })

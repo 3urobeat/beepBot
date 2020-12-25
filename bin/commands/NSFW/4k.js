@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, v, logger) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     try {
         let { body } = await v.superagent.get('https://nekobot.xyz/api/image?type=4k')
 

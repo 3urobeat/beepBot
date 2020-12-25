@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, v, logger) => {   
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { 
     var kickuser = v.getuserfrommsg(message, args, false);
     if (Object.keys(kickuser).length == 0) return message.channel.send(lang.general.usernotfound);
 

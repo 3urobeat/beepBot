@@ -1,19 +1,19 @@
-module.exports.run = async (bot, message, args, lang, v, logger) => {  
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     var m = await message.channel.send({embed:{
                         author:{
-                            name: v.BOTNAME,
+                            name: bot.user.username,
                             icon_url: bot.user.avatarURL
                         },
                         title: "Ping" + "?",
                         color: 0xFFA500
                     }});
 
-    var botheartbeat = v.round(bot.ws.ping, 2)
-    var botpingpong = v.round(m.createdTimestamp - message.createdTimestamp, 2)
+    var botheartbeat = fn.round(bot.ws.ping, 2)
+    var botpingpong = fn.round(m.createdTimestamp - message.createdTimestamp, 2)
 
     m.edit(({embed:{
                 author:{
-                    name: v.BOTNAME,
+                    name: bot.user.username,
                     icon_url: bot.user.avatarURL
                 },
                 title: "Pong" + "!",

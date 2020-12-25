@@ -1,0 +1,24 @@
+{
+    "DEFAULTPREFIX": "*",
+    "DEFAULTTESTPREFIX": "**",
+    "BOTNAME": "beepBot",
+    "BOTOWNER": "3urobeat#0975",
+    "OWNERID": "231827708198256642",
+    "botinvitelink": "https://discordapp.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=1610087551",
+    "testbotinvitelink": "https://discordapp.com/oauth2/authorize?client_id=264403059575095307&scope=bot&permissions=1610087551",
+    "botdefaultavatar": "https://i.imgur.com/64BkKW4.png",
+    "botxmasavatar": "https://i.imgur.com/GgHBtkG.png",
+    "testbotdefaultavatar": "https://i.imgur.com/gmP9eFn.png",
+    "githublink": "https://github.com/HerrEurobeat",
+    "defaultguildsettings": {
+        "guildid": "replaceguildid",
+        "prefix": "replaceprefix",
+        "lang": "english",
+        "adminroles": [],
+        "moderatorroles": [],
+        "systemchannel": null,
+        "greetmsg": null,
+        "byemsg": null,
+        "memberaddroles": []
+    }
+}
