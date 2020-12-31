@@ -13,36 +13,40 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => {
     if (guildsettings.adminroles.length > 0) {
         var adminroles = new String
         for(i = 0; i < guildsettings.adminroles.length; i++) { //< and not <= because i is one lower than length
-            if (i < 1) adminroles += message.guild.roles.cache.get(guildsettings.adminroles[i]).name
-                else adminroles += ", " + message.guild.roles.cache.get(guildsettings.adminroles[i]).name }
+            if (i < 1) adminroles += `<@&${message.guild.roles.cache.get(guildsettings.adminroles[i]).id}>`
+                else adminroles += `, <@&${message.guild.roles.cache.get(guildsettings.adminroles[i]).id}>` }
     } else { var adminroles = none }
 
     if (guildsettings.moderatorroles.length > 0) {
         var moderatorroles = new String
         for(i = 0; i < guildsettings.moderatorroles.length; i++) { //< and not <= because i is one lower than length
-            if (i < 1) moderatorroles += message.guild.roles.cache.get(guildsettings.moderatorroles[i]).name
-                else moderatorroles += ", " + message.guild.roles.cache.get(guildsettings.moderatorroles[i]).name }  
+            if (i < 1) moderatorroles += `<@&${message.guild.roles.cache.get(guildsettings.moderatorroles[i]).id}>`
+                else moderatorroles += `, <@&${message.guild.roles.cache.get(guildsettings.moderatorroles[i]).id}>` }  
     } else { var moderatorroles = none }
 
     if (guildsettings.memberaddroles.length > 0) {
         var memberaddroles = new String
         for(i = 0; i < guildsettings.memberaddroles.length; i++) { //< and not <= because i is one lower than length
-            if (i < 1) memberaddroles += message.guild.roles.cache.get(guildsettings.memberaddroles[i]).name
-                else memberaddroles += ", " + message.guild.roles.cache.get(guildsettings.memberaddroles[i]).name }  
+            if (i < 1) memberaddroles += `<@&${message.guild.roles.cache.get(guildsettings.memberaddroles[i]).id}>`
+                else memberaddroles += `, <@&${message.guild.roles.cache.get(guildsettings.memberaddroles[i]).id}>` }  
     } else { var memberaddroles = none }
 
     //systemchannel
-    if (guildsettings.systemchannel !== null) var systemchannel = "#" + message.guild.channels.cache.get(guildsettings.systemchannel).name
+    if (guildsettings.systemchannel) var systemchannel = `<#${message.guild.channels.cache.get(guildsettings.systemchannel).id}>`
         else {  if (message.guild.systemChannel !== null) {
                     var systemchannel = `${none} - ${lf.recommendation}: \`#${message.guild.systemChannel.name}\``
                 } else {
                     var systemchannel = none } }
+
+    //modlogchannel
+    if (guildsettings.modlogchannel) var modlogchannel = `<#${message.guild.channels.cache.get(guildsettings.modlogchannel).id}>`
+        else { var modlogchannel = none }
     
     //greetmsg & byemsg
-    if (guildsettings.greetmsg === null) var greetmsg = none
+    if (!guildsettings.greetmsg) var greetmsg = none
         else var greetmsg = guildsettings.greetmsg
 
-    if (guildsettings.byemsg === null) var byemsg = none
+    if (!guildsettings.byemsg) var byemsg = none
         else var byemsg = guildsettings.byemsg
 
 
@@ -170,24 +174,52 @@ ${lf.helpadvice}
                     try {
                         if (!args[2]) { return message.channel.send(lf.systemchannelusage) }
                         if (args[2].length === 18 && /^\d+$/.test(args[2])) { //Check if the arg is 18 chars long and if it is a number
-                            var channelid = args[2].toString() 
+                            var channelid = args[2].toString()
+                        } else if (args[2].match(/(?<=<#)[0-9]{18}?(?=>)/g)) { // <#18numbers>
+                            var channelid = args[2].toString().replace(/[<#>]/g, "")
                         } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args.slice(2).join(" ").toLowerCase()).id } //not a roleid so try and find by name
-                    } catch (err) { return message.channel.send(`${lf.systemchannelerror}.\n||\`${err}\`||`) }
+                    } catch (err) { return message.channel.send(`${lf.channelerror}.\n||\`${err}\`||`) }
+
                     bot.settings.update({ guildid: guildid }, { $set: { systemchannel: channelid }}, {}, (err) => { if (err) logDbErr(err) })
-                    message.channel.send(`${lf.systemchannelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
+                    message.channel.send(`${lf.channelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
                     break;
                 case "remove":
-                    if (guildsettings.systemchannel === null) return message.channel.send(lf.systemchannelnotset)
+                    if (!guildsettings.systemchannel) return message.channel.send(lf.channelnotset)
                     bot.settings.update({ guildid: guildid }, { $set: { systemchannel: null }}, {}, (err) => { if (err) logDbErr(err) })
-                    message.channel.send(lf.systemchannelremoved)
+                    message.channel.send(lf.channelremoved)
                     break;
                 default:
                     message.channel.send(lf.systemchannelusage)
                     return; }
             break;
+        case "modlogchannel":
+            if (!args[1]) { args[1] = "" }
+            switch(args[1].toLowerCase()) {
+                case "set":
+                    try {
+                        if (!args[2]) { return message.channel.send(lf.modlogchannelusage) }
+                        if (args[2].length === 18 && /^\d+$/.test(args[2])) { //Check if the arg is 18 chars long and if it is a number
+                            var channelid = args[2].toString()
+                        } else if (args[2].match(/(?<=<#)[0-9]{18}?(?=>)/g)) { // <#18numbers>
+                            var channelid = args[2].toString().replace(/[<#>]/g, "")
+                        } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args.slice(2).join(" ").toLowerCase()).id } //not a roleid so try and find by name
+                    } catch (err) { return message.channel.send(`${lf.channelerror}.\n||\`${err}\`||`) }
+
+                    bot.settings.update({ guildid: guildid }, { $set: { modlogchannel: channelid }}, {}, (err) => { if (err) logDbErr(err) })
+                    message.channel.send(`${lf.channelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
+                    break;
+                case "remove":
+                    if (!guildsettings.modlogchannel) return message.channel.send(lf.channelnotset)
+                    bot.settings.update({ guildid: guildid }, { $set: { modlogchannel: null }}, {}, (err) => { if (err) logDbErr(err) })
+                    message.channel.send(lf.channelremoved)
+                    break;
+                default:
+                    message.channel.send(lf.modlogchannelusage)
+                    return; }
+            break;
         case "greetmessage":
         case "greetmsg":
-            if (guildsettings.systemchannel == null) return message.channel.send(lf.greetmsgsystemchannelnotset)
+            if (!guildsettings.systemchannel) return message.channel.send(lf.greetmsgsystemchannelnotset)
 
             if (!args[1]) { args[1] = "" }
             switch(args[1].toLowerCase()) {
@@ -211,7 +243,7 @@ ${lf.helpadvice}
             break;
         case "byemessage":
         case "byemsg":
-            if (guildsettings.systemchannel == null) return message.channel.send(lf.greetmsgsystemchannelnotset)
+            if (!guildsettings.systemchannel) return message.channel.send(lf.greetmsgsystemchannelnotset)
 
             if (!args[1]) { args[1] = "" }
             switch(args[1].toLowerCase()) {
@@ -267,7 +299,7 @@ ${lf.helpadvice}
             message.channel.send(lang.general.areyousure)
             collector.on('collect', message => {
                 if (message.content == "y") {
-                    bot.servertosettings(message.guild)
+                    fn.servertosettings(message.guild)
                     message.channel.send(lf.settingsreset) } });
             break;
 
@@ -295,6 +327,9 @@ ${lf.helpadvice}
                     { 
                         name: `${lf.systemchannel}:`,
                         value: systemchannel },
+                    {
+                        name: `${lf.modlogchannel}:`,
+                        value: modlogchannel },
                     {
                         name: `${lf.greetmsg}:`,
                         value: greetmsg },

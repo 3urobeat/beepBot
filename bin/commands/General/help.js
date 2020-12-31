@@ -1,11 +1,11 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     if (!args[0]) { args[0] = "" }
-    args[0].replace(v.beepBot.settings[message.guild.id].prefix, "") //remove prefix from argument if the user should have provided one
+    args[0].replace(guildsettings.prefix, "") //remove prefix from argument if the user should have provided one
 
     let lf = lang.cmd.help //lc for lang-file
 
     if (args[0]) { //user wants detailed information to one command?
-        let cmd = v.beepBot.commands.get(args[0].toLowerCase())
+        let cmd = bot.commands.get(args[0].toLowerCase())
         
         if (cmd) {
             if (cmd.info.names.length > 1) var cmdaliases = cmd.info.names.filter((_, i) => i !== 0); //Remove first entry - Credit: https://stackoverflow.com/a/27396779/12934162
@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             message.channel.send({ 
                 embed: {
                     title: `${lf.help} - ${cmd.info.names[0]}`,
-                    color: v.randomhex(),
+                    color: fn.randomhex(),
                     description: `${cmd.info.description}`,
                     fields: [{
                         name: `${lf.aliases}:`,
@@ -30,7 +30,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     },
                     {
                         name: `${lf.usage}:`,
-                        value: `\`${v.beepBot.settings[message.guild.id].prefix}${cmd.info.names[0]} ${cmd.info.usage}\`\n*[] <- ${lf.optionalargument}, () <- ${lf.requiredargument}*`
+                        value: `\`${guildsettings.prefix}${cmd.info.names[0]} ${cmd.info.usage}\`\n\n*[] <- ${lf.optionalargument}, () <- ${lf.requiredargument}*`
                     },
                     {
                         name: `${lf.restrictions}:`,
@@ -38,7 +38,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                                 ${lf.cmdallowedindm}: ${replaceBool(cmd.info.allowedindm)}
                                 ${lf.cmdnsfwonly}: ${replaceBool(cmd.info.nsfwonly)}`
                     }],
-                    footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • ${lf.setrestrictionsinsettings}: ${v.beepBot.settings[message.guild.id].prefix}settings` }
+                    footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • ${lf.setrestrictionsinsettings}: ${guildsettings.prefix}settings` }
                 }
             })
         } else {
@@ -47,7 +47,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     } else { //No argument given, construct full list of commands
 
         var msg = {}
-        var commandsObj = v.beepBot.commands.array()
+        var commandsObj = bot.commands.array()
         var unsortedcategories = {}
         var sortedcategories = {}
 
@@ -55,12 +55,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         msg = { 
             embed: {
                 title: `${lf.help} - ${lf.commandlist}`,
-                color: v.randomhex(),
+                color: fn.randomhex(),
                 thumbnail: { url: bot.user.avatarURL() },
-                description: `__${lf.overviewofxcmds.replace("commandcount", `**${v.commandcount}**`)}__:\n${lf.detailedcommandinfo.replace("prefix", v.beepBot.settings[message.guild.id].prefix)}`,
+                description: `__${lf.overviewofxcmds.replace("commandcount", `**${bot.commandcount}**`)}__:\n${lf.detailedcommandinfo.replace("prefix", guildsettings.prefix)}`,
                 fields: [],
                 footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username}` },
-                timestamp: v.d()
+                timestamp: Date.now()
             }
         }
 
@@ -73,14 +73,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (e.info.thisisanalias == true) return;
             
             //Add command to existing Category Array
-            unsortedcategories[e.info.category].push(`\`${v.beepBot.settings[message.guild.id].prefix}${e.info.names[0]}\` - ${e.info.description}`)
+            unsortedcategories[e.info.category].push(`\`${guildsettings.prefix}${e.info.names[0]}\` - ${e.info.description}`)
         });
 
         //Sort Object by order defined in config
-        v.config.helpcategoryorder.forEach((e, i) => {
             if (e == "other") { //Check if this key is the key for all categories with no specific order
                 Object.keys(unsortedcategories).forEach((k) => { //Loop ober all categories
-                    if (!v.config.helpcategoryorder.includes(k)) { //Check if this is one of the categories with no specific order
+                    if (!bot.config.helpcategoryorder.includes(k)) { //Check if this is one of the categories with no specific order
                         sortedcategories[k] = unsortedcategories[k] //Just add it
                     } })
             } else {

@@ -1,15 +1,21 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     let invalidamount = lang.cmd.othermoderation.clearinvalidamount
-    if (!args[0]) { message.channel.send(invalidamount); return; }
+    if (!args[0]) return message.channel.send(invalidamount);
 
     var messagecount = parseInt(args[0]);
-    if (isNaN(messagecount)) { message.channel.send(invalidamount); return; }
-    if (messagecount > 100 || messagecount < 1) { message.channel.send(invalidamount); return; }
+    if (isNaN(messagecount)) return message.channel.send(invalidamount);
+    if (messagecount > 100 || messagecount < 1) return message.channel.send(invalidamount);
 
-    message.channel.messages.fetch({limit: messagecount + 1}).then(messages => 
-        message.channel.bulkDelete(messages)).catch(err => {
-            message.channel.send("clear delete msg error: " + err)
-            logger("clear delete msg error: " + err) })
+    if (message.member.permissions.has("MANAGE_MESSAGES", "ADMINISTRATOR")) {
+        message.channel.messages.fetch({limit: messagecount + 1}).then(messages => 
+            message.channel.bulkDelete(messages)).catch(err => {
+                message.channel.send("clear delete msg error: " + err)
+                logger("clear delete msg error: " + err)
+                return; })
+        
+                fn.msgtomodlogchannel(message.guild, "clear", message.author, {}, [messagecount, message.channel])
+    } else {
+        message.channel.send(fn.usermissperm(lang)) }
 }
 
 module.exports.info = {

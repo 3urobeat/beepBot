@@ -4,7 +4,9 @@
     "selfban": "Du kannst dich nicht selber bannen. :facepalm:",
     "serverownerban": "Du kannst den Serverbesitzer nicht bannen. :facepalm:",
     "botban": ["Ich bann mich doch nicht selber, was denkst du?! :angry:","Dich mag ich nicht mehr.","Nein. :angry:","Versuche nicht mich mit meinen eigenen Waffen zu schlagen!","Kann ich dich irgendwie blockieren?","Wie wärs wenn ich lieber dich banne?"],
-    "missingbanperm": "Du benötigst entweder die Mitglieder bannen oder Administrator Berechtigung.",
-    "banmsg": "username wurde gebannt. Begründung: banreasontext",
-    "bannotifymsg": "Du wurdest von **servername** gebannt. Begründung: banreasontext"
+    "missingbanperm": "Fehler: Du benötigst entweder die Mitglieder bannen oder Administrator Berechtigung.",
+    "permbanmsg": "username wurde permanent gebannt. Begründung: banreasontext",
+    "tempbanmsg": "username wurde für timetext gebannt. Begründung: banreasontext",
+    "bannotifymsg": "Du wurdest von **servername** gebannt.\nBegründung: banreasontext\nDauer: timetext",
+    "permanent": "Permanent"
 }

@@ -7,7 +7,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (isNaN(messagecount)) { message.channel.send(nomaxprovided); return; }
     if (messagecount < 2) { message.channel.send(nomaxprovided); return; }
 
-    message.channel.send(':game_die: ' + v.randomstring(lang.cmd.othermisc.dicerandommsg) + " **" + randomnumber + "**")
+    message.channel.send(':game_die: ' + fn.randomstring(lang.cmd.othermisc.dicerandommsg) + " **" + randomnumber + "**")
     return;
 }
 

@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     if (!args[0]) return message.channel.send(lang.cmd.otherfun.magic8missingargs)
-    message.channel.send(":8ball: " + v.randomstring(lang.cmd.otherfun.magic8responses))
+    message.channel.send(":8ball: " + fn.randomstring(lang.cmd.otherfun.magic8responses))
 }
 
 module.exports.info = {

@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {    
     try {
-        let { body } = await v.superagent.get('https://nekobot.xyz/api/image?type=pgif')
+        let { body } = await require("superagent").get('https://nekobot.xyz/api/image?type=pgif')
 
         message.channel.send({embed:{
             title: lang.general.imagehyperlink,
@@ -11,7 +11,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 icon_url: message.author.displayAvatarURL,
                 text: "Requestet by " + message.author.username },
             timestamp: message.createdAt,
-            color: v.randomhex() } })
+            color: fn.randomhex() } })
 
     } catch (err) {
         logger("error", "pgif.js", "API Error: " + err)
