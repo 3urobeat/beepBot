@@ -1,5 +1,5 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    var avataruser = v.getuserfrommsg(message, args, true)
+    var avataruser = fn.getuserfrommsg(message, args, true)
     if (Object.keys(avataruser).length == 0) return message.channel.send(lang.general.usernotfound)
 
     var avatarurl = avataruser.displayAvatarURL()
@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             text: `${lang.general.requestedby} ${message.author.username}`
         },
         timestamp: message.createdAt,
-        color: v.randomhex()
+        color: fn.randomhex()
     }})
 }
 

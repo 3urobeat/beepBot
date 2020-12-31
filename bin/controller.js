@@ -1,8 +1,10 @@
 //This file starts all shards and can coordinate actions between them
-const bootstart  = new Date()
+var bootstart  = 0;
+var bootstart  = new Date()
 
 const Discord   = require('discord.js');
 const path      = require("path")
+const nedb      = require("nedb")
 const fs        = require("fs")
 const readline  = require("readline")
 
@@ -84,6 +86,12 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
  */
 var randomstring = arr => arr[Math.floor(Math.random() * arr.length)]
 
+process.on('unhandledRejection', (reason, p) => {
+    logger('error', 'controller.js', `Unhandled Rejection! Reason: ${reason.stack}`) });
+
+process.on('uncaughtException', (reason, p) => {
+    logger('error', 'controller.js', `Uncaught Exception! Reason: ${reason.stack}`) });
+
 /* ------------ Initialise startup ------------ */
 let ascii = randomstring(asciipath.ascii) //set random ascii for this bootup
 
@@ -108,17 +116,19 @@ if (config.loginmode === "normal") {
     BOTNAME   = "beepBot";
     BOTAVATAR = constants.botdefaultavatar;
     token     = tokenpath.token //get token to let Manager know how many shards it has to start
+    respawnb  = true
 } else { 
     BOTNAME   = "beepTestBot";
     BOTAVATAR = constants.testbotdefaultavatar;
     token     = tokenpath.testtoken
+    respawnb  = false
 }
 
 const Manager = new Discord.ShardingManager('./bin/bot.js', {
     shardArgs: [],
     totalShards: "auto",
     token: token,
-    respawn: false });
+    respawn: respawnb });
 
 /* -------------- shardCreate Event -------------- */
 Manager.on('shardCreate', (shard) => { 
@@ -156,10 +166,10 @@ if ((process.env.COMPUTERNAME !== 'HÖLLENMASCHINE' && process.env.LOGNAME !== '
         if (process.platform === "win32") { require('child_process').exec('taskkill /f /im node.exe') } else { require('child_process').exec('killall node') } }) }
 
 
-Manager.spawn(Manager.totalShards).catch(err => { logger("error", "controller.js", `Failed to start shard: ${err.stack}`) }) //10000 is the delay before trying to respawn a shard
+Manager.spawn(Manager.totalShards).catch(err => { logger("error", "controller.js", `Failed to start shard: ${err.stack}`) }) //respawn delay is 10000
 
 let currentgameindex = 0
-let lastPresenceChange = Date.now()
+let lastPresenceChange = Date.now() //this is useful because intervals can get very unprecise over time
 var gamerotationloop = setInterval(async () => {
     if (lastPresenceChange + (config.gamerotateseconds * 1000) > Date.now()) return; //last change is more recent than gamerotateseconds wants
 
@@ -190,6 +200,60 @@ var gamerotationloop = setInterval(async () => {
         lastPresenceChange = Date.now() //set again to include processing time
 
         Manager.broadcastEval(`this.user.setPresence({activity: { name: "${callback}" }, status: "${config.status}" })`).catch(err => { //error will occur when not all shards are started yet
-            return logger("warn", "controller.js", "Couldn't broadcast setPresence. Error: " + err) })
+            return logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err) })
     })
 }, 2500)
+
+const timedbans = new nedb('./bin/data/timedbans.db') //initialise database
+    
+let lastTempBanCheck = Date.now() //this is useful because intervals can get very unprecise over time
+var tempbanloop = setInterval(() => {
+    if (lastTempBanCheck + 5000 > Date.now()) return; //last change is more recent than 30000
+
+    timedbans.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
+        if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
+
+    timedbans.find({ until: { $lte: Date.now() } }, (err, docs) => { //until is a date in ms, so we check if it is less than right now
+        if (docs.length < 1) return; //nothing found
+
+        docs.forEach((e, i) => { //take action for all results
+            Manager.broadcastEval(`
+                let guild = this.guilds.cache.get("${e.guildid}")
+                if (guild) {
+                    this.settings.findOne({ guildid: guild.id }, (err, gs) => { //gs: guildsettings
+                        guild.members.unban("${e.userid}")
+                            .then(res => {
+                                //Add ids as fallback option for msgtomodlogchannel
+                                var authorobj = guild.members.cache.get("${e.authorid}") //try to populate obj with actual data
+                                var recieverobj = res
+
+                                if (!authorobj) authorobj = {} //set blank if check failed
+                                if (!recieverobj) recieverobj = {}
+                                authorobj["userid"] = ${e.authorid} //add id as fallback should getting actual data failed
+                                recieverobj["userid"] = ${e.userid}
+
+                                this.fn.msgtomodlogchannel(guild, "unban", authorobj, recieverobj, ["${e.banreason}"]) //res is a user object
+                            })
+                            .catch(err => {
+                                //Add ids as fallback option for msgtomodlogchannel
+                                var authorobj = guild.members.cache.get("${e.authorid}") //try to populate obj with actual data
+                                var recieverobj = guild.members.cache.get("${e.userid}")
+
+                                if (!authorobj) authorobj = {} //set blank if check failed
+                                if (!recieverobj) recieverobj = {}
+                                authorobj["userid"] = ${e.authorid} //add id as fallback should getting actual data failed
+                                recieverobj["userid"] = ${e.userid}
+
+                                if (err != "DiscordAPIError: Unknown Ban") return this.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, recieverobj, ["${e.banreason}", err]) //if unknown ban ignore, user has already been unbanned
+                            })
+                    })
+
+                }
+            `).catch(err => {
+                logger("warn", "controller.js", "Couldn't broadcast unban: " + err.stack)
+                if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return; }) //do not remove from db when shards are being spawned
+
+            timedbans.remove({ userid: e.userid }, (err => { if (err) logger("error", "controller.js", `Error removing ${e.userid} from timedbans: ${err}`) }))
+        })
+    })
+}, 5000); //60 seconds

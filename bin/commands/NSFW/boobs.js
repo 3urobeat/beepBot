@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     try {
-        let { body } = await v.superagent.get('http://api.oboobs.ru/boobs/0/1/random')
+        let { body } = await require("superagent").get('http://api.oboobs.ru/boobs/0/1/random')
         
         let imageurl = "http://media.oboobs.ru/" + body[0].preview
         message.channel.send({embed:{
@@ -12,7 +12,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 icon_url: message.author.displayAvatarURL,
                 text: "Requestet by " + message.author.username },
             timestamp: message.createdAt,
-            color: v.randomhex() } })
+            color: fn.randomhex() } })
 
     } catch (err) {
         logger("error", "boobs.js", "API Error: " + err)

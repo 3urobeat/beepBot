@@ -1,5 +1,6 @@
 ﻿//This file controls one shard
-const bootstart = new Date()
+var bootstart   = 0;
+var bootstart   = new Date()
 const shardArgs = process.argv //ignore index 0 and 1
 
 const Discord  = require("discord.js")
@@ -14,6 +15,9 @@ const constants  = require("./constants.json")
 
 const bot = new Discord.Client()
 var   fn  = {} //object that will contain all functions to be accessible from commands
+
+bot.config    = config //I'm just gonna add it to the bot object as quite a few cmds will probably need the config later on
+bot.constants = constants
 
 /* ------------ Functions for all shards: ------------ */
 /**
@@ -86,19 +90,18 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
 * @param {Number} guildid The id of the guild
 * @returns {Object} lang object callback
 */
-var lang = (guildid, callback) => {
+var lang = (guildid, guildsettings) => {
     if (!guildid) { logger('error', 'bot.js', "function lang: guildid not specified!"); return; }
 
-    settings.findOne({ guildid: guildid }, (err, data) => {
-        if (!data) var serverlang = constants.defaultguildsettings.lang
-            else var serverlang = data.lang
-        
-        if (!Object.keys(bot.langObj).includes(serverlang)) {
-            logger("warn", "bot.js", `Guild ${guildid} has an invalid language! Returning english language...`)
-            callback(bot.langObj["english"]) }
-        
-        callback(bot.langObj[serverlang])
-    }) }
+    if (!guildsettings) var serverlang = constants.defaultguildsettings.lang
+        else var serverlang = guildsettings.lang
+    
+    if (!Object.keys(bot.langObj).includes(serverlang)) {
+        logger("warn", "bot.js", `Guild ${guildid} has an invalid language! Returning english language...`)
+        callback(bot.langObj["english"]) }
+    
+    return bot.langObj[serverlang]
+    }
 
 /**
  * Adds the specified guild to the settings database with default values
@@ -110,7 +113,7 @@ var servertosettings = (guild, removeentry) => {
 
     //if removeentry is true just remove entry and stop further execution
     if (removeentry) {
-        logger("info", "bot.js", `Removing ${guild.id} from settings database...`, false, true)
+        logger("info", "bot.js", `removeentry: Removing ${guild.id} from settings database...`, false, true)
         settings.remove({ guildid: guild.id }, (err) => { if (err) logger("error", "bot.js", `servertosettings error removing guild ${guild.id}: ${err}`)
         return; }) }
 
@@ -133,7 +136,7 @@ var servertosettings = (guild, removeentry) => {
         defaultguildsettings["prefix"] = prefix
 
         logger("info", "bot.js", `Adding ${guild.id} to settings database with default settings...`, false, true)
-        if (data) settings.remove({ guildid: guild.id }, (err) => { if (err) logger("error", "bot.js", `servertosettings error removing guild ${guild.id}: ${err}` + err) })
+        if (data) settings.remove({ guildid: guild.id }, (err) => { if (err) logger("error", "bot.js", `servertosettings error removing guild ${guild.id}: ${err}`) })
         settings.insert(defaultguildsettings, (err) => { if (err) logger("error", "bot.js", "servertosettings error inserting guild: " + err) })
     })
 }
@@ -152,6 +155,132 @@ var getuserfrommsg = (message, args, allowauthorreturn) => {
     else if (message.guild.members.cache.get(args[0])) return message.guild.members.cache.get(args[0]).user
     else if (message.mentions.users.first()) return message.mentions.users.first()
     else return {} }
+
+/**
+ * Attempts to get time from message and converts it into ms
+ * @param {Array} args The args array
+ * @returns {Number} time in ms
+ * @returns {Number} index of time unit in lang.general.gettimefuncoptions
+ * @returns {Array} Array containing amount and unit. Example: ["2", "minutes"]
+ */
+var gettimefrommsg = (args, callback) => {
+    var arr = []
+    if (args.includes("-t")) {
+        arr = [args[args.indexOf("-t") + 1], args[args.indexOf("-t") + 2]] //Result example: ["2", "minutes"]
+    } else if (args.includes("-time")) {
+        arr = [args[args.indexOf("-time") + 1], args[args.indexOf("-time") + 2]] //Result example: ["2", "minutes"]
+    } else {
+        timeinms(null)
+        unitindex(null) }
+
+    switch (arr[1]) {
+        case "second":
+        case "seconds":
+            callback(arr[0] * 1000, 0, arr)
+            break;
+        case "minute":
+        case "minutes":
+            callback(arr[0] * 60000, 1, arr)
+            break;
+        case "hour":
+        case "hours":
+            callback(arr[0] * 3600000, 2, arr)
+            break;
+        case "day":
+        case "days":
+            callback(arr[0] * 86400000, 3, arr)
+            break;
+        case "month":
+        case "months":
+            callback(arr[0] * 2629800000, 4, arr)
+            break;
+        case "year":
+        case "years":
+            callback(arr[0] * 31557600000, 5, arr)
+            break;
+        default:
+            callback(null, null, arr)
+    } }
+
+/**
+ * Sends a message to the modlogchannel of that guild if it has one set
+ * @param {Discord.Guild} guild The guild obj
+ * @param {String} action Type of action (valid: clear, kick, ban, unban)
+ * @param {Discord.User} author Initiator of the action
+ * @param {Discord.User} reciever The affected user of the action 
+ * @param {Array<String>} details Additional details
+ */
+var msgtomodlogchannel = (guild, action, author, reciever, details) => {
+    settings.findOne({ guildid: guild.id }, (err, guildsettings) => {
+
+        if (!guildsettings || !guildsettings.modlogchannel) { //if modlogchannel is undefined (turned off) & no error -> return
+            if (action.includes("err")) { //if error, then find a channel to inform someone
+                if (guildsettings.modlogchannel) guildsettings.modlogchannel = guildsettings.modlogchannel //try modlogchannel first
+                    else if (guildsettings.systemchannel) guildsettings.modlogchannel = guildsettings.systemchannel //if no modlogchannel set, try systemchannel
+                    else if (guild.systemChannelID) guildsettings.modlogchannel = guild.systemChannelID //then check if guild has a systemChannel set
+                    else guildsettings.modlogchannel = guild.channels.cache.filter(c => c.type == "text").find(c => c.position == 0).id //get first text channel (needs permission check -> if false try next channel)
+            
+                guildsettings.lang = constants.defaultguildsettings.lang //set default lang to suppress error from lang function
+            } else { return; } }
+
+        let guildlang = lang(guild.id, guildsettings)
+
+        //Avoid errors from controller.js unban broadcastEval
+        if (!author["username"]) author["username"] = "ID: " + author.userid //userid will always be defined (look at controller.js unban broadcastEval)
+        if (!author["discriminator"]) author["discriminator"] = "????"
+        if (!reciever["username"]) reciever["username"] = "ID: " + reciever.userid
+        if (!reciever["discriminator"]) reciever["discriminator"] = "????"
+
+        var msg = {embed:{
+            title: "",
+            color: null,
+            fields: [],
+            footer: { icon_url: bot.user.displayAvatarURL(), text: guildlang.general.modlogdeletewithreaction }
+        }}
+
+        switch (action) {
+            case "clear":
+                msg.embed.title = guildlang.general.modlogcleartitle.replace("author", `${author.username}#${author.discriminator}`).replace("clearamount", details[0]).replace("channelname", "#" + details[1].name)
+                msg.embed.color = 16753920 //orange
+                break;
+            case "kick":
+                msg.embed.title = guildlang.general.modlogkicktitle.replace("author", `${author.username}#${author.discriminator}`).replace("reciever", `${reciever.username}#${reciever.discriminator}`)
+                msg.embed.color = 16753920 //orange
+                msg.embed.fields.push({ name: `${guildlang.general.banreason}:`, value: details[0] })
+                msg.embed.fields.push({ name: `${guildlang.general.details}:`, value: guildlang.general.modloguserwasnotified + String(details[1]).replace("true", "✅").replace("false", "❌") }) //details[1] is a boolean if the user was notified
+                break;
+            case "ban":
+                msg.embed.title = guildlang.general.modlogbantitle.replace("author", `${author.username}#${author.discriminator}`).replace("reciever", `${reciever.username}#${reciever.discriminator}`)
+                msg.embed.color = 16711680 //red
+                msg.embed.fields.push({ name: `${guildlang.general.banreason}:`, value: details[0] })
+                msg.embed.fields.push({ name: `${guildlang.general.details}:`, 
+                                        value: `${guildlang.general.banlength}${details[1]}
+                                                ${guildlang.general.modloguserwasnotified}${String(details[2]).replace("true", "✅").replace("false", "❌")}` 
+                                    })
+                break;
+            case "unban":
+                msg.embed.title = guildlang.general.modlogunbantitle.replace("reciever", `${reciever.username}#${reciever.discriminator}`)
+                msg.embed.color = 65280 //green
+                msg.embed.fields.push({ name: `${guildlang.general.banreason}:`, value: details[0] })
+                break;
+            case "unbanerr":
+                msg.embed.title = guildlang.general.modlogunbanerrtitle.replace("reciever", `${reciever.username}#${reciever.discriminator}`)
+                msg.embed.color = 14725921 //some orange mixture
+                msg.embed.fields.push({ name: `${guildlang.general.error}:`, value: details[1] })
+                msg.embed.fields.push({ name: `${guildlang.general.banreason}:`, value: details[0] })
+                break;
+            default:
+                return logger("error", "bot.js", "msgtomodlogchannel unsupported action: " + action);
+        }
+
+        if (!guild.members.cache.get(bot.user.id).permissions.has("ADD_REACTIONS")) msg.embed.footer.text = guildlang.general.modlognoaddreactionsperm //change footer text
+
+        guild.channels.cache.get(guildsettings.modlogchannel).send(msg).then((msg) => { //don't need to ask shard manager
+            msg.react("🗑️") //doesn't work yet
+                .then(res => {  })
+                .catch(err => {}) }) //catch but ignore it
+    })
+}
 
 /**
  * Rounds a number with x decimals
@@ -176,14 +305,14 @@ var randomhex = () => {
  */
 var randomstring = arr => arr[Math.floor(Math.random() * arr.length)]
 
-var owneronlyerror = (guildid) => { return randomstring(lang(guildid).general.owneronlyerror) + " (Bot Owner only-Error)" }
-var usermissperm   = (guildid) => { return randomstring(lang(guildid).general.usermissperm) + " (Role permission-Error)" }
+var owneronlyerror = (lang) => { return randomstring(lang.general.owneronlyerror) + " (Bot Owner only-Error)" }
+var usermissperm   = (lang) => { return randomstring(lang.general.usermissperm) + " (Role permission-Error)" }
 
 
 /* -------------- Command reader -------------- */
 bot.commands = new Discord.Collection()
 
-let commandcount = 0;
+var commandcount = 0;
 const dirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory())
 
 dirs('./bin/commands').forEach((k, i) => {
@@ -210,7 +339,6 @@ dirs('./bin/commands').forEach((k, i) => {
         })
     })
 })
-
 
 /* -------------- Create lang object -------------- */
 /**
@@ -246,8 +374,9 @@ bot.langObj = {}
 langFiles("./bin/lang/"); //RECURSION TIME!
 
 
-//Add functions top fn object
-fn = { logger, lang, servertosettings, getuserfrommsg, round, randomhex, randomstring, owneronlyerror, usermissperm }
+//Add functions to fn object
+fn = { logger, lang, servertosettings, getuserfrommsg, gettimefrommsg, msgtomodlogchannel, round, randomhex, randomstring, owneronlyerror, usermissperm }
+bot.fn = fn //I need to be able to access functions from the sharding manager
 
 process.on('unhandledRejection', (reason, p) => {
     logger('error', 'bot.js', `Unhandled Rejection! Reason: ${reason.stack}`) });
@@ -260,8 +389,19 @@ process.on('uncaughtException', (reason, p) => {
 const settings = new nedb('./bin/data/settings.db') //initialise database
 settings.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading settings database. Error: " + err)
-    logger("info", "bot.js", "Successfully loaded settings database.", false, true)}); //load db content into memory
+    logger("info", "bot.js", "Successfully loaded settings database.", false, true) }); //load db content into memory
 bot.settings = settings; //add reference to bot obj
+
+const timedbans = new nedb('./bin/data/timedbans.db') //initialise database
+timedbans.loadDatabase((err) => {
+    if (err) return logger("error", "bot.js", "Error loading timedbans database. Error: " + err)
+    logger("info", "bot.js", "Successfully loaded timedbans database.", false, true) }); //load db content into memory
+bot.timedbans = timedbans; //add reference to bot obj
+
+const monitorreactions = new nedb('./bin/data/monitorreactions.db') //initialise database
+monitorreactions.loadDatabase((err) => {
+    if (err) return logger("error", "bot.js", "Error loading monitorreactions database. Error: " + err)
+    logger("info", "bot.js", "Successfully loaded monitorreactions database.", false, true) }); //load db content into memory
 
 /* ------------ Startup: ------------ */
 bot.on("ready", async function() {
@@ -277,6 +417,8 @@ bot.on("ready", async function() {
         logger("", "", "> Successfully logged in shard0!")
         logger("", "", "*--------------------------------------------------------------*\n ", true) }
 
+    bot.commandcount = commandcount //probably useful for a few cmds so lets just add it to the bot obj (export here so the read process is definitely finished)
+    
     setTimeout(() => {
         logger("", "", "", true, true) //Print empty line to clear other stuff
     }, 2500);
@@ -297,34 +439,36 @@ bot.on("guildDelete", async guild => {
     servertosettings(guild.id, true) }); //true argument will remove function from db
 
 bot.on("guildMemberAdd", member => {
-    if (config.loginmode == "test") return;
-
     //take care of greetmsg
-    if (bot.settings[member.guild.id].systemchannel != null && bot.settings[member.guild.id].greetmsg != null) {
-        //check settings.json for greetmsg, replace username and servername and send it into setting's systemchannel
-        let msgtosend = String(bot.settings[member.guild.id].greetmsg)
+    settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
+        if (guildsettings.systemchannel && guildsettings.greetmsg) {
+            //check settings.json for greetmsg, replace username and servername and send it into setting's systemchannel
+            let msgtosend = guildsettings.greetmsg
 
-        if (msgtosend.includes("@username")) msgtosend = msgtosend.replace("@username", `<@${member.user.id}>`)
-            else msgtosend = msgtosend.replace("username", member.user.username)
-        msgtosend = msgtosend.replace("servername", member.guild.name)
+            if (msgtosend.includes("@username")) msgtosend = msgtosend.replace("@username", `<@${member.user.id}>`)
+                else msgtosend = msgtosend.replace("username", member.user.username)
+            msgtosend = msgtosend.replace("servername", member.guild.name)
 
-        member.guild.channels.cache.get(String(bot.settings[member.guild.id].systemchannel)).send(msgtosend) }
+            member.guild.channels.cache.get(String(guildsettings.systemchannel)).send(msgtosend) }
 
-    //take care of memberaddrole
-    if (bot.settings[member.guild.id].memberaddroles.length > 0) {
-        member.roles.add(bot.settings[member.guild.id].memberaddroles) } //add all roles at once (memberaddroles is an array)
+        //take care of memberaddrole
+        if (guildsettings.memberaddroles.length > 0) {
+            member.roles.add(guildsettings.memberaddroles) } //add all roles at once (memberaddroles is an array)
+    })
+    
 });
 
 bot.on("guildMemberRemove", member => {
-    if (config.loginmode == "test") return;
-    if (bot.settings[member.guild.id].systemchannel == null) return;
-    if (bot.settings[member.guild.id].byemsg == null) return;
+    settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
+        if (!guildsettings.systemchannel) return;
+        if (!guildsettings.byemsg) return;
 
-    let msgtosend = String(bot.settings[member.guild.id].byemsg)
-    msgtosend = msgtosend.replace("username", member.user.username)
-    msgtosend = msgtosend.replace("servername", member.guild.name)
+        let msgtosend = String(guildsettings.byemsg)
+        msgtosend = msgtosend.replace("username", member.user.username)
+        msgtosend = msgtosend.replace("servername", member.guild.name)
 
-    member.guild.channels.cache.get(String(bot.settings[member.guild.id].systemchannel)).send(msgtosend)
+        member.guild.channels.cache.get(String(guildsettings.systemchannel)).send(msgtosend)
+    })
 })
 
 /* ------------ Message Handler: ------------ */
@@ -382,7 +526,7 @@ bot.on('message', (message) => {
             if (cmd && cmd.info.allowedindm === false) return message.channel.send(randomstring(["That cannot work in a dm. :face_palm:","That won't work in a DM...","This command in a DM? No.","Sorry but no. Try it on a server.","You need to be on a server!"]) + " (DM-Error)") }
 
         if (cmd) { //check if command is existing and run it
-            if (cmd.info.nsfwonly == true && !message.channel.nsfw) return message.channel.send(lang(message.guild.id).nsfwonlyerror)
+            if (cmd.info.nsfwonly == true && !message.channel.nsfw) return message.channel.send(lang(message.guild.id, guildsettings).general.nsfwonlyerror)
             
             var ab = cmd.info.accessableby
 
@@ -403,8 +547,7 @@ bot.on('message', (message) => {
 
             if (message.channel.type === "dm") cmd.run(bot, message, args, englishlang, logger, guildsettings, fn)
                 else {
-                    lang(message.guild.id, lang => {
-                        cmd.run(bot, message, args, lang, logger, guildsettings, fn) }) } //run the command after lang function callback
+                    cmd.run(bot, message, args, lang(message.guild.id, guildsettings), logger, guildsettings, fn) } //run the command after lang function callback
             
             return;
         } else { //cmd not recognized? check if channel is dm and send error message
