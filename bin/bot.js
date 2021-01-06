@@ -1,7 +1,7 @@
 ﻿//This file controls one shard
 var bootstart   = 0;
 var bootstart   = new Date()
-const shardArgs = process.argv //ignore index 0 and 1
+const shardArgs = process.argv //eslint-disable-line no-unused-vars
 
 const Discord  = require("discord.js")
 const readline = require("readline")
@@ -56,18 +56,16 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
             else var date = '' }
 
     //Add filers
+    var filler1 = ""
+    var filler2 = ""
+    var filler3 = ""
+
     if (typestr != "" || originstr != "") { 
         filler1 = "["
-        filler3 = "\x1b[0m] "
-    } else {
-        filler1 = ""
-        filler3 = "" }
+        filler3 = "\x1b[0m] " }
 
     if (typestr != "" && originstr != "") {
-        filler2 = " | "
-    } else {
-        filler2 = ""
-    }
+        filler2 = " | " }
 
     //Put it together
     var string = `${filler1}${typestr}${filler2}${originstr}${filler3}${date}${str}`
@@ -80,6 +78,7 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
         readline.clearLine(process.stdout, 0)
         console.log(`${string}`) }
 
+    //eslint-disable-next-line
     fs.appendFileSync('./bin/output.txt', string.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') + '\n', err => { //Regex Credit: https://github.com/Filirom1/stripcolorcodes
         if(err) console.log('logger function appendFileSync error: ' + err) }) 
 
@@ -98,10 +97,10 @@ var lang = (guildid, guildsettings) => {
     
     if (!Object.keys(bot.langObj).includes(serverlang)) {
         logger("warn", "bot.js", `Guild ${guildid} has an invalid language! Returning english language...`)
-        callback(bot.langObj["english"]) }
+        return bot.langObj["english"] }
     
     return bot.langObj[serverlang]
-    }
+}
 
 /**
  * Adds the specified guild to the settings database with default values
@@ -109,7 +108,7 @@ var lang = (guildid, guildsettings) => {
  * @param {Boolean} removeentry Removes the guild from the database
  */
 var servertosettings = (guild, removeentry) => {
-    if (!guild.id) return logger("error", "bot.js", "Can't write guild to settings because guild id undefined!"); //missing guildid will make entry unuseable
+    if (!guild.id) return logger("error", "bot.js", "Can't write guild to settings because guild id is undefined!"); //missing guildid will make entry unuseable
 
     //if removeentry is true just remove entry and stop further execution
     if (removeentry) {
@@ -129,7 +128,7 @@ var servertosettings = (guild, removeentry) => {
             else var prefix = constants.DEFAULTTESTPREFIX
         
         if (nickname == undefined) var nickname = bot.user.username //since nickname can still somehow be undefined check one last time
-        guild.members.cache.get(String(bot.user.id)).setNickname(`${nickname} [${prefix}]`).catch(err => {}) //catch error but ignore it
+        guild.members.cache.get(String(bot.user.id)).setNickname(`${nickname} [${prefix}]`).catch(() => {}) //catch error but ignore it
 
         let defaultguildsettings = constants.defaultguildsettings
         defaultguildsettings["guildid"] = guild.id
@@ -169,9 +168,7 @@ var gettimefrommsg = (args, callback) => {
         arr = [args[args.indexOf("-t") + 1], args[args.indexOf("-t") + 2]] //Result example: ["2", "minutes"]
     } else if (args.includes("-time")) {
         arr = [args[args.indexOf("-time") + 1], args[args.indexOf("-time") + 2]] //Result example: ["2", "minutes"]
-    } else {
-        timeinms(null)
-        unitindex(null) }
+    } else callback(null, null, []) //nothing found
 
     switch (arr[1]) {
         case "second":
@@ -212,16 +209,23 @@ var gettimefrommsg = (args, callback) => {
  */
 var msgtomodlogchannel = (guild, action, author, reciever, details) => {
     settings.findOne({ guildid: guild.id }, (err, guildsettings) => {
+        if (guildsettings.modlogfeatures && !guildsettings.modlogfeatures.includes(action) && !action.includes("err")) return; //user turned off this modlogfeature and it isn't an err
 
-        if (!guildsettings || !guildsettings.modlogchannel) { //if modlogchannel is undefined (turned off) & no error -> return
+        if (!guildsettings || !guildsettings.modlogchannel || action == "modlogmsgerr") { //if modlogchannel is undefined (turned off) or a previous modlogmsg failed
             if (action.includes("err")) { //if error, then find a channel to inform someone
-                if (guildsettings.modlogchannel) guildsettings.modlogchannel = guildsettings.modlogchannel //try modlogchannel first
-                    else if (guildsettings.systemchannel) guildsettings.modlogchannel = guildsettings.systemchannel //if no modlogchannel set, try systemchannel
-                    else if (guild.systemChannelID) guildsettings.modlogchannel = guild.systemChannelID //then check if guild has a systemChannel set
-                    else guildsettings.modlogchannel = guild.channels.cache.filter(c => c.type == "text").find(c => c.position == 0).id //get first text channel (needs permission check -> if false try next channel)
-            
-                guildsettings.lang = constants.defaultguildsettings.lang //set default lang to suppress error from lang function
-            } else { return; } }
+                if (guildsettings.systemchannel && action != "modlogmsgerr") guildsettings.modlogchannel = guildsettings.systemchannel //if no modlogchannel set, try systemchannel
+                    else if (guild.systemChannelID && action != "modlogmsgerr") guildsettings.modlogchannel = guild.systemChannelID //then check if guild has a systemChannel set
+                    else {
+                        //well then try and get the first channel (rawPosition) where the bot has permissions to send a message
+                        guildsettings.modlogchannel = null //better set it to null to avoid potential problems
+
+                        //get all text channels into array and sort them by ascending rawPositions
+                        let textchannels = guild.channels.cache.filter(c => c.type == "text").sort((a, b) => a.rawPosition - b.rawPosition)
+                        guildsettings.modlogchannel = textchannels.find(c => c.permissionsFor(bot.user).has("SEND_MESSAGES")).id //find the first channel with perms
+                        if (!guildsettings.modlogchannel) return; } //if it couldn't find a channel then stop
+                
+                if (!guildsettings || !guildsettings.lang) guildsettings.lang = constants.defaultguildsettings.lang //set default lang to suppress error from lang function
+            } else { return; } } //yes well if it isn't an error then stop
 
         let guildlang = lang(guild.id, guildsettings)
 
@@ -269,16 +273,29 @@ var msgtomodlogchannel = (guild, action, author, reciever, details) => {
                 msg.embed.fields.push({ name: `${guildlang.general.error}:`, value: details[1] })
                 msg.embed.fields.push({ name: `${guildlang.general.banreason}:`, value: details[0] })
                 break;
+            case "modlogmsgerr":
+                msg.embed.title = guildlang.general.modlogmsgerrtitle
+                msg.embed.color = 16711680 //red
+                msg.embed.fields.push({ name: `${guildlang.general.error}:`, value: details[0] })
+                msg.embed.fields.push({ name: `${guildlang.general.message}:`, value: details[1] })
+                break;
             default:
                 return logger("error", "bot.js", "msgtomodlogchannel unsupported action: " + action);
         }
 
         if (!guild.members.cache.get(bot.user.id).permissions.has("ADD_REACTIONS")) msg.embed.footer.text = guildlang.general.modlognoaddreactionsperm //change footer text
 
-        guild.channels.cache.get(guildsettings.modlogchannel).send(msg).then((msg) => { //don't need to ask shard manager
-            msg.react("🗑️") //doesn't work yet
-                .then(res => {  })
-                .catch(err => {}) }) //catch but ignore it
+        guild.channels.cache.get(guildsettings.modlogchannel).send(msg)
+            .then((msg) => { //don't need to ask shard manager
+                msg.react("🗑️") //doesn't work yet
+                    .then(res => { 
+                        //add res to monitorreactions db
+                        monitorreactions.insert({ type: "modlog", msg: res.message.id, reaction: res._emoji.name, guildid: guild.id, allowedroles: guildsettings.adminroles, until: Date.now() + 31557600000 }, (err) => { if (err) logger("error", "bot.js", "Error inserting modlogmsg reaction to db: " + err) }) //message also contains guild and timestamp | 31557600000 ms = 12 months
+                    })
+                    .catch(() => {}) }) //reaction err catch -> ignore error
+            .catch((err) => { //sendmsg error catch
+                if (err) return msgtomodlogchannel(guild, "modlogmsgerr", author, reciever, [err, msg.embed.title]) }) //call this same function again to notify that modlogmsgs can't be sent (won't end in a loop because if no channel can be found on err then it will stop)
+
     })
 }
 
@@ -315,7 +332,7 @@ bot.commands = new Discord.Collection()
 var commandcount = 0;
 const dirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory())
 
-dirs('./bin/commands').forEach((k, i) => {
+dirs('./bin/commands').forEach((k) => {
     fs.readdir(`./bin/commands/${k}`, (err, files) => {
         if (err) logger('error', 'bot.js', err);
         var jsfiles = files.filter(p => p.split('.').pop() === 'js');
@@ -323,7 +340,7 @@ dirs('./bin/commands').forEach((k, i) => {
         jsfiles.forEach((f) => {
             var cmd = require(`./commands/${k}/${f}`);
 
-            for(j = 0; j < cmd.info.names.length; j++) { //get all aliases of each command
+            for(let j = 0; j < cmd.info.names.length; j++) { //get all aliases of each command
                 var tempcmd = JSON.parse(JSON.stringify(cmd)) //Yes, this practice of a deep copy is probably bad but everything else also modified other Collection entries and I sat at this problem for 3 fucking hours now
                 tempcmd["run"] = cmd.run //Add command code to new deep copy because that got lost somehow
                 tempcmd.info.category = k
@@ -378,10 +395,10 @@ langFiles("./bin/lang/"); //RECURSION TIME!
 fn = { logger, lang, servertosettings, getuserfrommsg, gettimefrommsg, msgtomodlogchannel, round, randomhex, randomstring, owneronlyerror, usermissperm }
 bot.fn = fn //I need to be able to access functions from the sharding manager
 
-process.on('unhandledRejection', (reason, p) => {
+process.on('unhandledRejection', (reason) => {
     logger('error', 'bot.js', `Unhandled Rejection! Reason: ${reason.stack}`) });
 
-process.on('uncaughtException', (reason, p) => {
+process.on('uncaughtException', (reason) => {
     logger('error', 'bot.js', `Uncaught Exception! Reason: ${reason.stack}`) });
 
 
@@ -408,8 +425,9 @@ bot.on("ready", async function() {
     if (bot.guilds.cache.array()[0] == undefined) return logger("warn", "bot.js", "This shard has no guilds and is therefore unused!");
     var thisshard = bot.guilds.cache.array()[0].shard //Get shard instance of this shard with this "workaround" because it isn't directly accessable
 
-    //Set activity
-    bot.user.setPresence({activity: { name: config.gamerotation[0] }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })  
+    //Set activity either to gameoverwrite or gamerotation[0]
+    if (config.gameoverwrite != "") bot.user.setPresence({activity: { name: config.gameoverwrite }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
+        else bot.user.setPresence({activity: { name: config.gamerotation[0] }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
 
     if (thisshard.id == 0) {
         //Finish startup messages from controller.js
@@ -471,6 +489,28 @@ bot.on("guildMemberRemove", member => {
     })
 })
 
+bot.on("messageReactionAdd", (reaction, user) => {
+    monitorreactions.findOne({ reaction: reaction._emoji.name }, (err, doc) => {
+        if (!doc) return;
+        if (err) return logger("error", "bot.js", "messageReactionAdd Event: Error searching in db: " + err)
+        
+        switch (doc.type) {
+            case "modlog":
+                if (doc.allowedroles.filter(element => reaction.message.guild.members.cache.get(user.id).roles.cache.has(element)).length > 0 || user.id == reaction.message.guild.owner.id) { //either user has role or is owner of guild
+                    reaction.message.delete()
+                        .then(() => {
+                            monitorreactions.remove({ reaction: reaction._emoji.name }, {}, (err) => { 
+                                if (err) logger("error", "bot.js", `messageReactionAdd Event: Error removing ${reaction._emoji.name} from db after deleting msg: ${err}`) })
+                            return; })
+                        .catch(err => { reaction.message.channel.send(`Error deleting message: ${err}`) }) 
+                } else return;
+                break;
+            default:
+                return logger("error", "bot.js", "Invalid monitorreactions type in db! Fix this please: " + doc.type);
+        }
+    })
+})
+
 /* ------------ Message Handler: ------------ */
 bot.on('message', (message) => {
     if (message.author.bot) return;
@@ -493,7 +533,7 @@ bot.on('message', (message) => {
 
         //Check if guild is in settings db and add it if it isn't
         if (message.channel.type !== "dm") {
-            if (!guildsettings) { 
+            if (!guildsettings) {
                 servertosettings(message.guild)
         
                 //quickly construct guildsettings object to be able to carry on
@@ -503,9 +543,21 @@ bot.on('message', (message) => {
                 guildsettings = constants.defaultguildsettings
                 guildsettings["guildid"] = message.guild.id
                 guildsettings["prefix"] = prefix
-        }}
+            } else {
+                var changesmade = false
+                Object.keys(constants.defaultguildsettings).forEach((e, i) => { //check if this guild's settings is missing a key (update proofing!)
+                    if (!Object.keys(guildsettings).includes(e)) { 
+                        guildsettings[e] = Object.values(constants.defaultguildsettings)[i]
+                        changesmade = true } })
+                
+                if (changesmade) settings.update({ guildid: message.guild.id }, guildsettings, (err) => { if (err) logger("error", "bot.js", `Error adding missing keys to ${message.guild.id}'s settings db: ${err}`) })
+        } }
 
-        if (message.channel.type !== "dm") { var PREFIX = guildsettings.prefix } else { var PREFIX = DEFAULTPREFIX } //get prefix for this guild or set default prefix if channel is dm
+        //get prefix for this guild or set default prefix if channel is dm
+        if (message.channel.type !== "dm") var PREFIX = guildsettings.prefix 
+            else { 
+                if (config.loginmode == "normal") var PREFIX = constants.DEFAULTPREFIX
+                    else var PREFIX = constants.DEFAULTTESTPREFIX }
 
         if (message.content.startsWith(PREFIX)) { //check for normal prefix
             var cont = message.content.slice(PREFIX.length).split(" ");
@@ -536,16 +588,16 @@ bot.on('message', (message) => {
                 } else if (message.guild.owner && message.author.id == message.guild.owner.id) { //check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
                     //nothing to do here, just not returning an error message and let the server owner do what he wants
                 } else if (ab.includes("admins")) {
-                    if(!guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(usermissperm(message.guild.id))
+                    if (!guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(usermissperm(lang(message.guild.id)))
                 } else if (ab.includes("moderators")) {
-                    if(!guildsettings.moderatorroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(usermissperm(message.guild.id))
+                    if (!guildsettings.moderatorroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(usermissperm(lang(message.guild.id)))
                 } else {
-                    message.channel.send(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${BOTOWNER} will probably see this error and fix it.`)
-                    logger('warn', 'bot.js', `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${cont[0]}'\x1b[0m to prevent safety issues.`)
+                    message.channel.send(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${BOTOWNER} will probably see this error and fix it.`) //eslint-disable-line no-undef
+                    logger('error', 'bot.js', `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${cont[0]}'\x1b[0m to prevent safety issues.`)
                     return;
                 }}
 
-            if (message.channel.type === "dm") cmd.run(bot, message, args, englishlang, logger, guildsettings, fn)
+            if (message.channel.type === "dm") cmd.run(bot, message, args, bot.langObj["english"], logger, guildsettings, fn)
                 else {
                     cmd.run(bot, message, args, lang(message.guild.id, guildsettings), logger, guildsettings, fn) } //run the command after lang function callback
             

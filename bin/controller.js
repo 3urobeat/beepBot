@@ -3,14 +3,13 @@ var bootstart  = 0;
 var bootstart  = new Date()
 
 const Discord   = require('discord.js');
-const path      = require("path")
 const nedb      = require("nedb")
 const fs        = require("fs")
 const readline  = require("readline")
 
 const tokenpath = require("../../token.json")
 const asciipath = require("./ascii.js")
-const config    = require('./config.json')
+var   config    = require('./config.json')
 const constants = require("./constants.json")
 
 
@@ -50,18 +49,16 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
             else var date = '' }
 
     //Add filers
+    var filler1 = ""
+    var filler2 = ""
+    var filler3 = ""
+
     if (typestr != "" || originstr != "") { 
         filler1 = "["
-        filler3 = "\x1b[0m] "
-    } else {
-        filler1 = ""
-        filler3 = "" }
+        filler3 = "\x1b[0m] " }
 
     if (typestr != "" && originstr != "") {
-        filler2 = " | "
-    } else {
-        filler2 = ""
-    }
+        filler2 = " | " }
 
     //Put it together
     var string = `${filler1}${typestr}${filler2}${originstr}${filler3}${date}${str}`
@@ -74,6 +71,7 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
         readline.clearLine(process.stdout, 0)
         console.log(`${string}`) }
 
+    //eslint-disable-next-line
     fs.appendFileSync('./bin/output.txt', string.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') + '\n', err => { //Regex Credit: https://github.com/Filirom1/stripcolorcodes
         if(err) console.log('logger function appendFileSync error: ' + err) }) 
 
@@ -86,10 +84,10 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
  */
 var randomstring = arr => arr[Math.floor(Math.random() * arr.length)]
 
-process.on('unhandledRejection', (reason, p) => {
+process.on('unhandledRejection', (reason) => {
     logger('error', 'controller.js', `Unhandled Rejection! Reason: ${reason.stack}`) });
 
-process.on('uncaughtException', (reason, p) => {
+process.on('uncaughtException', (reason) => {
     logger('error', 'controller.js', `Uncaught Exception! Reason: ${reason.stack}`) });
 
 /* ------------ Initialise startup ------------ */
@@ -112,6 +110,7 @@ if (process.platform == "win32") { //set node process name to find it in task ma
 
 
 /* -------------- Start needed shards -------------- */
+/* eslint-disable */
 if (config.loginmode === "normal") {
     BOTNAME   = "beepBot";
     BOTAVATAR = constants.botdefaultavatar;
@@ -129,6 +128,8 @@ const Manager = new Discord.ShardingManager('./bin/bot.js', {
     totalShards: "auto",
     token: token,
     respawn: respawnb });
+
+/* eslint-disable */
 
 /* -------------- shardCreate Event -------------- */
 Manager.on('shardCreate', (shard) => { 
@@ -168,10 +169,40 @@ if ((process.env.COMPUTERNAME !== 'HÖLLENMASCHINE' && process.env.LOGNAME !== '
 
 Manager.spawn(Manager.totalShards).catch(err => { logger("error", "controller.js", `Failed to start shard: ${err.stack}`) }) //respawn delay is 10000
 
+
+/* -------------- Global refreshing/checking stuff -------------- */
+//Check if there are obsolete monitorreactions db entries
+const monitorreactions = new nedb('./bin/data/monitorreactions.db')
+monitorreactions.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
+    if (err) return logger("error", "controller.js", "Error loading timedbans database: " + err) 
+
+    monitorreactions.remove({ until: { $lte: Date.now() } }, {}, (err, num) => { //until is a date in ms, so we remove all entries that are greater than right now
+        if (err) logger("error", "controller.js", `Error removing all monitorreactions entries that are greater than ${Date.now()}: ${err}`, true) 
+        if (num > 0) { 
+            logger("info", "controller.js", `Cleaned up monitorreactions db and removed ${num} entries!`, true)
+            monitorreactions.persistence.compactDatafile() } }) //compact db so that the starting bot instances don't read old data
+});
+
+//Game rotation
+if (config.gamerotateseconds <= 10) logger("warn", "controller.js", "gamerotateseconds in config is less than 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true)
 let currentgameindex = 0
 let lastPresenceChange = Date.now() //this is useful because intervals can get very unprecise over time
-var gamerotationloop = setInterval(async () => {
+
+var gamerotationloop = setInterval(() => {
     if (lastPresenceChange + (config.gamerotateseconds * 1000) > Date.now()) return; //last change is more recent than gamerotateseconds wants
+
+    //Refresh config cache to check if gameoverwrite got changed
+    delete require.cache[require.resolve("./config.json")]
+    config = require("./config.json")
+
+    if (config.gameoverwrite != "") { //if botowner set a game manually then only change game if the instance isn't already playing it
+        Manager.broadcastEval(`
+        if (this.user.presence.activities[0].name != "${config.gameoverwrite}") {
+            this.user.setPresence({activity: { name: "${config.gameoverwrite}" }, status: "${config.status}" }) }`).catch(err => { //error will occur when not all shards are started yet
+            logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err) })
+
+        lastPresenceChange = Date.now() + 600000 //add 10 min to reduce load a bit
+        return; } //don't change anything else if botowner set a game manually
 
     currentgameindex++ //set here already so we can't get stuck at one index should an error occur
     if (currentgameindex == config.gamerotation.length) currentgameindex = 0 //reset
@@ -180,7 +211,7 @@ var gamerotationloop = setInterval(async () => {
     //Replace code in string (${})
     function processThisGame(thisgame, callback) {
         try {
-            let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs) //matches will be everything in between a "${"" and "}" -> either null or array with results
+            let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs) //matches will be everything in between a "${" and "}" -> either null or array with results
 
             if (matches) {
                 matches.forEach(async (e, i) => {
@@ -200,15 +231,15 @@ var gamerotationloop = setInterval(async () => {
         lastPresenceChange = Date.now() //set again to include processing time
 
         Manager.broadcastEval(`this.user.setPresence({activity: { name: "${callback}" }, status: "${config.status}" })`).catch(err => { //error will occur when not all shards are started yet
-            return logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err) })
-    })
-}, 2500)
+            return logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err) }) })
+}, 5000)
 
+//Unban checker
 const timedbans = new nedb('./bin/data/timedbans.db') //initialise database
     
 let lastTempBanCheck = Date.now() //this is useful because intervals can get very unprecise over time
 var tempbanloop = setInterval(() => {
-    if (lastTempBanCheck + 5000 > Date.now()) return; //last change is more recent than 30000
+    if (lastTempBanCheck + 60000 > Date.now()) return; //last change is more recent than 60000
 
     timedbans.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
         if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
@@ -256,4 +287,4 @@ var tempbanloop = setInterval(() => {
             timedbans.remove({ userid: e.userid }, (err => { if (err) logger("error", "controller.js", `Error removing ${e.userid} from timedbans: ${err}`) }))
         })
     })
-}, 5000); //60 seconds
+}, 60000); //60 seconds

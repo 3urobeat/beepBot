@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
 message.channel.send(`__
 
 

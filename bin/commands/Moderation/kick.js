@@ -26,7 +26,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     //Checks user perms and kick
     if (message.member.permissions.has("KICK_MEMBERS", "ADMINISTRATOR")) {
-        message.guild.members.cache.get(kickuser.id).kick(kickreason).then(member => {
+        message.guild.members.cache.get(kickuser.id).kick(kickreason).then(() => {
             message.channel.send(lang.cmd.kick.kickmsg.replace("username", kickuser.username).replace("kickreasontext", kickreasontext))
             fn.msgtomodlogchannel(message.guild, "kick", message.author, kickuser, [kickreasontext, message.content.includes("-notify") || message.content.includes("-n")]) //details[1] results in boolean
             

@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     var avataruser = fn.getuserfrommsg(message, args, true)
     if (Object.keys(avataruser).length == 0) return message.channel.send(lang.general.usernotfound)
 

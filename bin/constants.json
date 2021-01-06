@@ -18,7 +18,7 @@
         "moderatorroles": [],
         "systemchannel": null,
         "modlogchannel": null,
-        "modlogfeatures": [],
+        "modlogfeatures": ["clear", "kick", "ban", "unban"],
         "greetmsg": null,
         "byemsg": null,
         "memberaddroles": []

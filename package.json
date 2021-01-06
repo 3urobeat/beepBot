@@ -1,7 +1,7 @@
 {
   "name": "beepbot",
   "version": "3.0.0",
-  "description": "beepBot - 24/7 online, customizeable and feature rich Discord Bot.",
+  "description": "beepBot - 24/7 online, customizeable, feature rich & scaleable Discord Bot.",
   "main": "start.js",
   "dependencies": {
     "discord.js": "^12.5.1",
@@ -18,5 +18,8 @@
     "url": "https://github.com/HerrEurobeat/beepBot/issues"
   },
   "homepage": "https://github.com/HerrEurobeat",
-  "repository": "https://github.com/HerrEurobeat/beepBot"
+  "repository": "https://github.com/HerrEurobeat/beepBot",
+  "devDependencies": {
+    "eslint": "^7.17.0"
+  }
 }
