@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     message.channel.send(`${String(lang.cmd.otherfun.paidrespects).replace("username", `**${message.author.username}**`)} ${bot.guilds.cache.get("232550371191554051").emojis.cache.find(emoji => emoji.name === "paidrespects")}`)
 }
 

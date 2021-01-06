@@ -29,7 +29,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     //Checks user perms and ban
     if (message.member.permissions.has("BAN_MEMBERS", "ADMINISTRATOR")) {
-        message.guild.members.cache.get(banuser.id).ban(banreason).then(member => {
+        message.guild.members.cache.get(banuser.id).ban(banreason).then(() => {
             var notifytimetext = lang.cmd.ban.permanent //if not permanent it will get changed by the time argument code block
 
             //Time Argument
@@ -48,7 +48,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     bot.timedbans.remove({ userid: banuser.id }, (err) => { if (err) logger("error", "ban.js", `error removing user ${banuser.id}: ${err}`) }) //remove an old entry if there should be one
                     bot.timedbans.insert(timedbansobj, (err) => { if (err) logger("error", "ban.js", "error inserting user: " + err) })
                     message.channel.send(lang.cmd.ban.tempbanmsg.replace("username", banuser.username).replace("timetext", `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}`).replace("banreasontext", banreasontext))
-                    message.react("✅").catch(err => {})
+                    message.react("✅").catch(() => {}) //catch err but ignore it
 
                     notifytimetext = `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}` //change permanent to timetext
                     fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}`, message.content.includes("-notify") || message.content.includes("-n")]) //details[2] results in boolean

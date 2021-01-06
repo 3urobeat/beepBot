@@ -1,8 +1,9 @@
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     if (!args[0]) { args[0] = "" }
     args[0].replace(guildsettings.prefix, "") //remove prefix from argument if the user should have provided one
 
-    let lf = lang.cmd.help //lc for lang-file
+    let lf = lang.cmd.help //lf for lang-file
+    function replaceBool(value) { return String(value).replace("true", "✅").replace("false", "❌") }
 
     if (args[0]) { //user wants detailed information to one command?
         let cmd = bot.commands.get(args[0].toLowerCase())
@@ -10,8 +11,6 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (cmd) {
             if (cmd.info.names.length > 1) var cmdaliases = cmd.info.names.filter((_, i) => i !== 0); //Remove first entry - Credit: https://stackoverflow.com/a/27396779/12934162
                 else var cmdaliases = [lf.noaliases] //return as array so that .join doesn't throw error
-            
-            function replaceBool(value) { return String(value).replace("true", "✅").replace("false", "❌") }
 
             message.channel.send({ 
                 embed: {
@@ -77,6 +76,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         });
 
         //Sort Object by order defined in config
+        bot.config.helpcategoryorder.forEach((e) => {
             if (e == "other") { //Check if this key is the key for all categories with no specific order
                 Object.keys(unsortedcategories).forEach((k) => { //Loop ober all categories
                     if (!bot.config.helpcategoryorder.includes(k)) { //Check if this is one of the categories with no specific order
@@ -87,7 +87,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         })
 
         //Add sortedcategories with commands to msg
-        Object.keys(sortedcategories).forEach((e, i) => {
+        Object.keys(sortedcategories).forEach((e) => {
             msg.embed.fields.push({ 
                 name: e,
                 value: sortedcategories[e]

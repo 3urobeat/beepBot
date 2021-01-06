@@ -16,11 +16,12 @@
     "gettimefuncoptions": ["second(s)", "minute(s)", "hour(s)", "day(s)", "month(s)", "year(s)"],
     "unsupportedtime": "timeargument is sadly not supported. Please use one of these time units: seconds/minutes/hours/days/months/years",
 
-    "modlogcleartitle": "author deleted clearamount messages in channelname",
+    "modlogcleartitle": "author deleted clearamount message(s) in channelname",
     "modlogkicktitle": "author has kicked reciever",
     "modlogbantitle": "author has banned reciever",
     "modlogunbantitle": "reciever has been unbanned (temp-ban)",
     "modlogunbanerrtitle": "Error unbanning reciever! (temp-ban)",
+    "modlogmsgerrtitle": "Error sending modlog message!",
     "modloguserwasnotified": "Notified user: ",
     "modlogdeletewithreaction": "Click 🗑️ to delete this message (Admins)",
     "modlognoaddreactionsperm": "The bot has no permission to add a reaction to this message.",

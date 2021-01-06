@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     const si         = require("systeminformation")
     const Discord    = require("discord.js")
     var infofields   = []
@@ -134,8 +134,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             break;
         default:
             thumbnailurl = bot.user.displayAvatarURL()
-            let cpuTemp = await si.cpuTemperature(async (cb) => { return cb })
-            let cpuUsage = await si.currentLoad(async (cb) => { return cb })
+            var cpuTemp = await si.cpuTemperature(async (cb) => { return cb })
+            var cpuUsage = await si.currentLoad(async (cb) => { return cb })
             if (cpuTemp.main == -1) cpuTemp.main = "/" //si can't read temp
 
             if (args[1].toLowerCase() == "mobile") {
