@@ -414,7 +414,7 @@ ${lf.helpadvice.replace("prefix", PREFIX)}
 module.exports.info = {
     names: ["settings", "set"],
     description: "Configure the bot for your server!",
-    usage: '["help"]',
+    usage: "['help']",
     accessableby: ['admins'],
     allowedindm: false,
     nsfwonly: false

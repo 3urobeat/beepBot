@@ -1,3 +1,8 @@
 {
-    "saymissingargs": "Fehler: Bitte gib einen Nachrichtentext als Argument an."
+    "saymissingargs": "Fehler: Bitte gib einen Nachrichtentext als Argument an.",
+
+    "setpresencemissingargs": "Fehler: Bitte gib mindestens ein Argument an.",
+    "setpresenceinvalidstatus": "Fehler: Dein status scheint ungültig zu sein. Gültige Optionen:",
+    "setpresenceinvalidgametype": "Fehler: Dein gametype scheint ungültig zu sein. Gültige Optionen:",
+    "setpresenceupdated": "Präsenz erfolgreich aktualisiert."
 }

@@ -3,5 +3,18 @@
     "coinfliprandommsg": ["Head", "Number"],
 
     "dicenomaxprovided": "You have to give the endless dice a valid maximum! `2-∞`",
-    "dicerandommsg": ["Rolling... Stop! Its a","The dice stopped rolling:","Your Number:","...and its a","Dont become addicted!","Its like lottery! Did you win?"]
+    "dicerandommsg": ["Rolling... Stop! Its a","The dice stopped rolling:","Your Number:","...and its a","Dont become addicted!","Its like lottery! Did you win?"],
+
+    "redditsearching": "Searching in sort from subreddit...",
+    "redditnotfound": "I sadly couldn't find anything.",
+    "redditover18": "Error: The post I found was marked as 18+ but your channel is not set to NSFW. Please try again.\nTo also see NSFW posts in the future please change your channels settings.",
+    "redditnodescription": "No description",
+    "redditratio": "ratio",
+    "redditcomments": "comments",
+    "redditpostedago": "posted timetext ago",
+    "redditclicktitle": "Click on the blue title to open the post",
+
+    "udmissingargs": "Error: Please provide a search term!",
+    "uddefinition": "Definition:",
+    "udnotfound": "Sorry, I couldn't find anything."
 }

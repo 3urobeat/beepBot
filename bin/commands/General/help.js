@@ -65,6 +65,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
         //Get all unsortedcategories into array
         commandsObj.forEach(e => {
+            //Check if category is Botowner and ignore it if the user shouldn't be me (just to keep the msg shorter/more relevant)
+            if (e.info.category == "Botowner" && message.author.id !== "231827708198256642") return;
+
             //Create new Array for category if it doesn't exist yet
             if (!unsortedcategories[e.info.category]) unsortedcategories[e.info.category] = []
 
@@ -78,11 +81,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         //Sort Object by order defined in config
         bot.config.helpcategoryorder.forEach((e) => {
             if (e == "other") { //Check if this key is the key for all categories with no specific order
-                Object.keys(unsortedcategories).forEach((k) => { //Loop ober all categories
+                Object.keys(unsortedcategories).forEach((k) => { //Loop over all categories
                     if (!bot.config.helpcategoryorder.includes(k)) { //Check if this is one of the categories with no specific order
                         sortedcategories[k] = unsortedcategories[k] //Just add it
                     } })
             } else {
+                //Check if category is Botowner and ignore it if the user shouldn't be me (just to keep the msg shorter/more relevant)
+                if (e == "Botowner" && message.author.id !== "231827708198256642") return;
+
                 sortedcategories[e] = unsortedcategories[e] } //Add Category to Object
         })
 

@@ -426,8 +426,12 @@ bot.on("ready", async function() {
     var thisshard = bot.guilds.cache.array()[0].shard //Get shard instance of this shard with this "workaround" because it isn't directly accessable
 
     //Set activity either to gameoverwrite or gamerotation[0]
-    if (config.gameoverwrite != "") bot.user.setPresence({activity: { name: config.gameoverwrite }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
-        else bot.user.setPresence({activity: { name: config.gamerotation[0] }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
+    if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { 
+        let game = config.gameoverwrite
+        if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
+
+        bot.user.setPresence({activity: { name: game, type: config.gametype, url: config.gameurl }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
+    } else bot.user.setPresence({activity: { name: config.gamerotation[0], type: config.gametype, url: config.gameurl }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
 
     if (thisshard.id == 0) {
         //Finish startup messages from controller.js
@@ -519,12 +523,6 @@ bot.on('message', (message) => {
     //if (message.guild.id != "232550371191554051" && message.guild.id != "331822220051611648") return; //don't respond to other guilds when testing with normal loginmode
     if (message.channel.type == "text" && config.loginmode == "test") logger("info", "bot.js", `Shard ${thisshard.id}: ${message}`)
 
-    if (message.channel.type !== "dm") {
-        if (message.mentions.members.size > 0) {
-            if (message.mentions.members.get(bot.user.id) != undefined) {
-                message.react(bot.guilds.cache.get("232550371191554051").emojis.cache.find(emoji => emoji.name === "notification")).catch(err => {
-                    logger('error', 'bot.js', "mention reaction Error: " + err) }) }}}
-
     settings.findOne({ guildid: message.guild.id }, (err, guildsettings) => { //fetch guild data once and pass it with run function
         if (err) {
             logger("error", "bot.js", "msg Event: Error fetching guild from database: " + err)
@@ -584,7 +582,7 @@ bot.on('message', (message) => {
 
             if (!ab.includes("all")) { //check if user is allowed to use this command
                 if (ab.includes("botowner")) {
-                    if (message.author.id !== '231827708198256642') return message.channel.send(owneronlyerror(message.guild.id))
+                    if (message.author.id !== '231827708198256642') return message.channel.send(owneronlyerror(lang(message.guild.id)))
                 } else if (message.guild.owner && message.author.id == message.guild.owner.id) { //check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
                     //nothing to do here, just not returning an error message and let the server owner do what he wants
                 } else if (ab.includes("admins")) {

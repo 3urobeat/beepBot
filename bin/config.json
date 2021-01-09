@@ -2,11 +2,28 @@
     "loginmode": "test",
     "filetostart": "./bin/controller.js",
     "varsfile": "./bin/vars.js",
-    "version": "BETA 3.0 b11",
-    "status": "dnd",
-    "gametype": "playing",
-    "gamerotation": ["beepBot by 3urobeat#0975", "Tip: The character inside the [] in my nickname is my prefix for this server!", "github.com/HerrEurobeat", "I'm on ${Manager.fetchClientValues('guilds.cache.size').then(res => res.reduce((a, b) => b + a))} servers!", "Tip: Use the settings command to customize the bot for your server!", "Being a cool bot since 01.01.2017!", "Tip: You can also mention the bot instead of using a prefix!", "Have a nice day!"],
+    "version": "BETA 3.0 b12",
+    "status": "online",
+    "gametype": "PLAYING",
+    "gamerotation": [
+        "beepBot by 3urobeat#0975",
+        "Tip: The character inside the [] in my nickname is my prefix for this server!",
+        "github.com/HerrEurobeat",
+        "I'm on ${Manager.fetchClientValues('guilds.cache.size').then(res => res.reduce((a, b) => b + a))} servers!",
+        "Tip: Use the settings command to customize the bot for your server!",
+        "Being a cool bot since 01.01.2017!",
+        "Tip: You can also mention the bot instead of using a prefix!",
+        "Have a nice day!"
+    ],
     "gamerotateseconds": 60,
     "gameoverwrite": "",
-    "helpcategoryorder": ["General", "Moderation", "InfoUser", "Misc", "other", "Botowner"]
+    "gameurl": "https://3urobeat.com",
+    "helpcategoryorder": [
+        "General",
+        "Moderation",
+        "InfoUser",
+        "Misc",
+        "other",
+        "Botowner"
+    ]
 }

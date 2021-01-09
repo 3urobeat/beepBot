@@ -184,7 +184,8 @@ monitorreactions.loadDatabase((err) => { //needs to be loaded with each iteratio
 });
 
 //Game rotation
-if (config.gamerotateseconds <= 10) logger("warn", "controller.js", "gamerotateseconds in config is less than 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true)
+if (config.gamerotateseconds <= 10) logger("warn", "controller.js", "gamerotateseconds in config is <= 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true)
+if (config.gameurl == "") logger("warn", "controller.js", "gameurl in config is empty and will break the bots presence!", true)
 let currentgameindex = 0
 let lastPresenceChange = Date.now() //this is useful because intervals can get very unprecise over time
 
@@ -195,12 +196,16 @@ var gamerotationloop = setInterval(() => {
     delete require.cache[require.resolve("./config.json")]
     config = require("./config.json")
 
-    if (config.gameoverwrite != "") { //if botowner set a game manually then only change game if the instance isn't already playing it
-        Manager.broadcastEval(`
-        if (this.user.presence.activities[0].name != "${config.gameoverwrite}") {
-            this.user.setPresence({activity: { name: "${config.gameoverwrite}" }, status: "${config.status}" }) }`).catch(err => { //error will occur when not all shards are started yet
-            logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err) })
+    if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { //if botowner set a game manually then only change game if the instance isn't already playing it
+        let game = config.gameoverwrite
+        if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
 
+        Manager.broadcastEval(`
+        if (this.user.presence.activities[0].name != "${game}") {
+            this.user.setPresence({activity: { name: "${game}", type: "${config.gametype}", url: "${config.gameurl}" }, status: "${config.status}" }) }`).catch(err => { //error will occur when not all shards are started yet
+            logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err.stack) })
+
+        currentgameindex = 0; //reset gameindex
         lastPresenceChange = Date.now() + 600000 //add 10 min to reduce load a bit
         return; } //don't change anything else if botowner set a game manually
 
@@ -230,8 +235,8 @@ var gamerotationloop = setInterval(() => {
     processThisGame(config.gamerotation[currentgameindex], callback => {
         lastPresenceChange = Date.now() //set again to include processing time
 
-        Manager.broadcastEval(`this.user.setPresence({activity: { name: "${callback}" }, status: "${config.status}" })`).catch(err => { //error will occur when not all shards are started yet
-            return logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err) }) })
+        Manager.broadcastEval(`this.user.setPresence({activity: { name: "${callback}", type: "${config.gametype}", url: "${config.gameurl}" }, status: "${config.status}" })`).catch(err => { //error will occur when not all shards are started yet
+            return logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err.stack) }) })
 }, 5000)
 
 //Unban checker

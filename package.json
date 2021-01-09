@@ -6,8 +6,9 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "nedb": "^1.8.0",
+    "node-fetch": "^2.6.1",
     "superagent": "^6.1.0",
-    "systeminformation": "^4.32.0"
+    "systeminformation": "^4.34.5"
   },
   "scripts": {
     "start": "node start.js"

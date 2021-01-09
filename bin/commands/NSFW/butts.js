@@ -1,5 +1,6 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     try {
+        //Note: If this API shouldn't work anymore, use nekobot: https://nekobot.xyz/api/image?type=ass
         let { body } = await require("superagent").get('http://api.obutts.ru/butts/0/1/random')
 
         let imageurl = "http://media.obutts.ru/" + body[0].preview
@@ -10,17 +11,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 url: imageurl },
             footer: {
                 icon_url: message.author.displayAvatarURL,
-                text: "Requestet by " + message.author.username },
+                text: `${lang.general.poweredby} api.obutts.ru` },
             timestamp: message.createdAt,
             color: fn.randomhex() } })
 
     } catch (err) {
-        logger("butts API Error: " + err)
-        message.channel.send("butts API Error: " + err) }
+        logger("error", "butts.js", "API Error: " + err)
+        message.channel.send(`api.obutts.ru butts API ${lang.general.error}: ${err}`) }
 }
 
 module.exports.info = {
-    names: ["butts"],
+    names: ["butts", "butt", "ass"],
     description: "Posts porn pictures of butts. (NSFW)",
     usage: "",
     accessableby: ['all'],

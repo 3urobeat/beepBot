@@ -1,6 +1,9 @@
 {
     "DEFAULTPREFIX": "*",
     "DEFAULTTESTPREFIX": "**",
+    "DEFAULTSTATUS": "online",
+    "DEFAULTGAMETYPE": "PLAYING",
+    "DEFAULTGAMEURL": "https://3urobeat.com",
     "BOTNAME": "beepBot",
     "BOTOWNER": "3urobeat#0975",
     "OWNERID": "231827708198256642",

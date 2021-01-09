@@ -9,13 +9,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 url: body.message },
             footer: {
                 icon_url: message.author.displayAvatarURL,
-                text: "Requestet by " + message.author.username },
+                text: `${lang.general.poweredby} NekoBot API` },
             timestamp: message.createdAt,
             color: fn.randomhex() } })
 
     } catch (err) {
         logger("error", "pgif.js", "API Error: " + err)
-        message.channel.send("pgif API Error: " + err) }
+        message.channel.send(`nekobot.xyz pgif API ${lang.general.error}: ${err}`) }
 }
 
 module.exports.info = {
