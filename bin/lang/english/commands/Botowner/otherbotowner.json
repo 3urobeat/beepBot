@@ -1,3 +1,8 @@
 {
-    "saymissingargs": "Error: Please provide a message text as an argument."
+    "saymissingargs": "Error: Please provide a message text as an argument.",
+
+    "setpresencemissingargs": "Error: Please provide at least one argument.",
+    "setpresenceinvalidstatus": "Error: Your status seems to be invalid. Valid options:",
+    "setpresenceinvalidgametype": "Error: Your gametype seems to be invalid. Valid options:",
+    "setpresenceupdated": "Presence updated successfully."
 }

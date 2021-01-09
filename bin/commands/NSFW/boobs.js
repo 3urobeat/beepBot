@@ -1,5 +1,6 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     try {
+        //Note: If this API shouldn't work anymore, use nekobot: https://nekobot.xyz/api/image?type=boobs
         let { body } = await require("superagent").get('http://api.oboobs.ru/boobs/0/1/random')
         
         let imageurl = "http://media.oboobs.ru/" + body[0].preview
@@ -10,13 +11,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 url: imageurl },
             footer: {
                 icon_url: message.author.displayAvatarURL,
-                text: "Requestet by " + message.author.username },
+                text: `${lang.general.poweredby} api.oboobs.ru` },
             timestamp: message.createdAt,
             color: fn.randomhex() } })
 
     } catch (err) {
         logger("error", "boobs.js", "API Error: " + err)
-        message.channel.send("boobs API Error: " + err) }
+        message.channel.send(`api.oboobs.ru boobs API ${lang.general.error}: ${err}`) }
 }
 
 module.exports.info = {

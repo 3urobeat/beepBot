@@ -9,13 +9,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 url: body.message },
             footer: {
                 icon_url: message.author.displayAvatarURL,
-                text: `Requestet by ${message.author.username}` },
+                text: `${lang.general.poweredby} NekoBot API` },
             timestamp: message.createdAt,
             color: fn.randomhex() }})
 
     } catch (err) {
         logger("error", "4k.js", "API Error: " + err)
-        message.channel.send("nekobot.xyz 4k API Error: " + err) }
+        message.channel.send(`nekobot.xyz 4k API ${lang.general.error}: ${err}`) }
 }
 
 module.exports.info = {
