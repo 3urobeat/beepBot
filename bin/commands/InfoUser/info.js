@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (!args[1]) { args[1] = "" }
     switch(args[0].toLowerCase()) {
         case "user":
-            if (!args[1]) var whichuser = message.author
+            if (!args[1] || message.channel.type == "dm") var whichuser = message.author
             else if (message.guild.members.cache.find(member => member.user.username == args[1])) var whichuser = message.guild.members.cache.find(member => member.user.username == args[1]).user
             else if (message.guild.members.cache.find(member => member.nickname == args[1])) var whichuser = message.guild.members.cache.find(member => member.nickname == args[1]).user
             else if (message.guild.members.cache.get(args[1])) var whichuser = message.guild.members.cache.get(args[1]).user
@@ -34,7 +34,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 if (i + 1 == Object.keys(whichuser.presence.activities).length && alluseractivites.length >= 25) { 
                     alluseractivites = alluseractivites.slice(0, 25) + "..." } })
 
-            if (message.guild.members.cache.get(whichuser.id).nickname == null) usernickname = "/"
+            if (message.channel.type == "dm" || message.guild.members.cache.get(whichuser.id).nickname == null) usernickname = "/"
                     else usernickname = message.guild.members.cache.get(whichuser.id).nickname
 
             if (args[1].toLowerCase() == "mobile") { //Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
@@ -81,6 +81,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 quickInfoField(4, "server", "servershowmore", true) }
             break;
         case "server":
+            if (message.channel.type == "dm") return message.channel.send(lang.cmd.info.serverdmerror)
+
             thumbnailurl = message.guild.iconURL()
 
             if (args[1].toLowerCase() == "mobile") {

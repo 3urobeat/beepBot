@@ -1,7 +1,6 @@
 /* eslint-disable */ //remove this
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    const botjs  = require("../../bot.js") //remove if not needed
-    let lf       = lang //Should this file use his lang file path often use this var as shorthand
+    let lf = lang //Should this file use his lang file path often use this var as shorthand
     
 }
 

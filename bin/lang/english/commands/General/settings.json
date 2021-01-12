@@ -1,5 +1,5 @@
 {
-    "helpview": "Displays the current settings.",
+    "settings": "Settings",
     "helpprefixset": "Sets the bot's prefix for this server.",
     "helplangset": "Sets the language for this server. (Tip: Leave out the language to list all supported languages.)",
     "helpadminrolesset": "Adds, removes or removes all roles that have access to admin features of the bot.",
@@ -14,12 +14,14 @@
     "helpadvice": "Tip: Type the command but leave out any argument to see a detailed help message about that setting.\ne.g. prefixsettings greetmsg",
 
     "rolename": "role name",
+    "roleid": "role id",
     "roleadded": "The role has been added successfully",
     "rolealreadyadded": "Error: This role has already been added.",
     "roleremoved": "The role has been removed from the list",
     "rolenotincluded": "Error: The provided role doesn't seem to be included in the list.",
     "rolearraycleared": "The list has been successfully cleared.",
     "channelname": "channel name",
+    "channelid": "channel id",
     "recommendation": "Recommendation",
     "prefixmissingargs": "Error: Please provide a valid prefix",
     "newprefixset": "New prefix has been saved",

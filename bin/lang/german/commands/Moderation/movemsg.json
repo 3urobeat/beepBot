@@ -1,0 +1,13 @@
+{
+    "missingargs": "Fehler: Bitte gib eine Nachricht an indem du diesen Befehl in einer Antwort benutzt, indem du einen Nachrichtenlink oder die ID der Nachricht angibst.",
+    "missingchannel": "Fehler: Bitte gib einen Zielkanal an, in den die Nachricht verschoben werden soll.",
+    "channelnotfound": "Fehler: Ich konnte den Zielkanal leider nicht finden.",
+    "wrongchannel": "Fehler: Die verlinkte Nachricht muss aus diesem Kanal sein.",
+    "messagenotfound": "Fehler: Ich konnte die zu verschiebene Nachricht nicht finden!",
+    "seeattachmentbelow": "Anhang der originalen Nachricht ist oben angehängt.",
+    "title": "Verschobene Nachricht von username in channelname",
+    "fieldname": "Original von time (GMT Zeit)",
+    "movedby": "Verschoben von author",
+    "errordeletingmsg": "Fehler: Konnte Nachricht nicht löschen",
+    "errormovingmsg": "Fehler: Konnte Nachricht nicht in den Zielkanal senden"
+}

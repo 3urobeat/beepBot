@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["avatar", "useravatar"],
-    description: "Displays a link to your avatar or of the user you mentioned.",
+    description: "Displays your avatar or of the user you provided and a link to it.",
     usage: "[mention/username/userid]",
     accessableby: ['all'],
     allowedindm: false,
