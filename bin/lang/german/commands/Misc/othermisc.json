@@ -5,6 +5,11 @@
     "dicenomaxprovided": "Du musst dem endlosen Würfel ein Maximum geben! `2-∞`",
     "dicerandommsg": ["Der Würfel rollt... Stopp! Es ist eine","Der Würfel ist stehengeblieben:","Deine Zahl:","...und es ist eine","Werde nicht süchtig!","Es ist wie Lotto! Hast du gewonnen?"],
 
+    "lyricsmissingargs": "Fehler: Bitte gib einen Suchbegriff an!",
+    "lyricssearching": "Suchen...",
+    "lyricsnotfound": "Fehler: Ich konnte das Lied leider nicht finden.",
+    "lyricslongerthan6000": "Der Songtext ist länger als 6000 Zeichen. Bitte schau dir den Songtext auf Genius an:",
+
     "redditsearching": "Suche in sort in subreddit...",
     "redditnotfound": "Ich konnte leider nichts finden.",
     "redditover18": "Fehler: Den Post den ich gefunden habe ist als 18+ markiert, der Kanal ist allerdings nicht als NSFW-Kanal festgelegt. Bitte versuche erneut.\nUm in der Zukunft auch NSFW Beiträge zu sehen, ändere bitte die Einstellungen dieses Kanals.",

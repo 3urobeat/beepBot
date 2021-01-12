@@ -1,4 +1,6 @@
 {
+    "broadcastmessagesent": "The message has been sent to all (possible) guilds.",
+
     "saymissingargs": "Error: Please provide a message text as an argument.",
 
     "setpresencemissingargs": "Error: Please provide at least one argument.",

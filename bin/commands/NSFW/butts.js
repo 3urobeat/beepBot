@@ -10,7 +10,6 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             image: {
                 url: imageurl },
             footer: {
-                icon_url: message.author.displayAvatarURL,
                 text: `${lang.general.poweredby} api.obutts.ru` },
             timestamp: message.createdAt,
             color: fn.randomhex() } })

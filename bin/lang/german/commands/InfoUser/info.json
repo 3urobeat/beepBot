@@ -5,5 +5,6 @@
     "user": "Nutzer",
     "usershowmore": "Tippe `prefixinfo user` um detaillierte Informationen über dich zu erhalten.",
     "server": "Server",
+    "serverdmerror": "Fehler: Du kannst diese Seite nicht in einem DM-Kanal aufrufen.",
     "servershowmore": "Tippe `prefixinfo server` um detaillierte Informationen über diesen Server zu erhalten."
 }

@@ -1,5 +1,5 @@
 {
-    "helpview": "Zeigt die aktuellen Einstellungen an.",
+    "settings": "Einstellungen",
     "helpprefixset": "Stellt den Befehl-Prefix des Bots für diesen Server ein.",
     "helplangset": "Stellt die Sprache für diesen Server ein. (Tipp: Keine Sprache angeben um alle unterstützten Sprachen anzuzeigen.)",
     "helpadminrolesset": "Fügt hinzu, entfernt oder entfernt alle Rollen, die auf Zugriff auf Admin-Funktionen des Bots haben.",
@@ -14,12 +14,14 @@
     "helpadvice": "Tipp: Wenn du einen Befehl benutzt, aber kein Argument angibst, bekommst du eine detaillierte Hilfe Nachricht zu der bestimmten Einstellung.\nz.B. prefixsettings greetmsg",
 
     "rolename": "Rollenname",
+    "roleid": "Rollen-ID",
     "roleadded": "Die Rolle wurde erfolgreich hinzugefügt",
     "rolealreadyadded": "Fehler: Diese Rolle wurde bereits hinzugefügt.",
     "roleremoved": "Die Rolle wurde erfolgreich entfernt",
     "rolenotincluded": "Fehler: Die angegebene Rolle scheint nicht in der Liste zu befinden.",
     "rolearraycleared": "Die Liste wurde erfolgreich geleert.",
     "channelname": "Kanalname",
+    "channelid": "Kanal-ID",
     "recommendation": "Vorschlag",
     "prefixmissingargs": "Um einen Befehl-Prefix festzulegen, benutze das Argument 'set (prefix)'.\nUm den Prefix zur Grundeinstellung zurückzusetzen, benutze 'remove'.",
     "newprefixset": "Neuer Prefix wurde gespeichert",

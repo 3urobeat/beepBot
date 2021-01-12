@@ -1,0 +1,13 @@
+{
+    "missingargs": "Error: Please provide a message to move by using this command in a reply, by including a link to the message or by including the id of the message.",
+    "missingchannel": "Error: Please provide a target channel where I should move the message to.",
+    "channelnotfound": "Error: I sadly couldn't find the target channel.",
+    "wrongchannel": "Error: The linked message must be from this channel.",
+    "messagenotfound": "Error: I couldn't find the message to move!",
+    "seeattachmentbelow": "Attachment of the original message is attached above.",
+    "title": "Moved message from username in channelname",
+    "fieldname": "Original message from time (GMT time)",
+    "movedby": "Moved by author",
+    "errordeletingmsg": "Error: Couldn't delete message",
+    "errormovingmsg": "Error: Couldn't send message into target channel"
+}

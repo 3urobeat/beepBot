@@ -82,31 +82,48 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
         case "help":
             var PREFIX = guildsettings.prefix
 
-            //indentation looks stupid because otherwise the resulting message would have a ton spaces infront of every cmd
             // \` is to apply markdown to message without using some kind of string feature (like ending the ` String message)
-            var helpmsg = `
-${lang.cmd.help.help}: 
-\`${PREFIX}settings\` - ${lf.helpview}
+            message.channel.send({embed: {
+                title: `${lf.settings} - ${lang.cmd.help.help}`,
+                fields: [{
+                        name: `\`${PREFIX}settings prefix (new prefix)\``,
+                        value: lf.helpprefixset },
+                    {
+                        name: `\`${PREFIX}settings lang [${lang.general.language}]\``,
+                        value: lf.helplangset },
+                    {
+                        name: `\`${PREFIX}settings adminroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
+                        value: lf.helpadminrolesset },
+                    {
+                        name: `\`${PREFIX}settings modroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
+                        value: lf.helpmodrolesset },
+                    {
+                        name: `\`${PREFIX}settings systemchannel [set/remove] [${lf.channelname}/${lf.channelid}]\``,
+                        value: lf.helpsystemchannelset },
+                    {
+                        name: `\`${PREFIX}settings modlogchannel [set/remove] [${lf.channelname}/${lf.channelid}]\``,
+                        value: lf.helpmodlogchannelset },
+                    {
+                        name: `\`${PREFIX}settings modlogfeatures [enable/disable/enableall/disableall] [${lf.featurename}]\``,
+                        value: lf.helpmodlogfeaturesset },
+                    {
+                        name: `\`${PREFIX}settings greetmsg [set/remove] [${lang.general.message}]\``,
+                        value: lf.helpgreetmsgset},
+                    {
+                        name: `\`${PREFIX}settings byemsg [set/remove] [${lang.general.message}]\``,
+                        value: lf.helpbyemsgset },
+                    {
+                        name: `\`${PREFIX}settings joinroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
+                        value: lf.helpjoinrolesset},
+                    {
+                        name: `\`${PREFIX}settings reset\``,
+                        value: lf.helpsettingsreset },
+                    {
+                        name: `** **`,
+                        value: lf.helpadvice.replace("prefix", PREFIX) }
+                    ]}
+            })
 
-\`${PREFIX}settings prefix "prefix"\` - ${lf.helpprefixset}
-\`${PREFIX}settings lang "${lang.general.language}"\` - ${lf.helplangset}
-\`${PREFIX}settings adminroles [add/remove/removeall] "${lf.rolename}"\` - ${lf.helpadminrolesset}
-\`${PREFIX}settings modroles [add/remove/removeall] "${lf.rolename}"\` - ${lf.helpmodrolesset}
-\`${PREFIX}settings systemchannel [set/remove] "${lf.channelname}"\` - ${lf.helpsystemchannelset}
-\`${PREFIX}settings modlogchannel [set/remove] "${lf.channelname}"\` - ${lf.helpmodlogchannelset}
-\`${PREFIX}settings modlogfeatures [enable/disable/enableall/disableall] "${lf.featurename}"\` - ${lf.helpmodlogfeaturesset}
-\`${PREFIX}settings greetmsg [set/remove] "${lang.general.message}"\` - ${lf.helpgreetmsgset}
-\`${PREFIX}settings byemsg [set/remove] "${lang.general.message}"\`- ${lf.helpbyemsgset}
-\`${PREFIX}settings joinroles [add/remove/removeall] "${lf.rolename}"\` - ${lf.helpjoinrolesset}
-\`${PREFIX}settings reset\` - ${lf.helpsettingsreset}
-
-${lf.helpadvice.replace("prefix", PREFIX)}
-            `
-
-            //Split message if >2000
-            for(let i = 0; i < helpmsg.length; i += 2000) {
-                let toSend = helpmsg.substring(i, Math.min(helpmsg.length, i + 2000));
-                message.channel.send(toSend) }
             break;
         case "prefix":
             if (!args[1]) { args[1] = "" }
@@ -215,7 +232,7 @@ ${lf.helpadvice.replace("prefix", PREFIX)}
                             var channelid = args[2].toString()
                         } else if (args[2].match(/(?<=<#)[0-9]{18}?(?=>)/g)) { // <#18numbers>
                             var channelid = args[2].toString().replace(/[<#>]/g, "")
-                        } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args.slice(2).join(" ").toLowerCase()).id } //not a roleid so try and find by name
+                        } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args[2].toLowerCase()).id } //not a channelid so try and find by name (channelnames can't have spaces so no need to join array)
                     } catch (err) { return message.channel.send(`${lf.channelerror}.\n||\`${err}\`||`) }
 
                     bot.settings.update({ guildid: guildid }, { $set: { systemchannel: channelid }}, {}, (err) => { if (err) logDbErr(err) })
@@ -239,7 +256,7 @@ ${lf.helpadvice.replace("prefix", PREFIX)}
                             var channelid = args[2].toString()
                         } else if (args[2].match(/(?<=<#)[0-9]{18}?(?=>)/g)) { // <#18numbers>
                             var channelid = args[2].toString().replace(/[<#>]/g, "")
-                        } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args.slice(2).join(" ").toLowerCase()).id } //not a roleid so try and find by name
+                        } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args[2].toLowerCase()).id } //not a channelid so try and find by name (channelnames can't have spaces so no need to join array)
                     } catch (err) { return message.channel.send(`${lf.channelerror}.\n||\`${err}\`||`) }
 
                     bot.settings.update({ guildid: guildid }, { $set: { modlogchannel: channelid }}, {}, (err) => { if (err) logDbErr(err) })

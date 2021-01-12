@@ -1,4 +1,6 @@
 {
+    "broadcastmessagesent": "Die Nachricht wurde zu allen verfügbaren Servern gesendet.",
+
     "saymissingargs": "Fehler: Bitte gib einen Nachrichtentext als Argument an.",
 
     "setpresencemissingargs": "Fehler: Bitte gib mindestens ein Argument an.",

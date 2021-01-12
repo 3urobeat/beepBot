@@ -8,7 +8,6 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             image: {
                 url: body.message },
             footer: {
-                icon_url: message.author.displayAvatarURL,
                 text: `${lang.general.poweredby} NekoBot API` },
             timestamp: message.createdAt,
             color: fn.randomhex() }})

@@ -202,7 +202,7 @@ var gettimefrommsg = (args, callback) => {
 /**
  * Sends a message to the modlogchannel of that guild if it has one set
  * @param {Discord.Guild} guild The guild obj
- * @param {String} action Type of action (valid: clear, kick, ban, unban)
+ * @param {String} action Type of action (valid: clear, kick, ban, unban, movemsg)
  * @param {Discord.User} author Initiator of the action
  * @param {Discord.User} reciever The affected user of the action 
  * @param {Array<String>} details Additional details
@@ -250,13 +250,13 @@ var msgtomodlogchannel = (guild, action, author, reciever, details) => {
             case "kick":
                 msg.embed.title = guildlang.general.modlogkicktitle.replace("author", `${author.username}#${author.discriminator}`).replace("reciever", `${reciever.username}#${reciever.discriminator}`)
                 msg.embed.color = 16753920 //orange
-                msg.embed.fields.push({ name: `${guildlang.general.banreason}:`, value: details[0] })
+                msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[0] })
                 msg.embed.fields.push({ name: `${guildlang.general.details}:`, value: guildlang.general.modloguserwasnotified + String(details[1]).replace("true", "✅").replace("false", "❌") }) //details[1] is a boolean if the user was notified
                 break;
             case "ban":
                 msg.embed.title = guildlang.general.modlogbantitle.replace("author", `${author.username}#${author.discriminator}`).replace("reciever", `${reciever.username}#${reciever.discriminator}`)
                 msg.embed.color = 16711680 //red
-                msg.embed.fields.push({ name: `${guildlang.general.banreason}:`, value: details[0] })
+                msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[0] })
                 msg.embed.fields.push({ name: `${guildlang.general.details}:`, 
                                         value: `${guildlang.general.banlength}${details[1]}
                                                 ${guildlang.general.modloguserwasnotified}${String(details[2]).replace("true", "✅").replace("false", "❌")}` 
@@ -265,13 +265,20 @@ var msgtomodlogchannel = (guild, action, author, reciever, details) => {
             case "unban":
                 msg.embed.title = guildlang.general.modlogunbantitle.replace("reciever", `${reciever.username}#${reciever.discriminator}`)
                 msg.embed.color = 65280 //green
-                msg.embed.fields.push({ name: `${guildlang.general.banreason}:`, value: details[0] })
+                msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[0] })
                 break;
             case "unbanerr":
                 msg.embed.title = guildlang.general.modlogunbanerrtitle.replace("reciever", `${reciever.username}#${reciever.discriminator}`)
                 msg.embed.color = 14725921 //some orange mixture
                 msg.embed.fields.push({ name: `${guildlang.general.error}:`, value: details[1] })
-                msg.embed.fields.push({ name: `${guildlang.general.banreason}:`, value: details[0] })
+                msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[0] })
+                break;
+            case "movemsg":
+                msg.embed.title = guildlang.general.modlogmovemsgtitle.replace("author", `${author.username}#${author.discriminator}`).replace("reciever", `${reciever.username}#${reciever.discriminator}`)
+                msg.embed.color = 65280 //green
+                msg.embed.fields.push({ name: `${guildlang.general.modlogmovemsgcontent}:`, value: details[0] })
+                msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[2] })
+                msg["files"] = details[1] //add attachments array
                 break;
             case "modlogmsgerr":
                 msg.embed.title = guildlang.general.modlogmsgerrtitle
@@ -294,6 +301,7 @@ var msgtomodlogchannel = (guild, action, author, reciever, details) => {
                     })
                     .catch(() => {}) }) //reaction err catch -> ignore error
             .catch((err) => { //sendmsg error catch
+                console.log(err)
                 if (err) return msgtomodlogchannel(guild, "modlogmsgerr", author, reciever, [err, msg.embed.title]) }) //call this same function again to notify that modlogmsgs can't be sent (won't end in a loop because if no channel can be found on err then it will stop)
 
     })
@@ -518,12 +526,17 @@ bot.on("messageReactionAdd", (reaction, user) => {
 /* ------------ Message Handler: ------------ */
 bot.on('message', (message) => {
     if (message.author.bot) return;
-    var thisshard = message.guild.shard //Get shard instance of this shard with this "workaround" because it isn't directly accessable
+    if (message.channel.type == "text") var thisshard = message.guild.shard //Get shard instance of this shard with this "workaround" because it isn't directly accessabl
+        else var thisshard = 0 //set shard id to 0 to prevent errors for example when texting in DM
 
-    //if (message.guild.id != "232550371191554051" && message.guild.id != "331822220051611648") return; //don't respond to other guilds when testing with normal loginmode
-    if (message.channel.type == "text" && config.loginmode == "test") logger("info", "bot.js", `Shard ${thisshard.id}: ${message}`)
+    //if (message.guild.id != "232550371191554051" && message.guild.id != "331822220051611648") return; //don't respond to other guilds when testing with normal loginmode (for testing)
+    if (message.channel.type == "text" && config.loginmode == "test") logger("info", "bot.js", `Shard ${thisshard.id}: ${message}`) //log messages when testing
 
-    settings.findOne({ guildid: message.guild.id }, (err, guildsettings) => { //fetch guild data once and pass it with run function
+    //Confuse the db searching into finding nothing but not throwing an error when the channel is a dm
+    if (message.channel.type == "dm") var guildid = 0 //yes this isn't best practice but probably saves me from restructuring the code
+        else var guildid = message.guild.id
+
+    settings.findOne({ guildid: guildid }, (err, guildsettings) => { //fetch guild data once and pass it with run function
         if (err) {
             logger("error", "bot.js", "msg Event: Error fetching guild from database: " + err)
             message.channel.send("Something went wrong getting your guild's settings from the database. Please try again later.")
@@ -554,8 +567,13 @@ bot.on('message', (message) => {
         //get prefix for this guild or set default prefix if channel is dm
         if (message.channel.type !== "dm") var PREFIX = guildsettings.prefix 
             else { 
+                //quickly construct guildsettings object to not cause errors when using in dm
                 if (config.loginmode == "normal") var PREFIX = constants.DEFAULTPREFIX
-                    else var PREFIX = constants.DEFAULTTESTPREFIX }
+                    else var PREFIX = constants.DEFAULTTESTPREFIX
+
+                guildsettings = constants.defaultguildsettings
+                guildsettings["guildid"] = 0
+                guildsettings["prefix"] = PREFIX }
 
         if (message.content.startsWith(PREFIX)) { //check for normal prefix
             var cont = message.content.slice(PREFIX.length).split(" ");

@@ -1,0 +1,14 @@
+{
+    "missingargs": "Fehler: Bitte gib einen Stadtnamen an!",
+    "weatherincity": "Wetter in cityname",
+    "north": "N",
+    "east": "O",
+    "south": "S",
+    "west": "W",
+    "weather": "Wetter",
+    "cloudcoverage": "Bewölkung",
+    "visibility": "Sichtweite",
+    "temperature": "Temperatur",
+    "wind": "Wind",
+    "notfound": "Fehler: Die Stadt konnte nicht gefunden werden."
+}
