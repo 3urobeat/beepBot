@@ -1,3 +1,4 @@
 {
-    "clearinvalidamount": "Bitte gib eine gültige Menge an. `1-100`"
+    "clearinvalidamount": "Bitte gib eine gültige Menge an. `1-100`",
+    "clearinfodescription": "Löscht eine Menge an Nachrichten in dem Kanal."
 }

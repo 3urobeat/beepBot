@@ -430,7 +430,7 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
 
 module.exports.info = {
     names: ["settings", "set"],
-    description: "Configure the bot for your server!",
+    description: "cmd.settings.infodescription",
     usage: "['help']",
     accessableby: ['admins'],
     allowedindm: false,

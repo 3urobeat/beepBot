@@ -2,15 +2,19 @@
     "achievementmissingargs": "Fehler: Du musst einen Text mit angeben.",
     "achievementtoolongtext": "Fehler: Der Text darf maximal 22 Zeichen lang sein.",
     "achievementtitle": "Errungenschaft erhalten!",
+    "achievementinfodescription": "Sendet ein Bild einer Minecraft Errungenschaft mit deinem Text.",
 
-    "paidrespects": "username hat Respekt gezollt",
+    "fpaidrespects": "username hat Respekt gezollt",
+    "finfodescription": "Drück F um Respekt zu zollen.",
     
     "magic8missingargs": "magic8 kann sich nicht entscheiden wenn du keine Frage angibst...",
     "magic8responses": ["Ja","Jup.","Sieht danach aus","Höchstwahrscheinlich Ja","Meine Quellen sagen Ja","Ich würde Ja sagen","Nein","Ganz sicher Nein","Wahrscheinlich Nein","Nö","Meine Quellen sagen Nein","Denk garnicht erst drüber nach","Höchstwahrscheinlich Nein","Ich bin mir unsicher","Eventuell","Ich werde drüber nachdenken..."],
+    "magic8infodescription": "Beantwortet dir sogar deine schwersten Fragen.",
 
     "rpsusage": "Gib als Argument eines der Möglichkeiten 'rock'/'paper'/'scissors' oder deren Abkürzung 'r'/'p'/'s' an,\num Schere, Stein, Papier gegen den Bot zu spielen.",
     "rpsresponses": ["Stein", "Papier", "Schere"],
     "rpswin": "Du gewinnst!",
     "rpstie": "Unentschieden!",
-    "rpsloose": "Du verlierst!"
+    "rpsloose": "Du verlierst!",
+    "rpsinfodescription": "Spiel Schere Stein Papier gegen den Bot!"
 }

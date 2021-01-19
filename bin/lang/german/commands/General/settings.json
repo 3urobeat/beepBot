@@ -57,5 +57,7 @@
     "modlogfeatures": "Moderator-Logs Funktionen",
     "greetmsg": "Nachricht bei Beitritt eines Nutzers",
     "byemsg": "Nachricht beim Verlassen eines Nutzers",
-    "addroleonjoin": "Bei Beitritt zugewiesene Rolle"    
+    "addroleonjoin": "Bei Beitritt zugewiesene Rolle",
+
+    "infodescription": "Konfiguriere den Bot individuell für deinen Server!"
 }

@@ -1999,7 +1999,7 @@ __`)
 
 module.exports.info = { 
     names: ["empty", "space"],
-    description: "Posts a very long empty message",
+    description: "cmd.othermisc.emptyinfodescription",
     usage: "",
     accessableby: ['all'],
     allowedindm: true,

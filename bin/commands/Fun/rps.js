@@ -31,7 +31,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["rps"],
-    description: "Play rock paper scissors against the bot!",
+    description: "cmd.otherfun.rpsinfodescription",
     usage: "('r'/'rock'/'p'/'paper'/'s'/'scissors')",
     accessableby: ['all'],
     allowedindm: true,

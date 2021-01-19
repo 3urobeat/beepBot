@@ -6,5 +6,7 @@
     "botkick": ["I won't kick myself - what are you thinking?! :angry:","I don't like you anymore.","No. :angry:","Dont fight me with my own weapons!","Is there a way to block you?","How about I kick you instead?"],
     "missingkickperm": "You either need the Kick Members or Administrator permission.",
     "kickmsg": "username was kicked. Reason: kickreasontext",
-    "kicknotifymsg": "You got kicked from **servername**. Reason: kickreasontext"
+    "kicknotifymsg": "You got kicked from **servername**. Reason: kickreasontext",
+
+    "infodescription": "Kicks a user from the server. Add -notify to notify the kicked user."
 }

@@ -48,13 +48,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     bot.timedbans.remove({ userid: banuser.id }, (err) => { if (err) logger("error", "ban.js", `error removing user ${banuser.id}: ${err}`) }) //remove an old entry if there should be one
                     bot.timedbans.insert(timedbansobj, (err) => { if (err) logger("error", "ban.js", "error inserting user: " + err) })
                     message.channel.send(lang.cmd.ban.tempbanmsg.replace("username", banuser.username).replace("timetext", `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}`).replace("banreasontext", banreasontext))
-                    message.react("✅").catch(() => {}) //catch err but ignore it
+                    message.react("✅").catch(() => {}) //catch but ignore error
 
                     notifytimetext = `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}` //change permanent to timetext
                     fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}`, message.content.includes("-notify") || message.content.includes("-n")]) //details[2] results in boolean
                 })
             } else {
                 message.channel.send(lang.cmd.ban.permbanmsg.replace("username", banuser.username).replace("banreasontext", banreasontext))
+                message.react("✅").catch(() => {}) //catch but ignore error
                 fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, lang.cmd.ban.permanent, message.content.includes("-notify") || message.content.includes("-n")]) } //details[2] results in boolean
 
             //Notify argument
@@ -63,15 +64,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     message.channel.send(lang.general.dmerror + err) }) }
             
         }).catch(err => {
-            message.channel.send(`${lang.general.anerroroccurred} ${err}`) })
+            message.channel.send(`${lang.general.anerroroccurred} ${err}`)
+            message.react("❌").catch(() => {}) }) //catch but ignore error
     } else {
-        message.channel.send(fn.usermissperm(lang)) }
+        message.channel.send(fn.usermissperm(lang))
+        message.react("❌").catch(() => {}) } //catch but ignore error
     
 }
 
 module.exports.info = {
     names: ["ban"],
-    description: "Bans a user from the server. Supports temp-bans and notifications.",
+    description: "cmd.ban.infodescription",
     usage: '(mention/username) [reason] [-time/-t Number "seconds"/"minutes"/"hours"/"days"/"months"/"years"] [-notify/-n]',
     accessableby: ['admins'],
     allowedindm: false,

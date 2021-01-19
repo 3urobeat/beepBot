@@ -8,5 +8,7 @@
     "permbanmsg": "username wurde permanent gebannt. Begründung: banreasontext",
     "tempbanmsg": "username wurde für timetext gebannt. Begründung: banreasontext",
     "bannotifymsg": "Du wurdest von **servername** gebannt.\nBegründung: banreasontext\nDauer: timetext",
-    "permanent": "Permanent"
+    "permanent": "Permanent",
+
+    "infodescription": "Bannt einen Nutzer vom Server. Unterstützt temporäre Banns und Benachrichtigungen."
 }

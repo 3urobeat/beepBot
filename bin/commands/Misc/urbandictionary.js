@@ -33,7 +33,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["urban", "urbandictionary", "ud"],
-    description: "Searches for definitions in the Urban Dictionary!",
+    description: "cmd.othermisc.udinfodescription",
     usage: "(Search word)",
     accessableby: ['all'],
     allowedindm: true,

@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["servericon"],
-    description: "Displays the icon of this server and a link to it.",
+    description: "cmd.otherinfouser.servericoninfodescription",
     usage: "",
     accessableby: ['all'],
     allowedindm: false,

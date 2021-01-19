@@ -1,10 +1,22 @@
 {
     "broadcastmessagesent": "Die Nachricht wurde zu allen verfügbaren Servern gesendet.",
+    "broadcastinfodescription": "Sendet eine Nachricht an alle Server. Force wird versuchen den ersten Kanal mit Rechten zu finden.",
+
+    "evalinfodescription": "Führt javascript Code aus.",
 
     "saymissingargs": "Fehler: Bitte gib einen Nachrichtentext als Argument an.",
+    "sayinfodescription": "Wiederholt den Text und löscht die Befehl-Nachricht.",
+
+    "setconfigcurrentsettings": "Aktuelle config Einstellungen",
+    "setconfigmissingargs": "Bitte gib einen config Eintrag an, dessen Wert geändert werden soll!",
+    "setconfigcantfindkey": "Ich konnte diesen config Eintrag nicht finden.",
+    "setconfigkeyalreadynewvalue": "Der angeforderte Eintrag ist bereits configvalue.",
+    "setconfigkeychanged": "configkey wurde von oldvalue zu newvalue geändert.\nBitte vergiss nicht dass manche Änderungen einen Neustart erfordern könnten.",
+    "setconfiginfodescription": "Zeigt oder überschreibt config Einträge.",
 
     "setpresencemissingargs": "Fehler: Bitte gib mindestens ein Argument an.",
     "setpresenceinvalidstatus": "Fehler: Dein status scheint ungültig zu sein. Gültige Optionen:",
     "setpresenceinvalidgametype": "Fehler: Dein gametype scheint ungültig zu sein. Gültige Optionen:",
-    "setpresenceupdated": "Präsenz erfolgreich aktualisiert."
+    "setpresenceupdated": "Präsenz erfolgreich aktualisiert.",
+    "setpresenceinfodescription": "Überschreibt die aktuelle Präsenz des Bots."
 }

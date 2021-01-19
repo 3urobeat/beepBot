@@ -65,6 +65,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
         //Get all unsortedcategories into array
         commandsObj.forEach(e => {
+            //Check if cmd is test and ignore it
+            if (e.info.names[0] == "test") return;
+
             //Check if category is Botowner and ignore it if the user shouldn't be me (just to keep the msg shorter/more relevant)
             if (e.info.category == "Botowner" && message.author.id !== "231827708198256642") return;
 
@@ -75,7 +78,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (e.info.thisisanalias == true) return;
             
             //Add command to existing Category Array
-            unsortedcategories[e.info.category].push(`\`${guildsettings.prefix}${e.info.names[0]}\` - ${e.info.description}`)
+            unsortedcategories[e.info.category].push(`\`${guildsettings.prefix}${e.info.names[0]}\` - ${require("lodash").get(lang, e.info.description)}`)
         });
 
         //Sort Object by order defined in config
@@ -94,8 +97,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
         //Add sortedcategories with commands to msg
         Object.keys(sortedcategories).forEach((e) => {
+            var categorytitle = lf[e.toLowerCase()] //get translated category name from language file
+            if (!categorytitle) var categorytitle = e //if language file doesn't have this category just use the "raw" name
+
             msg.embed.fields.push({ 
-                name: e,
+                name: categorytitle,
                 value: sortedcategories[e]
             })
         })
@@ -107,7 +113,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["help", "h", "commands"],
-    description: "List of all commands or information of a specific command.",
+    description: "cmd.help.infodescription",
     usage: "[command name]",
     accessableby: ['all'],
     allowedindm: true,

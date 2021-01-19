@@ -15,5 +15,15 @@
     "overviewofxcmds": "Overview of commandcount commands",
     "detailedcommandinfo": "Type `prefixsettings [name_of_command]` to get detailed information and aliases on that specific command!",
     "cmdnotfound": "Sorry but I couldn't find that command.",
-    "setrestrictionsinsettings": "Set Admin & Mod roles in settings"
+    "setrestrictionsinsettings": "Set Admin & Mod roles in settings",
+
+    "botowner": "Botowner",
+    "fun": "Fun",
+    "general": "General",
+    "infouser": "Info & User",
+    "misc": "Miscellaneous",
+    "moderation": "Moderation",
+    "NSFW": "NSFW",
+
+    "infodescription": "List of all commands or information of a specific command."
 }

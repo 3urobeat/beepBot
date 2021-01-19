@@ -4,7 +4,10 @@
   "description": "beepBot - 24/7 online, customizeable, feature rich & scaleable Discord Bot.",
   "main": "start.js",
   "dependencies": {
+    "adm-zip": "^0.5.1",
     "discord.js": "^12.5.1",
+    "download": "^8.0.0",
+    "lodash": "^4.17.20",
     "nedb": "^1.8.0",
     "node-fetch": "^2.6.1",
     "superagent": "^6.1.0",

@@ -1,3 +1,4 @@
 {
-    "clearinvalidamount": "Please enter a valid amount. `1-100`"
+    "clearinvalidamount": "Please enter a valid amount. `1-100`",
+    "clearinfodescription": "Deletes an amount of messages in this channel."
 }

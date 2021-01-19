@@ -1,14 +1,21 @@
 {
     "coinflipped": "Die Münze ist gefallen:",
     "coinfliprandommsg": ["Kopf", "Zahl"],
+    "coinflipinfodescription": "Wirft eine Münze.",
 
     "dicenomaxprovided": "Du musst dem endlosen Würfel ein Maximum geben! `2-∞`",
     "dicerandommsg": ["Der Würfel rollt... Stopp! Es ist eine","Der Würfel ist stehengeblieben:","Deine Zahl:","...und es ist eine","Werde nicht süchtig!","Es ist wie Lotto! Hast du gewonnen?"],
+    "diceinfodescription": "Rollt einen Würfel mit einem einstellbaren Maximum.",
+
+    "emptyinfodescription": "Sendet eine sehr lange, leere Nachricht.",
 
     "lyricsmissingargs": "Fehler: Bitte gib einen Suchbegriff an!",
     "lyricssearching": "Suchen...",
     "lyricsnotfound": "Fehler: Ich konnte das Lied leider nicht finden.",
     "lyricslongerthan6000": "Der Songtext ist länger als 6000 Zeichen. Bitte schau dir den Songtext auf Genius an:",
+    "lyricsinfodescription": "Sucht nach Songtexten auf genius.com.",
+
+    "pollinfodescription": "Reagiert mit Daumen hoch/runter/Enthaltung auf deine Befehl-Nachricht.",
 
     "redditsearching": "Suche in sort in subreddit...",
     "redditnotfound": "Ich konnte leider nichts finden.",
@@ -18,8 +25,10 @@
     "redditcomments": "Kommentare",
     "redditpostedago": "vor timetextn geposted",
     "redditclicktitle": "Klicke auf die blaue Überschrift um den Post zu öffnen",
+    "redditinfodescription": "Zeigt einen zufälligen Reddit Post von r/all oder einem von dir angegebenen Subreddit.",
 
     "udmissingargs": "Fehler: Bitte gib einen Suchbegriff an!",
     "uddefinition": "Definition:",
-    "udnotfound": "Sorry, ich konnte dazu leider nichts finden."
+    "udnotfound": "Sorry, ich konnte dazu leider nichts finden.",
+    "udinfodescription": "Sucht nach einer Definition deines Worts im Urban Dictionary!"
 }

@@ -76,7 +76,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
     names: ["setpresence"],
-    description: "Overwrite the current presence of the bot.",
+    description: "cmd.otherbotowner.setpresenceinfodescription",
     usage: "['remove'/'default'] [-s 'online'/'idle'/'dnd'/'invisible'] [-gt 'playing'/'streaming'/'listening'/'watching'/'competing'] [-g gametext/'default'] [-url Stream URL/'default']",
     accessableby: ['botowner'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,

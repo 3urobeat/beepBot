@@ -9,5 +9,7 @@
     "fieldname": "Original message from time (GMT time)",
     "movedby": "Moved by author",
     "errordeletingmsg": "Error: Couldn't delete message",
-    "errormovingmsg": "Error: Couldn't send message into target channel"
+    "errormovingmsg": "Error: Couldn't send message into target channel",
+
+    "infodescription": "Moves a message from someone to another channel."
 }

@@ -2,7 +2,7 @@
     "loginmode": "test",
     "filetostart": "./bin/controller.js",
     "varsfile": "./bin/vars.js",
-    "version": "BETA 3.0 b13",
+    "version": "BETA 3.0 b14",
     "status": "online",
     "gametype": "PLAYING",
     "gamerotation": [

@@ -7,7 +7,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["say"],
-    description: "Deletes the cmd message and replies with the specified text.",
+    description: "cmd.otherbotowner.sayinfodescription",
     usage: "(text)",
     accessableby: ['botowner'],
     allowedindm: true,

@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["pgif", "porngif"],
-    description: "Posts porn gifs. (NSFW)",
+    description: "cmd.othernsfw.pgifinfodescription",
     usage: "",
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,

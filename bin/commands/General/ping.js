@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ['ping', 'pong'],
-    description: 'Returns the ping and heartbeat of the bot.',
+    description: "cmd.othergeneral.pinginfodescription",
     usage: "",
     accessableby: ['all'],
     allowedindm: true,
