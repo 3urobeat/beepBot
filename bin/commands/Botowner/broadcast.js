@@ -27,7 +27,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["broadcast"],
-    description: "Broadcasts a message to all guilds. Force will try to get the first channel with permissions.",
+    description: "cmd.otherbotowner.broadcastinfodescription",
     usage: '(force "true"/"false") (message)',
     accessableby: ['botowner'],
     allowedindm: true,

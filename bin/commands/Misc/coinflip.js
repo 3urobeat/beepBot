@@ -4,7 +4,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["coinflip", "coin", "flip"],
-    description: "Flips a coin.",
+    description: "cmd.othermisc.coinflipinfodescription",
     usage: "",
     accessableby: ['all'],
     allowedindm: true,

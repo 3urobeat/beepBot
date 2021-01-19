@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["dice", "roll"],
-    description: "Roll a dice with a custom limit.",
+    description: "cmd.othermisc.diceinfodescription",
     usage: "(limit)",
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,

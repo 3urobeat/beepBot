@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["achievement"],
-    description: "Sends a Minecraft achievement image with your text.",
+    description: "cmd.otherfun.achievementinfodescription",
     usage: "(text)",
     accessableby: ['all'],
     allowedindm: true,

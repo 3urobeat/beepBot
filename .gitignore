@@ -1,9 +1,8 @@
 node_modules
 nodemon.json
 beepBot.code-workspace
-bin/serverlist.txt
 bin/cmduse.txt
-bin/output.txt
+output.txt
 sync.ffs_db
 sync.ffs_lock
 bin/commands/General/test.js

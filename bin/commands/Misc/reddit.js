@@ -95,11 +95,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         message.channel.send(`reddit API ${lang.general.error}: ${err}`) }
 }
 
-module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
+module.exports.info = {
     names: ["reddit"],
-    description: "",
-    usage: "",
-    accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
+    description: "cmd.othermisc.redditinfodescription",
+    usage: '[subreddit] ["random"/"hot"/"new"/"top"]',
+    accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false
 }

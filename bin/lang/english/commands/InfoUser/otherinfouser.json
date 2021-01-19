@@ -1,4 +1,7 @@
 {
+    "avatarinfodescription": "Displays your avatar or of the user you provided.",
+
     "servericonnoicon": "Error: This server doesn't seem to have an icon.",
-    "servericontitle": "Click here to open the image in your browser"
+    "servericontitle": "Click here to open the image in your browser",
+    "servericoninfodescription": "Displays the icon of this server."
 }

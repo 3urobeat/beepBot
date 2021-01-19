@@ -57,5 +57,7 @@
     "modlogfeatures": "Moderator-Logs features",
     "greetmsg": "User join message",
     "byemsg": "User leave message",
-    "addroleonjoin": "Role added when user joins"
+    "addroleonjoin": "Role added when user joins",
+
+    "infodescription": "Configure the bot individually for your server!"
 }

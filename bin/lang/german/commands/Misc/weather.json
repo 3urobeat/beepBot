@@ -10,5 +10,7 @@
     "visibility": "Sichtweite",
     "temperature": "Temperatur",
     "wind": "Wind",
-    "notfound": "Fehler: Die Stadt konnte nicht gefunden werden."
+    "notfound": "Fehler: Die Stadt konnte nicht gefunden werden.",
+
+    "infodescription": "Zeigt das aktuelle Wetter der angegebenen Stadt."
 }

@@ -1,4 +1,5 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+    const lf         = lang.cmd.info
     const si         = require("systeminformation")
     const Discord    = require("discord.js")
     var infofields   = []
@@ -7,8 +8,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     //Small function to avoid repeating code
     function quickInfoField(index, name, value, inline) {
         return infofields[index] = {
-            name: lang.cmd.info[name],
-            value: String(lang.cmd.info[value]).replace("prefix", guildsettings.prefix),
+            name: lf[name],
+            value: String(lf[value]).replace("prefix", guildsettings.prefix),
             inline: inline
         } }
 
@@ -21,7 +22,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             else if (message.guild.members.cache.find(member => member.nickname == args[1])) var whichuser = message.guild.members.cache.find(member => member.nickname == args[1]).user
             else if (message.guild.members.cache.get(args[1])) var whichuser = message.guild.members.cache.get(args[1]).user
             else if (message.mentions.users.first()) var whichuser = message.mentions.users.first()
-            else return message.channel.send(lang.cmd.info.usernotfound)
+            else return message.channel.send(lf.usernotfound)
 
             thumbnailurl = whichuser.displayAvatarURL()
             var alluseractivites = ""
@@ -40,13 +41,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (args[1].toLowerCase() == "mobile") { //Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
                 //Mobile version
                 infofields[0] = {
-                    name: lang.cmd.info.user,
-                    value: `**Username:** ${whichuser.name}#${whichuser.discriminator}\n` +
-                           `**Nickname:** ${usernickname}\n` +
-                           `**Status:** ${whichuser.presence.status}\n` +
-                           `**Games:** (${Object.keys(whichuser.presence.activities).length}) ${alluseractivites}\n` +
-                           `**ID:** ${whichuser.id}\n` +
-                           `**Creation Date:** ${(new Date(whichuser.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
+                    name: lf.user,
+                    value: `**${lf.username}:** ${whichuser.name}#${whichuser.discriminator}\n` +
+                           `**${lf.nickname}:** ${usernickname}\n` +
+                           `**${lf.status}:** ${whichuser.presence.status}\n` +
+                           `**${lf.games}:** (${Object.keys(whichuser.presence.activities).length}) ${alluseractivites}\n` +
+                           `**${lf.id}:** ${whichuser.id}\n` +
+                           `**${lf.creationdate}:** ${(new Date(whichuser.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
                     inline: true }
                 
                 quickInfoField(1, "bot", "botshowmore", false)
@@ -54,13 +55,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             } else {
                 //Desktop version
                 infofields[0] = {
-                    name: lang.cmd.info.user,
-                    value: `Username:\n` +
-                           `Nickname:\n` +
-                           `Status:\n` +
-                           `Games: (${Object.keys(whichuser.presence.activities).length})\n` +
-                           `ID:\n` +
-                           `Creation Date:`,
+                    name: lf.user,
+                    value: `${lf.username}:\n` +
+                           `${lf.nickname}:\n` +
+                           `${lf.status}:\n` +
+                           `${lf.games}: (${Object.keys(whichuser.presence.activities).length})\n` +
+                           `${lf.id}:\n` +
+                           `${lf.creationdate}:`,
                     inline: true }
 
                 infofields[1] = {
@@ -81,22 +82,22 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 quickInfoField(4, "server", "servershowmore", true) }
             break;
         case "server":
-            if (message.channel.type == "dm") return message.channel.send(lang.cmd.info.serverdmerror)
+            if (message.channel.type == "dm") return message.channel.send(lf.serverdmerror)
 
             thumbnailurl = message.guild.iconURL()
 
             if (args[1].toLowerCase() == "mobile") {
                 //Mobile version
                 infofields[0] = {
-                    name: lang.cmd.info.server,
-                    value: `**Name:** ${message.guild.name}\n` +
-                           `**ID:** ${message.guild.id}\n` +
-                           `**Owner:** ${message.guild.owner}\n` +
-                           `**User Count:** ${message.guild.members.cache.size}\n` +
-                           `**This Channel ID:** ${message.channel.id}\n` +
-                           `**Server Region:** ${message.guild.region}\n` +
-                           `**Bot Shard ID:** ${message.guild.shardID}\n` +
-                           `**Creation Date:** ${(new Date(message.guild.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
+                    name: lf.server,
+                    value: `**${lf.name}:** ${message.guild.name}\n` +
+                           `**${lf.id}:** ${message.guild.id}\n` +
+                           `**${lf.owner}:** ${message.guild.owner}\n` +
+                           `**${lf.usercount}:** ${message.guild.members.cache.size}\n` +
+                           `**${lf.channelid}:** ${message.channel.id}\n` +
+                           `**${lf.serverregion}:** ${message.guild.region}\n` +
+                           `**${lf.shardid}:** ${message.guild.shardID}\n` +
+                           `**${lf.creationdate}:** ${(new Date(message.guild.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
                     inline: true }
 
                 quickInfoField(1, "bot", "botshowmore", false)
@@ -104,15 +105,15 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             } else {
                 //Desktop version
                 infofields[0] = {
-                    name: lang.cmd.info.server,
-                    value: `Name:\n` +
-                           `ID:\n` +
-                           `Owner:\n` +
-                           `User Count:\n` +
-                           `This Channel ID:\n` +
-                           `Server Region:\n` +
-                           `Bot Shard ID:\n` +
-                           `Creation Date:`,
+                    name: lf.server,
+                    value: `${lf.name}:\n` +
+                           `${lf.id}:\n` +
+                           `${lf.owner}:\n` +
+                           `${lf.usercount}:\n` +
+                           `${lf.channelid}:\n` +
+                           `${lf.serverregion}:\n` +
+                           `${lf.shardid}:\n` +
+                           `${lf.creationdate}:`,
                     inline: true }
 
                 infofields[1] = {
@@ -143,17 +144,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (args[1].toLowerCase() == "mobile") {
                 //Mobile version
                 infofields[0] = {
-                    name: `**${lang.cmd.info.bot}** - Mobile`,
-                    value: `**Uptime:** ${fn.round(bot.uptime / 3600000, 2)} hours\n` +
-                           `**Heartbeat:** ${fn.round(bot.ws.ping, 2)} ms\n` +
-                           `**RAM Usage:** ${Math.round(process.memoryUsage()["rss"] / 1024 / 1024 * 100) / 100} MB (RSS)\n` +
-                           `**CPU Temp:** ${cpuTemp.main} °C\n` +
-                           `**CPU Usage:** ${fn.round(cpuUsage.currentload, 2)} %\n` +
-                           `**Node.js:** ${process.version}\n` +
-                           `**Discord.js:** v${Discord.version}\n` +
-                           `**Server Count:** ${(await bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
-                           `**Shard Count:** ${bot.shard.count}\n` +
-                           `**Invite:** [Click here!](${bot.constants.botinvitelink})\n`,
+                    name: `**${lf.bot}** - Mobile`,
+                    value: `**${lf.uptime}:** ${fn.round(bot.uptime / 3600000, 2)} hours\n` +
+                           `**${lf.heartbeat}:** ${fn.round(bot.ws.ping, 2)} ms\n` +
+                           `**${lf.ramusage}:** ${Math.round(process.memoryUsage()["rss"] / 1024 / 1024 * 100) / 100} MB (RSS)\n` +
+                           `**${lf.cputemp}:** ${cpuTemp.main} °C\n` +
+                           `**${lf.cpuusage}:** ${fn.round(cpuUsage.currentload, 2)} %\n` +
+                           `**${lf.nodejsversion}:** ${process.version.replace("v", "")}\n` +
+                           `**${lf.discordjsversion}:** v${Discord.version}\n` +
+                           `**${lf.servercount}:** ${(await bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
+                           `**${lf.shardcount}:** ${bot.shard.count}\n` +
+                           `**${lf.inviteme}:** [Click here!](${bot.constants.botinvitelink})\n`,
                     inline: true }
 
                 quickInfoField(3, "user", "usershowmore", false)
@@ -161,17 +162,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             } else {
                 //Desktop version
                 infofields[0] = {
-                    name: lang.cmd.info.bot,
-                    value: `Uptime:\n` +
-                           `Heartbeat:\n` +
-                           `RAM Usage:\n` +
-                           `CPU Temp:\n` +
-                           `CPU Usage:\n` +
-                           `Node.js:\n` +
-                           `Discord.js:\n` +
-                           `Server Count:\n` +
-                           `Shard Count:\n` +
-                           `Invite:\n`,
+                    name: lf.bot,
+                    value: `${lf.uptime}:\n` +
+                           `${lf.heartbeat}:\n` +
+                           `${lf.ramusage}:\n` +
+                           `${lf.cputemp}:\n` +
+                           `${lf.cpuusage}:\n` +
+                           `${lf.nodejsversion}:\n` +
+                           `${lf.discordjsversion}:\n` +
+                           `${lf.servercount}:\n` +
+                           `${lf.shardcount}:\n` +
+                           `${lf.inviteme}:\n`,
                     inline: true }
 
                 infofields[1] = {
@@ -199,12 +200,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     message.channel.send({ 
         embed: {
-            title: `${bot.constants.BOTNAME} - ${lang.cmd.info.info}`,
+            title: `${bot.constants.BOTNAME} - ${lf.info}`,
             color: fn.randomhex(),
             thumbnail: { url: thumbnailurl },
             description: `${bot.constants.BOTNAME} version ${bot.config.version} made by ${bot.constants.BOTOWNER}\n${bot.constants.githublink}`,
             fields: infofields,
-            footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • If you are on mobile type ${guildsettings.prefix}info bot mobile` }
+            footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • ${lf.footermobilemsg.replace("prefix", guildsettings.prefix)}` }
         }
     })
     
@@ -212,7 +213,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["info"],
-    description: "Get info about a user, the server and the bot.",
+    description: "cmd.info.infodescription",
     usage: '["bot"/"user"/"server"] ["mobile"]',
     accessableby: ['all'],
     allowedindm: true,

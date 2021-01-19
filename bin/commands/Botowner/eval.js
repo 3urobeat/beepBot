@@ -21,7 +21,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["eval"],
-    description: "Bot owner can execute code through the discord chat.",
+    description: "cmd.otherbotowner.evalinfodescription",
     accessableby: ['botowner'],
     allowedindm: true,
     nsfwonly: false

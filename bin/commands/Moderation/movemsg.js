@@ -56,13 +56,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             fn.msgtomodlogchannel(message.guild, "movemsg", message.author, originalmsg.author, [originalcontent, originalmsg.attachments.array(), movereason]) //pass information to modlog function
         })
-        .catch(err => { return message.channel.send(`${lf.errormovingmsg}: ${err}`) })
+        .catch(err => { 
+            message.channel.send(`${lf.errormovingmsg}: ${err}`);
+            message.react("❌").catch(() => {}) //catch but ignore error
+            return; })
 
 }
 
 module.exports.info = {
     names: ["movemsg", "movemessage"],
-    description: "Moves a message from someone to another channel.",
+    description: "cmd.movemsg.infodescription",
     usage: "(use cmd in reply/message id/message link) (channelname/channelmention) [-r reason]",
     accessableby: ['moderators'],
     allowedindm: false,

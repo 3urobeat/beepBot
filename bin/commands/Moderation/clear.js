@@ -9,18 +9,19 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (message.member.permissions.has("MANAGE_MESSAGES", "ADMINISTRATOR")) {
         message.channel.messages.fetch({limit: messagecount + 1}).then(messages => 
             message.channel.bulkDelete(messages)).catch(err => {
-                message.channel.send("clear delete msg error: " + err)
-                logger("clear delete msg error: " + err)
+                message.channel.send(`${lang.general.anerroroccurred} ${err}`)
+                message.react("❌").catch(() => {}) //catch but ignore error
                 return; })
         
                 fn.msgtomodlogchannel(message.guild, "clear", message.author, {}, [messagecount, message.channel])
     } else {
-        message.channel.send(fn.usermissperm(lang)) }
+        message.channel.send(fn.usermissperm(lang))
+        message.react("❌").catch(() => {}) } //catch but ignore error
 }
 
 module.exports.info = {
     names: ["clear", "delete"],
-    description: "Deletes an amount of recent messages.",
+    description: "cmd.othermoderation.clearinfodescription",
     usage: "(amount of messages)",
     accessableby: ['moderators'],
     allowedindm: false,

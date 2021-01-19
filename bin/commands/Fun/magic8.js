@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["magic8", "8ball", "8b"],
-    description: "Answers even your toughest questions.",
+    description: "cmd.otherfun.magic8infodescription",
     usage: "(question)",
     accessableby: ['all'],
     allowedindm: true,

@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["poll", "vote", "survey"],
-    description: "Reacts with thumbs up/down to your message.",
+    description: "cmd.othermisc.pollinfodescription",
     usage: "[poll description]",
     accessableby: ['all'],
     allowedindm: false,

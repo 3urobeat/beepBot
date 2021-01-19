@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["pussy", "pussies"],
-    description: "Posts porn pictures of pussies. (NSFW)",
+    description: "cmd.othernsfw.pussyinfodescription",
     usage: "",
     accessableby: ['all'],
     allowedindm: true,

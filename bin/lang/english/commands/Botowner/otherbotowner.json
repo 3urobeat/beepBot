@@ -1,10 +1,22 @@
 {
     "broadcastmessagesent": "The message has been sent to all (possible) guilds.",
+    "broadcastinfodescription": "Broadcasts a message to all guilds. Force will try to get the first channel with permissions.",
+
+    "evalinfodescription": "Executes javascript code.",
 
     "saymissingargs": "Error: Please provide a message text as an argument.",
+    "sayinfodescription": "Repeats the text and deletes the command message.",
+
+    "setconfigcurrentsettings": "Current config settings",
+    "setconfigmissingargs": "Please provide a new value for the key you want to change!",
+    "setconfigcantfindkey": "I can't find this key in the config.",
+    "setconfigkeyalreadynewvalue": "The requested key is already configvalue.",
+    "setconfigkeychanged": "configkey has been changed from oldvalue to newvalue.\nPlease remember that certain values might need a restart to take effect.",
+    "setconfiginfodescription": "Shows or Overwrites config values.",
 
     "setpresencemissingargs": "Error: Please provide at least one argument.",
     "setpresenceinvalidstatus": "Error: Your status seems to be invalid. Valid options:",
     "setpresenceinvalidgametype": "Error: Your gametype seems to be invalid. Valid options:",
-    "setpresenceupdated": "Presence updated successfully."
+    "setpresenceupdated": "Presence updated successfully.",
+    "setpresenceinfodescription": "Overwrite the current presence of the bot."
 }

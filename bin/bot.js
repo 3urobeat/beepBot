@@ -79,7 +79,7 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
         console.log(`${string}`) }
 
     //eslint-disable-next-line
-    fs.appendFileSync('./bin/output.txt', string.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') + '\n', err => { //Regex Credit: https://github.com/Filirom1/stripcolorcodes
+    fs.appendFileSync('./output.txt', string.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') + '\n', err => { //Regex Credit: https://github.com/Filirom1/stripcolorcodes
         if(err) console.log('logger function appendFileSync error: ' + err) }) 
 
     return string; } //Return String, maybe it is useful for the calling file
@@ -411,19 +411,19 @@ process.on('uncaughtException', (reason) => {
 
 
 /* -------------- Load databases -------------- */
-const settings = new nedb('./bin/data/settings.db') //initialise database
+const settings = new nedb('./data/settings.db') //initialise database
 settings.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading settings database. Error: " + err)
     logger("info", "bot.js", "Successfully loaded settings database.", false, true) }); //load db content into memory
 bot.settings = settings; //add reference to bot obj
 
-const timedbans = new nedb('./bin/data/timedbans.db') //initialise database
+const timedbans = new nedb('./data/timedbans.db') //initialise database
 timedbans.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading timedbans database. Error: " + err)
     logger("info", "bot.js", "Successfully loaded timedbans database.", false, true) }); //load db content into memory
 bot.timedbans = timedbans; //add reference to bot obj
 
-const monitorreactions = new nedb('./bin/data/monitorreactions.db') //initialise database
+const monitorreactions = new nedb('./data/monitorreactions.db') //initialise database
 monitorreactions.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading monitorreactions database. Error: " + err)
     logger("info", "bot.js", "Successfully loaded monitorreactions database.", false, true) }); //load db content into memory

@@ -15,5 +15,15 @@
     "overviewofxcmds": "Übersicht über commandcount Befehle",
     "detailedcommandinfo": "Tippe `prefixsettings [Name_des_Befehls]` um detaillierte Informationen und Aliases zu dem spezifischen Befehl zu erhalten!",
     "cmdnotfound": "Ich konnte diesen Befehl leider nicht finden.",
-    "setrestrictionsinsettings": "Stelle Admin & Mod Rollen in den Einstellungen ein"
+    "setrestrictionsinsettings": "Stelle Admin & Mod Rollen in den Einstellungen ein",
+
+    "botowner": "Botbesitzer",
+    "fun": "Spaß",
+    "general": "Generell",
+    "infouser": "Info & Nutzer",
+    "misc": "Verschiedenes",
+    "moderation": "Moderation",
+    "NSFW": "18+",
+
+    "infodescription": "Zeigt eine Liste aller Befehle und Informationen zu einem spezifischen Befehl."
 }

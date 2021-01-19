@@ -43,7 +43,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
     names: ["lyrics", "l"], //Array<String> with all aliases
-    description: "Searches for song lyrics on genius.com.",
+    description: "cmd.othermisc.lyricsinfodescription",
     usage: "(song name)",
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,

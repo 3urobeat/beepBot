@@ -72,7 +72,7 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
         console.log(`${string}`) }
 
     //eslint-disable-next-line
-    fs.appendFileSync('./bin/output.txt', string.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') + '\n', err => { //Regex Credit: https://github.com/Filirom1/stripcolorcodes
+    fs.appendFileSync('./output.txt', string.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') + '\n', err => { //Regex Credit: https://github.com/Filirom1/stripcolorcodes
         if(err) console.log('logger function appendFileSync error: ' + err) }) 
 
     return string; } //Return String, maybe it is useful for the calling file
@@ -172,7 +172,7 @@ Manager.spawn(Manager.totalShards).catch(err => { logger("error", "controller.js
 
 /* -------------- Global refreshing/checking stuff -------------- */
 //Check if there are obsolete monitorreactions db entries
-const monitorreactions = new nedb('./bin/data/monitorreactions.db')
+const monitorreactions = new nedb('./data/monitorreactions.db')
 monitorreactions.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
     if (err) return logger("error", "controller.js", "Error loading timedbans database: " + err) 
 

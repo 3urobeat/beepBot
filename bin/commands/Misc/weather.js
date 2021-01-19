@@ -157,7 +157,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = {
     names: ["weather"],
-    description: "Shows the current weather of the provided city.",
+    description: "cmd.weather.infodescription",
     usage: "(city name)",
     accessableby: ['all'],
     allowedindm: true,

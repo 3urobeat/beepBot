@@ -1,4 +1,7 @@
 {
+    "avatarinfodescription": "Zeigt dein Profilbild oder des von dir angegebenen Nutzers.",
+
     "servericonnoicon": "Fehler: Dieser Server scheint kein Icon zu haben.",
-    "servericontitle": "Klicke hier um das Bild in deinem Browser zu öffnen"
+    "servericontitle": "Klicke hier um das Bild in deinem Browser zu öffnen",
+    "servericoninfodescription": "Zeigt das Symbolbild dieses Servers."
 }

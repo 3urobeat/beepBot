@@ -10,5 +10,7 @@
     "visibility": "Visibility",
     "temperature": "Temperature",
     "wind": "Wind",
-    "notfound": "Error: The city couldn't be found."
+    "notfound": "Error: The city couldn't be found.",
+
+    "infodescription": "Shows the current weather of the provided city."
 }

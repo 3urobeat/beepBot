@@ -9,5 +9,7 @@
     "fieldname": "Original von time (GMT Zeit)",
     "movedby": "Verschoben von author",
     "errordeletingmsg": "Fehler: Konnte Nachricht nicht löschen",
-    "errormovingmsg": "Fehler: Konnte Nachricht nicht in den Zielkanal senden"
+    "errormovingmsg": "Fehler: Konnte Nachricht nicht in den Zielkanal senden",
+
+    "infodescription": "Verschiebt eine Nachricht von jemandem in einen anderen Kanal."
 }
