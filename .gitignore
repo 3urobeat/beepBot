@@ -3,6 +3,7 @@ nodemon.json
 beepBot.code-workspace
 bin/cmduse.txt
 output.txt
+.sync.ffs_db
 sync.ffs_db
 sync.ffs_lock
 bin/commands/General/test.js

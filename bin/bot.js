@@ -202,7 +202,7 @@ var gettimefrommsg = (args, callback) => {
 /**
  * Sends a message to the modlogchannel of that guild if it has one set
  * @param {Discord.Guild} guild The guild obj
- * @param {String} action Type of action (valid: clear, kick, ban, unban, movemsg)
+ * @param {String} action Type of action
  * @param {Discord.User} author Initiator of the action
  * @param {Discord.User} reciever The affected user of the action 
  * @param {Array<String>} details Additional details
@@ -274,11 +274,18 @@ var msgtomodlogchannel = (guild, action, author, reciever, details) => {
                 msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[0] })
                 break;
             case "movemsg":
-                msg.embed.title = guildlang.general.modlogmovemsgtitle.replace("author", `${author.username}#${author.discriminator}`).replace("reciever", `${reciever.username}#${reciever.discriminator}`)
-                msg.embed.color = 65280 //green
-                msg.embed.fields.push({ name: `${guildlang.general.modlogmovemsgcontent}:`, value: details[0] })
-                msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[2] })
-                msg["files"] = details[1] //add attachments array
+                if (details[0] == "convo") { //conversation got moved
+                    msg.embed.title = guildlang.general.modlogmoveconvotitle.replace("author", `${author.username}#${author.discriminator}`).replace("amount", details[1])
+                    msg.embed.color = 65280 //green
+                    msg.embed.fields.push({ name: `${guildlang.general.channels}`, value: `<#${details[3]}> -> <#${details[4]}>` }) //originalchannel -> movechannel
+                    msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[2] })
+                } else {
+                    msg.embed.title = guildlang.general.modlogmovemsgtitle.replace("author", `${author.username}#${author.discriminator}`).replace("reciever", `${reciever.username}#${reciever.discriminator}`)
+                    msg.embed.color = 65280 //green
+                    msg.embed.fields.push({ name: `${guildlang.general.modlogmovemsgcontent}:`, value: details[1] }) //attachment is already in messagecontent
+                    msg.embed.fields.push({ name: `${guildlang.general.channels}`, value: `<#${details[3]}> -> <#${details[4]}>` }) //originalchannel -> movechannel
+                    msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[2] })
+                }
                 break;
             case "modlogmsgerr":
                 msg.embed.title = guildlang.general.modlogmsgerrtitle
