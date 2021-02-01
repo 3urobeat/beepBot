@@ -3,13 +3,19 @@
     "missingchannel": "Fehler: Bitte gib einen Zielkanal an, in den die Nachricht verschoben werden soll.",
     "channelnotfound": "Fehler: Ich konnte den Zielkanal leider nicht finden.",
     "wrongchannel": "Fehler: Die verlinkte Nachricht muss aus diesem Kanal sein.",
+    "toomanymsgs": "Fehler: Bitte versuche 25 oder weniger Nachrichten gleichzeitig zu verschieben.",
+    "tooktoolong": "Fehler: Es hat zu lange gedauert alle zu verschiebenden Nachrichten zu finden. Bitte versuche es später erneut.",
     "messagenotfound": "Fehler: Ich konnte die zu verschiebene Nachricht nicht finden!",
-    "seeattachmentbelow": "Anhang der originalen Nachricht ist oben angehängt.",
-    "title": "Verschobene Nachricht von username in channelname",
+    "seeattachment": "Anhang der originalen Nachricht ist oben angehängt.",
+    "isembed": "Nachricht beinhaltet/ist ein Embed. Titel: embedtitle",
+    "convotitle": "Verschobene Konversation aus channelname",
+    "convofieldname": "author schrieb: (time GMT)",
+    "title": "Verschobene Nachricht von username aus channelname",
+    "attachment": "Anhang",
     "fieldname": "Original von time (GMT Zeit)",
     "movedby": "Verschoben von author",
     "errordeletingmsg": "Fehler: Konnte Nachricht nicht löschen",
     "errormovingmsg": "Fehler: Konnte Nachricht nicht in den Zielkanal senden",
 
-    "infodescription": "Verschiebt eine Nachricht von jemandem in einen anderen Kanal."
+    "infodescription": "Verschiebt eine Nachricht von jemandem oder eine Unterhaltung mit bis zu 25 Nachrichten in einen anderen Kanal."
 }

@@ -3,13 +3,19 @@
     "missingchannel": "Error: Please provide a target channel where I should move the message to.",
     "channelnotfound": "Error: I sadly couldn't find the target channel.",
     "wrongchannel": "Error: The linked message must be from this channel.",
+    "toomanymsgs": "Error: Please try to move 25 or lessy messages at a time.",
+    "tooktoolong": "Error: It took too long to get all messages to move. Please try again later.",
     "messagenotfound": "Error: I couldn't find the message to move!",
-    "seeattachmentbelow": "Attachment of the original message is attached above.",
+    "seeattachment": "Attachment of the original message is attached above.",
+    "isembed": "Message contains/is an Embed. Title: embedtitle",
+    "convotitle": "Moved conversation from channelname",
+    "convofieldname": "author wrote: (time GMT)",
     "title": "Moved message from username in channelname",
+    "attachment": "Attachment",
     "fieldname": "Original message from time (GMT time)",
     "movedby": "Moved by author",
     "errordeletingmsg": "Error: Couldn't delete message",
     "errormovingmsg": "Error: Couldn't send message into target channel",
 
-    "infodescription": "Moves a message from someone to another channel."
+    "infodescription": "Moves a message from someone or a conversation up to 25 messages to another channel."
 }

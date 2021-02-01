@@ -5,30 +5,30 @@ const oldconfig = Object.assign(require("./config.json")) //get content of old c
 const url = 'https://github.com/HerrEurobeat/beepBot/archive/master.zip';
 const dontdelete = [".git", "node_modules", "data", ".eslintrc.json", "beepBot.code-workspace", "changelog.txt", "nodemon.json", "output.txt"]
 
-//Delete old files except dontdelete
-let files = fs.readdirSync("./")
+console.log("Downloading new files...")
+download(url, "./", { extract: true }).then(() => {
+    //Delete old files except dontdelete
+    let files = fs.readdirSync("./")
 
-console.log("Deleting old files...")
-files.forEach((e, i) => {
-    if (!dontdelete.includes(e)) {
-        if (fs.statSync("./" + e).isDirectory()) fs.rmdirSync("./" + e, { recursive: true })
-            else fs.unlinkSync("./" + e) }
+    console.log("Deleting old files...")
+    files.forEach((e, i) => {
+        if (!dontdelete.includes(e) && e != "beepBot-master") {
+            if (fs.statSync("./" + e).isDirectory()) fs.rmdirSync("./" + e, { recursive: true })
+                else fs.unlinkSync("./" + e) }
 
-    //Continue if finished
-    if (files.length == i + 1) {
-        console.log("Downloading new files...")
-        download(url, "./", { extract: true }).then(() => {
+        //Continue if finished
+        if (files.length == i + 1) {
 
             //Move new files out of directory
             let newfiles = fs.readdirSync("./beepBot-master")
 
             console.log("Moving new files...")
             newfiles.forEach((e, i) => {
-                fs.renameSync(`./beepBot-master/${e}`, `./${e}`)
+                if (!dontdelete.includes(e)) fs.renameSync(`./beepBot-master/${e}`, `./${e}`)
 
                 //Continue if finished
                 if (newfiles.length == i + 1) {
-                    fs.rmdirSync("./beepBot-master")
+                    fs.rmdirSync("./beepBot-master", { recursive: true })
 
                     //Update config to keep a few values from old config
                     console.log("Adding previous changes to new config...")
@@ -58,9 +58,9 @@ files.forEach((e, i) => {
                             console.log(`NPM Log:\n${stdout}`) //entire log
 
                             //Finished
-                            /* setTimeout(() => {
-                                
-                            }, 5000); */ })
+                            console.log("Finished updating. Please restart manually.") })
                     } catch (err) { console.log('update npm packages Error: ' + err) } }
-                }) })
-    } })
+                })
+        } }) })
+    .catch((err) => {
+        if (err) return console.log("Error while trying to download: " + err.stack) })
