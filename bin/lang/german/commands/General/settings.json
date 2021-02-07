@@ -30,6 +30,7 @@
     "settingsroleerror": "Fehler: Die Rolle wurde nicht gefunden oder es ist ein anderer Fehler aufgetreten.\nBitte gib die ID oder den korrekten Namen der Rolle an",
     "adminmodmemberaddroleusage": "Um der Liste eine neue Rolle hinzuzufügen/zu entfernen, benutze die Argumente\n'add (rolename/roleid)' oder 'remove (rolename/roleid)'\nUm alle Rollen zu entfernen, benutze 'removeall'.",
     "channelerror": "Fehler: Der Kanal wurde nicht gefunden oder es ist ein anderer Fehler aufgetreten.\nBitte gib die ID oder den korrekten Namen des Kanals an",
+    "channelnoperm": "Fehler: Ich habe keine Berechtigung Nachrichten in den Kanal zu senden.",
     "channelset": "Der Kanal wurde festgelegt",
     "channelremoved": "Der Kanal wurde entfernt.",
     "systemchannelusage": "Um einen Kanal als Durchsagekanal festzulegen (Beitritt/Verlassen-Nachrichten usw.), benutze das Argument 'set (channelname/channelid/channelmention)'\nUm den channel zu entfernen, benutze 'remove'.",

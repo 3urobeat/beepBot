@@ -5,7 +5,6 @@ var bootstart  = new Date()
 const Discord   = require('discord.js');
 const nedb      = require("nedb")
 const fs        = require("fs")
-const readline  = require("readline")
 
 const tokenpath = require("../../token.json")
 const asciipath = require("./ascii.js")
@@ -23,59 +22,7 @@ const constants = require("./constants.json")
  * @returns {String} The resulting String
  */
 var logger = (type, origin, str, nodate, remove) => { //Custom logger
-    var str = String(str)
-    if (str.toLowerCase().includes("error")) { var str = `\x1b[31m${str}\x1b[0m` }
-
-    //Define type
-    if (type == 'info') {
-        var typestr = `\x1b[34mINFO`
-    } else if (type == 'warn') {
-        var typestr = `\x1b[31mWARN`
-    } else if (type == 'error') {
-        var typestr = `\x1b[31m\x1b[7mERROR\x1b[0m\x1b[31m`
-    } else {
-        var typestr = '' }
-
-    //Define origin
-    if (origin != "") {
-        if (typestr == "") var originstr = `\x1b[34m${origin}`
-        else var originstr = `${origin}` 
-    } else var originstr = ''
-
-    //Add date or don't
-    if (nodate) var date = '';
-        else { //Only add date to message if it gets called at least 15 sec after bootup. This makes the startup cleaner.
-        if (new Date() - bootstart > 15000) var date = `\x1b[34m[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}]\x1b[0m `
-            else var date = '' }
-
-    //Add filers
-    var filler1 = ""
-    var filler2 = ""
-    var filler3 = ""
-
-    if (typestr != "" || originstr != "") { 
-        filler1 = "["
-        filler3 = "\x1b[0m] " }
-
-    if (typestr != "" && originstr != "") {
-        filler2 = " | " }
-
-    //Put it together
-    var string = `${filler1}${typestr}${filler2}${originstr}${filler3}${date}${str}`
-
-    //Print message with remove or without
-    if (remove) {
-        readline.clearLine(process.stdout, 0) //0 clears entire line
-        process.stdout.write(`${string}\r`)
-    } else {
-        readline.clearLine(process.stdout, 0)
-        console.log(`${string}`) }
-
-    //eslint-disable-next-line
-    fs.appendFileSync('./output.txt', string.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') + '\n', err => { //Regex Credit: https://github.com/Filirom1/stripcolorcodes
-        if(err) console.log('logger function appendFileSync error: ' + err) }) 
-
-    return string; } //Return String, maybe it is useful for the calling file
+    require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove) } //call the run function of the file which contains the code of this function
 
 /**
  * Returns a random String from an array
@@ -294,3 +241,40 @@ var tempbanloop = setInterval(() => {
         })
     })
 }, 60000); //60 seconds
+
+//X-mas avatar checker
+if (config.loginmode == "normal") {
+    let lastxmascheck = Date.now() - 21600000 //subtract 6 hours so that the first interval will already get executed
+    var currentavatar = ""
+
+    function checkavatar() {
+        if (new Date().getMonth() == "11") { //if month is December (getMonth counts from 0)
+            if (currentavatar == "xmas") return; //seems to be already set to xmas
+            
+            Manager.broadcastEval(`this.user.setAvatar("${constants.botxmasavatar}")`)
+                .then(() => { 
+                    logger("info", "controller.js", "Successfully changed avatar to xmas."); 
+                    currentavatar = "xmas" //change to xmas so that the check won't run again
+                    lastxmascheck = Date.now() })
+                .catch((err) => { //don't set currentavatar so that the check will run again
+                    logger("warn", "controller.js", "Couldn't broadcast xmas avatar change: " + err.stack) 
+                    lastxmascheck = Date.now() - 19800000 //subtract 5.5 hours so that the next check will run in half an hour
+                    return; })
+        } else {
+            if (currentavatar == "normal") return; //seems to be already set to normal
+
+            Manager.broadcastEval(`this.user.setAvatar("${constants.botdefaultavatar}")`)
+                .then(() => { 
+                    logger("info", "controller.js", "Successfully changed avatar to normal."); 
+                    currentavatar = "normal" //change to normal so that the check won't run again
+                    lastxmascheck = Date.now() })
+                .catch((err) => { //don't set currentavatar so that the check will run again
+                    logger("warn", "controller.js", "Couldn't broadcast normal avatar change: " + err.stack) 
+                    lastxmascheck = Date.now() - 19800000 //subtract 5.5 hours so that the next check will run in half an hour
+                    return; })
+        } }
+
+    var xmasloop = setInterval(() => {
+        if (lastxmascheck + 21600000 > Date.now()) return; //last change is more recent than 6 hours
+        checkavatar()
+    }, 60000) } //60 seconds
