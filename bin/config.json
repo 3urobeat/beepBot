@@ -1,7 +1,7 @@
 {
     "loginmode": "test",
     "filetostart": "./bin/controller.js",
-    "version": "BETA 3.0 b15",
+    "version": "BETA 3.0 b16",
     "status": "online",
     "gametype": "PLAYING",
     "gamerotation": [
@@ -11,6 +11,7 @@
         "I'm on ${Manager.fetchClientValues('guilds.cache.size').then(res => res.reduce((a, b) => b + a))} servers!",
         "Tip: Use the settings command to customize the bot for your server!",
         "Being a cool bot since 01.01.2017!",
+        "I have translations for ${Manager.broadcastEval('Object.keys(this.langObj).length', 0).then(res => res)} languages!",
         "Tip: You can also mention the bot instead of using a prefix!",
         "Have a nice day!"
     ],

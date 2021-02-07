@@ -158,6 +158,10 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                 message.channel.send(`${lf.supportedlang}: \n${Object.keys(bot.langObj).join("\n").split(".json").join("") }`)
             } else {
                 bot.settings.update({ guildid: guildid }, { $set: { lang: args[1].toLowerCase() }}, {}, (err) => { if (err) logDbErr(err) })
+
+                //modify all createGuild lang reactions in db to not be able to change the guild language anymore by setting enablesettingslangchange to false for *all* createGuildlang documents of that guild
+                bot.monitorreactions.update({$and: [{type: "createGuildlang"}, {guildid: message.guild.id}] }, { $set: { enablesettingslangchange: false }}, {multi: true}, (err) => {
+                    if (err) logDbErr(err) }) 
                 message.channel.send(`${bot.langObj[args[1].toLowerCase()].cmd.settings.newlangsaved}.`) }
             break;
         case "adminroles":

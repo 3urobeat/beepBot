@@ -1,7 +1,7 @@
 {
     "settings": "Settings",
     "helpprefixset": "Sets the bot's prefix for this server.",
-    "helplangset": "Sets the language for this server. (Tip: Leave out the language to list all supported languages.)",
+    "helplangset": "Sets the language for this server. (Tip: Leave out the language argument to list all supported languages.)",
     "helpadminrolesset": "Adds, removes or removes all roles that have access to admin features of the bot.",
     "helpmodrolesset": "Adds, removes or removes all roles that have access to moderator features of the bot.",
     "helpsystemchannelset": "Sets the channel for broadcast (e.g. user-join/leave) messages.",
@@ -11,7 +11,7 @@
     "helpbyemsgset": "Sets the message that will be sent in the systemchannel when a user leaves the server.",
     "helpjoinrolesset": "Adds, removes or removes all roles a new user will get when joining the server.",
     "helpsettingsreset": "Resets your settings.",
-    "helpadvice": "Tip: Type the command but leave out any argument to see a detailed help message about that setting.\ne.g. prefixsettings greetmsg",
+    "helpadvice": "Tip: Type the command but leave out any argument to see a detailed help message about that setting.\ne.g. `prefixsettings greetmsg`",
 
     "rolename": "role name",
     "roleid": "role id",

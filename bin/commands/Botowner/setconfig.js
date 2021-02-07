@@ -53,7 +53,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
     names: ["setconfig"], //Array<String> with all aliases
-    description: "lang.cmd.otherbotowner.setconfiginfodescription", //Path to lang file entry (example: "cmd.othergeneral.pinginfodescription")
+    description: "cmd.otherbotowner.setconfiginfodescription", //Path to lang file entry (example: "cmd.othergeneral.pinginfodescription")
     usage: '[config value] [new value]',
     accessableby: ['botowner'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,

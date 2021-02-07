@@ -13,7 +13,7 @@ const configpath = "./config.json"
 const config     = require(configpath)
 const constants  = require("./constants.json")
 
-const bot = new Discord.Client()
+const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] }) //partials are messages that are not fully cached and have to be fetched manually
 var   fn  = {} //object that will contain all functions to be accessible from commands
 
 bot.config    = config //I'm just gonna add it to the bot object as quite a few cmds will probably need the config later on
@@ -108,13 +108,13 @@ var lang = (guildid, guildsettings) => {
  * @param {Boolean} removeentry Removes the guild from the database
  */
 var servertosettings = (guild, removeentry) => {
-    if (!guild.id) return logger("error", "bot.js", "Can't write guild to settings because guild id is undefined!"); //missing guildid will make entry unuseable
-
     //if removeentry is true just remove entry and stop further execution
     if (removeentry) {
         logger("info", "bot.js", `removeentry: Removing ${guild.id} from settings database...`, false, true)
-        settings.remove({ guildid: guild.id }, (err) => { if (err) logger("error", "bot.js", `servertosettings error removing guild ${guild.id}: ${err}`)
-        return; }) }
+        settings.remove({ guildid: guild.id }, (err) => { if (err) logger("error", "bot.js", `servertosettings error removing guild ${guild.id}: ${err}`) })
+        return; }
+
+    if (!guild.id) return logger("error", "bot.js", "Can't write guild to settings because guild id is undefined!"); //missing guildid will make entry unuseable
 
     settings.findOne({ guildid: guild.id }, (err, data) => {
         //adding prefix to server nickname
@@ -297,11 +297,11 @@ var msgtomodlogchannel = (guild, action, author, reciever, details) => {
                 return logger("error", "bot.js", "msgtomodlogchannel unsupported action: " + action);
         }
 
-        if (!guild.members.cache.get(bot.user.id).permissions.has("ADD_REACTIONS")) msg.embed.footer.text = guildlang.general.modlognoaddreactionsperm //change footer text
+        if (!guild.channels.cache.get(guildsettings.modlogchannel).permissionsFor(bot.user).has("ADD_REACTIONS")) msg.embed.footer.text = guildlang.general.modlognoaddreactionsperm //change footer text
 
         guild.channels.cache.get(guildsettings.modlogchannel).send(msg)
             .then((msg) => { //don't need to ask shard manager
-                msg.react("🗑️") //doesn't work yet
+                msg.react("🗑️")
                     .then(res => { 
                         //add res to monitorreactions db
                         monitorreactions.insert({ type: "modlog", msg: res.message.id, reaction: res._emoji.name, guildid: guild.id, allowedroles: guildsettings.adminroles, until: Date.now() + 31557600000 }, (err) => { if (err) logger("error", "bot.js", "Error inserting modlogmsg reaction to db: " + err) }) //message also contains guild and timestamp | 31557600000 ms = 12 months
@@ -434,6 +434,7 @@ const monitorreactions = new nedb('./data/monitorreactions.db') //initialise dat
 monitorreactions.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading monitorreactions database. Error: " + err)
     logger("info", "bot.js", "Successfully loaded monitorreactions database.", false, true) }); //load db content into memory
+bot.monitorreactions = monitorreactions; //add reference to bot obj
 
 /* ------------ Startup: ------------ */
 bot.on("ready", async function() {
@@ -463,17 +464,63 @@ bot.on("ready", async function() {
 
 /* ------------ Event Handlers: ------------ */
 bot.on("guildCreate", guild => {
-    servertosettings(bot, guild)
+    servertosettings(guild)
     logger('info', 'bot.js', `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount-1} other members!`)
     
-    //welcome message mit help link und settings setup aufforderung
+    //get suitable channel to post welcome message to
+    let welcomechannel = null
+
+    if (guild.systemChannelID) welcomechannel = guild.systemChannelID //then check if guild has a systemChannel set
+        else {
+            //well then try and get the first channel (rawPosition) where the bot has permissions to send a message
+            //get all text channels into array and sort them by ascending rawPositions
+            let textchannels = guild.channels.cache.filter(c => c.type == "text").sort((a, b) => a.rawPosition - b.rawPosition)
+            welcomechannel = textchannels.find(c => c.permissionsFor(bot.user).has("SEND_MESSAGES")).id } //find the first channel with perms
+
+    //check react permission
+    if (!guild.channels.cache.get(welcomechannel).permissionsFor(bot.user).has("ADD_REACTIONS")) var footertext = bot.langObj["english"].general.botaddfooternoreactperm //can't react footer text
+        else var footertext = bot.langObj["english"].general.botaddfooter
+
+    //if no channel was found try to contact the guild owner
+    if (!welcomechannel) {
+        guild.owner.send({embed: {
+            title: bot.langObj["english"].general.botaddtitle,
+            description: bot.langObj["english"].general.botadddesc + bot.langObj["english"].general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
+            thumbnail: { url: bot.user.displayAvatarURL() },
+            footer: {
+                text: footertext }
+        } })
+            .then((msg) => { langreact(msg) })
+            .catch((err) => { logger("warn", "bot.js", "Failed to send owner welcome msg on createGuild: " + err) })
+    } else {
+        guild.channels.cache.get(welcomechannel).send({embed: {
+            title: bot.langObj["english"].general.botaddtitle,
+            description: bot.langObj["english"].general.botadddesc + bot.langObj["english"].general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
+            thumbnail: { url: bot.user.displayAvatarURL() },
+            footer: {
+                text: footertext }
+        } })
+            .then((msg) => { langreact(msg) })
+            .catch((err) => { logger("warn", "bot.js", "Failed to send owner welcome msg on createGuild: " + err) })
+    }
+
+    function langreact(msg) {
+        if (!guild.channels.cache.get(welcomechannel).permissionsFor(bot.user).has("ADD_REACTIONS")) return; //stop right here if the bot doesn't have permission to add reactions in this channel
+
+        Object.keys(bot.langObj).forEach((e, i) => {
+            setTimeout(() => {
+                msg.react(bot.langObj[e]["general"]["langemote"]).then((res) => {
+                    bot.monitorreactions.insert({ type: "createGuildlang", msg: res.message.id, reaction: res._emoji.name, guildid: guild.id, channelid: res.message.channel.id, enablesettingslangchange: true, until: Date.now() + 2629800000 }, (err) => { if (err) logger("error", "bot.js", "Error inserting guildCreate language reactions to db: " + err) }) //time is 1 month
+                }).catch((err) => { logger("warn", "bot.js", `Error trying to react with ${bot.langObj[e]["general"]["langemote"]} to createGuild welcome message: ${err}`) })
+            }, i * 250); //delay each reaction by 250ms to avoid a cooldown
+        }) }
 })
 
 bot.on("guildDelete", async guild => {
     bot.shard.fetchClientValues("guilds.cache.size").then(res => { //wait for promise
         logger('info', 'bot.js', `I have been removed from: ${guild.name} (${guild.id}). I'm now in ${res} servers.`) })
 
-    servertosettings(guild.id, true) }); //true argument will remove function from db
+    servertosettings(guild, true) }); //true argument will remove function from db
 
 bot.on("guildMemberAdd", member => {
     //take care of greetmsg
@@ -509,20 +556,54 @@ bot.on("guildMemberRemove", member => {
 })
 
 bot.on("messageReactionAdd", (reaction, user) => {
-    monitorreactions.findOne({ reaction: reaction._emoji.name }, (err, doc) => {
+    //Fetch a reaction if it is a partial to be able to work with messages that were sent before the bot was started
+    if (reaction.partial) {
+        logger("info", "bot.js", `Fetching a partial reaction in messageReactionAdd event... ID: ${reaction.message.id}`, false, true)
+        reaction.fetch()
+            .then(() => { logger("info", "bot.js", `Successfully fetched ${reaction.message.id}.`, false, true) })
+            .catch((err) => { return logger("error", "bot.js", `Couldn't fetch ${reaction.message.id}! Error: ${err}`) }) }
+
+    if (reaction.me) return; //ignore reactions by the bot itself
+
+    monitorreactions.findOne({ $and: [{msg: reaction.message.id}, {reaction: reaction._emoji.name}] }, (err, doc) => { //id and reaction itself must match
         if (!doc) return;
         if (err) return logger("error", "bot.js", "messageReactionAdd Event: Error searching in db: " + err)
         
         switch (doc.type) {
-            case "modlog":
+            case "modlog": //for wastebasket reaction on modlog messages
                 if (doc.allowedroles.filter(element => reaction.message.guild.members.cache.get(user.id).roles.cache.has(element)).length > 0 || user.id == reaction.message.guild.owner.id) { //either user has role or is owner of guild
                     reaction.message.delete()
                         .then(() => {
                             monitorreactions.remove({ reaction: reaction._emoji.name }, {}, (err) => { 
-                                if (err) logger("error", "bot.js", `messageReactionAdd Event: Error removing ${reaction._emoji.name} from db after deleting msg: ${err}`) })
+                                if (err) logger("error", "bot.js", `messageReactionAdd Event: Error removing ${reaction._emoji.name} of msg ${reaction.message.id} from db after deleting msg: ${err}`) })
                             return; })
                         .catch(err => { reaction.message.channel.send(`Error deleting message: ${err}`) }) 
                 } else return;
+                break;
+            case "createGuildlang": //for language reactions on createGuild welcome message
+                var requestedlang = {}
+                var requestedlangname = ""
+
+                Object.keys(bot.langObj).every((e) => {
+                    if (bot.langObj[e]["general"]["langemote"] == reaction._emoji.name) { 
+                        requestedlang = bot.langObj[e]
+                        requestedlangname = e
+                        return false; //stops loop
+                    } else return true; }) //continues with next iteration
+
+                //uhh this next line shouldn't trigger
+                if (Object.keys(requestedlang).length == 0) return logger("warn", "bot.js", "I could't find a language to a createGuildlang reaction. :/ Emote: " + reaction._emoji.name)
+                
+                bot.channels.cache.get(doc.channelid).messages.cache.get(doc.msg).edit({embed: {
+                    title: requestedlang.general.botaddtitle,
+                    description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
+                    thumbnail: { url: bot.user.displayAvatarURL() },
+                    footer: {
+                        text: requestedlang.general.botaddfooter }
+                } }).then(() => { reaction.users.remove(user).catch(() => {}) }) //catch but ignore error
+
+                //if the user didn't change the lang using the settings cmd we are still allowed to do that automatically to bring in some "magic"! (I feel like Apple rn lol)
+                if (doc.enablesettingslangchange) settings.update({ guildid: doc.guildid }, { $set: { lang: requestedlangname }}, {}, () => { }) //catch but ignore error
                 break;
             default:
                 return logger("error", "bot.js", "Invalid monitorreactions type in db! Fix this please: " + doc.type);
@@ -532,11 +613,18 @@ bot.on("messageReactionAdd", (reaction, user) => {
 
 /* ------------ Message Handler: ------------ */
 bot.on('message', (message) => {
+    //Fetch a message if it is a partial message to avoid errors
+    if (message.partial) {
+        logger("info", "bot.js", `Fetching a partial message in message event... ID: ${message.id}`, false, true)
+        message.fetch()
+            .then(() => { logger("info", "bot.js", `Successfully fetched ${message.id}.`, false, true) })
+            .catch((err) => { return logger("error", "bot.js", `Couldn't fetch ${message.id}! Error: ${err}`) }) }
+
     if (message.author.bot) return;
     if (message.channel.type == "text") var thisshard = message.guild.shard //Get shard instance of this shard with this "workaround" because it isn't directly accessabl
         else var thisshard = 0 //set shard id to 0 to prevent errors for example when texting in DM
 
-    //if (message.guild.id != "232550371191554051" && message.guild.id != "331822220051611648") return; //don't respond to other guilds when testing with normal loginmode (for testing)
+    //if (message.guild.id != "232550371191554051" && message.guild.id != "331822220051611648" && message.guild.id != "643117199791226880") return; //don't respond to other guilds when testing with normal loginmode (for testing)
     if (message.channel.type == "text" && config.loginmode == "test") logger("info", "bot.js", `Shard ${thisshard.id}: ${message}`) //log messages when testing
 
     //Confuse the db searching into finding nothing but not throwing an error when the channel is a dm
