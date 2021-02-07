@@ -147,6 +147,7 @@ Manager.on('shardCreate', (shard) => {
             if (Manager.totalShards == "auto") logger("", "", `> ShardManager is running in automatic mode...`)
                 else logger("", "", `> ShardManager is running with ${Manager.totalShards} shards...`)
 
+            //too lazy to use a switch case for 3 if statements
             if (config.status == "online") var configstatus = "\x1b[32monline\x1b[0m"
             if (config.status == "idle")   var configstatus = "\x1b[33midle\x1b[0m"
             if (config.status == "dnd")    var configstatus = "\x1b[91mdnd\x1b[0m"

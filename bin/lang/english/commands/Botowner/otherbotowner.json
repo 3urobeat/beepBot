@@ -18,5 +18,5 @@
     "setpresenceinvalidstatus": "Error: Your status seems to be invalid. Valid options:",
     "setpresenceinvalidgametype": "Error: Your gametype seems to be invalid. Valid options:",
     "setpresenceupdated": "Presence updated successfully.",
-    "setpresenceinfodescription": "Overwrite the current presence of the bot."
+    "setpresenceinfodescription": "Overwrites the current presence of the bot."
 }

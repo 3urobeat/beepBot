@@ -14,9 +14,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             message.channel.send("Error: " + err) })
     } catch (err) {
         message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
-        message.react("❌")
+        message.react("❌").catch(() => { }) //catch but ignore error
         return; }
-    message.react("✅")
+    message.react("✅").catch(() => { }) //catch but ignore error
 }
 
 module.exports.info = {

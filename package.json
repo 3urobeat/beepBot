@@ -4,14 +4,13 @@
   "description": "beepBot - 24/7 online, customizeable, feature rich & scaleable Discord Bot.",
   "main": "start.js",
   "dependencies": {
-    "adm-zip": "^0.5.1",
     "discord.js": "^12.5.1",
     "download": "^8.0.0",
     "lodash": "^4.17.20",
     "nedb": "^1.8.0",
     "node-fetch": "^2.6.1",
     "superagent": "^6.1.0",
-    "systeminformation": "^4.34.5"
+    "systeminformation": "^4.34.9"
   },
   "scripts": {
     "start": "node start.js"
@@ -24,6 +23,6 @@
   "homepage": "https://github.com/HerrEurobeat",
   "repository": "https://github.com/HerrEurobeat/beepBot",
   "devDependencies": {
-    "eslint": "^7.17.0"
+    "eslint": "^7.19.0"
   }
 }

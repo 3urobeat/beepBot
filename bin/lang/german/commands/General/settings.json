@@ -1,7 +1,7 @@
 {
     "settings": "Einstellungen",
     "helpprefixset": "Stellt den Befehl-Prefix des Bots für diesen Server ein.",
-    "helplangset": "Stellt die Sprache für diesen Server ein. (Tipp: Keine Sprache angeben um alle unterstützten Sprachen anzuzeigen.)",
+    "helplangset": "Stellt die Sprache für diesen Server ein. (Tipp: Gib keine Sprache an um alle unterstützten Sprachen anzuzeigen.)",
     "helpadminrolesset": "Fügt hinzu, entfernt oder entfernt alle Rollen, die auf Zugriff auf Admin-Funktionen des Bots haben.",
     "helpmodrolesset": "Fügt hinzu, entfernt oder entfernt alle Rollen, die auf Zugriff auf Moderator-Funktionen des Bots haben.",
     "helpsystemchannelset": "Setzt den Kanal für Durchsagen (z.B. Beitritt-Begrüßungs-Nachrichten) fest.",
@@ -11,7 +11,7 @@
     "helpbyemsgset": "Setzt die Nachricht fest, die im Kanal für Durchsagen gesendet wird, wenn ein Nutzer den Server verlässt.",
     "helpjoinrolesset": "Fügt hinzu, entfernt oder entfernt alle Rollen, die ein neuer Nutzer zugewiesen bekommt.",
     "helpsettingsreset": "Setzt deine Einstellungen zurück.",
-    "helpadvice": "Tipp: Wenn du einen Befehl benutzt, aber kein Argument angibst, bekommst du eine detaillierte Hilfe Nachricht zu der bestimmten Einstellung.\nz.B. prefixsettings greetmsg",
+    "helpadvice": "Tipp: Wenn du einen Befehl benutzt, aber kein Argument angibst, bekommst du eine detaillierte Hilfe Nachricht zu der bestimmten Einstellung.\nz.B. `prefixsettings greetmsg`",
 
     "rolename": "Rollenname",
     "roleid": "Rollen-ID",

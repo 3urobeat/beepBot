@@ -1,5 +1,6 @@
 {
     "thislang": "Deutsch",
+    "langemote": "🇩🇪",
     "languageauthor": ["3urobeat"],
     "language": "Sprache",
     "message": "Nachricht",
@@ -34,6 +35,12 @@
     "modlognoaddreactionsperm": "Der Bot hat keine Berechtigung auf diese Nachricht eine Reaktion hinzufügen.",
 
     "imagehyperlink": "Bild lädt nicht? Klick hier!",
+
+    "botaddtitle": "Danke, dass du mich zu deinem Server hinzugefügt hast!",
+    "botadddesc": "Es gibt noch ein paar Kleinigkeiten zu erledigen.\nBitte bewege in den Servereinstellungen die von mir erstellte Rolle 'beepBot' ganz nach oben, damit du alle meine Funktionen benutzen kannst.\n",
+    "botadddesc2": "\nNachdem du dies getan hast, tippe `prefixsettings` und konfiguriere meine Einstellungen nach deinem Belieben.\nUm eine Anleitung zu bekommen, wie der Befehl zu nutzen ist, tippe `prefixsettings help`.\nNun bist du bereit alle meine Befehle zu begutachten, indem du `prefixhelp` schreibst!\n\nViel Spaß!",
+    "botaddfooter": "Du kannst auf eine der Flaggen reagieren, um die Sprache dieser Nachricht zu ändern!",
+    "botaddfooternoreactperm": "Note: Only needed in English language.",
 
     "nsfwonlyerror": "🔞 Dieser Befehl kann nur in einem NSFW-Kanal genutzt werden!",
     "owneronlyerror": ["Dieser Befehl ist nur dem Botowner gestattet. Was hast du erwartet?!","Du bist nicht der Botowner.","Ich bin nicht dumm.","Ich bin sicher. Sicher wie sonst was.","Die Security lässt dich nicht rein.","Hab dich! Du wirst niemandem Schaden zufügen!"],

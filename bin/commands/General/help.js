@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 embed: {
                     title: `${lf.help} - ${cmd.info.names[0]}`,
                     color: fn.randomhex(),
-                    description: `${cmd.info.description}`,
+                    description: `${require("lodash").get(lang, cmd.info.description)}`, //lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!,
                     fields: [{
                         name: `${lf.aliases}:`,
                         value: cmdaliases.join(", "),
@@ -78,7 +78,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (e.info.thisisanalias == true) return;
             
             //Add command to existing Category Array
-            unsortedcategories[e.info.category].push(`\`${guildsettings.prefix}${e.info.names[0]}\` - ${require("lodash").get(lang, e.info.description)}`)
+            unsortedcategories[e.info.category].push(`\`${guildsettings.prefix}${e.info.names[0]}\` - ${require("lodash").get(lang, e.info.description)}`) //lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
         });
 
         //Sort Object by order defined in config
