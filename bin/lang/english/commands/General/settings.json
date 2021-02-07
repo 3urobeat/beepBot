@@ -30,6 +30,7 @@
     "settingsroleerror": "Error: The role couldn't be found or another error occured.\nPlease provide the correct ID or name of the role",
     "adminmodmemberaddroleusage": "To add a role to the list use the argument\n'add (rolename/roleid)' or 'remove (rolename/roleid)'\nTo remove all roles, use 'removeall'.",
     "channelerror": "Error: The channel couldn't be found or another error occured.\nPlease provide the correct ID or name of the channel",
+    "channelnoperm": "Error: I don't have permission to send messages into that channel.",
     "channelset": "The channel has been set",
     "channelremoved": "The channel has been removed.",
     "systemchannelusage": "To save a channel for broadcasts (join/leave messages etc.) use the argument 'set (channelname/channelid/channelmention)'\nTo remove the channel, use 'remove'.",

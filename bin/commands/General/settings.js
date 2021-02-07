@@ -239,6 +239,9 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                         } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args[2].toLowerCase()).id } //not a channelid so try and find by name (channelnames can't have spaces so no need to join array)
                     } catch (err) { return message.channel.send(`${lf.channelerror}.\n||\`${err}\`||`) }
 
+                    //check if the bot has permissions to send messages to that channel
+                    if (!message.guild.channels.cache.get(channelid).permissionsFor(bot.user).has("SEND_MESSAGES")) return message.channel.send(lf.channelnoperm)
+
                     bot.settings.update({ guildid: guildid }, { $set: { systemchannel: channelid }}, {}, (err) => { if (err) logDbErr(err) })
                     message.channel.send(`${lf.channelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
                     break;
@@ -262,6 +265,9 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                             var channelid = args[2].toString().replace(/[<#>]/g, "")
                         } else { var channelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args[2].toLowerCase()).id } //not a channelid so try and find by name (channelnames can't have spaces so no need to join array)
                     } catch (err) { return message.channel.send(`${lf.channelerror}.\n||\`${err}\`||`) }
+
+                    //check if the bot has permissions to send messages to that channel
+                    if (!message.guild.channels.cache.get(channelid).permissionsFor(bot.user).has("SEND_MESSAGES")) return message.channel.send(lf.channelnoperm)
 
                     bot.settings.update({ guildid: guildid }, { $set: { modlogchannel: channelid }}, {}, (err) => { if (err) logDbErr(err) })
                     message.channel.send(`${lf.channelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
