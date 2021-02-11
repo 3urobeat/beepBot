@@ -52,7 +52,7 @@ module.exports.run = (bot, logger, guild, action, author, reciever, details) => 
                 msg.embed.color = 16711680 //red
                 msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[0] })
                 msg.embed.fields.push({ name: `${guildlang.general.details}:`, 
-                                        value: `${guildlang.general.banlength}${details[1]}
+                                        value: `${guildlang.general.length}: ${details[1]}
                                                 ${guildlang.general.modloguserwasnotified}${String(details[2]).replace("true", "✅").replace("false", "❌")}` 
                                     })
                 break;
@@ -80,6 +80,30 @@ module.exports.run = (bot, logger, guild, action, author, reciever, details) => 
                     msg.embed.fields.push({ name: `${guildlang.general.channels}`, value: `<#${details[3]}> -> <#${details[4]}>` }) //originalchannel -> movechannel
                     msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[2] })
                 }
+                break;
+            case "mute":
+                if (details[0] == "all") details[0] = "voice, chat" //change term to make it more understandable
+ 
+                msg.embed.title = guildlang.general.modlogmutetitle.replace("author", `${author.username}#${author.discriminator}`).replace("reciever", `${reciever.username}#${reciever.discriminator}`)
+                msg.embed.color = 16753920 //orange
+                msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[1] })
+                msg.embed.fields.push({ name: `${guildlang.general.details}:`, 
+                                        value: `${guildlang.general.where}: ${details[0]}
+                                                ${guildlang.general.length}: ${details[2]}
+                                                ${guildlang.general.modloguserwasnotified}${String(details[3]).replace("true", "✅").replace("false", "❌")}` 
+                                    })
+                break;
+            case "unmute":
+                msg.embed.title = guildlang.general.modlogunmutetitle.replace("reciever", `${reciever.username}#${reciever.discriminator}`)
+                msg.embed.color = 65280 //green
+                msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[1] })
+                if (details[0] == "manual") msg.embed.fields.push({ name: `${guildlang.general.modlogunmutedby}:`, value: `${author.username}#${author.discriminator}` }) //we only care about this information if the unmute was executed by the unmute cmd
+                break;
+            case "unmuteerr":
+                msg.embed.title = guildlang.general.modlogunmuteerrtitle.replace("reciever", `${reciever.username}#${reciever.discriminator}`)
+                msg.embed.color = 14725921 //some orange mixture
+                msg.embed.fields.push({ name: `${guildlang.general.error}:`, value: details[1] })
+                msg.embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[0] })
                 break;
             case "modlogmsgerr":
                 msg.embed.title = guildlang.general.modlogmsgerrtitle

@@ -49,6 +49,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         var commandsObj = bot.commands.array()
         var unsortedcategories = {}
         var sortedcategories = {}
+        var commandcount = 0
 
         //Pre-configure message
         msg = { 
@@ -56,7 +57,6 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 title: `${lf.help} - ${lf.commandlist}`,
                 color: fn.randomhex(),
                 thumbnail: { url: bot.user.avatarURL() },
-                description: `__${lf.overviewofxcmds.replace("commandcount", `**${bot.commandcount}**`)}__:\n${lf.detailedcommandinfo.replace("prefix", guildsettings.prefix)}`,
                 fields: [],
                 footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username}` },
                 timestamp: Date.now()
@@ -76,10 +76,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             //Check if this iteration is an alias cmd by checking this value that was added in the cmd reading process
             if (e.info.thisisanalias == true) return;
+
+            //Count!
+            commandcount++
             
             //Add command to existing Category Array
             unsortedcategories[e.info.category].push(`\`${guildsettings.prefix}${e.info.names[0]}\` - ${require("lodash").get(lang, e.info.description)}`) //lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
         });
+
+        //Put counted commands into description
+        msg.embed.description = `__${lf.overviewofxcmds.replace("commandcount", `**${commandcount}**`)}__:\n${lf.detailedcommandinfo.replace("prefix", guildsettings.prefix)}`
 
         //Sort Object by order defined in config
         bot.config.helpcategoryorder.forEach((e) => {

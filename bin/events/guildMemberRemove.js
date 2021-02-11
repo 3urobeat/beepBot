@@ -10,6 +10,9 @@ module.exports.run = (bot, member) => {
         msgtosend = msgtosend.replace("username", member.user.username)
         msgtosend = msgtosend.replace("servername", member.guild.name)
 
-        member.guild.channels.cache.get(String(guildsettings.systemchannel)).send(msgtosend).catch(() => {}) //catch but ignore error
+        let channel = member.guild.channels.cache.get(String(guildsettings.systemchannel))
+        
+        if (!channel) return;
+        channel.send(msgtosend).catch(() => {}) //catch but ignore error
     })
 }

@@ -24,7 +24,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         kickreason, kickreasontext = newargs.slice(1).join(" ")
     } else { 
         kickreasontext = "/" 
-        kickreason = "" }
+        kickreason = undefined }
 
     //Checks user perms and kick
     if (message.member.permissions.has("KICK_MEMBERS", "ADMINISTRATOR")) {

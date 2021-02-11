@@ -210,6 +210,12 @@ timedbans.loadDatabase((err) => {
     logger("info", "bot.js", "Successfully loaded timedbans database.", false, true) }); //load db content into memory
 bot.timedbans = timedbans; //add reference to bot obj
 
+const timedmutes = new nedb('./data/timedmutes.db') //initialise database
+timedmutes.loadDatabase((err) => {
+    if (err) return logger("error", "bot.js", "Error loading timedmutes database. Error: " + err)
+    logger("info", "bot.js", "Successfully loaded timedmutes database.", false, true) }); //load db content into memory
+bot.timedmutes = timedmutes; //add reference to bot obj
+
 const monitorreactions = new nedb('./data/monitorreactions.db') //initialise database
 monitorreactions.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading monitorreactions database. Error: " + err)
@@ -246,7 +252,7 @@ bot.on("ready", async function() {
 bot.on("guildCreate", guild => {
     require("./events/guildCreate.js").run(bot, logger, guild) }) //call the run function of the file which contains the code of this event
 
-bot.on("guildDelete", async guild => {
+bot.on("guildDelete", guild => {
     bot.shard.fetchClientValues("guilds.cache.size").then(res => { //wait for promise
         logger('info', 'bot.js', `I have been removed from: ${guild.name} (${guild.id}). I'm now in ${res} servers.`) })
 
@@ -260,6 +266,9 @@ bot.on("guildMemberRemove", member => {
 
 bot.on("messageReactionAdd", (reaction, user) => {
     require("./events/messageReactionAdd.js").run(bot, logger, reaction, user) }) //call the run function of the file which contains the code of this event
+
+bot.on("voiceStateUpdate", (oldstate, newstate) => {
+    require("./events/voiceStateUpdate.js").run(bot, oldstate, newstate) })
 
 /* ------------ Message Handler: ------------ */
 bot.on('message', (message) => {

@@ -1,0 +1,16 @@
+{
+    "rolecreatereason": "Benötigte Rolle um Nutzer im Chat stummschalten zu können.",
+    "rolechannelpermreason": "Nötige Änderung sodass es einem stummgeschalteten Nutzer nicht möglich ist Nachrichten zu senden und zu reagieren.",
+    "rolechannelpermerror": "Es war mir leider nicht möglich die Berechtigungen der 'beepBot Muted' Rolle in allen Kanälen zu ändern.\nDu kannst das Problem beheben, indem du meine Berechtigungen überprüfst und den Befehl erneut ausführst.",
+    "rolecreateerror": "Ich konnte leider nicht die 'beepBot Muted' Rolle erstellen.",
+    "invalidargs": "Fehler: Es scheinen Argumente in deinem Befehl falsch zu sein oder zu fehlen.\nBitte folge dem Schema wie er in der detaillierten Hilfe angegeben ist: `prefixhelp mute`",
+    "botmute": ["Stopp genau da Krimineller", "Was hälst du von Nein?", "Entschuldigung aber *so* doof bin ich nun wirklich nicht.", "Das werde ich bestimmt nicht tun.", "Nein, vergiss es."],
+    "selfmute": "Du kannst dich nicht selber stummschalten.",
+    "roleadderror": "Fehler: Ich konnte muteuser die 'beepBot Muted' Rolle nicht geben!",
+    "voicemuteerror": "Fehler: Ich konnte muteuser nicht im Sprachchat stummschalten!",
+    "tempmutemsg": "username wurde für timetext stummgeschaltet. Begründung: mutereasontext",
+    "permmutemsg": "username wurde permanent stummgeschaltet. Begründung: mutereasontext",
+    "mutenotifymsg": "Du wurdest auf **servername** stummgeschaltet.\nBegründung: mutereasontext\nDauer: timetext",
+
+    "infodescription": "Schaltet einen Nutzer im Chat und/oder im Sprachkanal stumm. Unterstützt temporäre Stummschaltungen und Benachrichtigungen."
+}

@@ -52,4 +52,28 @@ module.exports.run = (bot, logger, guild) => { //eslint-disable-line
                 }).catch((err) => { logger("warn", "guildCreate.js", `Error trying to react with ${bot.langObj[e]["general"]["langemote"]} to createGuild welcome message: ${err}`) })
             }, i * 250); //delay each reaction by 250ms to avoid a cooldown
         }) }
+
+    //Ensure that @everyone hasn't manage role enabled so that users can't remove the muted role from them
+    guild.updateOverwrite(guild.id, { MANAGE_ROLES: false }, "Needed so that users are unable to remove the beepBot Muted role from their own roles.") //doesn't work yet
+
+    //Create beepBot Muted role (this code is used again in mute.js)
+    guild.roles.create({
+        data: {
+            name: "beepBot Muted",
+            color: "#99AAB5",
+            permissions: [] },
+        reason: "Role needed to chat-mute users using the mute command." 
+    })
+        .then((role) => { //after creating role change permissions of every text channel
+            var errormsgsent = false
+
+            guild.channels.cache.forEach((channel) => {
+                if (channel.type != "text") return;
+
+                channel.updateOverwrite(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, "Needed change so that a muted user will be unable to send and react to messages.")
+                    .catch((err) => { 
+                        if (!errormsgsent) guild.channels.cache.get(welcomechannel).send(`I was sadly unable to change the permissions of the 'beepBot Muted' role in all channels.\nYou can fix this by checking/correcting my permissions and then running the mute command once.\nError: ${err}`) //message can technically only be in English - also: send this message only once
+                    }) }) 
+        })
+        .catch((err) => { guild.channels.cache.get(welcomechannel).send(`I was unable to create the 'beepBot Muted' role.\nError: ${err}`) }) //message can only be in English and shouldn't even occurr because the permission is already included in the invite link (same with the error above but you never know)
 }
