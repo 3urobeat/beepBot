@@ -190,9 +190,9 @@ var gamerotationloop = setInterval(() => {
 //Unban checker
 const timedbans = new nedb('./data/timedbans.db') //initialise database
     
-let lastTempBanCheck = Date.now() //this is useful because intervals can get very unprecise over time
+let lastTempBanCheck = Date.now() //this is useful because intervals can get unprecise over time
 var tempbanloop = setInterval(() => {
-    if (lastTempBanCheck + 60000 > Date.now()) return; //last change is more recent than 60000
+    if (lastTempBanCheck + 10000 > Date.now()) return; //last check is more recent than 10 seconds
 
     timedbans.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
         if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
@@ -204,43 +204,101 @@ var tempbanloop = setInterval(() => {
             Manager.broadcastEval(`
                 let guild = this.guilds.cache.get("${e.guildid}")
                 if (guild) {
-                    this.settings.findOne({ guildid: guild.id }, (err, gs) => { //gs: guildsettings
-                        guild.members.unban("${e.userid}")
-                            .then(res => {
-                                //Add ids as fallback option for msgtomodlogchannel
-                                var authorobj = guild.members.cache.get("${e.authorid}") //try to populate obj with actual data
-                                var recieverobj = res
+                    //Add ids as fallback option for msgtomodlogchannel
+                    var authorobj = guild.members.cache.get("${e.authorid}") //try to populate obj with actual data
+                    var recieverobj = guild.members.cache.get("${e.userid}")
 
-                                if (!authorobj) authorobj = {} //set blank if check failed
-                                if (!recieverobj) recieverobj = {}
-                                authorobj["userid"] = ${e.authorid} //add id as fallback should getting actual data failed
-                                recieverobj["userid"] = ${e.userid}
+                    if (!authorobj) authorobj = {} //set blank if check failed
+                    if (!recieverobj) recieverobj = {}
+                    authorobj["userid"] = ${e.authorid} //add id as fallback should getting actual data failed
+                    recieverobj["userid"] = ${e.userid}
 
-                                this.fn.msgtomodlogchannel(guild, "unban", authorobj, recieverobj, ["${e.banreason}"]) //res is a user object
-                            })
-                            .catch(err => {
-                                //Add ids as fallback option for msgtomodlogchannel
-                                var authorobj = guild.members.cache.get("${e.authorid}") //try to populate obj with actual data
-                                var recieverobj = guild.members.cache.get("${e.userid}")
+                    this.timedbans.remove({$and: [{ userid: "${e.userid}" }, { guildid: "${e.guildid}" }] }, (err => { if (err) logger("error", "controller.js", "Error removing ${e.userid} from timedbans: " + err) }))
 
-                                if (!authorobj) authorobj = {} //set blank if check failed
-                                if (!recieverobj) recieverobj = {}
-                                authorobj["userid"] = ${e.authorid} //add id as fallback should getting actual data failed
-                                recieverobj["userid"] = ${e.userid}
+                    guild.members.unban("${e.userid}")
+                        .then(res => {
+                            if (Object.keys(res).length > 1) recieverobj = res //overwrite recieverobj if we actually have data from the unban response
 
-                                if (err != "DiscordAPIError: Unknown Ban") return this.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, recieverobj, ["${e.banreason}", err]) //if unknown ban ignore, user has already been unbanned
-                            })
-                    })
-
+                            this.fn.msgtomodlogchannel(guild, "unban", authorobj, recieverobj, ["${e.banreason}"]) })
+                        .catch(err => {
+                            if (err != "DiscordAPIError: Unknown Ban") return this.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, recieverobj, ["${e.banreason}", err]) }) //if unknown ban ignore, user has already been unbanned
                 }
             `).catch(err => {
                 logger("warn", "controller.js", "Couldn't broadcast unban: " + err.stack)
                 if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return; }) //do not remove from db when shards are being spawned
-
-            timedbans.remove({ userid: e.userid }, (err => { if (err) logger("error", "controller.js", `Error removing ${e.userid} from timedbans: ${err}`) }))
         })
     })
-}, 60000); //60 seconds
+}, 5000); //5 seconds
+
+//Unmute checker
+const timedmutes = new nedb('./data/timedmutes.db') //initialise database
+    
+let lastTempMuteCheck = Date.now() //this is useful because intervals can get unprecise over time
+var timedmuteloop = setInterval(() => {
+    if (lastTempMuteCheck + 10000 > Date.now()) return; //last check is more recent than 10 seconds
+
+    timedmutes.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
+        if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
+
+    timedmutes.find({ until: { $lte: Date.now() } }, (err, docs) => { //until is a date in ms, so we check if it is less than right now
+        if (docs.length < 1) return; //nothing found
+
+        docs.forEach((e, i) => { //take action for all results
+            if (e.type != "tempmute") return; //only handle mutes that are temporary and should result in a unmute
+
+            Manager.broadcastEval(`
+                let guild = this.guilds.cache.get("${e.guildid}")
+                if (guild) {
+                    //Add ids as fallback option for msgtomodlogchannel
+                    var authorobj = guild.members.cache.get("${e.authorid}").user //try to populate obj with actual data
+                    var recieverobj = guild.members.cache.get("${e.userid}").user
+
+                    if (!authorobj) authorobj = {} //set blank if check failed
+                    if (!recieverobj) recieverobj = {}
+                    authorobj["userid"] = ${e.authorid} //add id as fallback should getting actual data failed
+                    recieverobj["userid"] = ${e.userid}
+
+                    if ("${e.where}" == "chat" || "${e.where}" == "all") { //user was muted in chat
+                        let mutedrole = guild.roles.cache.find(role => role.name == "beepBot Muted")
+                        if (!mutedrole) return; //role was deleted as it seems so user can't have it anymore anyway
+
+                        //Remove role
+                        guild.members.cache.get("${e.userid}").roles.remove()
+                            .catch(err => { //catch error of role adding
+                                return this.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, ["${e.mutereason}", err]) }) }
+                    
+                    //remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
+                    this.timedmutes.remove({$and: [{ userid: "${e.userid}" }, { guildid: "${e.guildid}" }]}, (err => { if (err) this.fn.logger("error", "controller.js", "Error removing ${e.userid} from timedmutes: " + err) }))
+                
+                    if ("${e.where}" == "voice" || "${e.where}" == "all") { //user was banned in voice
+                        //Remove voice mute
+                        if (guild.members.cache.get("${e.userid}").voice.channel != null) { 
+                            guild.members.cache.get("${e.userid}").voice.setMute(false)
+                                .catch(err => {
+                                    return this.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, ["${e.mutereason}", err]) }) 
+                        } else {
+                            //if the user can't be unmuted right now push it into the db and handle it with the voiceStateUpdate event
+                            let unmuteobj = {
+                                type: "unmute", //used to determine what action to take by the voiceStateUpdate event if the user can't be muted right now
+                                userid: "${e.userid}",
+                                where: "voice",
+                                guildid: "${e.guildid}",
+                                authorid: "${e.authorid}",
+                                mutereason: "${e.mutereason}"
+                            }
+                            
+                            this.timedmutes.insert(unmuteobj, (err) => { if (err) this.fn.logger("error", "controller.js", "error updating db: " + err) }) //insert new obj instead of updating old one so that the db remove call won't remove it
+                        }
+                    }
+
+                    this.fn.msgtomodlogchannel(guild, "unmute", authorobj, recieverobj, ["auto", "${e.mutereason}"])
+                }
+            `).catch(err => {
+                if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return;
+                logger("warn", "controller.js", "Couldn't broadcast unmute: " + err.stack) }) 
+        })
+    })
+}, 5000); //5 seconds
 
 //X-mas avatar checker
 if (config.loginmode == "normal") {

@@ -1,4 +1,8 @@
 {
     "clearinvalidamount": "Please enter a valid amount. `1-100`",
-    "clearinfodescription": "Deletes an amount of messages in this channel."
+    "clearinfodescription": "Deletes an amount of messages in this channel.",
+
+    "unmuteinvalidargs": "Error: It seems like you are missing or have provided wrong arguments.\nPlease follow the command usage as seen in the detailed help page: `prefixhelp unmute`",
+    "unmutemsg": "username was unmuted. Reason: unmutereason",
+    "unmuteinfodescription": "Unmutes a user in chat and/or voice."
 }

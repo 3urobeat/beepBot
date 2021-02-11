@@ -44,14 +44,15 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                         authorid: message.author.id,
                         banreason: banreasontext
                     }
-    
-                    bot.timedbans.remove({ userid: banuser.id }, (err) => { if (err) logger("error", "ban.js", `error removing user ${banuser.id}: ${err}`) }) //remove an old entry if there should be one
-                    bot.timedbans.insert(timedbansobj, (err) => { if (err) logger("error", "ban.js", "error inserting user: " + err) })
-                    message.channel.send(lang.cmd.ban.tempbanmsg.replace("username", banuser.username).replace("timetext", `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}`).replace("banreasontext", banreasontext))
-                    message.react("✅").catch(() => {}) //catch but ignore error
 
                     notifytimetext = `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}` //change permanent to timetext
-                    fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}`, message.content.includes("-notify") || message.content.includes("-n")]) //details[2] results in boolean
+
+                    bot.timedbans.remove({ userid: banuser.id }, (err) => { if (err) logger("error", "ban.js", `error removing user ${banuser.id}: ${err}`) }) //remove an old entry if there should be one
+                    bot.timedbans.insert(timedbansobj, (err) => { if (err) logger("error", "ban.js", "error inserting user: " + err) })
+                    message.channel.send(lang.cmd.ban.tempbanmsg.replace("username", banuser.username).replace("timetext", notifytimetext).replace("banreasontext", banreasontext))
+                    message.react("✅").catch(() => {}) //catch but ignore error
+
+                    fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, notifytimetext, message.content.includes("-notify") || message.content.includes("-n")]) //details[2] results in boolean
                 })
             } else {
                 message.channel.send(lang.cmd.ban.permbanmsg.replace("username", banuser.username).replace("banreasontext", banreasontext))

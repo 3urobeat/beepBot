@@ -1,11 +1,12 @@
 {
     "loginmode": "test",
     "filetostart": "./bin/controller.js",
-    "version": "BETA 3.0 b17",
+    "version": "BETA 3.0 b18",
     "status": "online",
     "gametype": "PLAYING",
     "gamerotation": [
         "beepBot by 3urobeat#0975",
+        "Take a look at all of my commands using the help command!",
         "Tip: The character inside the [] in my nickname is my prefix for this server!",
         "github.com/HerrEurobeat",
         "I'm on ${Manager.fetchClientValues('guilds.cache.size').then(res => res.reduce((a, b) => b + a))} servers!",

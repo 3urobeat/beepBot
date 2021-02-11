@@ -1,4 +1,4 @@
-//This file contains code of the servertosettings function and is called by bot.js
+//This file contains code of the guildMemberAdd event and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
 module.exports.run = (bot, member) => {
