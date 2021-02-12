@@ -24,6 +24,7 @@
 
     "modlogcleartitle": "author deleted clearamount message(s) in channelname",
     "modlogkicktitle": "author has kicked reciever",
+    "modloguserwasnotified": "Notified user: ",
     "modlogbantitle": "author has banned reciever",
     "modlogunbantitle": "reciever has been unbanned (temp-ban)",
     "modlogunbanerrtitle": "Error unbanning reciever! (temp-ban)",
@@ -35,7 +36,7 @@
     "modlogunmutedby": "Unmuted by",
     "modlogunmuteerrtitle": "Error unmuting reciever! (temp-mute)",
     "modlogmsgerrtitle": "Error sending modlog message!",
-    "modloguserwasnotified": "Notified user: ",
+    "modlogchannelnotfound": "Error: The modlogchannel (channelid) couldn't be found. Please correct this error by setting a valid modlogchannel using the settings command.",
     "modlogdeletewithreaction": "Click 🗑️ to delete this message (Admins)",
     "modlognoaddreactionsperm": "The bot has no permission to add a reaction to this message.",
 

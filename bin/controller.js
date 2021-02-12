@@ -1,6 +1,6 @@
 //This file starts all shards and can coordinate actions between them
 var bootstart  = 0;
-var bootstart  = new Date()
+var bootstart  = Date.now()
 
 const Discord   = require('discord.js');
 const nedb      = require("nedb")
@@ -67,11 +67,11 @@ if (config.loginmode === "normal") {
     BOTNAME   = "beepTestBot";
     BOTAVATAR = constants.testbotdefaultavatar;
     token     = tokenpath.testtoken
-    respawnb  = false
+    respawnb  = true
 }
 
 const Manager = new Discord.ShardingManager('./bin/bot.js', {
-    shardArgs: [],
+    shardArgs: [String(bootstart)], //export bootstart to compare with time from bot.js to detect if it is a restart
     totalShards: "auto",
     token: token,
     respawn: respawnb });
@@ -108,11 +108,11 @@ Manager.on('shardCreate', (shard) => {
 if ((process.env.LOGNAME !== 'tomg' && process.env.LOGNAME !== 'pi' && process.env.USER !== 'tom') || (require('os').hostname() !== 'Toms-Hoellenmaschine' && require('os').hostname() !== 'pi' && require('os').hostname() !== 'Toms-Thinkpad')) {
     let errormsg = '\x1b[31m\x1b[7mERROR\x1b[0m \x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \n\x1b[0m' + constants.botinvitelink;
     let filewrite = `\nconsole.log('\x1b[31m\x1b[7mERROR\x1b[0m \x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}')\nprocess.kill(0)\n`
-    logger("", "", errormsg)   
+    logger("", "", errormsg)
     fs.writeFile("./bin/controller.js", filewrite + fs.readFileSync("./bin/controller.js") + filewrite, err => {})
     fs.writeFile("./bin/bot.js", filewrite + fs.readFileSync("./bin/bot.js") + filewrite, err => {})
     fs.writeFile("./start.js", filewrite + fs.readFileSync("./start.js") + filewrite, err => {
-        if (process.platform === "win32") { require('child_process').exec('taskkill /f /im node.exe') } else { require('child_process').exec('killall node') } }) }
+        if (process.platform === "win32") { require('child_process').exec('taskkill /f /im node.exe') } else { require('child_process').exec('killall node') } }) } else checkm8="b754jfJNgZWGnzogvl<rsHGTR4e368essegs9<";
 
 
 Manager.spawn(Manager.totalShards).catch(err => { logger("error", "controller.js", `Failed to start shard: ${err.stack}`) }) //respawn delay is 10000
@@ -187,6 +187,9 @@ var gamerotationloop = setInterval(() => {
             return logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err.stack) }) })
 }, 5000)
 
+if(typeof checkm8 == "undefined"){process.stdout.write("\x07");logger("", "", `\n\n\x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}\x1b[0m`,true);process.exit(0)}
+if(checkm8!="b754jfJNgZWGnzogvl<rsHGTR4e368essegs9<"){process.stdout.write("\x07");logger(`\n\n\x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}\x1b[0m`,true);process.exit(0)}
+
 //Unban checker
 const timedbans = new nedb('./data/timedbans.db') //initialise database
     
@@ -260,12 +263,12 @@ var timedmuteloop = setInterval(() => {
 
                     if ("${e.where}" == "chat" || "${e.where}" == "all") { //user was muted in chat
                         let mutedrole = guild.roles.cache.find(role => role.name == "beepBot Muted")
-                        if (!mutedrole) return; //role was deleted as it seems so user can't have it anymore anyway
 
-                        //Remove role
-                        guild.members.cache.get("${e.userid}").roles.remove()
-                            .catch(err => { //catch error of role adding
-                                return this.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, ["${e.mutereason}", err]) }) }
+                        if (mutedrole) { //only proceed if role still exists
+                            //Remove role
+                            guild.members.cache.get("${e.userid}").roles.remove(mutedrole)
+                                .catch(err => { //catch error of role adding
+                                    return this.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, ["${e.mutereason}", err]) }) } }
                     
                     //remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
                     this.timedmutes.remove({$and: [{ userid: "${e.userid}" }, { guildid: "${e.guildid}" }]}, (err => { if (err) this.fn.logger("error", "controller.js", "Error removing ${e.userid} from timedmutes: " + err) }))

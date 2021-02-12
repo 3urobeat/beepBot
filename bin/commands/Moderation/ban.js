@@ -1,5 +1,5 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    var banuser = fn.getuserfrommsg(message, args, false);
+    var banuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
     if (Object.keys(banuser).length == 0) return message.channel.send(lang.general.usernotfound);
 
     if (message.guild.owner && message.guild.owner.id !== message.author.id && message.guild.members.cache.get(banuser.id).roles.highest.position >= message.member.roles.highest.position) {
@@ -11,21 +11,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (message.guild.members.cache.get(banuser.id).roles.highest.position >= message.guild.members.cache.get(bot.user.id).roles.highest.position) {
         return message.channel.send(lang.cmd.ban.botRoleTooLow) }
 
+    //Get reason if there is one provided
     var banreason, banreasontext = ""
-    var notargs1 = ["-time", "-t", "-notify", "-n", undefined] //things the next check shouldn't be
 
-    if (!notargs1.includes(args[1])) { //args[1] isn't something from the array
-        let newargs = [ ...args ] //make a copy of the original array because splice would modify it
-        if (newargs.includes("-t")) newargs.splice(newargs.indexOf("-t"), 3)
-            else if (newargs.includes("-time")) newargs.splice(newargs.indexOf("-time"), 3)
-        
-        if (newargs.includes("-n")) newargs.splice(newargs.indexOf("-n"), 1)
-            else if (newargs.includes("-notify")) newargs.splice(newargs.indexOf("-notify"), 1)
-
-        banreason, banreasontext = newargs.slice(1).join(" ")
-    } else { 
-        banreasontext = "/" 
-        banreason = undefined }
+    fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
+        banreason = reason
+        banreasontext = reasontext })
 
     //Checks user perms and ban
     if (message.member.permissions.has("BAN_MEMBERS", "ADMINISTRATOR")) {
@@ -76,7 +67,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["ban"],
     description: "cmd.ban.infodescription",
-    usage: '(mention/username) [reason] [-time/-t Number "seconds"/"minutes"/"hours"/"days"/"months"/"years"] [-notify/-n]',
+    usage: '(mention/username) [-r reason] [-time/-t Number "seconds"/"minutes"/"hours"/"days"/"months"/"years"] [-notify/-n]',
     accessableby: ['admins'],
     allowedindm: false,
     nsfwonly: false

@@ -1,16 +1,20 @@
 const download = require("download")
 const fs = require("fs")
 const oldconfig = Object.assign(require("./config.json")) //get content of old config
+var logger = (type, origin, str, nodate, remove) => { //Custom logger
+    return require("./functions/logger.js").run(0, type, origin, str, nodate, remove) } //call the run function of the file which contains the code of this function
 
 const url = 'https://github.com/HerrEurobeat/beepBot/archive/master.zip';
 const dontdelete = [".git", "node_modules", "data", ".eslintrc.json", "beepBot.code-workspace", "changelog.txt", "nodemon.json", "output.txt"]
 
-console.log("Downloading new files...")
+logger("", "", "", true)
+logger("info", "updater.js", "Downloading new files...")
+
 download(url, "./", { extract: true }).then(() => {
     //Delete old files except dontdelete
     let files = fs.readdirSync("./")
 
-    console.log("Deleting old files...")
+    logger("info", "updater.js", "Deleting old files...")
     files.forEach((e, i) => {
         if (!dontdelete.includes(e) && e != "beepBot-master") {
             if (fs.statSync("./" + e).isDirectory()) fs.rmdirSync("./" + e, { recursive: true })
@@ -22,7 +26,7 @@ download(url, "./", { extract: true }).then(() => {
             //Move new files out of directory
             let newfiles = fs.readdirSync("./beepBot-master")
 
-            console.log("Moving new files...")
+            logger("info", "updater.js", "Moving new files...")
             newfiles.forEach((e, i) => {
                 if (!dontdelete.includes(e)) fs.renameSync(`./beepBot-master/${e}`, `./${e}`)
 
@@ -31,7 +35,7 @@ download(url, "./", { extract: true }).then(() => {
                     fs.rmdirSync("./beepBot-master", { recursive: true })
 
                     //Update config to keep a few values from old config
-                    console.log("Adding previous changes to new config...")
+                    logger("info", "updater.js", "Adding previous changes to new config...")
 
                     delete require.cache[require.resolve("./config.json")] //delete cache
                     let newconfig = require("./config.json")
@@ -43,24 +47,24 @@ download(url, "./", { extract: true }).then(() => {
                     newconfig.gameurl = oldconfig.gameurl
 
                     fs.writeFile("./bin/config.json", JSON.stringify(newconfig, null, 4), (err) => {
-                        if (err) console.log(err.stack) })
+                        if (err) logger("info", "updater.js", err.stack) })
 
                     //Update/Install new packages according to new package.json
                     try {
                         const { exec } = require('child_process');
 
-                        console.log("Updating with NPM...")
+                        logger("info", "updater.js", "Updating with NPM...")
                         exec('npm install', (err, stdout) => { //wanted to do it with the npm package but that didn't work out (BETA 2.8 b2)
                             if (err) {
-                                console.log(err)
+                                logger("info", "updater.js", err)
                                 return; }
 
-                            console.log(`NPM Log:\n${stdout}`) //entire log
+                                logger("info", "updater.js", `NPM Log:\n${stdout}`) //entire log
 
                             //Finished
-                            console.log("Finished updating. Please restart manually.") })
-                    } catch (err) { console.log('update npm packages Error: ' + err) } }
+                            logger("info", "updater.js", "Finished updating. Please restart manually.") })
+                    } catch (err) { logger("info", "updater.js", 'update npm packages Error: ' + err) } }
                 })
         } }) })
     .catch((err) => {
-        if (err) return console.log("Error while trying to download: " + err.stack) })
+        if (err) return logger("info", "updater.js", "Error while trying to download: " + err.stack) })

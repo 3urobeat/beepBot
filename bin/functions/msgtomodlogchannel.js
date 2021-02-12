@@ -7,8 +7,8 @@ module.exports.run = (bot, logger, guild, action, author, reciever, details) => 
 
         if (!guildsettings || !guildsettings.modlogchannel || action == "modlogmsgerr") { //if modlogchannel is undefined (turned off) or a previous modlogmsg failed
             if (action.includes("err")) { //if error, then find a channel to inform someone
-                if (guildsettings.systemchannel && action != "modlogmsgerr") guildsettings.modlogchannel = guildsettings.systemchannel //if no modlogchannel set, try systemchannel
-                    else if (guild.systemChannelID && action != "modlogmsgerr") guildsettings.modlogchannel = guild.systemChannelID //then check if guild has a systemChannel set
+                if (guildsettings.systemchannel) guildsettings.modlogchannel = guildsettings.systemchannel //if no modlogchannel set, try systemchannel
+                    else if (guild.systemChannelID) guildsettings.modlogchannel = guild.systemChannelID //then check if guild has a systemChannel set
                     else {
                         //well then try and get the first channel (rawPosition) where the bot has permissions to send a message
                         guildsettings.modlogchannel = null //better set it to null to avoid potential problems
@@ -115,7 +115,13 @@ module.exports.run = (bot, logger, guild, action, author, reciever, details) => 
                 return logger("error", "msgtomodlogchannel.js", "Unsupported action: " + action);
         }
 
-        if (!guild.channels.cache.get(guildsettings.modlogchannel).permissionsFor(bot.user).has("ADD_REACTIONS")) msg.embed.footer.text = guildlang.general.modlognoaddreactionsperm //change footer text
+        var modlogchannel = guild.channels.cache.get(guildsettings.modlogchannel)
+        if (!modlogchannel) { //Check if modlogchannel can't be found
+            bot.fn.msgtomodlogchannel(guild, "modlogmsgerr", author, reciever, [guildlang.general.modlogchannelnotfound.replace("channelid", guildsettings.modlogchannel), msg.embed.title])
+            bot.settings.update({ guildid: guild.id }, { $set: { modlogchannel: bot.constants.defaultguildsettings.modlogchannel }}, {}, () => { }) //reset setting
+            return; }
+        
+        if (!modlogchannel.permissionsFor(bot.user).has("ADD_REACTIONS")) msg.embed.footer.text = guildlang.general.modlognoaddreactionsperm //change footer text
 
         guild.channels.cache.get(guildsettings.modlogchannel).send(msg)
             .then((msg) => { //don't need to ask shard manager
@@ -126,7 +132,6 @@ module.exports.run = (bot, logger, guild, action, author, reciever, details) => 
                     })
                     .catch(() => {}) }) //reaction err catch -> ignore error
             .catch((err) => { //sendmsg error catch
-                console.log(err)
                 if (err) return bot.fn.msgtomodlogchannel(guild, "modlogmsgerr", author, reciever, [err, msg.embed.title]) }) //call this same function again to notify that modlogmsgs can't be sent (won't end in a loop because if no channel can be found on err then it will stop)
     })
 }
