@@ -50,17 +50,20 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     
     if (args[0].toLowerCase() == "chat" || args[0].toLowerCase() == "all") {
-        //Apply role
-        message.guild.members.cache.get(muteuser.id).roles.add(message.guild.roles.cache.find(role => role.name == "beepBot Muted"), mutereason)
-            .catch(err => { //catch error of role adding
-                return message.channel.send(`${lf.roleadderror}\n${lang.general.error}: ${err}`) }) }
+        let mutedrole = message.guild.roles.cache.find(role => role.name == "beepBot Muted")
+
+        if (mutedrole) {
+            //Apply role
+            message.guild.members.cache.get(muteuser.id).roles.add(mutedrole, mutereason)
+                .catch(err => { //catch error of role adding
+                    return message.channel.send(`${lf.roleadderror.replace("muteuser", muteuser.username)}\n${lang.general.error}: ${err}`) }) } }
           
     if (args[0].toLowerCase() == "voice" || args[0].toLowerCase() == "all") {
         //Apply voicemute if muteuser is in voice chat, if not the voiceStateUpdate event in bot.js will handle muting
         if (message.guild.members.cache.get(muteuser.id).voice.channel != null) { 
             message.guild.members.cache.get(muteuser.id).voice.setMute(true, mutereason)
                 .catch(err => {
-                    return message.channel.send(`${lf.voicemuteerror}\n${lang.general.error}: ${err}`) }) 
+                    return message.channel.send(`${lf.voicemuteerror.replace("muteuser", muteuser.username)}\n${lang.general.error}: ${err}`) })
         } }
 
     

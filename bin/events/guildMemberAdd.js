@@ -4,6 +4,8 @@
 module.exports.run = (bot, member) => {
     //take care of greetmsg
     bot.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
+        if (!guildsettings) return; //yeah better stop if nothing was found to avoid errors
+
         if (guildsettings.systemchannel && guildsettings.greetmsg) {
             //check settings.json for greetmsg, replace username and servername and send it into setting's systemchannel
             let msgtosend = guildsettings.greetmsg

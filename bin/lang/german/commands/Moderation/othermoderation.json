@@ -3,6 +3,8 @@
     "clearinfodescription": "Löscht eine Menge an Nachrichten in dem Kanal.",
 
     "unmuteinvalidargs": "Fehler: Es scheinen Argumente in deinem Befehl falsch zu sein oder zu fehlen.\nBitte folge dem Schema wie er in der detaillierten Hilfe angegeben ist: `prefixhelp unmute`",
+    "unmuteroleremoveerror": "Fehler: Ich konnte muteuser die 'beepBot Muted' Rolle nicht entfernen! Bitte überprüfe meine Berechtigungen und versuche es erneut.",
+    "unmutevoiceunmuteerror": "Fehler: Ich konnte die Stummschaltung von muteuser nicht aufheben! Bitte überprüfe meine Berechtigungen und versuche es erneut.",
     "unmutemsg": "Die Stummschaltung von username wurde aufgehoben. Begründung: unmutereason",
     "unmuteinfodescription": "Hebt die Stummschaltung eines Nutzers im Chat und/oder im Sprachkanal auf."
 }

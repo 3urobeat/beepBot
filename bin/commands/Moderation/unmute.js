@@ -30,7 +30,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             //Remove role
             message.guild.members.cache.get(unmuteuser.id).roles.remove(mutedrole, unmutereason)
                 .catch(err => { //catch error of role adding
-                    return fn.msgtomodlogchannel(message.guild, "unmuterr", message.author, unmuteuser, [unmutereasontext, err]) }) } }
+                    return message.channel.send(`${lf.unmuteroleremoveerror.replace("muteuser", unmuteuser.username)}\n${lang.general.error}: ${err}`) }) } }
     
     //remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
     bot.timedmutes.remove({$and: [{ userid: unmuteuser.id }, { guildid: message.guild.id }]}, (err => { if (err) logger("error", "controller.js", "Error removing ${e.userid} from timedmutes: " + err) }))
@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (message.guild.members.cache.get(unmuteuser.id).voice.channel != null) {
             message.guild.members.cache.get(unmuteuser.id).voice.setMute(false, unmutereason)
                 .catch(err => {
-                    return bot.fn.msgtomodlogchannel(message.guild, "unmuterr", message.author, unmuteuser, [unmutereasontext, err]) })
+                    return message.channel.send(`${lf.unmutevoiceunmuteerror.replace("muteuser", unmuteuser.username)}\n${lang.general.error}: ${err}`) })
         } else {
             //if the user can't be unmuted right now push it into the db and handle it with the voiceStateUpdate event
             let unmuteobj = {

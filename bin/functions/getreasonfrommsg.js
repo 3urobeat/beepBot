@@ -12,7 +12,7 @@ module.exports.run = (args, stoparguments, callback) => {
         if (searchfor.length > 0) searchfor += ` ${e}` //if there is already something in the string add a space infront this entry
             else searchfor += e
         
-        if (stoparguments.includes(args[i++]) || i++ > args.length - 1) { //check if next iteration would match a stoparg or it would exceed the array length
+        if (stoparguments.includes(args[i + 1]) || i + 1 > args.length - 1) { //check if next iteration would match a stoparg or it would exceed the array length
             callback(searchfor, searchfor)
 
             return false; //stop loop

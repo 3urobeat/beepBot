@@ -95,3 +95,4 @@ Version 2.15.3: Mentioning the bot will now also work as prefix! Updated *radio 
 Version 2.15.4: (Hopefully) fixed 6 hours avatarinterval() loop to update every 6 hours consistently. Modified and improved reddit loading messages. Potentially fixed the index error event error message that only logged [object Object]. Added a few comments. updateserverlist() function has now a console.log(). Updated packages and somehow magically fixed the music command with it.
 
 Version 3.0: All new! If you are interested in detailed changes take a look at the GitHub BETA 3.0 commit descriptions.
+Version 3.0.1: Added db find result check to guildMemberAdd & -Remove events. Info cmd CPU Temp is now rounded. Added note to mute error translations. Fixed wrong response method of unmute cmd. Fixed uncorrect stoparguments recogniton of next index in getreasonfrommsg.js. 
