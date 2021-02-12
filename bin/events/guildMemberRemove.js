@@ -3,6 +3,7 @@
 
 module.exports.run = (bot, member) => {
     bot.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
+        if (!guildsettings) return; //yeah better stop if nothing was found to avoid errors
         if (!guildsettings.systemchannel) return;
         if (!guildsettings.byemsg) return;
 

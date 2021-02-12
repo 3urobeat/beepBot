@@ -148,7 +148,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     value: `**${lf.uptime}:** ${fn.round(bot.uptime / 3600000, 2)} hours\n` +
                            `**${lf.heartbeat}:** ${fn.round(bot.ws.ping, 2)} ms\n` +
                            `**${lf.ramusage}:** ${Math.round(process.memoryUsage()["rss"] / 1024 / 1024 * 100) / 100} MB (RSS)\n` +
-                           `**${lf.cputemp}:** ${cpuTemp.main} °C\n` +
+                           `**${lf.cputemp}:** ${bot.fn.round(cpuTemp.main, 2)} °C\n` +
                            `**${lf.cpuusage}:** ${fn.round(cpuUsage.currentload, 2)} %\n` +
                            `**${lf.nodejsversion}:** ${process.version.replace("v", "")}\n` +
                            `**${lf.discordjsversion}:** v${Discord.version}\n` +
@@ -180,7 +180,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     value: `${fn.round(bot.uptime / 3600000, 2)} hours\n` +
                            `${fn.round(bot.ws.ping, 2)} ms\n` +
                            `${Math.round(process.memoryUsage()["rss"] / 1024 / 1024 * 100) / 100} MB (RSS)\n` +
-                           `${cpuTemp.main} °C\n` +
+                           `${bot.fn.round(cpuTemp.main, 2)} °C\n` +
                            `${fn.round(cpuUsage.currentload, 2)} %\n` +
                            `${process.version}\n` +
                            `v${Discord.version}\n` +

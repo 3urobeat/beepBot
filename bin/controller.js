@@ -67,7 +67,7 @@ if (config.loginmode === "normal") {
     BOTNAME   = "beepTestBot";
     BOTAVATAR = constants.testbotdefaultavatar;
     token     = tokenpath.testtoken
-    respawnb  = true
+    respawnb  = false
 }
 
 const Manager = new Discord.ShardingManager('./bin/bot.js', {
