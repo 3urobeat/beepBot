@@ -1,7 +1,7 @@
 {
     "loginmode": "test",
     "filetostart": "./bin/controller.js",
-    "version": "BETA 3.0 b18",
+    "version": "BETA 3.0 b19",
     "status": "online",
     "gametype": "PLAYING",
     "gamerotation": [

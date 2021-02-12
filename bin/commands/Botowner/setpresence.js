@@ -3,8 +3,6 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let lf = lang.cmd.otherbotowner
     //Note: Gametype must be caps
 
-    console.log("incoming args: " + args)
-
     if (!args[0]) return message.channel.send(lf.setpresencemissingargs)
 
     if (args[0].toLowerCase() == "remove" || args[0].toLowerCase() == "default") { //reset presence settings to default and stop

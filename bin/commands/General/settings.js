@@ -32,15 +32,28 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
     } else { var memberaddroles = none }
 
     //systemchannel
-    if (guildsettings.systemchannel) var systemchannel = `<#${message.guild.channels.cache.get(guildsettings.systemchannel).id}>`
-        else {  if (message.guild.systemChannel !== null) {
-                    var systemchannel = `${none} - ${lf.recommendation}: \`#${message.guild.systemChannel.name}\``
-                } else {
-                    var systemchannel = none } }
+    if (guildsettings.systemchannel) { //channel set
+        var systemchannel = message.guild.channels.cache.get(guildsettings.systemchannel)
+
+        if (!systemchannel) { //check if channel doesn't exist
+            bot.settings.update({ guildid: guildid }, { $set: { systemchannel: bot.constants.defaultguildsettings.systemchannel }}, {}, (err) => { if (err) logDbErr(err) }) //reset setting
+            systemchannel = none
+        } else var systemchannel = `<#${systemchannel.id}>`
+    } else { //no channel set
+        if (message.guild.systemChannel !== null) { //display recommendation
+            var systemchannel = `${none} - ${lf.recommendation}: \`#${message.guild.systemChannel.name}\``
+        } else {
+            var systemchannel = none } }
 
     //modlogchannel
-    if (guildsettings.modlogchannel) var modlogchannel = `<#${message.guild.channels.cache.get(guildsettings.modlogchannel).id}>`
-        else { var modlogchannel = none }
+    if (guildsettings.modlogchannel) { //channel set
+        var modlogchannel = message.guild.channels.cache.get(guildsettings.modlogchannel) //try to get channel
+
+        if (!modlogchannel) { //check if channel doesn't exist
+            bot.settings.update({ guildid: guildid }, { $set: { modlogchannel: bot.constants.defaultguildsettings.modlogchannel }}, {}, (err) => { if (err) logDbErr(err) }) //reset setting
+            modlogchannel = none
+        } else var modlogchannel = `<#${modlogchannel.id}>`
+    } else { var modlogchannel = none } //no channel set
 
     //modlogfeatures
     if (guildsettings.modlogchannel && guildsettings.modlogfeatures && guildsettings.modlogfeatures.length > 0) { //also show none if modlogchannel is not set

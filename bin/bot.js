@@ -2,7 +2,7 @@
 //Note: This file had like 720 lines so I moved some code into the 'events' & 'functions' folder
 
 var bootstart   = 0;
-var bootstart   = new Date()
+var bootstart   = Date.now()
 const shardArgs = process.argv //eslint-disable-line no-unused-vars
 
 const Discord  = require("discord.js")
@@ -31,7 +31,7 @@ bot.constants = constants
  * @returns {String} The resulting String
  */
 var logger = (type, origin, str, nodate, remove) => { //Custom logger
-    require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove) } //call the run function of the file which contains the code of this function
+    return require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove) } //call the run function of the file which contains the code of this function
 
 /**
 * Returns the language obj the specified server has set
@@ -63,16 +63,14 @@ var servertosettings = (guild, removeentry) => {
  * Attempts to get a user object from a message
  * @param {Object} message The message object
  * @param {Array} args The args array
+ * @param {Number} startindex The index of the args array to start searching from
+ * @param {Number} endindex The index of the args array to stop searching (won't be included) (optional)
  * @param {Boolean} allowauthorreturn Specifies if the function should return the author if no args is given
+ * @param {Array} stoparguments Arguments that will stop/limit the search (basically an automatic endindex)
  * @returns {Object} The retrieved user object
  */
-var getuserfrommsg = (message, args, allowauthorreturn) => {
-    if (!args[0] && allowauthorreturn) return message.author
-    else if (message.guild.members.cache.find(member => member.user.username == args[0])) return message.guild.members.cache.find(member => member.user.username == args[0]).user
-    else if (message.guild.members.cache.find(member => member.nickname == args[0])) return message.guild.members.cache.find(member => member.nickname == args[0]).user
-    else if (message.guild.members.cache.get(args[0])) return message.guild.members.cache.get(args[0]).user
-    else if (message.mentions.users.first()) return message.mentions.users.first()
-    else return {} }
+var getuserfrommsg = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
+    return require("./functions/getuserfrommsg.js").run(message, args, startindex, endindex, allowauthorreturn, stoparguments) }
 
 /**
  * Attempts to get time from message and converts it into ms
@@ -82,7 +80,16 @@ var getuserfrommsg = (message, args, allowauthorreturn) => {
  * @returns {Array} Array containing amount and unit. Example: ["2", "minutes"]
  */
 var gettimefrommsg = (args, callback) => {
-    require("./functions/gettimefrommsg.js").run(args, callback) } //call the run function of the file which contains the code of this function
+    require("./functions/gettimefrommsg.js").run(args, (time, unitindex, arr) => { callback(time, unitindex, arr) }) } //callback the callback
+
+/**
+ * Attempts to get a reason from a message
+ * @param {Array} args The args array
+ * @param {Array} stoparguments Arguments that will stop/limit the search
+ * @returns reason and reasontext (reason is for Audit Log, reasontext for message)
+ */
+var getreasonfrommsg = (args, stoparguments, callback) => {
+    require("./functions/getreasonfrommsg.js").run(args, stoparguments, (reason, reasontext) => { callback(reason, reasontext) }) } //callback the callback
 
 /**
  * Sends a message to the modlogchannel of that guild if it has one set
@@ -187,7 +194,7 @@ langFiles("./bin/lang/"); //RECURSION TIME!
 
 
 //Add functions to fn object
-fn = { logger, lang, servertosettings, getuserfrommsg, gettimefrommsg, msgtomodlogchannel, round, randomhex, randomstring, owneronlyerror, usermissperm }
+fn = { logger, lang, servertosettings, getuserfrommsg, gettimefrommsg, getreasonfrommsg, msgtomodlogchannel, round, randomhex, randomstring, owneronlyerror, usermissperm }
 bot.fn = fn //I need to be able to access functions from the sharding manager
 
 process.on('unhandledRejection', (reason) => {
@@ -236,10 +243,14 @@ bot.on("ready", async function() {
     } else bot.user.setPresence({activity: { name: config.gamerotation[0], type: config.gametype, url: config.gameurl }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
 
     if (thisshard.id == 0) {
-        //Finish startup messages from controller.js
-        logger("", "", `> ${commandcount} commands & ${Object.keys(bot.langObj).length} languages found!`)
-        logger("", "", "> Successfully logged in shard0!")
-        logger("", "", "*--------------------------------------------------------------*\n ", true) }
+        if (bootstart - Number(shardArgs[2]) < 10000) { //if difference is more than 10 seconds it must be a restart
+            //Finish startup messages from controller.js
+            logger("", "", `> ${commandcount} commands & ${Object.keys(bot.langObj).length} languages found!`)
+            logger("", "", "> Successfully logged in shard0!")
+            logger("", "", "*--------------------------------------------------------------*\n ", true) 
+        } else {
+            logger("info", "bot.js", "shard0 got restarted...", false, true)
+        } }
 
     bot.commandcount = commandcount //probably useful for a few cmds so lets just add it to the bot obj (export here so the read process is definitely finished)
     

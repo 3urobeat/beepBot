@@ -34,30 +34,19 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let args0 = ["chat", "voice", "all"] //things args[0] should be
     if (!args0.includes(args[0])) return message.channel.send(lf.invalidargs.replace("prefix", guildsettings.prefix))
 
-    var muteuser = fn.getuserfrommsg(message, args, false);
+    var muteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-n"]);
     if (Object.keys(muteuser).length == 0) return message.channel.send(lang.general.usernotfound);
 
     if (muteuser.id == bot.user.id) return message.channel.send(fn.randomstring(lf.botmute))
     if (muteuser.id == message.author.id) return message.channel.send(lf.selfmute)
 
-    var mutereason, mutereasontext = ""
-
 
     //Get reason if there is one provided
-    let notargs1 = ["-time", "-t", "-notify", "-n", undefined] //things the next check shouldn't be
+    var mutereason, mutereasontext = ""
 
-    if (!notargs1.includes(args[2])) { //args[1] isn't something from the array
-        let newargs = [ ...args ] //make a copy of the original array because splice would modify it
-        if (newargs.includes("-t")) newargs.splice(newargs.indexOf("-t"), 3)
-            else if (newargs.includes("-time")) newargs.splice(newargs.indexOf("-time"), 3)
-        
-        if (newargs.includes("-n")) newargs.splice(newargs.indexOf("-n"), 1)
-            else if (newargs.includes("-notify")) newargs.splice(newargs.indexOf("-notify"), 1)
-
-        mutereason, mutereasontext = newargs.slice(2).join(" ")
-    } else { 
-        mutereasontext = "/" //used for message
-        mutereason = undefined } //used for Discord & the audit log
+    fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
+        mutereason = reason
+        mutereasontext = reasontext })
 
     
     if (args[0].toLowerCase() == "chat" || args[0].toLowerCase() == "all") {
