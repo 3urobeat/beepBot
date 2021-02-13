@@ -46,7 +46,7 @@ logger("", "", `\n${ascii}\n`, true)
 logger('info', 'controller.js', "Loading...", true)
 
 //Log the startup in the cmduse.txt file
-fs.appendFile("./bin/cmduse.txt", ` \nStarting ${config.version} in ${config.loginmode} mode. ${new Date()}]\n`, err => {
+fs.appendFile("./bin/cmduse.txt", `\n\n[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}] Starting beepBot version ${config.version} in ${config.loginmode} mode\n`, err => {
     if (err) logger('error', 'controller.js', "writing startup to cmduse.txt error: " + err) });
 
 if (process.platform == "win32") { //set node process name to find it in task manager etc.

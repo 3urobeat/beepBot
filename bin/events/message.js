@@ -90,7 +90,9 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
                 } else if (ab.includes("admins")) {
                     if (!guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id)))
                 } else if (ab.includes("moderators")) {
-                    if (!guildsettings.moderatorroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id)))
+                    //check if user doesn't have admin nor modrole because admins should be able to execute mod commands
+                    if (!guildsettings.moderatorroles.filter(element => message.member.roles.cache.has(element)).length > 0 && //weird two line if statement
+                        !guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id)))
                 } else {
                     message.channel.send(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${BOTOWNER} will probably see this error and fix it.`) //eslint-disable-line no-undef
                     logger('error', 'message.js', `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${cont[0]}'\x1b[0m to prevent safety issues.`)
@@ -99,6 +101,7 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
 
             if (message.channel.type === "dm") cmd.run(bot, message, args, bot.langObj["english"], logger, guildsettings, bot.fn)
                 else {
+                    require("fs").appendFile("./bin/cmduse.txt", `[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}] (Guild ${message.guild.id}) ${message.content}`, () => {}) //add cmd usage to cmduse.txt
                     cmd.run(bot, message, args, bot.fn.lang(message.guild.id, guildsettings), logger, guildsettings, bot.fn) } //run the command after lang function callback
             
             return;

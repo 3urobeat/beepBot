@@ -12,7 +12,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (!args0.includes(args[0])) return message.channel.send(lf.unmuteinvalidargs.replace("prefix", guildsettings.prefix))
 
     var unmuteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-n"]);
-    if (Object.keys(unmuteuser).length == 0) return message.channel.send(lang.general.usernotfound);
+    if (!unmuteuser) return message.channel.send(lang.general.usernotfound)
+    if (typeof (unmuteuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", unmuteuser))
 
 
     //Get reason if there is one provided

@@ -8,26 +8,52 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let lf = lang.cmd.mute
     
     //Check if role was successfully created by guildCreate.js (where this code is also used)
-    if (!message.guild.roles.cache.find(role => role.name == "beepBot Muted")) {
-        message.guild.roles.create({
-            data: {
-                name: "beepBot Muted",
-                color: "#99AAB5",
-                permissions: [] },
-            reason: lf.rolecreatereason
-        })
-            .then((role) => { //after creating role change permissions of every text channel
-                var errorcount = 0
-    
+    function checkMutedRole() {
+        return new Promise((resolve, reject) => {
+            var mutedrole = message.guild.roles.cache.find(role => role.name == "beepBot Muted")
+            var errorcount = 0
+
+            if (!mutedrole) {
+                message.guild.roles.create({
+                    data: {
+                        name: "beepBot Muted",
+                        color: "#99AAB5",
+                        permissions: [] },
+                    reason: lf.rolecreatereason
+                })
+                    .then((role) => { //after creating role change permissions of every text channel           
+                        message.guild.channels.cache.forEach((channel) => {
+                            if (channel.type != "text") return;
+            
+                            channel.updateOverwrite(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
+                                .catch((err) => {
+                                    if (errorcount < 1) message.channel.send(`${lf.rolechannelpermerror}\n${lang.general.error}: ${err}`)
+                                    errorcount++ //we don't want to spam the channel
+                                    return reject(); })
+                        })
+
+                        resolve() //resolve promise
+                    })
+                    .catch((err) => { 
+                        message.channel.send(`${lf.rolecreateerror}\n${lang.general.error}: ${err}`)
+                        return reject(); })
+
+            } else { //role seems to exist so lets check if all channels have it added to their permissions
                 message.guild.channels.cache.forEach((channel) => {
                     if (channel.type != "text") return;
+                    if (!channel.permissionsFor(mutedrole).has("SEND_MESSAGES") && !channel.permissionsFor(mutedrole).has("ADD_REACTIONS")) return; //if this channel already has both perms set to false then skip this iteration
     
-                    channel.updateOverwrite(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
+                    channel.updateOverwrite(mutedrole, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
                         .catch((err) => {
                             if (errorcount < 1) message.channel.send(`${lf.rolechannelpermerror}\n${lang.general.error}: ${err}`)
-                            errorcount++ }) //we don't want to spam the channel
-                }) })
-            .catch((err) => { message.channel.send(`${lf.rolecreateerror}\n${lang.general.error}: ${err}`) }) }
+                            errorcount++ //we don't want to spam the channel
+                            return reject(); })
+                })
+
+                resolve() } }) //resolve promise
+    }
+
+    await checkMutedRole() //call function and wait for resolved promise
 
     
     //Get user and do other checks
@@ -35,7 +61,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (!args0.includes(args[0])) return message.channel.send(lf.invalidargs.replace("prefix", guildsettings.prefix))
 
     var muteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-n"]);
-    if (Object.keys(muteuser).length == 0) return message.channel.send(lang.general.usernotfound);
+    if (!muteuser) return message.channel.send(lang.general.usernotfound)
+    if (typeof (muteuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", muteuser))
 
     if (muteuser.id == bot.user.id) return message.channel.send(fn.randomstring(lf.botmute))
     if (muteuser.id == message.author.id) return message.channel.send(lf.selfmute)
@@ -86,7 +113,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             notifytimetext = `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}` //change permanent to timetext
 
-            bot.timedmutes.remove({ userid: muteuser.id }, (err) => { if (err) logger("error", "mute.js", `error removing user ${muteuser.id}: ${err}`) }) //remove an old entry if there should be one
+            bot.timedmutes.remove({$and: [{ userid: muteuser.id }, { guildid: message.guild.id }]}, (err) => { if (err) logger("error", "mute.js", `error removing user ${muteuser.id}: ${err}`) }) //remove an old entry if there should be one
             bot.timedmutes.insert(timedmuteobj, (err) => { if (err) logger("error", "mute.js", "error inserting user: " + err) })
             message.channel.send(lf.tempmutemsg.replace("username", muteuser.username).replace("timetext", notifytimetext).replace("mutereasontext", mutereasontext))
         })
@@ -101,7 +128,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             mutereason: mutereasontext
         }
 
-        bot.timedmutes.remove({ userid: muteuser.id }, (err) => { if (err) logger("error", "mute.js", `error removing user ${muteuser.id}: ${err}`) }) //remove an old entry if there should be one
+        bot.timedmutes.remove({$and: [{ userid: muteuser.id }, { guildid: message.guild.id }]}, (err) => { if (err) logger("error", "mute.js", `error removing user ${muteuser.id}: ${err}`) }) //remove an old entry if there should be one
         bot.timedmutes.insert(permmuteobj, (err) => { if (err) logger("error", "mute.js", "error inserting user: " + err) })
         message.channel.send(lf.permmutemsg.replace("username", muteuser.username).replace("mutereasontext", mutereasontext)) }
 

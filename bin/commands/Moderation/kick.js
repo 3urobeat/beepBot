@@ -1,6 +1,7 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { 
     var kickuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-n"]);
-    if (Object.keys(kickuser).length == 0) return message.channel.send(lang.general.usernotfound);
+    if (!kickuser) return message.channel.send(lang.general.usernotfound)
+    if (typeof (kickuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", kickuser))
 
     if (message.guild.owner && message.guild.owner.id !== message.author.id && message.guild.members.cache.get(kickuser.id).roles.highest.position >= message.member.roles.highest.position) {
         message.channel.send(lang.cmd.kick.highestRoleError)

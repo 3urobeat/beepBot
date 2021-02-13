@@ -67,7 +67,7 @@ var servertosettings = (guild, removeentry) => {
  * @param {Number} endindex The index of the args array to stop searching (won't be included) (optional)
  * @param {Boolean} allowauthorreturn Specifies if the function should return the author if no args is given
  * @param {Array} stoparguments Arguments that will stop/limit the search (basically an automatic endindex)
- * @returns {Object} The retrieved user object
+ * @returns The retrieved user object, undefined if nothing was found or a number >1 if more than one user was found
  */
 var getuserfrommsg = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
     return require("./functions/getuserfrommsg.js").run(message, args, startindex, endindex, allowauthorreturn, stoparguments) }
