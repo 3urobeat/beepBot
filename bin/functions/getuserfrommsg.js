@@ -18,9 +18,19 @@ module.exports.run = (message, args, startindex, endindex, allowauthorreturn, st
         } else return false; //stop loop
     })
 
-    if (!searchfor && allowauthorreturn) return message.author
-    else if (message.guild.members.cache.find(member => member.user.username == searchfor)) return message.guild.members.cache.find(member => member.user.username == searchfor).user
-    else if (message.guild.members.cache.find(member => member.nickname == searchfor)) return message.guild.members.cache.find(member => member.nickname == searchfor).user
-    else if (message.guild.members.cache.get(searchfor)) return message.guild.members.cache.get(searchfor).user
-    else if (message.mentions.users.first()) return message.mentions.users.first()
-    else return {} }
+    if (!searchfor && allowauthorreturn) return message.author //author
+    else if (message.guild.members.cache.filter(member => member.user.username == searchfor).size > 0) { //search by username
+        let searchCollection = message.guild.members.cache.filter(member => member.username == searchfor)
+
+        if (searchCollection.size > 1) return searchCollection.size //return amount of users found if more than one was found
+            else return searchCollection.array()[0].user } //if only one was found return 
+
+    else if (message.guild.members.cache.filter(member => member.nickname == searchfor).size > 0) { //search by nickname
+        let searchCollection = message.guild.members.cache.filter(member => member.nickname == searchfor)
+
+        if (searchCollection.size > 1) return searchCollection.size //return amount of users found if more than one was found
+            else return searchCollection.array()[0].user } //if only one was found return 
+
+    else if (message.guild.members.cache.get(searchfor)) return message.guild.members.cache.get(searchfor).user //get by id
+    else if (message.mentions.users.first()) return message.mentions.users.first() //get mention
+    else return undefined } //return undefined if nothing was found

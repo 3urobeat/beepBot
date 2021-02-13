@@ -2,6 +2,8 @@
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
 module.exports.run = (bot, oldstate, newstate) => {
+    if (!oldstate || !newstate) return; //dunno why but I once got a 'Cannot read property 'id' of null' so maybe it can be undefined? dunno but it is weird
+
     bot.settings.findOne({ guildid: oldstate.guild.id }, (err, gs) => {
         if (err) gs = bot.langObj["english"]
 

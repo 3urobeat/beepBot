@@ -1,6 +1,7 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     var banuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
-    if (Object.keys(banuser).length == 0) return message.channel.send(lang.general.usernotfound);
+    if (!banuser) return message.channel.send(lang.general.usernotfound)
+    if (typeof (banuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", banuser))
 
     if (message.guild.owner && message.guild.owner.id !== message.author.id && message.guild.members.cache.get(banuser.id).roles.highest.position >= message.member.roles.highest.position) {
         return message.channel.send(lang.cmd.ban.highestRoleError) }
@@ -38,7 +39,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                     notifytimetext = `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}` //change permanent to timetext
 
-                    bot.timedbans.remove({ userid: banuser.id }, (err) => { if (err) logger("error", "ban.js", `error removing user ${banuser.id}: ${err}`) }) //remove an old entry if there should be one
+                    bot.timedbans.remove({$and: [{ userid: banuser.id }, { guildid: message.guild.id }] }, (err) => { if (err) logger("error", "ban.js", `error removing user ${banuser.id}: ${err}`) }) //remove an old entry if there should be one
                     bot.timedbans.insert(timedbansobj, (err) => { if (err) logger("error", "ban.js", "error inserting user: " + err) })
                     message.channel.send(lang.cmd.ban.tempbanmsg.replace("username", banuser.username).replace("timetext", notifytimetext).replace("banreasontext", banreasontext))
                     message.react("✅").catch(() => {}) //catch but ignore error

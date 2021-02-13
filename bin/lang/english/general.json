@@ -7,6 +7,7 @@
     "description": "Description",
     "example": "Example",
     "usernotfound": "Sorry, but I couldn't find that user.",
+    "multipleusersfound": "I found useramount matching users!\nPlease mention the user to make sure that you target the right one!",
     "requestedby": "Requested by",
     "by": "by",
     "poweredby": "Powered by",

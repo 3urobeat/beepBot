@@ -54,7 +54,7 @@ module.exports.run = (bot, logger, guild) => { //eslint-disable-line
         }) }
 
     //Ensure that @everyone hasn't manage role enabled so that users can't remove the muted role from them
-    guild.updateOverwrite(guild.id, { MANAGE_ROLES: false }, "Needed so that users are unable to remove the beepBot Muted role from their own roles.") //doesn't work yet
+    guild.roles.cache.get(guild.id).setPermissions(guild.roles.cache.get(guild.id).permissions.remove("MANAGE_ROLES"), "Needed so that users are unable to remove the beepBot Muted role from their own roles.") //permissions.remove only returns the changed bitfield
 
     //Create beepBot Muted role (this code is used again in mute.js)
     guild.roles.create({
