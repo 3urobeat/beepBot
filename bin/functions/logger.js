@@ -1,7 +1,7 @@
 //This file contains code of the logger function and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
-module.exports.run = (bootstart, type, origin, str, nodate, remove) => { //eslint-disable-line
+module.exports.run = (bootstart, type, origin, str, nodate, remove, logafterlogin) => { //eslint-disable-line
     const readline = require("readline")
     const fs       = require("fs")
 
@@ -10,7 +10,7 @@ module.exports.run = (bootstart, type, origin, str, nodate, remove) => { //eslin
 
     //Define type
     if (type == 'info') {
-        var typestr = `\x1b[34mINFO`
+        var typestr = `\x1b[96mINFO`
     } else if (type == 'warn') {
         var typestr = `\x1b[31mWARN`
     } else if (type == 'error') {
@@ -20,14 +20,14 @@ module.exports.run = (bootstart, type, origin, str, nodate, remove) => { //eslin
 
     //Define origin
     if (origin != "") {
-        if (typestr == "") var originstr = `\x1b[34m${origin}`
+        if (typestr == "") var originstr = `\x1b[96m${origin}`
         else var originstr = `${origin}` 
     } else var originstr = ''
 
     //Add date or don't
     if (nodate) var date = '';
         else { //Only add date to message if it gets called at least 15 sec after bootup. This makes the startup cleaner.
-        if (new Date() - bootstart > 15000) var date = `\x1b[34m[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}]\x1b[0m `
+        if (new Date() - bootstart > 15000) var date = `\x1b[96m[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}]\x1b[0m `
             else var date = '' }
 
     //Add filers
@@ -44,6 +44,11 @@ module.exports.run = (bootstart, type, origin, str, nodate, remove) => { //eslin
 
     //Put it together
     var string = `${filler1}${typestr}${filler2}${originstr}${filler3}${date}${str}`
+
+    //Push to logafterlogin if bot isn't logged in yet to reduce clutter (logafterlogin will be undefined if shard0 is logged in (see bot.js))
+    if (logafterlogin && !nodate && !remove && !string.toLowerCase().includes("error") && !string.includes("Logging in...") && originstr != "controller.js") {
+        logafterlogin.push(string)
+        return; }
 
     //Print message with remove or without
     if (remove) {

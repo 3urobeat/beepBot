@@ -51,6 +51,7 @@
     "argtoolong": "Fehler: Das Argument ist zu lang. Bitte versuche es mit einer kürzeren Nachricht erneut.",
     "settingsreset": "Deine Einstellungen wurden zurückgesetzt.",
     "settingsfor": "Einstellungen für",
+    "embeddescription": "Tippe `prefixsetings help` um eine Hile zu erhalten wie du ganz einfach die Einstellungen an deine Vorlieben anpassen kannst!",
     "adminroles": "Administrator-Rollen",
     "moderatorroles": "Moderator-Rollen",
     "systemchannel": "Kanal für Durchsagen",

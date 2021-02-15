@@ -408,9 +408,16 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
 
         /* --------------- Display current settings --------------- */
         default:
+            if (guildsettings.adminroles.length == 0 && guildsettings.moderatorroles.length == 0 && !guildsettings.systemchannel && 
+                !guildsettings.modlogchannel && !guildsettings.greetmsg && !guildsettings.byemsg && guildsettings.memberaddroles.length == 0) { //only display this message if the user hasn't set anything yet
+                var embeddescription = lf.embeddescription.replace("prefix", guildsettings.prefix)
+            } else {
+                var embeddescription = undefined }
+
             message.channel.send({embed:{
                 title: `${lf.settingsfor} '${message.guild.name}'`,
                 color: fn.randomhex(),
+                description: embeddescription,
                 thumbnail: { url: message.guild.iconURL },
                 fields: [{ 
                         name: "Prefix:", 

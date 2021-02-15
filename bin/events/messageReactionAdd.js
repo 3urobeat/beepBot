@@ -4,9 +4,9 @@
 module.exports.run = (bot, logger, reaction, user) => { //eslint-disable-line
     //Fetch a reaction if it is a partial to be able to work with messages that were sent before the bot was started
     if (reaction.partial) {
-        logger("info", "messageReactionAdd.js", `Fetching a partial reaction... ID: ${reaction.message.id}`, false, true)
+        //logger("info", "messageReactionAdd.js", `Fetching a partial reaction... ID: ${reaction.message.id}`, false, true)
         reaction.fetch()
-            .then(() => { logger("info", "messageReactionAdd.js", `Successfully fetched reaction message ${reaction.message.id}.`, false, true) })
+            //.then(() => { logger("info", "messageReactionAdd.js", `Successfully fetched reaction message ${reaction.message.id}.`, false, true) })
             .catch((err) => { return logger("error", "messageReactionAdd.js", `Couldn't fetch reaction message ${reaction.message.id}! Error: ${err}`) }) }
 
     if (reaction.me) return; //ignore reactions by the bot itself

@@ -85,7 +85,7 @@ Manager.on('shardCreate', (shard) => {
     if (shard.id == 0) {
         setTimeout(() => {
 
-            logger("", "", "\n*---------=----------[\x1b[34mINFO | controller.js\x1b[0m]---------=----------*", true)
+            logger("", "", "\n*---------=----------[\x1b[96mINFO | controller.js\x1b[0m]---------=----------*", true)
             logger("", "", `> Started ${constants.BOTNAME} ${config.version} by ${constants.BOTOWNER}`, true)
 
             if (config.shards > 1) logger(`> ${config.shards} shards running in \x1b[32m${config.loginmode}\x1b[0m mode on ${process.platform}`, true); 

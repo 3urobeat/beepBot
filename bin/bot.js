@@ -17,6 +17,9 @@ const constants  = require("./constants.json")
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] }) //partials are messages that are not fully cached and have to be fetched manually
 var   fn  = {} //object that will contain all functions to be accessible from commands
 
+var loggedin      = false
+var logafterlogin = []
+
 bot.config    = config //I'm just gonna add it to the bot object as quite a few cmds will probably need the config later on
 bot.constants = constants
 
@@ -31,7 +34,8 @@ bot.constants = constants
  * @returns {String} The resulting String
  */
 var logger = (type, origin, str, nodate, remove) => { //Custom logger
-    return require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove) } //call the run function of the file which contains the code of this function
+    if (loggedin) logafterlogin = undefined
+    return require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove, logafterlogin) } //call the run function of the file which contains the code of this function
 
 /**
 * Returns the language obj the specified server has set
@@ -208,25 +212,25 @@ process.on('uncaughtException', (reason) => {
 const settings = new nedb('./data/settings.db') //initialise database
 settings.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading settings database. Error: " + err)
-    logger("info", "bot.js", "Successfully loaded settings database.", false, true) }); //load db content into memory
+    logger("info", "bot.js", "Successfully loaded settings database.") }); //load db content into memory
 bot.settings = settings; //add reference to bot obj
 
 const timedbans = new nedb('./data/timedbans.db') //initialise database
 timedbans.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading timedbans database. Error: " + err)
-    logger("info", "bot.js", "Successfully loaded timedbans database.", false, true) }); //load db content into memory
+    logger("info", "bot.js", "Successfully loaded timedbans database.") }); //load db content into memory
 bot.timedbans = timedbans; //add reference to bot obj
 
 const timedmutes = new nedb('./data/timedmutes.db') //initialise database
 timedmutes.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading timedmutes database. Error: " + err)
-    logger("info", "bot.js", "Successfully loaded timedmutes database.", false, true) }); //load db content into memory
+    logger("info", "bot.js", "Successfully loaded timedmutes database.") }); //load db content into memory
 bot.timedmutes = timedmutes; //add reference to bot obj
 
 const monitorreactions = new nedb('./data/monitorreactions.db') //initialise database
 monitorreactions.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading monitorreactions database. Error: " + err)
-    logger("info", "bot.js", "Successfully loaded monitorreactions database.", false, true) }); //load db content into memory
+    logger("info", "bot.js", "Successfully loaded monitorreactions database.") }); //load db content into memory
 bot.monitorreactions = monitorreactions; //add reference to bot obj
 
 /* ------------ Startup: ------------ */
@@ -245,12 +249,18 @@ bot.on("ready", async function() {
     if (thisshard.id == 0) {
         if (bootstart - Number(shardArgs[2]) < 10000) { //if difference is more than 10 seconds it must be a restart
             //Finish startup messages from controller.js
-            logger("", "", `> ${commandcount} commands & ${Object.keys(bot.langObj).length} languages found!`)
-            logger("", "", "> Successfully logged in shard0!")
-            logger("", "", "*--------------------------------------------------------------*\n ", true) 
+            logger("", "", `> ${commandcount} commands & ${Object.keys(bot.langObj).length} languages found!`, true)
+            logger("", "", "> Successfully logged in shard0!", true)
+            logger("", "", "*--------------------------------------------------------------*\n ", true)
         } else {
-            logger("info", "bot.js", "shard0 got restarted...", false, true)
-        } }
+            logger("info", "bot.js", "shard0 got restarted...", false, true) }
+    } else {
+        logger("info", "bot.js", `Successfully logged in shard${thisshard.id}!`, false, true) }
+
+    loggedin = true
+    logafterlogin.forEach(e => {
+        if (thisshard.id != 0 && e.includes("Successfully loaded") && e.includes("database")) return; //check if this message is a database loaded message and don't log it again
+        logger("", "", e) });
 
     bot.commandcount = commandcount //probably useful for a few cmds so lets just add it to the bot obj (export here so the read process is definitely finished)
     
@@ -285,7 +295,5 @@ bot.on("voiceStateUpdate", (oldstate, newstate) => {
 bot.on('message', (message) => {
     require("./events/message.js").run(bot, logger, message) }) //call the run function of the file which contains the code of this event
 
-setTimeout(() => {
-    logger("info", "bot.js", "Logging in...", false, true)
-}, 550); //Needs to be slightly longer than controller.js shardCreate timeout
+logger("info", "bot.js", "Logging in...", false, true)
 bot.login() //Token is provided by the shard manager
