@@ -51,6 +51,7 @@
     "argtoolong": "Error: Argument too long. Please try again with a shorter message.",
     "settingsreset": "Your settings have been reset.",
     "settingsfor": "Settings for",
+    "embeddescription": "Type `prefixsettings help` to get a help page on how to easily adjust the settings to your liking!",
     "adminroles": "Administrator roles",
     "moderatorroles": "Moderator roles",
     "systemchannel": "Channel for broadcasts",

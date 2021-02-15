@@ -65,7 +65,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["unmute"],
     description: "cmd.othermoderation.unmuteinfodescription",
-    usage: '("voice"/"chat"/"all") (mention/username) [reason]',
+    usage: '("voice"/"chat"/"all") (mention/username) [-r reason]',
     accessableby: ['moderators'],
     allowedindm: false,
     nsfwonly: false

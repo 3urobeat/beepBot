@@ -14,7 +14,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         fs.writeFile("./bin/config.json", JSON.stringify(bot.config, null, 4), (err) => { if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err) })
 
         bot.shard.broadcastEval(`
-            this.user.setPresence({activity: { name: "${bot.config.gamerotation[0]}", type: "${bot.config.gametype}", url: "${bot.config.gameurl}" }, status: "${bot.config.status}" })`).catch(err => { //error will occur when not all shards are started yet
+            this.user.setPresence({activity: { name: "${bot.config.gamerotation[0]}", type: "${bot.config.gametype}", url: "${bot.config.gameurl}" }, status: "${bot.config.status}" })`)
+        .then(() => {
+            message.channel.send(lf.setpresenceupdated) })
+        .catch(err => { //error will occur when not all shards are started yet
             logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err.stack) })
     } else {
         let possibleflags = ["-s", "-gt", "-g", "-url"]

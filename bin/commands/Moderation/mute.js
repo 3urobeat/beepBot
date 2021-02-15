@@ -144,7 +144,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["mute"],
     description: "cmd.mute.infodescription",
-    usage: '("voice"/"chat"/"all") (mention/username) [reason] [-time/-t Number "seconds"/"minutes"/"hours"/"days"/"months"/"years"] [-notify/-n]',
+    usage: '("voice"/"chat"/"all") (mention/username) [-r reason] [-time/-t Number "seconds"/"minutes"/"hours"/"days"/"months"/"years"] [-notify/-n]',
     accessableby: ['moderators'],
     allowedindm: false,
     nsfwonly: false

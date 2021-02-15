@@ -4,9 +4,9 @@
 module.exports.run = (bot, logger, message) => { //eslint-disable-line
     //Fetch a message if it is a partial message to avoid errors
     if (message.partial) {
-        logger("info", "message.js", `Fetching a partial message in message event... ID: ${message.id}`, false, true)
+        //logger("info", "message.js", `Fetching a partial message in message event... ID: ${message.id}`, false, true)
         message.fetch()
-            .then(() => { logger("info", "message.js", `Successfully fetched message ${message.id}.`, false, true) })
+            //.then(() => { logger("info", "message.js", `Successfully fetched message ${message.id}.`, false, true) })
             .catch((err) => { return logger("error", "message.js", `Couldn't fetch message ${message.id}! Error: ${err}`) }) }
 
     if (message.author.bot) return;
@@ -101,7 +101,7 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
 
             if (message.channel.type === "dm") cmd.run(bot, message, args, bot.langObj["english"], logger, guildsettings, bot.fn)
                 else {
-                    require("fs").appendFile("./bin/cmduse.txt", `[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}] (Guild ${message.guild.id}) ${message.content}`, () => {}) //add cmd usage to cmduse.txt
+                    require("fs").appendFile("./bin/cmduse.txt", `[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}] (Guild ${message.guild.id}) ${message.content}\n`, () => {}) //add cmd usage to cmduse.txt
                     cmd.run(bot, message, args, bot.fn.lang(message.guild.id, guildsettings), logger, guildsettings, bot.fn) } //run the command after lang function callback
             
             return;
