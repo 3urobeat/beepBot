@@ -6,12 +6,12 @@
 ## Version 3.0 is finally out!  
 **Featuring a settings command to configure the bot for your server and much more!**  
 
+[Invite my bot to your server!](https://discordapp.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=502787199)
+
 **If you want, you can donate a few bucks on my [Patreon](https://www.patreon.com/3urobeat) or [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VAVVKE4L962H6&source=url)! I would really appreciate it!**  
 
-[Invite my bot to your server.](https://discordapp.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=502787199)
-
-Join my server!  
-https://discord.gg/YPDPPWT  
+If you've got a question or something like that then feel free to add me on Discord:  
+3urobeat#0975
 
 This bot is not intended to be downloaded and used privatly. This repo will miss some important files you would need to run it on your computer.  
 Instead, add the bot to your server with the invite link above.  
@@ -21,12 +21,7 @@ Instead, add the bot to your server with the invite link above.
 	<a href="https://discordbots.org/bot/265162449441783808">
 	  <img src="https://discordbots.org/api/widget/265162449441783808.svg" />
 	</a>
-</div>
-
-<div align="right">
 	<a href="https://botsfordiscord.com/bots/265162449441783808" >
 		<img src="https://botsfordiscord.com/api/bot/265162449441783808/widget" title="Visit beepBot listed on Bots for Discord!" alt="beepBot's Widget Failed to Load" />
 	</a>
 </div>
-
-See the changelog in the changelog.txt file!  
