@@ -6,6 +6,8 @@
 
     "fpaidrespects": "username hat Respekt gezollt",
     "finfodescription": "Drück F um Respekt zu zollen.",
+
+    "jokeinfodescription": "Sendet einen zufälligen Witz von icanhazdadjoke.com.",
     
     "magic8missingargs": "magic8 kann sich nicht entscheiden wenn du keine Frage angibst...",
     "magic8responses": ["Ja","Jup.","Sieht danach aus","Höchstwahrscheinlich Ja","Meine Quellen sagen Ja","Ich würde Ja sagen","Nein","Ganz sicher Nein","Wahrscheinlich Nein","Nö","Meine Quellen sagen Nein","Denk garnicht erst drüber nach","Höchstwahrscheinlich Nein","Ich bin mir unsicher","Eventuell","Ich werde drüber nachdenken..."],
