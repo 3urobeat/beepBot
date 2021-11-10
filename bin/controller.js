@@ -3,7 +3,7 @@ var bootstart  = 0;
 var bootstart  = Date.now()
 
 const Discord   = require('discord.js');
-const nedb      = require("nedb")
+const nedb      = require("@yetzt/nedb")
 const fs        = require("fs")
 
 const tokenpath = require("../../token.json")
@@ -196,6 +196,7 @@ const timedbans = new nedb('./data/timedbans.db') //initialise database
 let lastTempBanCheck = Date.now() //this is useful because intervals can get unprecise over time
 var tempbanloop = setInterval(() => {
     if (lastTempBanCheck + 10000 > Date.now()) return; //last check is more recent than 10 seconds
+    lastTempBanCheck = Date.now()
 
     timedbans.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
         if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
@@ -231,7 +232,7 @@ var tempbanloop = setInterval(() => {
                 if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return; }) //do not remove from db when shards are being spawned
         })
     })
-}, 5000); //5 seconds
+}, 10000); //10 seconds
 
 //Unmute checker
 const timedmutes = new nedb('./data/timedmutes.db') //initialise database
@@ -239,6 +240,7 @@ const timedmutes = new nedb('./data/timedmutes.db') //initialise database
 let lastTempMuteCheck = Date.now() //this is useful because intervals can get unprecise over time
 var timedmuteloop = setInterval(() => {
     if (lastTempMuteCheck + 10000 > Date.now()) return; //last check is more recent than 10 seconds
+    lastTempMuteCheck = Date.now()
 
     timedmutes.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
         if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
@@ -301,7 +303,7 @@ var timedmuteloop = setInterval(() => {
                 logger("warn", "controller.js", "Couldn't broadcast unmute: " + err.stack) }) 
         })
     })
-}, 5000); //5 seconds
+}, 10000); //10 seconds
 
 //X-mas avatar checker
 if (config.loginmode == "normal") {
