@@ -7,7 +7,7 @@ const shardArgs = process.argv //eslint-disable-line no-unused-vars
 
 const Discord  = require("discord.js")
 const path     = require("path")
-const nedb     = require("nedb")
+const nedb     = require("@yetzt/nedb")
 const fs       = require("fs")
 
 const configpath = "./config.json"
