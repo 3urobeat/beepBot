@@ -1,7 +1,7 @@
 {
-    "loginmode": "normal",
+    "loginmode": "test",
     "filetostart": "./bin/controller.js",
-    "version": "3.0.3",
+    "version": "3.1",
     "status": "online",
     "gametype": "PLAYING",
     "gamerotation": [
@@ -13,10 +13,11 @@
         "Tip: Use the settings command to customize the bot for your server!",
         "Being a cool bot since 01.01.2017!",
         "I have translations for ${Manager.broadcastEval('Object.keys(this.langObj).length', 0).then(res => res)} languages!",
+        "beepBot v${config.version}",
         "Tip: You can also mention the bot instead of using a prefix!",
         "Have a nice day!"
     ],
-    "gamerotateseconds": 60,
+    "gamerotateseconds": 30,
     "gameoverwrite": "",
     "gameurl": "https://3urobeat.com",
     "helpcategoryorder": [

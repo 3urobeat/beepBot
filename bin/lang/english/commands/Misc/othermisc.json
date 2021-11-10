@@ -15,7 +15,15 @@
     "lyricslongerthan6000": "The lyrics are longer than 6000 characters. Please check out the lyrics on Genius:",
     "lyricsinfodescription": "Searches for song lyrics on genius.com.",
 
-    "pollinfodescription": "Reacts with thumbs up/down/idc to your command message.",
+    "pollmissingargs": "Please provide a question for your poll!",
+    "pollnoreactperms": "Error: It seems like that I have no permissions to react with emotes to messages. Please make sure that I'm allowed to react and try again.",
+    "pollnewpoll": "New poll by author",
+    "polltimelimit": "Time limit",
+    "pollanonymous": "Anonymous votes",
+    "pollresults": "Results",
+    "pollfooter": "Vote by reacting to one of the reactions below!",
+    "pollresultsreveal": "The results will be shown in timetext.",
+    "pollinfodescription": "Start a poll in the chat that supports a time limit with results and anonymous votes.",
 
     "redditsearching": "Searching in sort from subreddit...",
     "redditnotfound": "I sadly couldn't find anything.",

@@ -15,7 +15,15 @@
     "lyricslongerthan6000": "Der Songtext ist länger als 6000 Zeichen. Bitte schau dir den Songtext auf Genius an:",
     "lyricsinfodescription": "Sucht nach Songtexten auf genius.com.",
 
-    "pollinfodescription": "Reagiert mit Daumen hoch/runter/Enthaltung auf deine Befehl-Nachricht.",
+    "pollmissingargs": "Bitte gib eine Fragestellung für deine Abstimmung an!",
+    "pollnoreactperms": "Fehler: Es scheint als hätte ich keine Berechtigungen um auf Nachrichten zu reagieren. Bitte stelle sicher dass ich die Berechtigungen habe und versuche es erneut.",
+    "pollnewpoll": "Neue Abstimmung von author",
+    "polltimelimit": "Zeitbeschränkung",
+    "pollanonymous": "Anonyme Stimmen",
+    "pollresults": "Resultate",
+    "pollfooter": "Stimme ab, indem du auf eine der Reaktionen reagierst!",
+    "pollresultsreveal": "Die Resultate werden in timetext angezeigt.",
+    "pollinfodescription": "Starte eine Abstimmung im Chat die Zeitbegrenzungen mit Resultaten und anonymen Stimmen unterstützt.",
 
     "redditsearching": "Suche in sort in subreddit...",
     "redditnotfound": "Ich konnte leider nichts finden.",

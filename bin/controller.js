@@ -305,6 +305,60 @@ var timedmuteloop = setInterval(() => {
     })
 }, 10000); //10 seconds
 
+//Poll time limit checker
+let lastPollCheck = Date.now() //this is useful because intervals can get unprecise over time
+var timedpollloop = setInterval(() => {
+    if (lastPollCheck + 10000 > Date.now()) return; //last check is more recent than 10 seconds
+    lastPollCheck = Date.now()
+
+    monitorreactions.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
+        if (err) return logger("warn", "controller.js", "Error loading monitorreactions database: " + err) });
+
+    monitorreactions.find({ $and: [{ type: "pollcmd" }, { until: { $lte: Date.now() } }] }, (err, docs) => { //until is a date in ms, so we check if it is less than right now
+        if (docs.length < 1) return; //nothing found
+
+        docs.forEach((e, i) => { //take action for all results
+            if (e.timelimit < 0) return;
+
+            Manager.broadcastEval(`
+                let channel = this.channels.cache.get("${e.channelid}") //check if this shard has this channel
+                if (channel) {
+                    if ("${e.reaction}" == "👍") { // only do this for the first reaction
+                        channel.messages.fetch("${e.msg}").then(res => { //always fetch message to ensure content is cached (fetch won't fetch the message again if it is already cached - I tested that)
+                            if (!res) return;
+                            console.log("fetched")
+
+                            //Update results
+                            res.embeds[0].fields[1].value=\`👍 - \${res.reactions.cache.get("👍").count - 1}
+                                                            👎 - \${res.reactions.cache.get("👎").count - 1}
+                                                            🤷 - \${res.reactions.cache.get("🤷").count - 1}\`
+
+                            res.edit({ embed: res.embeds[0] })
+                            console.log("edit")
+
+                            /* //Check if the poll message is included in the last 5 messages in that channel
+                            channel.messages.fetch({limit: 5}).then(messages => {
+                                if (!messages.has("${e.msg}")) {
+                                    console.log("new msg")
+
+                                    channel.send(\`<@\${message.author.id}>\`, embed: {
+                                        title: "Poll ended!",
+                                        description: "bye bye"
+                                    })
+                                }
+                            }) */
+                        })
+                    }
+                    
+                    this.monitorreactions.remove({_id: "${e._id}"}, (err) => { if (err) this.fn.logger("error", "controller.js", "Error removing poll ${e._id} from monitorreactions db: " + err) })
+                }
+            `).catch(err => {
+                if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return;
+                logger("warn", "controller.js", "Couldn't broadcast end of poll: " + err.stack) }) 
+        })
+    })
+}, 10000); //10 seconds
+
 //X-mas avatar checker
 if (config.loginmode == "normal") {
     let lastxmascheck = Date.now() - 21600000 //subtract 6 hours so that the first interval will already get executed

@@ -288,6 +288,9 @@ bot.on("guildMemberRemove", member => {
 bot.on("messageReactionAdd", (reaction, user) => {
     require("./events/messageReactionAdd.js").run(bot, logger, reaction, user) }) //call the run function of the file which contains the code of this event
 
+bot.on("messageReactionRemove", (reaction, user) => {
+    require("./events/messageReactionRemove.js").run(bot, logger, reaction, user) }) //call the run function of the file which contains the code of this event
+
 bot.on("voiceStateUpdate", (oldstate, newstate) => {
     require("./events/voiceStateUpdate.js").run(bot, oldstate, newstate) })
 
