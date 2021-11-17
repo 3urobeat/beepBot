@@ -17,38 +17,41 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (!args[1]) { args[1] = "" }
     switch(args[0].toLowerCase()) {
         case "user":
-            if (!args[1] || message.channel.type == "dm") var whichuser = message.author
-            else if (message.guild.members.cache.find(member => member.user.username == args[1])) var whichuser = message.guild.members.cache.find(member => member.user.username == args[1]).user
-            else if (message.guild.members.cache.find(member => member.nickname == args[1])) var whichuser = message.guild.members.cache.find(member => member.nickname == args[1]).user
-            else if (message.guild.members.cache.get(args[1])) var whichuser = message.guild.members.cache.get(args[1]).user
-            else if (message.mentions.users.first()) var whichuser = message.mentions.users.first()
+            if (!args[1] || message.channel.type == "DM") var whichmember = message.guild.members.cache.get(message.author.id)
+            else if (message.guild.members.cache.find(member => member.user.username == args[1])) var whichmember = message.guild.members.cache.find(member => member.user.username == args[1])
+            else if (message.guild.members.cache.find(member => member.nickname == args[1])) var whichmember = message.guild.members.cache.find(member => member.nickname == args[1])
+            else if (message.guild.members.cache.get(args[1])) var whichmember = message.guild.members.cache.get(args[1])
+            else if (message.mentions.users.first()) var whichmember = message.guild.members.cache.get(message.mentions.users.first().id)
             else return message.channel.send(lf.usernotfound)
 
-            thumbnailurl = whichuser.displayAvatarURL()
+            thumbnailurl = whichmember.displayAvatarURL()
             var alluseractivites = ""
             var usernickname = ""
 
-            whichuser.presence.activities.forEach((e, i) => {
+            whichmember.presence.activities.forEach((e, i) => {
                 if (i == 0) alluseractivites += `${e.name}`
                     else alluseractivites += `, ${e.name}`
 
-                if (i + 1 == Object.keys(whichuser.presence.activities).length && alluseractivites.length >= 25) { 
-                    alluseractivites = alluseractivites.slice(0, 25) + "..." } })
+                if (i + 1 == Object.keys(whichmember.presence.activities).length && alluseractivites.length >= 25) { 
+                    alluseractivites = alluseractivites.slice(0, 25) + "..."
+                }
+            })
 
-            if (message.channel.type == "dm" || message.guild.members.cache.get(whichuser.id).nickname == null) usernickname = "/"
-                    else usernickname = message.guild.members.cache.get(whichuser.id).nickname
+            if (message.channel.type == "DM" || whichmember.nickname == null) usernickname = "/"
+                    else usernickname = whichmember.nickname
 
             if (args[1].toLowerCase() == "mobile") { //Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
                 //Mobile version
                 infofields[0] = {
                     name: lf.user,
-                    value: `**${lf.username}:** ${whichuser.name}#${whichuser.discriminator}\n` +
+                    value: `**${lf.username}:** ${whichmember.user.username}#${whichmember.user.discriminator}\n` +
                            `**${lf.nickname}:** ${usernickname}\n` +
-                           `**${lf.status}:** ${whichuser.presence.status}\n` +
-                           `**${lf.games}:** (${Object.keys(whichuser.presence.activities).length}) ${alluseractivites}\n` +
-                           `**${lf.id}:** ${whichuser.id}\n` +
-                           `**${lf.creationdate}:** ${(new Date(whichuser.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
-                    inline: true }
+                           `**${lf.status}:** ${whichmember.presence.status}\n` +
+                           `**${lf.games}:** (${Object.keys(whichmember.presence.activities).length}) ${alluseractivites}\n` +
+                           `**${lf.id}:** ${whichmember.id}\n` +
+                           `**${lf.creationdate}:** ${(new Date(whichmember.user.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
+                    inline: true
+                }
                 
                 quickInfoField(1, "bot", "botshowmore", false)
                 quickInfoField(2, "server", "servershowmore", false)
@@ -59,81 +62,91 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     value: `${lf.username}:\n` +
                            `${lf.nickname}:\n` +
                            `${lf.status}:\n` +
-                           `${lf.games}: (${Object.keys(whichuser.presence.activities).length})\n` +
+                           `${lf.games}: (${Object.keys(whichmember.presence.activities).length})\n` +
                            `${lf.id}:\n` +
                            `${lf.creationdate}:`,
-                    inline: true }
+                    inline: true
+                }
 
                 infofields[1] = {
                     name: "\u200b",
-                    value: `${whichuser.username}#${whichuser.discriminator}\n` +
+                    value: `${whichmember.user.username}#${whichmember.user.discriminator}\n` +
                            `${usernickname}\n` +
-                           `${whichuser.presence.status}\n` +
+                           `${whichmember.presence.status}\n` +
                            `${alluseractivites}\n` +
-                           `${whichuser.id}\n` +
-                           `${(new Date(whichuser.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
-                    inline: true }
+                           `${whichmember.id}\n` +
+                           `${(new Date(whichmember.user.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
+                    inline: true
+                }
 
                 infofields[2] = {
                     name: "\u200b",
-                    value: "\u200b" }
+                    value: "\u200b"
+                }
 
                 quickInfoField(3, "bot", "botshowmore", true)
                 quickInfoField(4, "server", "servershowmore", true) }
             break;
         case "server":
-            if (message.channel.type == "dm") return message.channel.send(lf.serverdmerror)
+            if (message.channel.type == "DM") return message.channel.send(lf.serverdmerror)
 
             thumbnailurl = message.guild.iconURL()
+
+            var guildowner = await message.guild.fetchOwner();
 
             if (args[1].toLowerCase() == "mobile") {
                 //Mobile version
                 infofields[0] = {
                     name: lf.server,
                     value: `**${lf.name}:** ${message.guild.name}\n` +
-                           `**${lf.id}:** ${message.guild.id}\n` +
-                           `**${lf.owner}:** ${message.guild.owner}\n` +
-                           `**${lf.usercount}:** ${message.guild.members.cache.size}\n` +
-                           `**${lf.channelid}:** ${message.channel.id}\n` +
-                           `**${lf.serverregion}:** ${message.guild.region}\n` +
-                           `**${lf.shardid}:** ${message.guild.shardID}\n` +
-                           `**${lf.creationdate}:** ${(new Date(message.guild.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
-                    inline: true }
+                        `**${lf.id}:** ${message.guild.id}\n` +
+                        `**${lf.owner}:** <@${guildowner.user.id}>\n` +
+                        `**${lf.usercount}:** ${message.guild.members.cache.size}\n` +
+                        `**${lf.channelid}:** ${message.channel.id}\n` +
+                        `**${lf.shardid}:** ${message.guild.shardId}\n` +
+                        `**${lf.creationdate}:** ${(new Date(message.guild.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
+                    inline: true
+                }
 
                 quickInfoField(1, "bot", "botshowmore", false)
                 quickInfoField(2, "user", "usershowmore", false)
+
             } else {
+
                 //Desktop version
                 infofields[0] = {
                     name: lf.server,
                     value: `${lf.name}:\n` +
-                           `${lf.id}:\n` +
-                           `${lf.owner}:\n` +
-                           `${lf.usercount}:\n` +
-                           `${lf.channelid}:\n` +
-                           `${lf.serverregion}:\n` +
-                           `${lf.shardid}:\n` +
-                           `${lf.creationdate}:`,
-                    inline: true }
+                        `${lf.id}:\n` +
+                        `${lf.owner}:\n` +
+                        `${lf.usercount}:\n` +
+                        `${lf.channelid}:\n` +
+                        `${lf.shardid}:\n` +
+                        `${lf.creationdate}:`,
+                    inline: true 
+                }
 
                 infofields[1] = {
                     name: "\u200b",
                     value: `${message.guild.name}\n` +
-                           `${message.guild.id}\n` +
-                           `${message.guild.owner}\n` +
-                           `${message.guild.members.cache.size}\n` +
-                           `${message.channel.id}\n` +
-                           `${message.guild.region}\n` +
-                           `${message.guild.shardID}\n` +
-                           `${(new Date(message.guild.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
-                    inline: true }
+                        `${message.guild.id}\n` +
+                        `<@${guildowner.user.id}>\n` +
+                        `${message.guild.members.cache.size}\n` +
+                        `${message.channel.id}\n` +
+                        `${message.guild.shardId}\n` +
+                        `${(new Date(message.guild.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}`,
+                    inline: true 
+                }
 
                 infofields[2] = {
                     name: "\u200b",
-                    value: "\u200b" }
+                    value: "\u200b"
+                }
 
                 quickInfoField(3, "bot", "botshowmore", true)
-                quickInfoField(4, "user", "usershowmore", true) }
+                quickInfoField(4, "user", "usershowmore", true)
+
+            }
             break;
         default:
             thumbnailurl = bot.user.displayAvatarURL()
@@ -199,14 +212,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     }
 
     message.channel.send({ 
-        embed: {
+        embeds: [{
             title: `${bot.constants.BOTNAME} - ${lf.info}`,
             color: fn.randomhex(),
             thumbnail: { url: thumbnailurl },
             description: `${bot.constants.BOTNAME} version ${bot.config.version} made by ${bot.constants.BOTOWNER}\n${bot.constants.githublink}`,
             fields: infofields,
             footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • ${lf.footermobilemsg.replace("prefix", guildsettings.prefix)}` }
-        }
+        }]
     })
     
 }

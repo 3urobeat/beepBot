@@ -13,7 +13,6 @@
     "owner": "Besitzer",
     "usercount": "Anzahl Mitglieder",
     "channelid": "Kanal-ID",
-    "serverregion": "Serverregion",
     "shardid": "Shard-ID",
     "serverdmerror": "Fehler: Du kannst diese Seite nicht in einem DM-Kanal aufrufen.",
     "servershowmore": "Tippe `prefixinfo server` um detaillierte Informationen über diesen Server zu erhalten.",

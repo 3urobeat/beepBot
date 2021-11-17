@@ -23,13 +23,13 @@ module.exports.run = (message, args, startindex, endindex, allowauthorreturn, st
         let searchCollection = message.guild.members.cache.filter(member => member.username == searchfor)
 
         if (searchCollection.size > 1) return searchCollection.size //return amount of users found if more than one was found
-            else return searchCollection.array()[0].user } //if only one was found return 
+            else return [...searchCollection.values()][0].user } //if only one was found return 
 
     else if (message.guild.members.cache.filter(member => member.nickname == searchfor).size > 0) { //search by nickname
         let searchCollection = message.guild.members.cache.filter(member => member.nickname == searchfor)
 
         if (searchCollection.size > 1) return searchCollection.size //return amount of users found if more than one was found
-            else return searchCollection.array()[0].user } //if only one was found return 
+            else return [...searchCollection.values()][0].user } //if only one was found return 
 
     else if (message.guild.members.cache.get(searchfor)) return message.guild.members.cache.get(searchfor).user //get by id
     else if (message.mentions.users.first()) return message.mentions.users.first() //get mention

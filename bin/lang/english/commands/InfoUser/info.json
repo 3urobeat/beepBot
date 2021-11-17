@@ -13,7 +13,6 @@
     "owner": "Owner",
     "usercount": "User Count",
     "channelid": "Channel ID",
-    "serverregion": "Server Region",
     "shardid": "Shard ID",
     "serverdmerror": "Error: You can't use this page in a DM.",
     "servershowmore": "Type `prefixinfo server` to get detailed information about this server.",

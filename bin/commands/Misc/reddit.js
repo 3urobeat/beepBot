@@ -74,7 +74,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
         //if the description is short enough for one message then post it directly without splitting it up
         if (selftext.length < 1800) { //using 1800 because of the additional description
-            msg.edit("", {embed: { //"" is to delete content of the "normal" searching message
+            msg.edit({ content: "** **", embeds: [{ //"" is to delete content of the "normal" searching message
                 title: over18 + title,
                 url: `https://reddit.com${post.permalink}`,
                 image: {
@@ -85,8 +85,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 footer: {
                     text: `${lf.redditclicktitle}` },
                 timestamp: message.createdAt
-            } })
-            return; }
+            }] })
+            return;
+        }
         
     } catch (err) {
         if (err == "Error: Not found") return message.channel.send(lf.redditnotfound)

@@ -4,8 +4,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (typeof (avataruser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", avataruser))
 
     var avatarurl = avataruser.displayAvatarURL()
-    message.channel.send({embed:{
-        author:{
+    message.channel.send({ embeds: [{
+        author: {
             name: avataruser.username,
             icon_url: avatarurl,
             url: avatarurl
@@ -20,8 +20,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             text: `${lang.general.requestedby} ${message.author.username}`
         },
         timestamp: message.createdAt,
-        color: fn.randomhex()
-    }})
+        color: fn.randomhex() 
+    }] })
 }
 
 module.exports.info = {

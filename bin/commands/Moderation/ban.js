@@ -1,9 +1,11 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+    var Discord = require("discord.js");
+
     var banuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
     if (!banuser) return message.channel.send(lang.general.usernotfound)
     if (typeof (banuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", banuser))
 
-    if (message.guild.owner && message.guild.owner.id !== message.author.id && message.guild.members.cache.get(banuser.id).roles.highest.position >= message.member.roles.highest.position) {
+    if (message.guild.fetchOwner() && message.guild.fetchOwner().id !== message.author.id && message.guild.members.cache.get(banuser.id).roles.highest.position >= message.member.roles.highest.position) {
         return message.channel.send(lang.cmd.ban.highestRoleError) }
 
     if (banuser.id == bot.user.id) return message.channel.send(fn.randomstring(lang.cmd.ban.botban))
@@ -20,8 +22,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         banreasontext = reasontext })
 
     //Checks user perms and ban
-    if (message.member.permissions.has("BAN_MEMBERS", "ADMINISTRATOR")) {
-        message.guild.members.cache.get(banuser.id).ban(banreason).then(() => {
+    if (message.member.permissions.has(Discord.Permissions.FLAGS.BAN_MEMBERS, Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+        message.guild.members.cache.get(banuser.id).ban({ reason: banreason }).then(() => {
             var notifytimetext = lang.cmd.ban.permanent //if not permanent it will get changed by the time argument code block
 
             //Time Argument

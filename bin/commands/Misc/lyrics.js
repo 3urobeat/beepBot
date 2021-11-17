@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         var str = body.lyrics;
 
         if (str.length < 6000) {
-            var fullmsg = {embed: {
+            var fullmsg = { content: "** **", embeds: [{
                 title: `${body.author} - ${body.title}`,
                 url: body.links.genius,
                 thumbnail: { url: body.thumbnail.genius },
@@ -24,15 +24,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 fields: [],
                 timestamp: message.createdAt,
                 footer: { text: `${lang.general.poweredby} some-random-api.ml & genius.com` },
-                color: fn.randomhex() } }
+                color: fn.randomhex() }] 
+            }
 
             //longer than description character limit? field limits: https://birdie0.github.io/discord-webhooks-guide/other/field_limits.html
-            if (str.length > 2048) fullmsg.embed.fields.push({ name: "** **", value: str.slice(2048, 3072) })
-            if (str.length > 3072) fullmsg.embed.fields.push({ name: "** **", value: str.slice(3072, 4096) })
-            if (str.length > 4096) fullmsg.embed.fields.push({ name: "** **", value: str.slice(4096, 5120) })
-            if (str.length > 5120) fullmsg.embed.fields.push({ name: "** **", value: str.slice(5120, 899) }) 
+            if (str.length > 2048) fullmsg.embeds[0].fields.push({ name: "** **", value: str.slice(2048, 3072) })
+            if (str.length > 3072) fullmsg.embeds[0].fields.push({ name: "** **", value: str.slice(3072, 4096) })
+            if (str.length > 4096) fullmsg.embeds[0].fields.push({ name: "** **", value: str.slice(4096, 5120) })
+            if (str.length > 5120) fullmsg.embeds[0].fields.push({ name: "** **", value: str.slice(5120, 899) }) 
 
-            msg.edit("", fullmsg)
+            msg.edit(fullmsg)
         } else {
             msg.edit(`${lang.cmd.othermisc.lyricslongerthan6000}\n${body.links.genius}`) } //longer than 6000? then just display message with link
 

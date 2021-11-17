@@ -122,7 +122,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (body.visibility > 1000) var visibility = fn.round(body.visibility / 1000, 1) + " km"
             else var visibility = body.visibility + " m"
 
-        message.channel.send({embed: {
+        message.channel.send({embeds: [{
             title: lf.weatherincity.replace("cityname", `${body.name} (${body.sys.country})`) + ":",
             color: fn.randomhex(),
             thumbnail: {
@@ -147,7 +147,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             footer: {
                 text: `${lang.general.poweredby} OpenWeatherMap API` },
             timestamp: message.createdAt
-        } })
+        }] })
     } catch (err) {
         if (err == "Error: Not found") return message.channel.send(lf.notfound)
 

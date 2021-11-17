@@ -3,7 +3,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     let iconurl = message.guild.iconURL()
 
-    message.channel.send({embed: {
+    message.channel.send({embeds: [{
         title: lang.cmd.otherinfouser.servericontitle,
         url: iconurl,
         color: fn.randomhex(),
@@ -12,7 +12,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             icon_url: message.author.displayAvatarURL,
             text: `${lang.general.requestedby} ${message.author.username}`},
         timestamp: message.createdAt
-    } })
+    }] })
 }
 
 module.exports.info = {

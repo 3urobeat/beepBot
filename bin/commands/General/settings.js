@@ -96,7 +96,7 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
             var PREFIX = guildsettings.prefix
 
             // \` is to apply markdown to message without using some kind of string feature (like ending the ` String message)
-            message.channel.send({embed: {
+            message.channel.send({ embeds: [{
                 title: `${lf.settings} - ${lang.cmd.help.help}`,
                 fields: [{
                         name: `\`${PREFIX}settings prefix (new prefix)\``,
@@ -133,8 +133,9 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                         value: lf.helpsettingsreset },
                     {
                         name: `** **`,
-                        value: lf.helpadvice.replace("prefix", PREFIX) }
-                    ]}
+                        value: lf.helpadvice.replace("prefix", PREFIX) 
+                    }]
+                }]
             })
 
             break;
@@ -414,7 +415,7 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
             } else {
                 var embeddescription = undefined }
 
-            message.channel.send({embed:{
+            message.channel.send({ embeds: [{
                 title: `${lf.settingsfor} '${message.guild.name}'`,
                 color: fn.randomhex(),
                 description: embeddescription,
@@ -453,9 +454,15 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                     {
                         name: `${lf.addroleonjoin}:`,
                         value: memberaddroles }],
-                footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • ${lang.cmd.help.help}: ${guildsettings.prefix}settings help` }
-            } })
-            return; }
+                footer: {
+                    icon_url: message.author.displayAvatarURL(), 
+                    text: `${lang.general.requestedby} ${message.author.username} • ${lang.cmd.help.help}: ${guildsettings.prefix}settings help`
+                }
+            }] 
+        })
+
+        return; 
+    }
 }
 
 module.exports.info = {

@@ -11,13 +11,15 @@ module.exports.run = (bot, logger, reaction, user) => { //eslint-disable-line
 
     if (reaction.me) return; //ignore reactions by the bot itself
 
-    bot.monitorreactions.findOne({ $and: [{msg: reaction.message.id}, {reaction: reaction._emoji.name}] }, (err, doc) => { //id and reaction itself must match
+    bot.monitorreactions.findOne({ $and: [{msg: reaction.message.id}, {reaction: reaction._emoji.name}] }, async (err, doc) => { //id and reaction itself must match
         if (!doc) return;
         if (err) return logger("error", "messageReactionAdd.js", "Error searching in db: " + err)
         
         switch (doc.type) {
             case "modlog": //for wastebasket reaction on modlog messages
-                if (doc.allowedroles.filter(element => reaction.message.guild.members.cache.get(user.id).roles.cache.has(element)).length > 0 || user.id == reaction.message.guild.owner.id) { //either user has role or is owner of guild
+                var guildowner = await reaction.message.guild.fetchOwner();
+
+                if (doc.allowedroles.filter(element => reaction.message.guild.members.cache.get(user.id).roles.cache.has(element)).length > 0 || user.id == guildowner.user.id) { //either user has role or is owner of guild
                     reaction.message.delete()
                         .then(() => {
                             bot.monitorreactions.remove({ reaction: reaction._emoji.name }, {}, (err) => { 
@@ -40,13 +42,14 @@ module.exports.run = (bot, logger, reaction, user) => { //eslint-disable-line
                 //uhh this next line shouldn't trigger
                 if (Object.keys(requestedlang).length == 0) return logger("warn", "messageReactionAdd.js", "I could't find a language to a createGuildlang reaction. :/ Emote: " + reaction._emoji.name)
                 
-                bot.channels.cache.get(doc.channelid).messages.cache.get(doc.msg).edit({embed: {
+                bot.channels.cache.get(doc.channelid).messages.cache.get(doc.msg).edit({embeds: [{
                     title: requestedlang.general.botaddtitle,
                     description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
                     thumbnail: { url: bot.user.displayAvatarURL() },
                     footer: {
-                        text: requestedlang.general.botaddfooter }
-                } }).then(() => { reaction.users.remove(user).catch(() => {}) }) //catch but ignore error
+                        text: requestedlang.general.botaddfooter 
+                    } }] 
+                }).then(() => { reaction.users.remove(user).catch(() => {}) }) //catch but ignore error
 
                 //if the user didn't change the lang using the settings cmd we are still allowed to do that automatically to bring in some "magic"! (I feel like Apple rn lol)
                 if (doc.enablesettingslangchange) bot.settings.update({ guildid: doc.guildid }, { $set: { lang: requestedlangname }}, {}, () => { }) //catch but ignore error
