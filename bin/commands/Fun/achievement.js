@@ -1,9 +1,9 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line   
     if (!args[0]) message.channel.send(lang.cmd.otherfun.achievementmissingargs)
 
-    let title = lang.cmd.otherfun.achievementtitle
+    let title    = lang.cmd.otherfun.achievementtitle
     let contents = args.join(" ")
-    let rnd = Math.floor((Math.random() * 39) + 1);
+    let rnd      = Math.floor((Math.random() * 39) + 1);
     
     if (contents.length > 22) return message.channel.send(lang.cmd.otherfun.achievementtoolongtext)
 

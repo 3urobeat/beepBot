@@ -15,22 +15,40 @@ module.exports.run = (message, args, startindex, endindex, allowauthorreturn, st
                 else searchfor += e
             
             return true; //continue with next iteration
-        } else return false; //stop loop
+        } else {
+            return false; //stop loop
+        }
     })
 
-    if (!searchfor && allowauthorreturn) return message.author //author
-    else if (message.guild.members.cache.filter(member => member.user.username == searchfor).size > 0) { //search by username
+    
+    if (!searchfor && allowauthorreturn) {
+        return message.author //author
+
+    } else if (message.guild.members.cache.filter(member => member.user.username == searchfor).size > 0) { //search by username
         let searchCollection = message.guild.members.cache.filter(member => member.username == searchfor)
 
-        if (searchCollection.size > 1) return searchCollection.size //return amount of users found if more than one was found
-            else return [...searchCollection.values()][0].user } //if only one was found return 
+        if (searchCollection.size > 1) {
+            return searchCollection.size //return amount of users found if more than one was found
+        } else {
+            return [...searchCollection.values()][0].user //if only one was found return 
+        }
 
-    else if (message.guild.members.cache.filter(member => member.nickname == searchfor).size > 0) { //search by nickname
+    } else if (message.guild.members.cache.filter(member => member.nickname == searchfor).size > 0) { //search by nickname
         let searchCollection = message.guild.members.cache.filter(member => member.nickname == searchfor)
 
-        if (searchCollection.size > 1) return searchCollection.size //return amount of users found if more than one was found
-            else return [...searchCollection.values()][0].user } //if only one was found return 
+        if (searchCollection.size > 1) {
+            return searchCollection.size //return amount of users found if more than one was found
+        } else {
+            return [...searchCollection.values()][0].user //if only one was found return 
+        }
 
-    else if (message.guild.members.cache.get(searchfor)) return message.guild.members.cache.get(searchfor).user //get by id
-    else if (message.mentions.users.first()) return message.mentions.users.first() //get mention
-    else return undefined } //return undefined if nothing was found
+    } else if (message.guild.members.cache.get(searchfor)) {
+        return message.guild.members.cache.get(searchfor).user //get by id
+
+    } else if (message.mentions.users.first()) {
+        return message.mentions.users.first() //get mention
+
+    } else {
+        return undefined //return undefined if nothing was found
+    }
+}

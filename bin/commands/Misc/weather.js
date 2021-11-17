@@ -7,7 +7,6 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let token = require("../../../../token.json").openweathermapapitoken //nice path bro
 
 
-
     //Yes this bot will probably never support so many languages but since it should be as dynamic and scaleable as possible try and get a fitting language
     //lang doc: https://openweathermap.org/current#multi
     let supportedlangs = {
@@ -59,8 +58,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     }
 
     //get lang code from obj or set english if the language isn't supported/found
-    if (supportedlangs[guildsettings.lang]) var thislang = supportedlangs[guildsettings.lang]
-        else var thislang = supportedlangs["english"]
+    if (supportedlangs[guildsettings.lang]) {
+        var thislang = supportedlangs[guildsettings.lang]
+    } else {
+        var thislang = supportedlangs["english"]
+    }
     
     try {
         let { body } = await require("superagent").get(`http://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${token}&lang=${thislang}`)
@@ -116,43 +118,52 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 break;
             case deg > 326.25 && deg <= 348.75:
                 var degstr = lf.north + lf.north + lf.west
-                break; }
+                break;
+        }
 
         //make visibility units nicer
-        if (body.visibility > 1000) var visibility = fn.round(body.visibility / 1000, 1) + " km"
-            else var visibility = body.visibility + " m"
+        if (body.visibility > 1000) {
+            var visibility = fn.round(body.visibility / 1000, 1) + " km"
+        } else {
+            var visibility = body.visibility + " m"
+        }
 
-        message.channel.send({embeds: [{
-            title: lf.weatherincity.replace("cityname", `${body.name} (${body.sys.country})`) + ":",
-            color: fn.randomhex(),
-            thumbnail: {
-                url: "http://openweathermap.org/img/w/" + body.weather[0].icon + ".png"
-            },
-            fields: [
-                {
-                    name: `${lf.weather}:`,
-                    value: body.weather[0].description },
-                {
-                    name: `${lf.cloudcoverage}:`,
-                    value: body.clouds.all + " %" },
-                {
-                    name: `${lf.temperature}:`,
-                    value: `${fn.round(body.main.temp - 273,2)} °C | ${fn.round(body.main.temp * 1.8 - 459.67,2)} °F` },
-                {
-                    name: `${lf.visibility}:`,
-                    value: visibility },
-                {
-                    name: `${lf.wind}:`,
-                    value: `${body.wind.speed} m/s\n${degstr} (${body.wind.deg}°)` }],
-            footer: {
-                text: `${lang.general.poweredby} OpenWeatherMap API` },
-            timestamp: message.createdAt
-        }] })
+        message.channel.send({
+            embeds: [{
+                title: lf.weatherincity.replace("cityname", `${body.name} (${body.sys.country})`) + ":",
+                color: fn.randomhex(),
+                thumbnail: {
+                    url: "http://openweathermap.org/img/w/" + body.weather[0].icon + ".png"
+                },
+                fields: [
+                    {
+                        name: `${lf.weather}:`,
+                        value: body.weather[0].description },
+                    {
+                        name: `${lf.cloudcoverage}:`,
+                        value: body.clouds.all + " %" },
+                    {
+                        name: `${lf.temperature}:`,
+                        value: `${fn.round(body.main.temp - 273,2)} °C | ${fn.round(body.main.temp * 1.8 - 459.67,2)} °F` },
+                    {
+                        name: `${lf.visibility}:`,
+                        value: visibility },
+                    {
+                        name: `${lf.wind}:`,
+                        value: `${body.wind.speed} m/s\n${degstr} (${body.wind.deg}°)`
+                    }],
+                footer: {
+                    text: `${lang.general.poweredby} OpenWeatherMap API`
+                },
+                timestamp: message.createdAt
+            }]
+        })
     } catch (err) {
         if (err == "Error: Not found") return message.channel.send(lf.notfound)
 
         logger("error", "weather.js", "API Error: " + err)
-        message.channel.send(`openweathermap.org API ${lang.general.error}: ${err}`) }
+        message.channel.send(`openweathermap.org API ${lang.general.error}: ${err}`)
+    }
 }
 
 module.exports.info = {

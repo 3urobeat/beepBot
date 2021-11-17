@@ -7,7 +7,8 @@ module.exports.run = (bot, logger, reaction, user) => { //eslint-disable-line
         //logger("info", "messageReactionAdd.js", `Fetching a partial reaction... ID: ${reaction.message.id}`, false, true)
         reaction.fetch()
             //.then(() => { logger("info", "messageReactionAdd.js", `Successfully fetched reaction message ${reaction.message.id}.`, false, true) })
-            .catch((err) => { return logger("error", "messageReactionAdd.js", `Couldn't fetch reaction message ${reaction.message.id}! Error: ${err}`) }) }
+            .catch((err) => { return logger("error", "messageReactionAdd.js", `Couldn't fetch reaction message ${reaction.message.id}! Error: ${err}`) })
+    }
 
     if (reaction.me) return; //ignore reactions by the bot itself
 
@@ -23,11 +24,19 @@ module.exports.run = (bot, logger, reaction, user) => { //eslint-disable-line
                     reaction.message.delete()
                         .then(() => {
                             bot.monitorreactions.remove({ reaction: reaction._emoji.name }, {}, (err) => { 
-                                if (err) logger("error", "messageReactionAdd.js", `Error removing ${reaction._emoji.name} of msg ${reaction.message.id} from db after deleting msg: ${err}`) })
-                            return; })
-                        .catch(err => { reaction.message.channel.send(`Error deleting message: ${err}`) }) 
-                } else return;
+                                if (err) logger("error", "messageReactionAdd.js", `Error removing ${reaction._emoji.name} of msg ${reaction.message.id} from db after deleting msg: ${err}`)
+                            })
+
+                            return;
+                        })
+                        .catch(err => { reaction.message.channel.send(`Error deleting message: ${err}`)
+                    }) 
+                } else {
+                    return;
+                }
+
                 break;
+
             case "createGuildlang": //for language reactions on createGuild welcome message
                 var requestedlang = {}
                 var requestedlangname = ""
@@ -37,23 +46,31 @@ module.exports.run = (bot, logger, reaction, user) => { //eslint-disable-line
                         requestedlang = bot.langObj[e]
                         requestedlangname = e
                         return false; //stops loop
-                    } else return true; }) //continues with next iteration
+                    } else {
+                        return true; //continues with next iteration
+                    }
+                })
 
                 //uhh this next line shouldn't trigger
                 if (Object.keys(requestedlang).length == 0) return logger("warn", "messageReactionAdd.js", "I could't find a language to a createGuildlang reaction. :/ Emote: " + reaction._emoji.name)
                 
-                bot.channels.cache.get(doc.channelid).messages.cache.get(doc.msg).edit({embeds: [{
-                    title: requestedlang.general.botaddtitle,
-                    description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
-                    thumbnail: { url: bot.user.displayAvatarURL() },
-                    footer: {
-                        text: requestedlang.general.botaddfooter 
-                    } }] 
-                }).then(() => { reaction.users.remove(user).catch(() => {}) }) //catch but ignore error
+                bot.channels.cache.get(doc.channelid).messages.cache.get(doc.msg).edit({
+                    embeds: [{
+                        title: requestedlang.general.botaddtitle,
+                        description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
+                        thumbnail: { url: bot.user.displayAvatarURL() },
+                        footer: {
+                            text: requestedlang.general.botaddfooter 
+                        } 
+                    }] 
+                }).then(() => {
+                    reaction.users.remove(user).catch(() => {}) //catch but ignore error
+                })
 
                 //if the user didn't change the lang using the settings cmd we are still allowed to do that automatically to bring in some "magic"! (I feel like Apple rn lol)
                 if (doc.enablesettingslangchange) bot.settings.update({ guildid: doc.guildid }, { $set: { lang: requestedlangname }}, {}, () => { }) //catch but ignore error
                 break;
+                
             default:
                 return logger("error", "messageReactionAdd.js", "Invalid monitorreactions type in db! Fix this please: " + doc.type);
         }

@@ -21,7 +21,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         unmutereason = reason
-        unmutereasontext = reasontext })
+        unmutereasontext = reasontext
+    })
 
     
     if (args[0].toLowerCase() == "chat" || args[0].toLowerCase() == "all") { //user was muted in chat
@@ -31,7 +32,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             //Remove role
             message.guild.members.cache.get(unmuteuser.id).roles.remove(mutedrole, unmutereason)
                 .catch(err => { //catch error of role adding
-                    return message.channel.send(`${lf.unmuteroleremoveerror.replace("muteuser", unmuteuser.username)}\n${lang.general.error}: ${err}`) }) } }
+                    return message.channel.send(`${lf.unmuteroleremoveerror.replace("muteuser", unmuteuser.username)}\n${lang.general.error}: ${err}`)
+                })
+        }
+    }
     
     //remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
     bot.timedmutes.remove({$and: [{ userid: unmuteuser.id }, { guildid: message.guild.id }]}, (err => { if (err) logger("error", "controller.js", "Error removing ${e.userid} from timedmutes: " + err) }))
@@ -41,8 +45,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (message.guild.members.cache.get(unmuteuser.id).voice.channel != null) {
             message.guild.members.cache.get(unmuteuser.id).voice.setMute(false, unmutereason)
                 .catch(err => {
-                    return message.channel.send(`${lf.unmutevoiceunmuteerror.replace("muteuser", unmuteuser.username)}\n${lang.general.error}: ${err}`) })
+                    return message.channel.send(`${lf.unmutevoiceunmuteerror.replace("muteuser", unmuteuser.username)}\n${lang.general.error}: ${err}`)
+                })
+
         } else {
+            
             //if the user can't be unmuted right now push it into the db and handle it with the voiceStateUpdate event
             let unmuteobj = {
                 type: "unmute", //used to determine what action to take by the voiceStateUpdate event if the user can't be muted right now

@@ -1,9 +1,14 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    if (!args[0]) { args[0] = "" }
-    args[0].replace(guildsettings.prefix, "") //remove prefix from argument if the user should have provided one
+    var lf = lang.cmd.help //lf for lang-file
 
-    let lf = lang.cmd.help //lf for lang-file
-    function replaceBool(value) { return String(value).replace("true", "✅").replace("false", "❌") }
+    //Process first argument
+    if (!args[0]) args[0] = ""
+        else args[0].replace(guildsettings.prefix, "") //remove prefix from argument if the user should have provided one
+
+    //Helper function to replace boolean in string with emote
+    function replaceBool(value) {
+        return String(value).replace("true", "✅").replace("false", "❌")
+    }
 
     if (args[0]) { //user wants detailed information to one command?
         let cmd = bot.commands.get(args[0].toLowerCase())
@@ -41,7 +46,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 }]
             })
         } else {
-            return message.channel.send(lf.cmdnotfound) }
+            return message.channel.send(lf.cmdnotfound)
+        }
 
     } else { //No argument given, construct full list of commands
 
@@ -71,7 +77,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             //Check if category is Botowner and ignore it if the user shouldn't be me (just to keep the msg shorter/more relevant)
             if (e.info.category == "Botowner" && message.author.id !== "231827708198256642") return;
 
-            //Check if command is a music command and hide it if the guild isn't allowed to use them
+            //Check if command is allowed on this guild and hide it if it isn't
             if (e.info.allowedguilds && !e.info.allowedguilds.includes(message.guild.id)) return;
 
             //Create new Array for category if it doesn't exist yet

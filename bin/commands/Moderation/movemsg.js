@@ -7,13 +7,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (message.reference) { //check if user replied to the message
         var msgid = message.reference.messageId
         args.unshift(msgid) //add msgid to beginning of the array so that the next channelcheck doesn't get confused because otherwise the channel arg would now be index 0 and not 1
+
     } else if (args[0].startsWith("https://discord.com/channels/")) { //check if user linked the message
         var newargs = args[0].toLowerCase().replace("https://discord.com/channels/", "").split("/")
         if (newargs[0] != message.guild.id || newargs[1] != message.channel.id) return message.channel.send(lf.wrongchannel)
 
         var msgid = newargs[2]
+
     } else if (args[0].length === 18 && /^\d+$/.test(args[0])) { //Check if user provided the message id
         var msgid = args[0]
+
     } else if (!isNaN(parseInt(args[0]))) { //Check if the user wants to move last x messages
         if (parseInt(args[0]) > 25) return message.channel.send(lf.toomanymsgs)
         message.react("⏳") //react to let user know that something is happening if fetching all messages should take longer
@@ -28,13 +31,15 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (message.createdTimestamp + 15000 < Date.now()) { //took longer than 15 seconds to fetch all messages? abort.
             message.channel.send(lf.tooktoolong)
             clearInterval(waitformsgid) 
-            return; }
+            return;
+        }
                
         if (typeof(msgid) == "undefined") return; //continue to wait if msgid is still undefined
         clearInterval(waitformsgid) //Clear interval now so that the code below can't possibly get executed twice
 
         //get channel to move msg to
         if (!args[1]) return message.channel.send(lf.missingchannel)
+
         try {
             if (args[1].length === 18 && /^\d+$/.test(args[1])) { //Check if the arg is 18 chars long and if it is a number
                 var movechannelid = args[1].toString()
@@ -97,20 +102,24 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 //Handle embed as we can't display it and content is usually empty
                 if (e.embeds.length > 0) {
                     if (originalcontent > 0) originalcontent += "\n\n" //if there is text put a new line between the text and the embed note
-                    originalcontent += lf.isembed.replace("embedtitle", e.embeds[0].title) }
+                    originalcontent += lf.isembed.replace("embedtitle", e.embeds[0].title)
+                }
 
                 //Handle attachment
                 if (e.attachments.length > 0) {
                     if (originalcontent > 0) originalcontent += "\n\n" //if there is text put a new line between the text and attachment url
-                    originalcontent += `${lf.attachment}: ${e.attachments[0].url}` }
+                    originalcontent += `${lf.attachment}: ${e.attachments[0].url}`
+                }
 
                 //Check if message is a beepBot command and suppress markdown
                 if (e.content.startsWith(guildsettings.prefix)) {
                     var cont = e.content.slice(guildsettings.prefix.length).split(" "); //slice prefix from message
-                    if (bot.commands.get(cont[0].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``) } //check if command exists and if so add ` around prefix in message (replace applies to first occurrence)
+                    if (bot.commands.get(cont[0].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``) //check if command exists and if so add ` around prefix in message (replace applies to first occurrence)
+                }
 
                 if (originalcontent.length > 1020) { //1024 is the field value character limit
-                    originalcontent.slice(0, 1020) + "..." }
+                    originalcontent.slice(0, 1020) + "..."
+                }
 
                 if (originalcontent.length == 0) return; //something probably went wrong but this message appears to be empty so lets stop to suppress an error
 
@@ -121,8 +130,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     embed.fields.push({
                         name: lf.convofieldname.replace("author", `${e.author.username}#${e.author.discriminator}`).replace("time", (new Date(e.createdTimestamp)).toISOString().replace(/T/, ' ').replace(/\..+/, '')),
                         value: originalcontent
-                    }) }
+                    })
+                }
             })
+
         } else { //one message
 
             var originalmsg = await message.channel.messages.fetch(String(msgid))
@@ -135,7 +146,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             //Handle embed as we can't display it and content is usually empty
             if (originalmsg.embeds.length > 0) {
                 if (originalcontent > 0) originalcontent += "\n\n" //if there is text put a new line between the text and the embed note
-                originalcontent += lf.isembed.replace("embedtitle", originalmsg.embeds[0].title) }
+                originalcontent += lf.isembed.replace("embedtitle", originalmsg.embeds[0].title)
+            }
 
             //process attachment
             if ([...originalmsg.attachments.values()].length > 0) {
@@ -154,10 +166,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             //Check if message is a beepBot command and suppress markdown
             if (originalmsg.content.startsWith(guildsettings.prefix)) {
                 var cont = message.content.slice(guildsettings.prefix.length).split(" "); //slice prefix from message
-                if (bot.commands.get(cont[1].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``) } //check if command exists and if so add ` around prefix in message
+                if (bot.commands.get(cont[1].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``) //check if command exists and if so add ` around prefix in message
+            }
 
             if (originalcontent.length > 1020) { //1024 is the field value character limit
-                originalcontent.slice(0, 1020) + "..." }
+                originalcontent.slice(0, 1020) + "..."
+            }
 
             if (originalcontent.length == 0) originalcontent = "** **" //makes field look empty and avoid an error
 
@@ -165,12 +179,15 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 title: lf.title.replace("username", `${originalmsg.author.username}#${originalmsg.author.discriminator}`).replace("channelname", `#${message.channel.name}`),
                 fields: [{
                     name: `${lf.fieldname.replace("time", (new Date(originalmsg.createdTimestamp)).toISOString().replace(/T/, ' ').replace(/\..+/, ''))}:`, //"original msg" from utc time
-                    value: originalcontent }], //original msg content
+                    value: originalcontent //original msg content
+                }],
                 image: {
-                    url: thumbnail },
+                    url: thumbnail
+                },
                 footer: {
                     icon_url: message.author.displayAvatarURL(),
-                    text: `${lf.movedby.replace("author", `${message.author.username}#${message.author.discriminator}`)} • ${lang.general.reason}: ${movereason}` } //moved by and reason
+                    text: `${lf.movedby.replace("author", `${message.author.username}#${message.author.discriminator}`)} • ${lang.general.reason}: ${movereason}`  //moved by and reason
+                }
             }
         }
 
@@ -197,7 +214,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             .catch(err => { 
                 message.channel.send(`${lf.errormovingmsg}: ${err}`);
                 message.react("❌").catch(() => {}) //catch but ignore error
-                return; })
+                return;
+            })
     }, 250);
 
 }

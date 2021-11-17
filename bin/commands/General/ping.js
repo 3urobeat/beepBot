@@ -1,17 +1,21 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    let m = await message.channel.send({ embeds: [{
-                        title: "Ping?",
-                        color: 0xFFA500
+    let msg = await message.channel.send({
+        embeds: [{
+            title: "Ping?",
+            color: 0xFFA500
         }]
     });
 
+    //Get heartbeat and calculate ping
     let botheartbeat = fn.round(bot.ws.ping, 2)
-    let botpingpong = fn.round(m.createdTimestamp - message.createdTimestamp, 2)
+    let botpingpong  = fn.round(msg.createdTimestamp - message.createdTimestamp, 2)
 
-    m.edit({ embeds: [{
-                title: "Pong!",
-                description:":heartbeat: " + botheartbeat + "ms\n:ping_pong: " + botpingpong + "ms",
-                color: 0x32CD32
+    //Edit original message with results
+    msg.edit({
+        embeds: [{
+            title: "Pong!",
+            description:":heartbeat: " + botheartbeat + "ms\n:ping_pong: " + botpingpong + "ms",
+            color: 0x32CD32
         }]
     });
     
