@@ -71,6 +71,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             //Check if category is Botowner and ignore it if the user shouldn't be me (just to keep the msg shorter/more relevant)
             if (e.info.category == "Botowner" && message.author.id !== "231827708198256642") return;
 
+            //Check if command is a music command and hide it if the guild isn't allowed to use them
+            if (e.info.allowedguilds && !e.info.allowedguilds.includes(message.guild.id)) return;
+
             //Create new Array for category if it doesn't exist yet
             if (!unsortedcategories[e.info.category]) unsortedcategories[e.info.category] = []
 
