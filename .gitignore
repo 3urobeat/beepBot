@@ -8,3 +8,4 @@ sync.ffs_db
 sync.ffs_lock
 bin/commands/General/test.js
 .eslintrc.json
+.idea
