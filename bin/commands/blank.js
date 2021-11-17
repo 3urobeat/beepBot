@@ -16,5 +16,6 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
     usage: '',
     accessableby: [''], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
-    nsfwonly: false
+    nsfwonly: false,
+    allowedguilds: config.musicenabledguilds //Optional value. Provide array with guildids as Strings that should only be allowed to use this command
 }

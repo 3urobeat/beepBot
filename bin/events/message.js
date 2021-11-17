@@ -84,18 +84,21 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
             
             var guildowner = await message.guild.fetchOwner();
 
+            //Check if command is a music command and hide it if the guild isn't allowed to use them
+            if (cmd.info.allowedguilds && !cmd.info.allowedguilds.includes(message.guild.id)) return message.channel.send(bot.fn.lang(message.guild.id, guildsettings).general.guildnotallowederror);
+
 
             if (!ab.includes("all")) { //check if user is allowed to use this command
                 if (ab.includes("botowner")) {
-                    if (message.author.id !== '231827708198256642') return message.channel.send(bot.fn.owneronlyerror(bot.fn.lang(message.guild.id)))
+                    if (message.author.id !== '231827708198256642') return message.channel.send(bot.fn.owneronlyerror(bot.fn.lang(message.guild.id, guildsettings)))
                 } else if (guildowner && message.author.id == guildowner.user.id) { //check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
                     //nothing to do here, just not returning an error message and let the server owner do what he wants
                 } else if (ab.includes("admins")) {
-                    if (!guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id)))
+                    if (!guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id, guildsettings)))
                 } else if (ab.includes("moderators")) {
                     //check if user doesn't have admin nor modrole because admins should be able to execute mod commands
                     if (!guildsettings.moderatorroles.filter(element => message.member.roles.cache.has(element)).length > 0 && //weird two line if statement
-                        !guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id)))
+                        !guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id, guildsettings)))
                 } else {
                     message.channel.send(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${BOTOWNER} will probably see this error and fix it.`) //eslint-disable-line no-undef
                     logger('error', 'message.js', `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${cont[0]}'\x1b[0m to prevent safety issues.`)
