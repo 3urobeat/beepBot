@@ -1,12 +1,17 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { 
+    var Discord = require("discord.js");
+
     var kickuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-n"]);
     if (!kickuser) return message.channel.send(lang.general.usernotfound)
     if (typeof (kickuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", kickuser))
 
-    if (message.guild.owner && message.guild.owner.id !== message.author.id && message.guild.members.cache.get(kickuser.id).roles.highest.position >= message.member.roles.highest.position) {
+    var guildowner = await message.guild.fetchOwner();
+
+    if (guildowner && guildowner.user.id !== message.author.id && message.guild.members.cache.get(kickuser.id).roles.highest.position >= message.member.roles.highest.position) {
         message.channel.send(lang.cmd.kick.highestRoleError)
         message.react("❌").catch(() => {}) //catch but ignore error
-        return; }
+        return;
+    }
 
     if (kickuser.id == bot.user.id) return message.channel.send(fn.randomstring(lang.cmd.kick.botkick))
     if (kickuser.id == message.author.id) return message.channel.send(lang.cmd.kick.selfkick)
@@ -22,7 +27,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         kickreasontext = reasontext })
 
     //Checks user perms and kick
-    if (message.member.permissions.has("KICK_MEMBERS", "ADMINISTRATOR")) {
+    if (message.member.permissions.has(Discord.Permissions.FLAGS.KICK_MEMBERS, Discord.Permissions.FLAGS.ADMINISTRATOR)) {
         message.guild.members.cache.get(kickuser.id).kick(kickreason).then(() => {
             message.channel.send(lang.cmd.kick.kickmsg.replace("username", kickuser.username).replace("kickreasontext", kickreasontext))
             message.react("✅").catch(() => {}) //catch but ignore error

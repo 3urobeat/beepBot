@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         let { body } = await require("superagent").get(`http://urbanscraper.herokuapp.com/define/${args.join(" ")}`)
         let bodyurl = body.url.replace(/\s/g, '')
 
-        message.channel.send({embed:{
+        message.channel.send({embeds: [{
             title: body.term.charAt(0).toUpperCase() + body.term.slice(1) + " - Urban Dictionary",
             url: bodyurl,
             color: fn.randomhex(),
@@ -20,7 +20,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             ],
             footer: {
                 text: `${lang.general.by} ${body.author}` },
-            timestamp: body.posted }})
+            timestamp: body.posted }]
+        })
         
     } catch (err) {
         if (err == "Error: Not Found") return message.channel.send(lang.cmd.othermisc.udnotfound) //Send custom error message that nothing has been found about this search term

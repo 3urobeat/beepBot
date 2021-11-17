@@ -10,24 +10,24 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
             .catch((err) => { return logger("error", "message.js", `Couldn't fetch message ${message.id}! Error: ${err}`) }) }
 
     if (message.author.bot) return;
-    if (message.channel.type == "text") var thisshard = message.guild.shard //Get shard instance of this shard with this "workaround" because it isn't directly accessabl
+    if (message.channel.type == "GUILD_TEXT") var thisshard = message.guild.shard //Get shard instance of this shard with this "workaround" because it isn't directly accessabl
         else var thisshard = 0 //set shard id to 0 to prevent errors for example when texting in DM
 
     //if (message.guild.id != "232550371191554051" && message.guild.id != "331822220051611648" && message.guild.id != "643117199791226880") return; //don't respond to other guilds when testing with normal loginmode (for testing)
-    if (message.channel.type == "text" && bot.config.loginmode == "test") logger("info", "message.js", `Shard ${thisshard.id}: ${message}`) //log messages when testing
+    if (message.channel.type == "GUILD_TEXT" && bot.config.loginmode == "test") logger("info", "message.js", `Shard ${thisshard.id}: ${message}`) //log messages when testing
 
     //Confuse the db searching into finding nothing but not throwing an error when the channel is a dm
-    if (message.channel.type == "dm") var guildid = 0 //yes this isn't best practice but probably saves me from restructuring the code
+    if (message.channel.type == "DM") var guildid = 0 //yes this isn't best practice but probably saves me from restructuring the code
         else var guildid = message.guild.id
 
-    bot.settings.findOne({ guildid: guildid }, (err, guildsettings) => { //fetch guild data once and pass it with run function
+    bot.settings.findOne({ guildid: guildid }, async (err, guildsettings) => { //fetch guild data once and pass it with run function
         if (err) {
             logger("error", "message.js", "msg Event: Error fetching guild from database: " + err)
             message.channel.send("Something went wrong getting your guild's settings from the database. Please try again later.")
             return; }
 
         //Check if guild is in settings db and add it if it isn't
-        if (message.channel.type !== "dm") {
+        if (message.channel.type !== "DM") {
             if (!guildsettings) {
                 bot.fn.servertosettings(message.guild)
         
@@ -49,7 +49,7 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
         } }
 
         //get prefix for this guild or set default prefix if channel is dm
-        if (message.channel.type !== "dm") var PREFIX = guildsettings.prefix 
+        if (message.channel.type !== "DM") var PREFIX = guildsettings.prefix 
             else { 
                 //quickly construct guildsettings object to not cause errors when using in dm
                 if (bot.config.loginmode == "normal") var PREFIX = bot.constants.DEFAULTPREFIX
@@ -74,18 +74,21 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
         var args = cont.slice(1);
         var cmd  = bot.commands.get(cont[0].toLowerCase());
 
-        if (message.channel.type === "dm") {
+        if (message.channel.type === "DM") {
             if (cmd && cmd.info.allowedindm === false) return message.channel.send(bot.fn.randomstring(["That cannot work in a dm. :face_palm:","That won't work in a DM...","This command in a DM? No.","Sorry but no. Try it on a server.","You need to be on a server!"]) + " (DM-Error)") }
 
         if (cmd) { //check if command is existing and run it
             if (cmd.info.nsfwonly == true && !message.channel.nsfw) return message.channel.send(bot.fn.lang(message.guild.id, guildsettings).general.nsfwonlyerror)
             
             var ab = cmd.info.accessableby
+            
+            var guildowner = await message.guild.fetchOwner();
+
 
             if (!ab.includes("all")) { //check if user is allowed to use this command
                 if (ab.includes("botowner")) {
                     if (message.author.id !== '231827708198256642') return message.channel.send(bot.fn.owneronlyerror(bot.fn.lang(message.guild.id)))
-                } else if (message.guild.owner && message.author.id == message.guild.owner.id) { //check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
+                } else if (guildowner && message.author.id == guildowner.user.id) { //check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
                     //nothing to do here, just not returning an error message and let the server owner do what he wants
                 } else if (ab.includes("admins")) {
                     if (!guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id)))
@@ -99,14 +102,14 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
                     return;
                 }}
 
-            if (message.channel.type === "dm") cmd.run(bot, message, args, bot.langObj["english"], logger, guildsettings, bot.fn)
+            if (message.channel.type === "DM") cmd.run(bot, message, args, bot.langObj["english"], logger, guildsettings, bot.fn)
                 else {
                     require("fs").appendFile("./bin/cmduse.txt", `[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}] (Guild ${message.guild.id}) ${message.content}\n`, () => {}) //add cmd usage to cmduse.txt
                     cmd.run(bot, message, args, bot.fn.lang(message.guild.id, guildsettings), logger, guildsettings, bot.fn) } //run the command after lang function callback
             
             return;
         } else { //cmd not recognized? check if channel is dm and send error message
-            if (message.channel.type === "dm") {
+            if (message.channel.type === "DM") {
                 message.channel.send(bot.fn.randomstring(["Invalid command! :neutral_face:","You got something wrong there!","Something is wrong... :thinking:","Whoops - it seems like this command doesn't exists.","Trust me. Something is wrong with your command.","That is not right."]) + " (Wrong command-Error)") }
             return; }
     })

@@ -11,17 +11,31 @@ const nedb     = require("@yetzt/nedb")
 const fs       = require("fs")
 
 const configpath = "./config.json"
-const config     = require(configpath)
+var   config     = require(configpath)
 const constants  = require("./constants.json")
 
-const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] }) //partials are messages that are not fully cached and have to be fetched manually
-var   fn  = {} //object that will contain all functions to be accessible from commands
+//I hate intents
+const bot = new Discord.Client({ intents: [ 
+    Discord.Intents.FLAGS.GUILDS, 
+    Discord.Intents.FLAGS.GUILD_MEMBERS, 
+    Discord.Intents.FLAGS.GUILD_BANS,
+    Discord.Intents.FLAGS.GUILD_INVITES,
+    Discord.Intents.FLAGS.GUILD_PRESENCES,
+    Discord.Intents.FLAGS.GUILD_MESSAGES,
+    Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+    Discord.Intents.FLAGS.DIRECT_MESSAGES,
+    Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+], partials: ['MESSAGE', 'REACTION'] }) //partials are messages that are not fully cached and have to be fetched manually
+
+var fn = {} //object that will contain all functions to be accessible from commands
 
 var loggedin      = false
 var logafterlogin = []
 
 bot.config    = config //I'm just gonna add it to the bot object as quite a few cmds will probably need the config later on
 bot.constants = constants
+
+global.config = config;
 
 /* ------------ Functions for all shards: ------------ */
 /**
@@ -233,18 +247,21 @@ monitorreactions.loadDatabase((err) => {
     logger("info", "bot.js", "Successfully loaded monitorreactions database.") }); //load db content into memory
 bot.monitorreactions = monitorreactions; //add reference to bot obj
 
+
 /* ------------ Startup: ------------ */
 bot.on("ready", async function() {
-    if (bot.guilds.cache.array()[0] == undefined) return logger("warn", "bot.js", "This shard has no guilds and is therefore unused!");
-    var thisshard = bot.guilds.cache.array()[0].shard //Get shard instance of this shard with this "workaround" because it isn't directly accessable
+    if ([...bot.guilds.cache.values()].length == 0) return logger("warn", "bot.js", "This shard has no guilds and is therefore unused!");
+    var thisshard = [...bot.guilds.cache.values()][0].shard //Get shard instance of this shard with this "workaround" because it isn't directly accessable
 
     //Set activity either to gameoverwrite or gamerotation[0]
     if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { 
         let game = config.gameoverwrite
         if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
 
-        bot.user.setPresence({activity: { name: game, type: config.gametype, url: config.gameurl }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
-    } else bot.user.setPresence({activity: { name: config.gamerotation[0], type: config.gametype, url: config.gameurl }, status: config.status }).catch(err => { return logger("", "", "Woops! Couldn't set presence: " + err); })
+        bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+    } else {
+        bot.user.setPresence({ activities: [{ name: config.gamerotation[0], type: config.gametype, url: config.gameurl }], status: config.status })
+    }
 
     if (thisshard.id == 0) {
         if (bootstart - Number(shardArgs[2]) < 10000) { //if difference is more than 10 seconds it must be a restart
@@ -267,6 +284,66 @@ bot.on("ready", async function() {
     setTimeout(() => {
         logger("", "", "", true, true) //Print empty line to clear other stuff
     }, 2500);
+
+
+    //Game rotation
+    if (config.gamerotateseconds <= 10) logger("warn", "controller.js", "gamerotateseconds in config is <= 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true)
+    if (config.gameurl == "") logger("warn", "controller.js", "gameurl in config is empty and will break the bots presence!", true)
+    let currentgameindex = 0
+    let lastPresenceChange = Date.now() //this is useful because intervals can get very unprecise over time
+
+    setInterval(() => {
+        if (lastPresenceChange + (config.gamerotateseconds * 1000) > Date.now()) return; //last change is more recent than gamerotateseconds wants
+
+        //Refresh config cache to check if gameoverwrite got changed
+        delete require.cache[require.resolve("./config.json")]
+        config = require("./config.json")
+
+        if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { //if botowner set a game manually then only change game if the instance isn't already playing it
+            let game = config.gameoverwrite
+            if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
+
+            if (bot.user.presence.activities[0].name != game) {
+                bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+            }
+
+            currentgameindex = 0; //reset gameindex
+            lastPresenceChange = Date.now() + 600000 //add 10 min to reduce load a bit
+            return; //don't change anything else if botowner set a game manually
+        }
+
+        currentgameindex++ //set here already so we can't get stuck at one index should an error occur
+        if (currentgameindex == config.gamerotation.length) currentgameindex = 0 //reset
+        lastPresenceChange = Date.now()
+
+        //Replace code in string (${})
+        function processThisGame(thisgame, callback) {
+            try {
+                let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs) //matches will be everything in between a "${" and "}" -> either null or array with results
+
+                if (matches) {
+                    matches.forEach(async (e, i) => {
+                        let evaled = await eval(matches[i]);
+                        thisgame = thisgame.replace(`\${${e}}`, evaled);
+
+                        if (!thisgame.includes("${")) callback(thisgame);
+                    })
+                } else {
+                    callback(thisgame); //nothing to process, callback unprocessed argument
+                }
+            
+            } catch(err) {
+                logger("warn", "controller.js", `Couldn't replace gamerotation[${currentgameindex}] in gamerotationloop. Error: ${err.stack}`);
+                return;
+            }
+        }
+
+        processThisGame(config.gamerotation[currentgameindex], (game) => {
+            lastPresenceChange = Date.now() //set again to include processing time
+
+            bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+        })
+    }, 5000)
 });
 
 /* ------------ Event Handlers: ------------ */
@@ -292,7 +369,7 @@ bot.on("voiceStateUpdate", (oldstate, newstate) => {
     require("./events/voiceStateUpdate.js").run(bot, oldstate, newstate) })
 
 /* ------------ Message Handler: ------------ */
-bot.on('message', (message) => {
+bot.on('messageCreate', (message) => {
     require("./events/message.js").run(bot, logger, message) }) //call the run function of the file which contains the code of this event
 
 logger("info", "bot.js", "Logging in...", false, true)

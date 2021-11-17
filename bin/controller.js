@@ -74,7 +74,8 @@ const Manager = new Discord.ShardingManager('./bin/bot.js', {
     shardArgs: [String(bootstart)], //export bootstart to compare with time from bot.js to detect if it is a restart
     totalShards: "auto",
     token: token,
-    respawn: respawnb });
+    respawn: respawnb
+});
 
 /* eslint-disable */
 
@@ -115,7 +116,9 @@ if ((process.env.LOGNAME !== 'tomg' && process.env.LOGNAME !== 'pi' && process.e
         if (process.platform === "win32") { require('child_process').exec('taskkill /f /im node.exe') } else { require('child_process').exec('killall node') } }) } else checkm8="b754jfJNgZWGnzogvl<rsHGTR4e368essegs9<";
 
 
-Manager.spawn(Manager.totalShards).catch(err => { logger("error", "controller.js", `Failed to start shard: ${err.stack}`) }) //respawn delay is 10000
+Manager.spawn({ amount: Manager.totalShards }).catch(err => { //respawn delay is 10000
+    logger("error", "controller.js", `Failed to start shard: ${err.stack}`)
+})
 
 
 /* -------------- Global refreshing/checking stuff -------------- */
@@ -130,62 +133,6 @@ monitorreactions.loadDatabase((err) => { //needs to be loaded with each iteratio
             logger("info", "controller.js", `Cleaned up monitorreactions db and removed ${num} entries!`, true)
             monitorreactions.persistence.compactDatafile() } }) //compact db so that the starting bot instances don't read old data
 });
-
-//Game rotation
-if (config.gamerotateseconds <= 10) logger("warn", "controller.js", "gamerotateseconds in config is <= 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true)
-if (config.gameurl == "") logger("warn", "controller.js", "gameurl in config is empty and will break the bots presence!", true)
-let currentgameindex = 0
-let lastPresenceChange = Date.now() //this is useful because intervals can get very unprecise over time
-
-var gamerotationloop = setInterval(() => {
-    if (lastPresenceChange + (config.gamerotateseconds * 1000) > Date.now()) return; //last change is more recent than gamerotateseconds wants
-
-    //Refresh config cache to check if gameoverwrite got changed
-    delete require.cache[require.resolve("./config.json")]
-    config = require("./config.json")
-
-    if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { //if botowner set a game manually then only change game if the instance isn't already playing it
-        let game = config.gameoverwrite
-        if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
-
-        Manager.broadcastEval(`
-        if (this.user.presence.activities[0].name != "${game}") {
-            this.user.setPresence({activity: { name: "${game}", type: "${config.gametype}", url: "${config.gameurl}" }, status: "${config.status}" }) }`).catch(err => { //error will occur when not all shards are started yet
-            logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err.stack) })
-
-        currentgameindex = 0; //reset gameindex
-        lastPresenceChange = Date.now() + 600000 //add 10 min to reduce load a bit
-        return; } //don't change anything else if botowner set a game manually
-
-    currentgameindex++ //set here already so we can't get stuck at one index should an error occur
-    if (currentgameindex == config.gamerotation.length) currentgameindex = 0 //reset
-    lastPresenceChange = Date.now()
-
-    //Replace code in string (${})
-    function processThisGame(thisgame, callback) {
-        try {
-            let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs) //matches will be everything in between a "${" and "}" -> either null or array with results
-
-            if (matches) {
-                matches.forEach(async (e, i) => {
-                    let evaled = await eval(matches[i])
-                    thisgame = thisgame.replace(`\${${e}}`, evaled)
-
-                    if (!thisgame.includes("${")) callback(thisgame)
-                })
-            } else {
-                callback(thisgame) } //nothing to process, callback unprocessed argument
-        
-        } catch(err) {
-            logger("warn", "controller.js", `Couldn't replace gamerotation[${currentgameindex}] in gamerotationloop. Error: ${err.stack}`)
-            return; } }
-
-    processThisGame(config.gamerotation[currentgameindex], callback => {
-        lastPresenceChange = Date.now() //set again to include processing time
-
-        Manager.broadcastEval(`this.user.setPresence({activity: { name: "${callback}", type: "${config.gametype}", url: "${config.gameurl}" }, status: "${config.status}" })`).catch(err => { //error will occur when not all shards are started yet
-            return logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err.stack) }) })
-}, 5000)
 
 if(typeof checkm8 == "undefined"){process.stdout.write("\x07");logger("", "", `\n\n\x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}\x1b[0m`,true);process.exit(0)}
 if(checkm8!="b754jfJNgZWGnzogvl<rsHGTR4e368essegs9<"){process.stdout.write("\x07");logger(`\n\n\x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}\x1b[0m`,true);process.exit(0)}
@@ -205,31 +152,36 @@ var tempbanloop = setInterval(() => {
         if (docs.length < 1) return; //nothing found
 
         docs.forEach((e, i) => { //take action for all results
-            Manager.broadcastEval(`
-                let guild = this.guilds.cache.get("${e.guildid}")
+            Manager.broadcastEval(client => {
+                let guild = client.guilds.cache.get(e.guildid)
                 if (guild) {
                     //Add ids as fallback option for msgtomodlogchannel
-                    var authorobj = guild.members.cache.get("${e.authorid}") //try to populate obj with actual data
-                    var recieverobj = guild.members.cache.get("${e.userid}")
+                    var authorobj = guild.members.cache.get(e.authorid) //try to populate obj with actual data
+                    var recieverobj = guild.members.cache.get(e.userid)
 
                     if (!authorobj) authorobj = {} //set blank if check failed
                     if (!recieverobj) recieverobj = {}
-                    authorobj["userid"] = ${e.authorid} //add id as fallback should getting actual data failed
-                    recieverobj["userid"] = ${e.userid}
+                    authorobj["userid"] = e.authorid //add id as fallback should getting actual data failed
+                    recieverobj["userid"] = e.userid
 
-                    this.timedbans.remove({$and: [{ userid: "${e.userid}" }, { guildid: "${e.guildid}" }] }, (err => { if (err) logger("error", "controller.js", "Error removing ${e.userid} from timedbans: " + err) }))
+                    client.timedbans.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }] }, (err => {
+                        if (err) logger("error", "controller.js", `Error removing ${e.userid} from timedbans: ${err}`)
+                    }))
 
-                    guild.members.unban("${e.userid}")
+                    guild.members.unban(e.userid)
                         .then(res => {
                             if (Object.keys(res).length > 1) recieverobj = res //overwrite recieverobj if we actually have data from the unban response
 
-                            this.fn.msgtomodlogchannel(guild, "unban", authorobj, recieverobj, ["${e.banreason}"]) })
+                            client.fn.msgtomodlogchannel(guild, "unban", authorobj, recieverobj, [e.banreason]) 
+                        })
                         .catch(err => {
-                            if (err != "DiscordAPIError: Unknown Ban") return this.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, recieverobj, ["${e.banreason}", err]) }) //if unknown ban ignore, user has already been unbanned
+                            if (err != "DiscordAPIError: Unknown Ban") return client.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, recieverobj, [e.banreason, err]) //if unknown ban ignore, user has already been unbanned
+                        })
                 }
-            `).catch(err => {
+            }).catch(err => {
                 logger("warn", "controller.js", "Couldn't broadcast unban: " + err.stack)
-                if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return; }) //do not remove from db when shards are being spawned
+                if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return; //do not remove from db when shards are being spawned
+            })
         })
     })
 }, 10000); //10 seconds
@@ -251,56 +203,61 @@ var timedmuteloop = setInterval(() => {
         docs.forEach((e, i) => { //take action for all results
             if (e.type != "tempmute") return; //only handle mutes that are temporary and should result in a unmute
 
-            Manager.broadcastEval(`
-                let guild = this.guilds.cache.get("${e.guildid}")
+            Manager.broadcastEval(client => {
+                let guild = client.guilds.cache.get(e.guildid)
                 if (guild) {
                     //Add ids as fallback option for msgtomodlogchannel
-                    var authorobj = guild.members.cache.get("${e.authorid}").user //try to populate obj with actual data
-                    var recieverobj = guild.members.cache.get("${e.userid}").user
+                    var authorobj = guild.members.cache.get(e.authorid).user //try to populate obj with actual data
+                    var recieverobj = guild.members.cache.get(e.userid).user
 
                     if (!authorobj) authorobj = {} //set blank if check failed
                     if (!recieverobj) recieverobj = {}
-                    authorobj["userid"] = ${e.authorid} //add id as fallback should getting actual data failed
-                    recieverobj["userid"] = ${e.userid}
+                    authorobj["userid"] = e.authorid //add id as fallback should getting actual data failed
+                    recieverobj["userid"] = e.userid
 
-                    if ("${e.where}" == "chat" || "${e.where}" == "all") { //user was muted in chat
+                    if (e.where == "chat" || e.where == "all") { //user was muted in chat
                         let mutedrole = guild.roles.cache.find(role => role.name == "beepBot Muted")
 
                         if (mutedrole) { //only proceed if role still exists
                             //Remove role
-                            guild.members.cache.get("${e.userid}").roles.remove(mutedrole)
-                                .catch(err => { //catch error of role adding
-                                    return this.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, ["${e.mutereason}", err]) }) } }
+                            guild.members.cache.get(e.userid).roles.remove(mutedrole).catch(err => { //catch error of role adding
+                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, [e.mutereason, err])
+                            })
+                        }
+                    }
                     
                     //remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
-                    this.timedmutes.remove({$and: [{ userid: "${e.userid}" }, { guildid: "${e.guildid}" }]}, (err => { if (err) this.fn.logger("error", "controller.js", "Error removing ${e.userid} from timedmutes: " + err) }))
+                    client.timedmutes.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }]}, (err => { if (err) client.fn.logger("error", "controller.js", `Error removing ${e.userid} from timedmutes: ${err}`) }))
                 
-                    if ("${e.where}" == "voice" || "${e.where}" == "all") { //user was banned in voice
+                    if (e.where == "voice" || e.where == "all") { //user was banned in voice
                         //Remove voice mute
-                        if (guild.members.cache.get("${e.userid}").voice.channel != null) { 
-                            guild.members.cache.get("${e.userid}").voice.setMute(false)
-                                .catch(err => {
-                                    return this.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, ["${e.mutereason}", err]) }) 
+                        if (guild.members.cache.get(e.userid).voice.channel != null) { 
+                            guild.members.cache.get(e.userid).voice.setMute(false).catch(err => {
+                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, [e.mutereason, err])
+                            }) 
                         } else {
                             //if the user can't be unmuted right now push it into the db and handle it with the voiceStateUpdate event
                             let unmuteobj = {
                                 type: "unmute", //used to determine what action to take by the voiceStateUpdate event if the user can't be muted right now
-                                userid: "${e.userid}",
+                                userid: e.userid,
                                 where: "voice",
-                                guildid: "${e.guildid}",
-                                authorid: "${e.authorid}",
-                                mutereason: "${e.mutereason}"
+                                guildid: e.guildid,
+                                authorid: e.authorid,
+                                mutereason: e.mutereason
                             }
                             
-                            this.timedmutes.insert(unmuteobj, (err) => { if (err) this.fn.logger("error", "controller.js", "error updating db: " + err) }) //insert new obj instead of updating old one so that the db remove call won't remove it
+                            client.timedmutes.insert(unmuteobj, (err) => { 
+                                if (err) client.fn.logger("error", "controller.js", "error updating db: " + err) //insert new obj instead of updating old one so that the db remove call won't remove it
+                            })
                         }
                     }
 
-                    this.fn.msgtomodlogchannel(guild, "unmute", authorobj, recieverobj, ["auto", "${e.mutereason}"])
+                    client.fn.msgtomodlogchannel(guild, "unmute", authorobj, recieverobj, ["auto", e.mutereason])
                 }
-            `).catch(err => {
+            }).catch(err => {
                 if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return;
-                logger("warn", "controller.js", "Couldn't broadcast unmute: " + err.stack) }) 
+                logger("warn", "controller.js", "Couldn't broadcast unmute: " + err.stack)
+            }) 
         })
     })
 }, 10000); //10 seconds
@@ -314,28 +271,33 @@ if (config.loginmode == "normal") {
         if (new Date().getMonth() == "11") { //if month is December (getMonth counts from 0)
             if (currentavatar == "xmas") return; //seems to be already set to xmas
             
-            Manager.broadcastEval(`this.user.setAvatar("${constants.botxmasavatar}")`)
+            Manager.broadcastEval(client => { client.user.setAvatar(constants.botxmasavatar) })
                 .then(() => { 
                     logger("info", "controller.js", "Successfully changed avatar to xmas."); 
                     currentavatar = "xmas" //change to xmas so that the check won't run again
-                    lastxmascheck = Date.now() })
+                    lastxmascheck = Date.now() 
+                })
                 .catch((err) => { //don't set currentavatar so that the check will run again
                     logger("warn", "controller.js", "Couldn't broadcast xmas avatar change: " + err.stack) 
                     lastxmascheck = Date.now() - 19800000 //subtract 5.5 hours so that the next check will run in half an hour
-                    return; })
+                    return;
+                })
         } else {
             if (currentavatar == "normal") return; //seems to be already set to normal
 
-            Manager.broadcastEval(`this.user.setAvatar("${constants.botdefaultavatar}")`)
-                .then(() => { 
+            Manager.broadcastEval(client => { client.user.setAvatar(constants.botdefaultavatar) })
+                .then(() => {
                     logger("info", "controller.js", "Successfully changed avatar to normal."); 
                     currentavatar = "normal" //change to normal so that the check won't run again
-                    lastxmascheck = Date.now() })
+                    lastxmascheck = Date.now()
+                })
                 .catch((err) => { //don't set currentavatar so that the check will run again
                     logger("warn", "controller.js", "Couldn't broadcast normal avatar change: " + err.stack) 
                     lastxmascheck = Date.now() - 19800000 //subtract 5.5 hours so that the next check will run in half an hour
-                    return; })
-        } }
+                    return;
+                })
+            }
+        }
 
     var xmasloop = setInterval(() => {
         if (lastxmascheck + 21600000 > Date.now()) return; //last change is more recent than 6 hours

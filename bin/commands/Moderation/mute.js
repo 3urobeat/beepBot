@@ -23,7 +23,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 })
                     .then((role) => { //after creating role change permissions of every text channel           
                         message.guild.channels.cache.forEach((channel) => {
-                            if (channel.type != "text") return;
+                            if (channel.type != "GUILD_TEXT") return;
             
                             channel.updateOverwrite(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
                                 .catch((err) => {
@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             } else { //role seems to exist so lets check if all channels have it added to their permissions
                 message.guild.channels.cache.forEach((channel) => {
-                    if (channel.type != "text") return;
+                    if (channel.type != "GUILD_TEXT") return;
                     if (!channel.permissionsFor(mutedrole).has("SEND_MESSAGES") && !channel.permissionsFor(mutedrole).has("ADD_REACTIONS")) return; //if this channel already has both perms set to false then skip this iteration
     
                     channel.updateOverwrite(mutedrole, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)

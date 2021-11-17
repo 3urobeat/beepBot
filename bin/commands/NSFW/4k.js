@@ -2,7 +2,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     try {
         let { body } = await require("superagent").get('https://nekobot.xyz/api/image?type=4k')
 
-        message.channel.send({embed:{
+        message.channel.send({embeds: [{
             title: lang.general.imagehyperlink,
             url: body.message,
             image: {
@@ -10,7 +10,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             footer: {
                 text: `${lang.general.poweredby} NekoBot API` },
             timestamp: message.createdAt,
-            color: fn.randomhex() }})
+            color: fn.randomhex() }]
+        })
 
     } catch (err) {
         logger("error", "4k.js", "API Error: " + err)

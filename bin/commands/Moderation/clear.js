@@ -1,4 +1,6 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+    var Discord = require("discord.js");
+
     let invalidamount = lang.cmd.othermoderation.clearinvalidamount
     if (!args[0]) return message.channel.send(invalidamount);
 
@@ -6,7 +8,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (isNaN(messagecount)) return message.channel.send(invalidamount);
     if (messagecount > 100 || messagecount < 1) return message.channel.send(invalidamount);
 
-    if (message.member.permissions.has("MANAGE_MESSAGES", "ADMINISTRATOR")) {
+    if (message.member.permissions.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES, Discord.Permissions.FLAGS.ADMINISTRATOR)) {
         message.channel.messages.fetch({limit: messagecount + 1}).then(messages => 
             message.channel.bulkDelete(messages)).catch(err => {
                 message.channel.send(`${lang.general.anerroroccurred} ${err}`)

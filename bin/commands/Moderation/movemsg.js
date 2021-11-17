@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 return arr;
             };
 
-            let sortedarray = sort("createdTimestamp", msgid.array())
+            let sortedarray = sort("createdTimestamp", msgid.values())
             sortedarray.forEach((e, i) => {
                 if (e.id == message.id) return; //stop if this is the command message
                 var originalcontent = e.content
@@ -130,16 +130,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 originalcontent += lf.isembed.replace("embedtitle", originalmsg.embeds[0].title) }
 
             //process attachment
-            if (originalmsg.attachments.array().length > 0) {
-                let attachmenturlarr = originalmsg.attachments.array()[0].url.split(".")
+            if ([...originalmsg.attachments.values()].length > 0) {
+                let attachmenturlarr = [...originalmsg.attachments.values()][0].url.split(".")
                 let allowedfiletypes = ["jpg", "jpeg", "png", "gif"]
 
                 if (allowedfiletypes.includes(attachmenturlarr[attachmenturlarr.length - 1]) && attachmenturlarr[attachmenturlarr.length - 1] != "gifv") { //if file type is allowed put it in the thumbnail
-                    thumbnail = originalmsg.attachments.array()[0].url
+                    thumbnail = [...originalmsg.attachments.values()][0].url
                 } else { //otherwise put the url in the text
                     if (originalcontent.length > 0) originalcontent += "\n\n" //if there is text put a new line between the text and attachment url
                     originalcontent += `${lf.seeattachment}`
-                    originalattachments = originalmsg.attachments.array()
+                    originalattachments = [...originalmsg.attachments.values()]
                 }
             }
 
@@ -166,7 +166,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             }
         }
 
-        message.guild.channels.cache.get(movechannelid).send({ embed: embed, files: originalattachments }) //if no attachments in original msg then the array will be empty
+        message.guild.channels.cache.get(movechannelid).send({ embeds: [embed], files: originalattachments }) //if no attachments in original msg then the array will be empty
             .then(() => {
                 message.delete().catch(err => { message.channel.send(`${lf.errordeletingmsg}: ${err}`) })
 
@@ -177,9 +177,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     //put all attachments into message as we won't bother with files in the modlogmsg so the code from above won't work here
                     var modlogcontent = originalmsg.content
 
-                    if (originalmsg.attachments.array().length > 0) {
+                    if ([...originalmsg.attachments.values()].length > 0) {
                         if (modlogcontent.length > 0) modlogcontent += "\n\n" //if there is text put a new line between the text and attachment url
-                        modlogcontent += `${lf.attachment}: ${originalmsg.attachments.array()[0].url}` } //add url to text since the modlogchannel msg won't bother with files
+                        modlogcontent += `${lf.attachment}: ${[...originalmsg.attachments.values()][0].url}` //add url to text since the modlogchannel msg won't bother with files
+                    }
 
                     originalmsg.delete().catch(err => { message.channel.send(`${lf.errordeletingmsg}: ${err}`) })
                     fn.msgtomodlogchannel(message.guild, "movemsg", message.author, originalmsg.author, ["single", modlogcontent, movereason, message.channel.id, movechannelid]) //pass information to modlog function
