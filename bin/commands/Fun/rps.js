@@ -3,9 +3,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (wordarr[0] == decision[0]) return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpstie}`)
 
         if (result == "win") return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpswin}`)
-            else return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpsloose}`) }
+            else return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpsloose}`)
+    }
         
-    var word = args[0]
+    var word     = args[0]
     let decision = fn.randomstring([[0, ":rocket:"], [1, ":newspaper:"], [2, ":scissors:"]]) //get decision by index ["rock", "paper", "scissors"]
    
     switch (word) { //user decision

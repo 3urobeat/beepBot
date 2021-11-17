@@ -6,20 +6,23 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (typeof (banuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", banuser))
 
     if (message.guild.fetchOwner() && message.guild.fetchOwner().id !== message.author.id && message.guild.members.cache.get(banuser.id).roles.highest.position >= message.member.roles.highest.position) {
-        return message.channel.send(lang.cmd.ban.highestRoleError) }
+        return message.channel.send(lang.cmd.ban.highestRoleError)
+    }
 
     if (banuser.id == bot.user.id) return message.channel.send(fn.randomstring(lang.cmd.ban.botban))
     if (banuser.id == message.author.id) return message.channel.send(lang.cmd.ban.selfban)
 
     if (message.guild.members.cache.get(banuser.id).roles.highest.position >= message.guild.members.cache.get(bot.user.id).roles.highest.position) {
-        return message.channel.send(lang.cmd.ban.botRoleTooLow) }
+        return message.channel.send(lang.cmd.ban.botRoleTooLow)
+    }
 
     //Get reason if there is one provided
     var banreason, banreasontext = ""
 
     fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         banreason = reason
-        banreasontext = reasontext })
+        banreasontext = reasontext
+    })
 
     //Checks user perms and ban
     if (message.member.permissions.has(Discord.Permissions.FLAGS.BAN_MEMBERS, Discord.Permissions.FLAGS.ADMINISTRATOR)) {
@@ -51,19 +54,24 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             } else {
                 message.channel.send(lang.cmd.ban.permbanmsg.replace("username", banuser.username).replace("banreasontext", banreasontext))
                 message.react("✅").catch(() => {}) //catch but ignore error
-                fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, lang.cmd.ban.permanent, message.content.includes("-notify") || message.content.includes("-n")]) } //details[2] results in boolean
+                fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, lang.cmd.ban.permanent, message.content.includes("-notify") || message.content.includes("-n")]) //details[2] results in boolean
+            }
 
             //Notify argument
             if (message.content.includes("-notify") || message.content.includes("-n")) {
                 if (!banuser.bot) banuser.send(lang.cmd.ban.bannotifymsg.replace("servername", message.guild.name).replace("banreasontext", banreasontext).replace("timetext", notifytimetext)).catch(err => {
-                    message.channel.send(lang.general.dmerror + err) }) }
+                    message.channel.send(lang.general.dmerror + err)
+                })
+            }
             
         }).catch(err => {
             message.channel.send(`${lang.general.anerroroccurred} ${err}`)
-            message.react("❌").catch(() => {}) }) //catch but ignore error
+            message.react("❌").catch(() => {}) //catch but ignore error
+        })
     } else {
         message.channel.send(fn.usermissperm(lang))
-        message.react("❌").catch(() => {}) } //catch but ignore error
+        message.react("❌").catch(() => {}) //catch but ignore error
+    }
     
 }
 

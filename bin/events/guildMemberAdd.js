@@ -12,12 +12,15 @@ module.exports.run = (bot, member) => {
 
             if (msgtosend.includes("@username")) msgtosend = msgtosend.replace("@username", `<@${member.user.id}>`)
                 else msgtosend = msgtosend.replace("username", member.user.username)
+            
             msgtosend = msgtosend.replace("servername", member.guild.name)
 
-            member.guild.channels.cache.get(String(guildsettings.systemchannel)).send(msgtosend).catch(() => {}) } //catch but ignore error
+            member.guild.channels.cache.get(String(guildsettings.systemchannel)).send(msgtosend).catch(() => {}) //catch but ignore error
+        }
 
         //take care of memberaddrole
         if (guildsettings.memberaddroles.length > 0) {
-            member.roles.add(guildsettings.memberaddroles) } //add all roles at once (memberaddroles is an array)
+            member.roles.add(guildsettings.memberaddroles) //add all roles at once (memberaddroles is an array)
+        }
     })
 }

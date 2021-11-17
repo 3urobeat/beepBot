@@ -19,4 +19,5 @@ module.exports.run = (args, stoparguments, callback) => {
         } else {
             return true; //continue with next iteration
         } 
-    }) }
+    })
+}

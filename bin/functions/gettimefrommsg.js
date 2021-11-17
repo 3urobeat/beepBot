@@ -3,11 +3,14 @@
 
 module.exports.run = (args, callback) => { //eslint-disable-line
     var arr = []
+    
     if (args.includes("-t")) {
         arr = [args[args.indexOf("-t") + 1], args[args.indexOf("-t") + 2]] //Result example: ["2", "minutes"]
     } else if (args.includes("-time")) {
         arr = [args[args.indexOf("-time") + 1], args[args.indexOf("-time") + 2]] //Result example: ["2", "minutes"]
-    } else callback(null, null, []) //nothing found
+    } else {
+        callback(null, null, []) //nothing found
+    }
 
     switch (arr[1]) {
         case "second":

@@ -22,7 +22,8 @@ const constants = require("./constants.json")
  * @returns {String} The resulting String
  */
 var logger = (type, origin, str, nodate, remove) => { //Custom logger
-    require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove) } //call the run function of the file which contains the code of this function
+    require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove) //call the run function of the file which contains the code of this function
+}
 
 /**
  * Returns a random String from an array
@@ -32,10 +33,12 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
 var randomstring = arr => arr[Math.floor(Math.random() * arr.length)]
 
 process.on('unhandledRejection', (reason) => {
-    logger('error', 'controller.js', `Unhandled Rejection! Reason: ${reason.stack}`) });
+    logger('error', 'controller.js', `Unhandled Rejection! Reason: ${reason.stack}`)
+});
 
 process.on('uncaughtException', (reason) => {
-    logger('error', 'controller.js', `Uncaught Exception! Reason: ${reason.stack}`) });
+    logger('error', 'controller.js', `Uncaught Exception! Reason: ${reason.stack}`)
+});
 
 /* ------------ Initialise startup ------------ */
 let ascii = randomstring(asciipath.ascii) //set random ascii for this bootup
@@ -47,13 +50,15 @@ logger('info', 'controller.js', "Loading...", true)
 
 //Log the startup in the cmduse.txt file
 fs.appendFile("./bin/cmduse.txt", `\n\n[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}] Starting beepBot version ${config.version} in ${config.loginmode} mode\n`, err => {
-    if (err) logger('error', 'controller.js', "writing startup to cmduse.txt error: " + err) });
+    if (err) logger('error', 'controller.js', "writing startup to cmduse.txt error: " + err)
+});
 
 if (process.platform == "win32") { //set node process name to find it in task manager etc.
     process.title = `3urobeat's beepBot v${config.version} | ${process.platform}` //Windows allows long terminal/process names
 } else {
     process.stdout.write(`${String.fromCharCode(27)}]0;3urobeat's beepBot v${config.version} | ${process.platform}${String.fromCharCode(7)}`) //sets terminal title (thanks: https://stackoverflow.com/a/30360821/12934162)
-    process.title = `beepBot` } //sets process title in task manager etc.
+    process.title = `beepBot` //sets process title in task manager etc.
+}
 
 
 /* -------------- Start needed shards -------------- */
@@ -124,14 +129,18 @@ Manager.spawn({ amount: Manager.totalShards }).catch(err => { //respawn delay is
 /* -------------- Global refreshing/checking stuff -------------- */
 //Check if there are obsolete monitorreactions db entries
 const monitorreactions = new nedb('./data/monitorreactions.db')
+
 monitorreactions.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
     if (err) return logger("error", "controller.js", "Error loading timedbans database: " + err) 
 
     monitorreactions.remove({ until: { $lte: Date.now() } }, {}, (err, num) => { //until is a date in ms, so we remove all entries that are greater than right now
-        if (err) logger("error", "controller.js", `Error removing all monitorreactions entries that are greater than ${Date.now()}: ${err}`, true) 
-        if (num > 0) { 
+        if (err) logger("error", "controller.js", `Error removing all monitorreactions entries that are greater than ${Date.now()}: ${err}`, true)
+
+        if (num > 0) {
             logger("info", "controller.js", `Cleaned up monitorreactions db and removed ${num} entries!`, true)
-            monitorreactions.persistence.compactDatafile() } }) //compact db so that the starting bot instances don't read old data
+            monitorreactions.persistence.compactDatafile() //compact db so that the starting bot instances don't read old data
+        }
+    })
 });
 
 if(typeof checkm8 == "undefined"){process.stdout.write("\x07");logger("", "", `\n\n\x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}\x1b[0m`,true);process.exit(0)}
@@ -141,12 +150,14 @@ if(checkm8!="b754jfJNgZWGnzogvl<rsHGTR4e368essegs9<"){process.stdout.write("\x07
 const timedbans = new nedb('./data/timedbans.db') //initialise database
     
 let lastTempBanCheck = Date.now() //this is useful because intervals can get unprecise over time
+
 var tempbanloop = setInterval(() => {
     if (lastTempBanCheck + 10000 > Date.now()) return; //last check is more recent than 10 seconds
     lastTempBanCheck = Date.now()
 
     timedbans.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
-        if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
+        if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err)
+    });
 
     timedbans.find({ until: { $lte: Date.now() } }, (err, docs) => { //until is a date in ms, so we check if it is less than right now
         if (docs.length < 1) return; //nothing found
@@ -154,6 +165,7 @@ var tempbanloop = setInterval(() => {
         docs.forEach((e, i) => { //take action for all results
             Manager.broadcastEval(client => {
                 let guild = client.guilds.cache.get(e.guildid)
+
                 if (guild) {
                     //Add ids as fallback option for msgtomodlogchannel
                     var authorobj = guild.members.cache.get(e.authorid) //try to populate obj with actual data
@@ -164,9 +176,9 @@ var tempbanloop = setInterval(() => {
                     authorobj["userid"] = e.authorid //add id as fallback should getting actual data failed
                     recieverobj["userid"] = e.userid
 
-                    client.timedbans.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }] }, (err => {
+                    client.timedbans.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }] }, (err) => {
                         if (err) logger("error", "controller.js", `Error removing ${e.userid} from timedbans: ${err}`)
-                    }))
+                    })
 
                     guild.members.unban(e.userid)
                         .then(res => {
@@ -190,12 +202,14 @@ var tempbanloop = setInterval(() => {
 const timedmutes = new nedb('./data/timedmutes.db') //initialise database
     
 let lastTempMuteCheck = Date.now() //this is useful because intervals can get unprecise over time
+
 var timedmuteloop = setInterval(() => {
     if (lastTempMuteCheck + 10000 > Date.now()) return; //last check is more recent than 10 seconds
     lastTempMuteCheck = Date.now()
 
     timedmutes.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
-        if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
+        if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err)
+    });
 
     timedmutes.find({ until: { $lte: Date.now() } }, (err, docs) => { //until is a date in ms, so we check if it is less than right now
         if (docs.length < 1) return; //nothing found
@@ -205,6 +219,7 @@ var timedmuteloop = setInterval(() => {
 
             Manager.broadcastEval(client => {
                 let guild = client.guilds.cache.get(e.guildid)
+
                 if (guild) {
                     //Add ids as fallback option for msgtomodlogchannel
                     var authorobj = guild.members.cache.get(e.authorid).user //try to populate obj with actual data
@@ -227,7 +242,9 @@ var timedmuteloop = setInterval(() => {
                     }
                     
                     //remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
-                    client.timedmutes.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }]}, (err => { if (err) client.fn.logger("error", "controller.js", `Error removing ${e.userid} from timedmutes: ${err}`) }))
+                    client.timedmutes.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }]}, (err) => {
+                        if (err) client.fn.logger("error", "controller.js", `Error removing ${e.userid} from timedmutes: ${err}`)
+                    })
                 
                     if (e.where == "voice" || e.where == "all") { //user was banned in voice
                         //Remove voice mute
@@ -296,10 +313,11 @@ if (config.loginmode == "normal") {
                     lastxmascheck = Date.now() - 19800000 //subtract 5.5 hours so that the next check will run in half an hour
                     return;
                 })
-            }
         }
+    }
 
     var xmasloop = setInterval(() => {
         if (lastxmascheck + 21600000 > Date.now()) return; //last change is more recent than 6 hours
-        checkavatar()
-    }, 60000) } //60 seconds
+        checkavatar();
+    }, 60000) //60 seconds
+}

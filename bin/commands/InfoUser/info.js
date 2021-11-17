@@ -2,6 +2,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     const lf         = lang.cmd.info
     const si         = require("systeminformation")
     const Discord    = require("discord.js")
+
     var infofields   = []
     var thumbnailurl = ""
 
@@ -11,18 +12,33 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             name: lf[name],
             value: String(lf[value]).replace("prefix", guildsettings.prefix),
             inline: inline
-        } }
+        }
+    }
 
-    if (!args[0]) { args[0] = "" }
-    if (!args[1]) { args[1] = "" }
+    if (!args[0]) args[0] = ""
+    if (!args[1]) args[1] = ""
+
     switch(args[0].toLowerCase()) {
         case "user":
-            if (!args[1] || message.channel.type == "DM") var whichmember = message.guild.members.cache.get(message.author.id)
-            else if (message.guild.members.cache.find(member => member.user.username == args[1])) var whichmember = message.guild.members.cache.find(member => member.user.username == args[1])
-            else if (message.guild.members.cache.find(member => member.nickname == args[1])) var whichmember = message.guild.members.cache.find(member => member.nickname == args[1])
-            else if (message.guild.members.cache.get(args[1])) var whichmember = message.guild.members.cache.get(args[1])
-            else if (message.mentions.users.first()) var whichmember = message.guild.members.cache.get(message.mentions.users.first().id)
-            else return message.channel.send(lf.usernotfound)
+            if (!args[1] || message.channel.type == "DM") {
+                var whichmember = message.guild.members.cache.get(message.author.id)
+
+            } else if (message.guild.members.cache.find(member => member.user.username == args[1])) {
+                var whichmember = message.guild.members.cache.find(member => member.user.username == args[1])
+
+            } else if (message.guild.members.cache.find(member => member.nickname == args[1])) {
+                var whichmember = message.guild.members.cache.find(member => member.nickname == args[1])
+
+            } else if (message.guild.members.cache.get(args[1])) {
+                var whichmember = message.guild.members.cache.get(args[1])
+
+            } else if (message.mentions.users.first()) {
+                var whichmember = message.guild.members.cache.get(message.mentions.users.first().id)
+
+            } else {
+                return message.channel.send(lf.usernotfound)
+            }
+
 
             thumbnailurl = whichmember.displayAvatarURL()
             var alluseractivites = ""
@@ -38,7 +54,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             })
 
             if (message.channel.type == "DM" || whichmember.nickname == null) usernickname = "/"
-                    else usernickname = whichmember.nickname
+                else usernickname = whichmember.nickname
 
             if (args[1].toLowerCase() == "mobile") { //Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
                 //Mobile version
@@ -55,6 +71,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 
                 quickInfoField(1, "bot", "botshowmore", false)
                 quickInfoField(2, "server", "servershowmore", false)
+
             } else {
                 //Desktop version
                 infofields[0] = {
@@ -85,8 +102,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 }
 
                 quickInfoField(3, "bot", "botshowmore", true)
-                quickInfoField(4, "server", "servershowmore", true) }
+                quickInfoField(4, "server", "servershowmore", true)
+            }
+
             break;
+
         case "server":
             if (message.channel.type == "DM") return message.channel.send(lf.serverdmerror)
 
@@ -148,9 +168,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             }
             break;
+
         default:
             thumbnailurl = bot.user.displayAvatarURL()
-            var cpuTemp = await si.cpuTemperature(async (cb) => { return cb })
+            var cpuTemp  = await si.cpuTemperature(async (cb) => { return cb })
             var cpuUsage = await si.currentLoad(async (cb) => { return cb })
             if (cpuTemp.main == -1) cpuTemp.main = "/" //si can't read temp
 
@@ -168,11 +189,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                            `**${lf.servercount}:** ${(await bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
                            `**${lf.shardcount}:** ${bot.shard.count}\n` +
                            `**${lf.inviteme}:** [Click here!](${bot.constants.botinvitelink})\n`,
-                    inline: true }
+                    inline: true
+                }
 
                 quickInfoField(3, "user", "usershowmore", false)
                 quickInfoField(4, "server", "servershowmore", false)
+
             } else {
+
                 //Desktop version
                 infofields[0] = {
                     name: lf.bot,
@@ -186,7 +210,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                            `${lf.servercount}:\n` +
                            `${lf.shardcount}:\n` +
                            `${lf.inviteme}:\n`,
-                    inline: true }
+                    inline: true
+                }
 
                 infofields[1] = {
                     name: "\u200b",
@@ -200,15 +225,18 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                            `${(await bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
                            `${bot.shard.count}\n` +
                            `[Click here!](${bot.constants.botinvitelink})`,
-                    inline: true }
+                    inline: true
+                }
 
                 infofields[2] = {
                     name: "\u200b",
                     value: "\u200b",
-                    inline: true } 
+                    inline: true
+                } 
                 
                 quickInfoField(3, "user", "usershowmore", true)
-                quickInfoField(4, "server", "servershowmore", true) }
+                quickInfoField(4, "server", "servershowmore", true)
+            }
     }
 
     message.channel.send({ 

@@ -1,17 +1,19 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     const fs = require("fs")
-    let lf = lang.cmd.otherbotowner
+    var   lf = lang.cmd.otherbotowner
     //Note: Gametype must be caps
 
     if (!args[0]) return message.channel.send(lf.setpresencemissingargs)
 
     if (args[0].toLowerCase() == "remove" || args[0].toLowerCase() == "default") { //reset presence settings to default and stop
-        bot.config.status = bot.constants.DEFAULTSTATUS
-        bot.config.gametype = bot.constants.DEFAULTGAMETYPE
+        bot.config.status        = bot.constants.DEFAULTSTATUS
+        bot.config.gametype      = bot.constants.DEFAULTGAMETYPE
         bot.config.gameoverwrite = "";
-        bot.config.gameurl = bot.constants.DEFAULTGAMEURL
+        bot.config.gameurl       = bot.constants.DEFAULTGAMEURL
         
-        fs.writeFile("./bin/config.json", JSON.stringify(bot.config, null, 4), (err) => { if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err) })
+        fs.writeFile("./bin/config.json", JSON.stringify(bot.config, null, 4), (err) => {
+            if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err)
+        })
 
         bot.shard.broadcastEval(client => client.user.setPresence({ activities: [{ name: bot.config.gamerotation[0], type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status }))
             .then(() => {
@@ -30,15 +32,19 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
         if (newstatus != "-1") {
             if (!["online", "idle", "dnd", "invisible"].includes(args[newstatus + 1].toLowerCase())) { 
-                return message.channel.send(`${lf.setpresenceinvalidstatus} 'online', 'idle', 'dnd', 'invisible'`) }
+                return message.channel.send(`${lf.setpresenceinvalidstatus} 'online', 'idle', 'dnd', 'invisible'`)
+            }
 
-            bot.config.status = args[newstatus + 1].toLowerCase() }
+            bot.config.status = args[newstatus + 1].toLowerCase()
+        }
 
         if (newgametype != "-1") {
             if (!["PLAYING", "STREAMING", "LISTENING", "WATCHING", "COMPETING"].includes(args[newgametype + 1].toUpperCase())) { 
-                return message.channel.send(`${lf.setpresenceinvalidgametype} 'playing', 'streaming', 'listening', 'watching', 'competing'`) }
+                return message.channel.send(`${lf.setpresenceinvalidgametype} 'playing', 'streaming', 'listening', 'watching', 'competing'`)
+            }
 
-            bot.config.gametype = args[newgametype + 1].toUpperCase() } //must be caps
+            bot.config.gametype = args[newgametype + 1].toUpperCase() //must be caps
+        }
 
         if (newgame != "-1") {
             if (args[newgame + 1] == "default") { //default will just remove gameoverwrite but keep any other setting
@@ -57,15 +63,22 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     if (possibleflags.includes(args[index]) || !args[index]) {
                         bot.config.gameoverwrite = newgame
                         break;
-                    } }
-            } } else newgame = bot.user.presence.activities[0].name //just set it to current game
+                    }
+                }
+            }
+        } else {
+            newgame = bot.user.presence.activities[0].name //just set it to current game
+        }
 
         if (newurl != "-1") {
             if (args[newurl + 1] == "default") bot.config.gameurl = bot.constants.DEFAULTGAMEURL
-                else bot.config.gameurl = args[newurl + 1] } //url shouldn't contain a space
+                else bot.config.gameurl = args[newurl + 1] //url shouldn't contain a space
+        }
         
         //Write and broadcast changes
-        fs.writeFile("./bin/config.json", JSON.stringify(bot.config, null, 4), (err) => { if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err) })
+        fs.writeFile("./bin/config.json", JSON.stringify(bot.config, null, 4), (err) => {
+            if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err)
+        })
 
         bot.shard.broadcastEval(client => client.user.setPresence({ activities: [{ name: newgame, type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status }))
             .then(() => {

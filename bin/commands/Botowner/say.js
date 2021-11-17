@@ -1,7 +1,11 @@
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     if (!args[0]) return message.channel.send(lang.cmd.otherbotowner.saymissingargs)
-    message.delete().catch(err => { return message.channel.send("Error deleting message: " + err) })
-    message.channel.send(args.join(" "))
+
+    message.delete().catch(err => { 
+        return message.channel.send("Error deleting message: " + err);
+    })
+
+    message.channel.send(args.join(" "));
     
 }
 

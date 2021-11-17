@@ -9,16 +9,21 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (messagecount > 100 || messagecount < 1) return message.channel.send(invalidamount);
 
     if (message.member.permissions.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES, Discord.Permissions.FLAGS.ADMINISTRATOR)) {
-        message.channel.messages.fetch({limit: messagecount + 1}).then(messages => 
-            message.channel.bulkDelete(messages)).catch(err => {
+
+        message.channel.messages.fetch({ limit: messagecount + 1 })
+            .then((messages) => {
+                message.channel.bulkDelete(messages)
+            }).catch(err => {
                 message.channel.send(`${lang.general.anerroroccurred} ${err}`)
                 message.react("❌").catch(() => {}) //catch but ignore error
-                return; })
+                return;
+            })
         
-                fn.msgtomodlogchannel(message.guild, "clear", message.author, {}, [messagecount, message.channel])
+        fn.msgtomodlogchannel(message.guild, "clear", message.author, {}, [messagecount, message.channel])
     } else {
         message.channel.send(fn.usermissperm(lang))
-        message.react("❌").catch(() => {}) } //catch but ignore error
+        message.react("❌").catch(() => {}) //catch but ignore error
+    }
 }
 
 module.exports.info = {

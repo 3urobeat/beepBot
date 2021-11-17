@@ -15,12 +15,13 @@ module.exports.run = (bot, oldstate, newstate) => {
                 if (doc.type == "tempmute" || doc.type == "permmute" && !newstate.member.voice.serverMute) { //check if user is not muted (serverMute returns true or false) but should be muted
                     //mute and attach reason for audit log
                     newstate.member.voice.setMute(true, bot.langObj[gs.lang].general.voicestateupdatemutereason.replace("muteauthor", newstate.guild.members.cache.get(doc.authorid).user.username).replace("reasontext", doc.mutereason)).catch(() => { })
-                } 
+                }
 
                 if (doc.type == "unmute") {
                     newstate.member.voice.setMute(false, bot.langObj[gs.lang].general.voicestateupdateunmutereason.replace("muteauthor", newstate.guild.members.cache.get(doc.authorid).user.username).replace("reasontext", doc.mutereason)).catch(() => { })
                     bot.timedmutes.remove({$and: [{ userid: newstate.member.id }, { guildid: newstate.guild.id }]})
                 }
-            } })
+            }
+        })
     }) 
 }

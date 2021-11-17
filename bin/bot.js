@@ -15,17 +15,20 @@ var   config     = require(configpath)
 const constants  = require("./constants.json")
 
 //I hate intents
-const bot = new Discord.Client({ intents: [ 
-    Discord.Intents.FLAGS.GUILDS, 
-    Discord.Intents.FLAGS.GUILD_MEMBERS, 
-    Discord.Intents.FLAGS.GUILD_BANS,
-    Discord.Intents.FLAGS.GUILD_INVITES,
-    Discord.Intents.FLAGS.GUILD_PRESENCES,
-    Discord.Intents.FLAGS.GUILD_MESSAGES,
-    Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-    Discord.Intents.FLAGS.DIRECT_MESSAGES,
-    Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-], partials: ['MESSAGE', 'REACTION'] }) //partials are messages that are not fully cached and have to be fetched manually
+const bot = new Discord.Client({
+    intents: [ 
+        Discord.Intents.FLAGS.GUILDS, 
+        Discord.Intents.FLAGS.GUILD_MEMBERS, 
+        Discord.Intents.FLAGS.GUILD_BANS,
+        Discord.Intents.FLAGS.GUILD_INVITES,
+        Discord.Intents.FLAGS.GUILD_PRESENCES,
+        Discord.Intents.FLAGS.GUILD_MESSAGES,
+        Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Discord.Intents.FLAGS.DIRECT_MESSAGES,
+        Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+    ], 
+    partials: ['MESSAGE', 'REACTION'] //partials are messages that are not fully cached and have to be fetched manually
+})
 
 var fn = {} //object that will contain all functions to be accessible from commands
 
@@ -49,7 +52,8 @@ global.config = config;
  */
 var logger = (type, origin, str, nodate, remove) => { //Custom logger
     if (loggedin) logafterlogin = undefined
-    return require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove, logafterlogin) } //call the run function of the file which contains the code of this function
+    return require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove, logafterlogin) //call the run function of the file which contains the code of this function
+}
 
 /**
 * Returns the language obj the specified server has set
@@ -57,14 +61,18 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
 * @returns {Object} lang object callback
 */
 var lang = (guildid, guildsettings) => {
-    if (!guildid) { logger('error', 'bot.js', "function lang: guildid not specified!"); return; }
+    if (!guildid) {
+        logger('error', 'bot.js', "function lang: guildid not specified!");
+        return {};
+    }
 
     if (!guildsettings) var serverlang = constants.defaultguildsettings.lang
         else var serverlang = guildsettings.lang
     
     if (!Object.keys(bot.langObj).includes(serverlang)) {
         logger("warn", "bot.js", `Guild ${guildid} has an invalid language! Returning english language...`)
-        return bot.langObj["english"] }
+        return bot.langObj["english"]
+    }
     
     return bot.langObj[serverlang]
 }
@@ -75,7 +83,8 @@ var lang = (guildid, guildsettings) => {
  * @param {Boolean} removeentry Removes the guild from the database
  */
 var servertosettings = (guild, removeentry) => {
-    require("./functions/servertosettings.js").run(bot, logger, guild, removeentry) } //call the run function of the file which contains the code of this function
+    require("./functions/servertosettings.js").run(bot, logger, guild, removeentry) //call the run function of the file which contains the code of this function
+}
 
 /**
  * Attempts to get a user object from a message
@@ -88,7 +97,8 @@ var servertosettings = (guild, removeentry) => {
  * @returns The retrieved user object, undefined if nothing was found or a number >1 if more than one user was found
  */
 var getuserfrommsg = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
-    return require("./functions/getuserfrommsg.js").run(message, args, startindex, endindex, allowauthorreturn, stoparguments) }
+    return require("./functions/getuserfrommsg.js").run(message, args, startindex, endindex, allowauthorreturn, stoparguments)
+}
 
 /**
  * Attempts to get time from message and converts it into ms
@@ -98,7 +108,8 @@ var getuserfrommsg = (message, args, startindex, endindex, allowauthorreturn, st
  * @returns {Array} Array containing amount and unit. Example: ["2", "minutes"]
  */
 var gettimefrommsg = (args, callback) => {
-    require("./functions/gettimefrommsg.js").run(args, (time, unitindex, arr) => { callback(time, unitindex, arr) }) } //callback the callback
+    require("./functions/gettimefrommsg.js").run(args, (time, unitindex, arr) => { callback(time, unitindex, arr) }) //callback the callback
+}
 
 /**
  * Attempts to get a reason from a message
@@ -107,7 +118,8 @@ var gettimefrommsg = (args, callback) => {
  * @returns reason and reasontext (reason is for Audit Log, reasontext for message)
  */
 var getreasonfrommsg = (args, stoparguments, callback) => {
-    require("./functions/getreasonfrommsg.js").run(args, stoparguments, (reason, reasontext) => { callback(reason, reasontext) }) } //callback the callback
+    require("./functions/getreasonfrommsg.js").run(args, stoparguments, (reason, reasontext) => { callback(reason, reasontext) }) //callback the callback
+}
 
 /**
  * Sends a message to the modlogchannel of that guild if it has one set
@@ -118,7 +130,8 @@ var getreasonfrommsg = (args, stoparguments, callback) => {
  * @param {Array<String>} details Additional details
  */
 var msgtomodlogchannel = (guild, action, author, reciever, details) => {
-    require("./functions/msgtomodlogchannel.js").run(bot, logger, guild, action, author, reciever, details) } //call the run function of the file which contains the code of this function
+    require("./functions/msgtomodlogchannel.js").run(bot, logger, guild, action, author, reciever, details) //call the run function of the file which contains the code of this function
+}
 
 /**
  * Rounds a number with x decimals
@@ -127,14 +140,16 @@ var msgtomodlogchannel = (guild, action, author, reciever, details) => {
  * @returns {Number} Rounded number
  */
 var round = (value, decimals) => {
-    return Number(Math.round(value+'e'+decimals)+'e-'+decimals) }
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals)
+}
 
 /**
  * Returns random hex value
  * @returns {Number} Hex value
  */
 var randomhex = () => {
-    return Math.floor(Math.random() * 16777214) + 1 }
+    return Math.floor(Math.random() * 16777214) + 1
+}
 
 /**
  * Returns a random String from an array
@@ -168,14 +183,18 @@ dirs('./bin/commands').forEach((k) => {
 
                 if (bot.commands.get(tempcmd.info.names[j])) return logger("warn", "bot.js", `Duplicate command name found! Command: ${tempcmd.info.names[j]}`, true)
 
-                if (j != 0) tempcmd.info.thisisanalias = true //seems like this is an alias
-                    else { 
-                        commandcount++
-                        tempcmd.info.thisisanalias = false }
+                if (j != 0) {
+                    tempcmd.info.thisisanalias = true //seems like this is an alias
+                } else { 
+                    commandcount++
+                    tempcmd.info.thisisanalias = false
+                }
 
-                bot.commands.set(tempcmd.info.names[j], tempcmd) }
+                bot.commands.set(tempcmd.info.names[j], tempcmd)
+            }
         })
-    }) })
+    })
+})
 
 /* -------------- Create lang object -------------- */
 /**
@@ -185,8 +204,10 @@ dirs('./bin/commands').forEach((k) => {
 function langFiles(dir) { //Idea from https://stackoverflow.com/a/63111390/12934162
     fs.readdirSync(dir).forEach(file => {
         const absolute = path.join(dir, file);
-        if (fs.statSync(absolute).isDirectory()) return langFiles(absolute);
-        else {
+
+        if (fs.statSync(absolute).isDirectory()) {
+            return langFiles(absolute);
+        } else {
             if (!file.includes(".json")) return; //ignore all files that aren't .json
             let result = absolute.replace(".json", "").replace(/\\/g, '/').split("/") //remove file ending, convert windows \ to unix / and split path into array
 
@@ -200,12 +221,16 @@ function langFiles(dir) { //Idea from https://stackoverflow.com/a/63111390/12934
                 if (result[1] == "commands") {
                     bot.langObj[result[0]]["cmd"][result[2]] = require(absolute.replace("bin", "."))
                 } else {
-                    bot.langObj[result[0]][result[1]] = require(absolute.replace("bin", ".")) }
+                    bot.langObj[result[0]][result[1]] = require(absolute.replace("bin", "."))
+                }
             } catch(err) {
-                if (err) logger("warn", "bot.js", `langFiles function: lang ${result[0]} has an invalid file: ${err}`) }
+                if (err) logger("warn", "bot.js", `langFiles function: lang ${result[0]} has an invalid file: ${err}`)
+            }
             
-            return; }
-    }) }
+            return;
+        }
+    })
+}
 
 bot.langObj = {}
 langFiles("./bin/lang/"); //RECURSION TIME!
@@ -216,35 +241,43 @@ fn = { logger, lang, servertosettings, getuserfrommsg, gettimefrommsg, getreason
 bot.fn = fn //I need to be able to access functions from the sharding manager
 
 process.on('unhandledRejection', (reason) => {
-    logger('error', 'bot.js', `Unhandled Rejection! Reason: ${reason.stack}`) });
+    logger('error', 'bot.js', `Unhandled Rejection! Reason: ${reason.stack}`)
+});
 
 process.on('uncaughtException', (reason) => {
-    logger('error', 'bot.js', `Uncaught Exception! Reason: ${reason.stack}`) });
+    logger('error', 'bot.js', `Uncaught Exception! Reason: ${reason.stack}`)
+});
 
 
 /* -------------- Load databases -------------- */
 const settings = new nedb('./data/settings.db') //initialise database
+const timedbans = new nedb('./data/timedbans.db') //initialise database
+const timedmutes = new nedb('./data/timedmutes.db') //initialise database
+const monitorreactions = new nedb('./data/monitorreactions.db') //initialise database
+
 settings.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading settings database. Error: " + err)
-    logger("info", "bot.js", "Successfully loaded settings database.") }); //load db content into memory
-bot.settings = settings; //add reference to bot obj
+    logger("info", "bot.js", "Successfully loaded settings database.") //load db content into memory
+});
 
-const timedbans = new nedb('./data/timedbans.db') //initialise database
 timedbans.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading timedbans database. Error: " + err)
-    logger("info", "bot.js", "Successfully loaded timedbans database.") }); //load db content into memory
-bot.timedbans = timedbans; //add reference to bot obj
+    logger("info", "bot.js", "Successfully loaded timedbans database.") //load db content into memory
+});
 
-const timedmutes = new nedb('./data/timedmutes.db') //initialise database
 timedmutes.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading timedmutes database. Error: " + err)
-    logger("info", "bot.js", "Successfully loaded timedmutes database.") }); //load db content into memory
-bot.timedmutes = timedmutes; //add reference to bot obj
+    logger("info", "bot.js", "Successfully loaded timedmutes database.") //load db content into memory
+});
 
-const monitorreactions = new nedb('./data/monitorreactions.db') //initialise database
 monitorreactions.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading monitorreactions database. Error: " + err)
-    logger("info", "bot.js", "Successfully loaded monitorreactions database.") }); //load db content into memory
+    logger("info", "bot.js", "Successfully loaded monitorreactions database.") //load db content into memory
+});
+
+bot.settings = settings; //add reference to bot obj
+bot.timedbans = timedbans; //add reference to bot obj
+bot.timedmutes = timedmutes; //add reference to bot obj
 bot.monitorreactions = monitorreactions; //add reference to bot obj
 
 
@@ -270,14 +303,17 @@ bot.on("ready", async function() {
             logger("", "", "> Successfully logged in shard0!", true)
             logger("", "", "*--------------------------------------------------------------*\n ", true)
         } else {
-            logger("info", "bot.js", "shard0 got restarted...", false, true) }
+            logger("info", "bot.js", "shard0 got restarted...", false, true)
+        }
     } else {
-        logger("info", "bot.js", `Successfully logged in shard${thisshard.id}!`, false, true) }
+        logger("info", "bot.js", `Successfully logged in shard${thisshard.id}!`, false, true)
+    }
 
     loggedin = true
     logafterlogin.forEach(e => {
         if (thisshard.id != 0 && e.includes("Successfully loaded") && e.includes("database")) return; //check if this message is a database loaded message and don't log it again
-        logger("", "", e) });
+        logger("", "", e)
+    });
 
     bot.commandcount = commandcount //probably useful for a few cmds so lets just add it to the bot obj (export here so the read process is definitely finished)
     
@@ -348,29 +384,37 @@ bot.on("ready", async function() {
 
 /* ------------ Event Handlers: ------------ */
 bot.on("guildCreate", guild => {
-    require("./events/guildCreate.js").run(bot, logger, guild) }) //call the run function of the file which contains the code of this event
+    require("./events/guildCreate.js").run(bot, logger, guild) //call the run function of the file which contains the code of this event
+})
 
 bot.on("guildDelete", guild => {
     bot.shard.fetchClientValues("guilds.cache.size").then(res => { //wait for promise
-        logger('info', 'bot.js', `I have been removed from: ${guild.name} (${guild.id}). I'm now in ${res} servers.`) })
+        logger('info', 'bot.js', `I have been removed from: ${guild.name} (${guild.id}). I'm now in ${res} servers.`)
+    })
 
-    servertosettings(guild, true) }); //true argument will remove function from db
+    servertosettings(guild, true) //true argument will remove function from db
+});
 
 bot.on("guildMemberAdd", member => {
-    require("./events/guildMemberAdd.js").run(bot, member) }) //call the run function of the file which contains the code of this event
+    require("./events/guildMemberAdd.js").run(bot, member) //call the run function of the file which contains the code of this event
+});
 
 bot.on("guildMemberRemove", member => {
-    require("./events/guildMemberRemove.js").run(bot, member) }) //call the run function of the file which contains the code of this event
+    require("./events/guildMemberRemove.js").run(bot, member) //call the run function of the file which contains the code of this event
+});
 
 bot.on("messageReactionAdd", (reaction, user) => {
-    require("./events/messageReactionAdd.js").run(bot, logger, reaction, user) }) //call the run function of the file which contains the code of this event
+    require("./events/messageReactionAdd.js").run(bot, logger, reaction, user) //call the run function of the file which contains the code of this event
+});
 
 bot.on("voiceStateUpdate", (oldstate, newstate) => {
-    require("./events/voiceStateUpdate.js").run(bot, oldstate, newstate) })
+    require("./events/voiceStateUpdate.js").run(bot, oldstate, newstate)
+});
 
 /* ------------ Message Handler: ------------ */
 bot.on('messageCreate', (message) => {
-    require("./events/message.js").run(bot, logger, message) }) //call the run function of the file which contains the code of this event
+    require("./events/message.js").run(bot, logger, message) //call the run function of the file which contains the code of this event
+});
 
 logger("info", "bot.js", "Logging in...", false, true)
 bot.login() //Token is provided by the shard manager
