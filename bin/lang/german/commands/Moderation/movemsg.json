@@ -1,5 +1,5 @@
 {
-    "missingargs": "Fehler: Bitte gib eine Nachricht an indem du diesen Befehl in einer Antwort benutzt, indem du einen Nachrichtenlink oder die ID der Nachricht angibst.",
+    "missingargs": "Fehler: Bitte gib eine Nachricht an indem du diesen Befehl in einer Antwort benutzt, indem du einen Nachrichtenlink oder die ID der Nachricht angibst.\nUm mehrere Nachrichten zu verschieben, gib eine Zahl an.",
     "missingchannel": "Fehler: Bitte gib einen Zielkanal an, in den die Nachricht verschoben werden soll.",
     "channelnotfound": "Fehler: Ich konnte den Zielkanal leider nicht finden.",
     "wrongchannel": "Fehler: Die verlinkte Nachricht muss aus diesem Kanal sein.",

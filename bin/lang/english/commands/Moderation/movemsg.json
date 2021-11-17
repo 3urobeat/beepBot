@@ -1,5 +1,5 @@
 {
-    "missingargs": "Error: Please provide a message to move by using this command in a reply, by including a link to the message or by including the id of the message.",
+    "missingargs": "Error: Please provide a message to move by using this command in a reply, by including a link to the message or by including the id of the message.\nTo move multiple messages, provide a number.",
     "missingchannel": "Error: Please provide a target channel where I should move the message to.",
     "channelnotfound": "Error: I sadly couldn't find the target channel.",
     "wrongchannel": "Error: The linked message must be from this channel.",

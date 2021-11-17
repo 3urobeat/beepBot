@@ -2,10 +2,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let lf = lang.cmd.movemsg
 
     if (!args[0] && !message.reference) return message.channel.send(lf.missingargs)
-    
+
     //get message to move
     if (message.reference) { //check if user replied to the message
-        var msgid = message.reference.messageID
+        var msgid = message.reference.messageId
         args.unshift(msgid) //add msgid to beginning of the array so that the next channelcheck doesn't get confused because otherwise the channel arg would now be index 0 and not 1
     } else if (args[0].startsWith("https://discord.com/channels/")) { //check if user linked the message
         var newargs = args[0].toLowerCase().replace("https://discord.com/channels/", "").split("/")
@@ -18,8 +18,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (parseInt(args[0]) > 25) return message.channel.send(lf.toomanymsgs)
         message.react("⏳") //react to let user know that something is happening if fetching all messages should take longer
 
-        message.channel.messages.fetch({limit: parseInt(args[0]) + 1}).then(messages => { //+ 1 because we need to add the command message (will be removed later)
-            msgid = messages })
+        message.channel.messages.fetch({ limit: parseInt(args[0]) + 1 }).then(messages => { //+ 1 because we need to add the command message (will be removed later)
+            msgid = messages
+        })
     }
 
     //wait until msgid is defined (can take a bit longer if the bot needs to fetch multiple messages)
@@ -39,9 +40,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 var movechannelid = args[1].toString()
             } else if (args[1].match(/(?<=<#)[0-9]{18}?(?=>)/g)) { // <#18numbers>
                 var movechannelid = args[1].toString().replace(/[<#>]/g, "")
-            } else { var movechannelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args[1].toLowerCase()).id } //not a channelid so try and find by name (channelnames can't have spaces so no need to join array)
+            } else {
+                var movechannelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args[1].toLowerCase()).id //not a channelid so try and find by name (channelnames can't have spaces so no need to join array)
+            }
         } catch (err) {
-            return message.channel.send(lf.channelnotfound) }
+            return message.channel.send(lf.channelnotfound)
+        }
 
         //get reason if there is one
         if (args[2]) var movereason = args.slice(2).join(" ")
@@ -58,7 +62,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 fields: [], //original messages
                 footer: {
                     icon_url: message.author.displayAvatarURL(),
-                    text: `${lf.movedby.replace("author", `${message.author.username}#${message.author.discriminator}`)} • ${lang.general.reason}: ${movereason}` } //moved by and reason
+                    text: `${lf.movedby.replace("author", `${message.author.username}#${message.author.discriminator}`)} • ${lang.general.reason}: ${movereason}` //moved by and reason
+                }
             }
 
             //Sort the collection by timestamp because Discord fetches it without the right order
@@ -81,9 +86,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 return arr;
             };
 
-            let sortedarray = sort("createdTimestamp", msgid.values())
+
+            let sortedarray = sort("createdTimestamp", [...msgid.values()])
+
             sortedarray.forEach((e, i) => {
                 if (e.id == message.id) return; //stop if this is the command message
+
                 var originalcontent = e.content
 
                 //Handle embed as we can't display it and content is usually empty
