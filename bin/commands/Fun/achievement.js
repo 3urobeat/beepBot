@@ -8,12 +8,15 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (contents.length > 22) return message.channel.send(lang.cmd.otherfun.achievementtoolongtext)
 
     let url = `https://www.minecraftskinstealer.com/achievement/a.php?i=${rnd}&h=${encodeURIComponent(title)}&t=${encodeURIComponent(contents)}`
+    
     require("node-fetch")(url)
-        .then(res => { message.channel.send("", { files: [{ attachment: res.body }] }) })
+        .then(res => { message.channel.send({ files: [{ attachment: res.body }] }) })
         .catch(err => {
             if (err) { //lets check that before successful requests get logged as "null" error
                 logger("error", "achievement.js", "API Error: " + err)
-                message.channel.send(`minecraftskinstealer.com API ${lang.general.error}: ${err}`) } })
+                message.channel.send(`minecraftskinstealer.com API ${lang.general.error}: ${err}`) 
+            }
+        })
 }
 
 module.exports.info = {
