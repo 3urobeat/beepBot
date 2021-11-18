@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 15:43:03
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:31:01
+ * Last Modified: 18.11.2021 20:26:44
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,18 @@
 //This file contains code of the msgtomodlogchannel function and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The msgtomodlogchannel helper function
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Function} logger Reference to the logger function
+ * @param {Discord.Guild} guild The Discord guild class
+ * @param {String} action The type of the modlog event (clear, unban, kick, etc.)
+ * @param {Discord.User} author The Discord user class of the message author
+ * @param {Discord.User} reciever The Discord user class of the action recipient
+ * @param {Array} details Array containing further informations like the reasontext and if the user should be notified
+ */
 module.exports.run = (bot, logger, guild, action, author, reciever, details) => {
     bot.settings.findOne({ guildid: guild.id }, (err, guildsettings) => {
         if (guildsettings.modlogfeatures && !guildsettings.modlogfeatures.includes(action) && !action.includes("err")) return; //user turned off this modlogfeature and it isn't an err

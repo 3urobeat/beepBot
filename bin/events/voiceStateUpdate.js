@@ -4,7 +4,7 @@
  * Created Date: 11.02.2021 18:54:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:23:24
+ * Last Modified: 18.11.2021 20:25:34
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,14 @@
 //This file contains code of the voiceStateUpdate event and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The voiceStateUpdate event
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.VoiceState} oldstate The Discord VoiceState class of the oldstate
+ * @param {Discord.VoiceState} newstate The Discord VoiceState class of the newstate
+ */
 module.exports.run = (bot, oldstate, newstate) => {
     if (!oldstate || !newstate) return; //dunno why but I once got a 'Cannot read property 'id' of null' so maybe it can be undefined? dunno but it is weird
 

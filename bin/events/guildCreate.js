@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 15:15:19
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:19:18
+ * Last Modified: 18.11.2021 20:23:42
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,14 @@
 //This file contains code of the guildCreate event and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The guildCreate event
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Function} logger The logger function
+ * @param {Discord.Guild} guild The Discord guild class
+ */
 module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
     bot.fn.servertosettings(guild)
     logger('info', 'guildCreate.js', `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount-1} other members!`)

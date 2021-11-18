@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:30:46
+ * Last Modified: 18.11.2021 21:55:38
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,16 @@
 //This file contains code of the logger function and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+/**
+ * Logs text to the terminal and appends it to the output.txt file.
+ * @param {Number} bootstart Timestamp of when the bot was started
+ * @param {String} type String that determines the type of the log message. Can be info, warn, error, debug or an empty string to not use the field.
+ * @param {String} origin Name of the file where the message is coming from
+ * @param {String} str The text to log into the terminal
+ * @param {Boolean} nodate Setting to true will hide date and time in the message
+ * @param {Boolean} remove Setting to true will remove this message with the next one
+ * @param {Boolean} logafterlogin Defines if the message should be logged after login
+ */
 module.exports.run = (bootstart, type, origin, str, nodate, remove, logafterlogin) => { //eslint-disable-line
     const readline = require("readline")
     const fs       = require("fs")

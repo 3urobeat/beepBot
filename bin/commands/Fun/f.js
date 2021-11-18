@@ -4,7 +4,7 @@
  * Created Date: 07.10.2020 20:44:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:01:43
+ * Last Modified: 18.11.2021 20:20:03
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -15,6 +15,18 @@
  */
 
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The f command
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.Message} message The recieved message object
+ * @param {Array} args An array of arguments the user provided
+ * @param {Object} lang The language object for this guild
+ * @param {Function} logger The logger function
+ * @param {Object} guildsettings All settings of this guild
+ * @param {Object} fn The object containing references to functions for easier access
+ */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     message.channel.send(`${String(lang.cmd.otherfun.fpaidrespects).replace("username", `**${message.author.username}**`)} <:paidrespects:763023492521656330>`)
 }

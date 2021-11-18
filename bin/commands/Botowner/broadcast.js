@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 18:56:36
+ * Last Modified: 18.11.2021 20:19:34
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -15,6 +15,18 @@
  */
 
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The broadcast command
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.Message} message The recieved message object
+ * @param {Array} args An array of arguments the user provided
+ * @param {Object} lang The language object for this guild
+ * @param {Function} logger The logger function
+ * @param {Object} guildsettings All settings of this guild
+ * @param {Object} fn The object containing references to functions for easier access
+ */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     if (!args[0]) return message.channel.send(lang.cmd.otherbotowner.saymissingargs) //same message so we are just using that
 

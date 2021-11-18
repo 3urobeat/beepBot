@@ -4,7 +4,7 @@
  * Created Date: 12.02.2021 19:25:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:30:22
+ * Last Modified: 18.11.2021 20:26:26
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,17 @@
 //This file contains code of the getuserfrommsg function and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The getuserfrommsg helper function
+ * @param {Discord.Message} message The recieved message object
+ * @param {Array} args An array of arguments the user provided
+ * @param {Number} startindex The index where to start searching in the args array
+ * @param {Number} endindex The index where to stop searching in the args array
+ * @param {Boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
+ * @param {Array} stoparguments An array of arguments that will stop the loop if found at the current position
+ */
 module.exports.run = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
     var searchfor = ""
     if (!endindex) endindex = 99999999

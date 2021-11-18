@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:21:57
+ * Last Modified: 18.11.2021 20:24:07
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,13 @@
 //This file contains code of the servertosettings function and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The guildMemberRemove event
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.GuildMember} member The Discord guild member class
+ */
 module.exports.run = (bot, member) => {
     bot.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
         if (!guildsettings) return; //yeah better stop if nothing was found to avoid errors
