@@ -4,7 +4,7 @@
  * Created Date: 12.02.2021 19:25:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:29:37
+ * Last Modified: 18.11.2021 20:25:48
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,12 @@
 //This file contains code of the getreasonfrommsg function and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+/**
+ * The getreasonfrommsg helper function
+ * @param {Array} args An array of arguments the user provided
+ * @param {Array} stoparguments Array of flags
+ * @param {function} [callback] Called with `reason` (String or undefined) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
+ */
 module.exports.run = (args, stoparguments, callback) => {
     var searchfor = ""
     let startindex = args.indexOf("-r") + 1

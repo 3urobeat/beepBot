@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:22:48
+ * Last Modified: 18.11.2021 21:39:50
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,15 @@
 //This file contains code of the messageReactionAdd event and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The messageReactionAdd event
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Function} logger The logger function
+ * @param {Discord.MessageReaction} reaction The Discord message reaction class
+ * @param {Discord.User} user The Discord user class
+ */
 module.exports.run = (bot, logger, reaction, user) => { //eslint-disable-line
     //Fetch a reaction if it is a partial to be able to work with messages that were sent before the bot was started
     if (reaction.partial) {

@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:21:14
+ * Last Modified: 18.11.2021 20:23:55
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,13 @@
 //This file contains code of the guildMemberAdd event and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The guildMemberAdd event
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.GuildMember} member The Discord guild member class
+ */
 module.exports.run = (bot, member) => {
     //take care of greetmsg
     bot.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {

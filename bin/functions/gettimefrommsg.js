@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:30:01
+ * Last Modified: 18.11.2021 20:26:08
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,11 @@
 //This file contains code of the gettimefrommsg function and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+/**
+ * The gettimefrommsg helper function
+ * @param {Array} args An array of arguments the user provided
+ * @param {function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
+ */
 module.exports.run = (args, callback) => { //eslint-disable-line
     var arr = []
     

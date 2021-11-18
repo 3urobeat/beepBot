@@ -75,6 +75,7 @@ var logger = (type, origin, str, nodate, remove) => { //Custom logger
 /**
 * Returns the language obj the specified server has set
 * @param {Number} guildid The id of the guild
+* @param {Object} guildsettings The settings of this guild
 * @returns {Object} lang object callback
 */
 var lang = (guildid, guildsettings) => {
@@ -120,9 +121,7 @@ var getuserfrommsg = (message, args, startindex, endindex, allowauthorreturn, st
 /**
  * Attempts to get time from message and converts it into ms
  * @param {Array} args The args array
- * @returns {Number} time in ms
- * @returns {Number} index of time unit in lang.general.gettimefuncoptions
- * @returns {Array} Array containing amount and unit. Example: ["2", "minutes"]
+ * @param {function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
  */
 var gettimefrommsg = (args, callback) => {
     require("./functions/gettimefrommsg.js").run(args, (time, unitindex, arr) => { callback(time, unitindex, arr) }) //callback the callback
@@ -132,7 +131,7 @@ var gettimefrommsg = (args, callback) => {
  * Attempts to get a reason from a message
  * @param {Array} args The args array
  * @param {Array} stoparguments Arguments that will stop/limit the search
- * @returns reason and reasontext (reason is for Audit Log, reasontext for message)
+ * @param {function} [callback] Called with `reason` (String or undefined) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
  */
 var getreasonfrommsg = (args, stoparguments, callback) => {
     require("./functions/getreasonfrommsg.js").run(args, stoparguments, (reason, reasontext) => { callback(reason, reasontext) }) //callback the callback

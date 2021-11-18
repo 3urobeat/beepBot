@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:22:16
+ * Last Modified: 18.11.2021 20:24:53
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,14 @@
 //This file contains code of the message event and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The mesageCreate event (named message discord.js version <12)
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Function} logger The logger function
+ * @param {Discord.Message} message The Discord message class
+ */
 module.exports.run = (bot, logger, message) => { //eslint-disable-line
     //Fetch a message if it is a partial message to avoid errors
     if (message.partial) {
@@ -144,7 +152,8 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
                     message.channel.send(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${BOTOWNER} will probably see this error and fix it.`) //eslint-disable-line no-undef
                     logger('error', 'message.js', `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${cont[0]}'\x1b[0m to prevent safety issues.`)
                     return;
-                }}
+                }
+            }
 
             if (message.channel.type === "DM") {
                 cmd.run(bot, message, args, bot.langObj["english"], logger, guildsettings, bot.fn)

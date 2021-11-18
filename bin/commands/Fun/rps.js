@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:03:04
+ * Last Modified: 18.11.2021 20:20:12
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -15,6 +15,18 @@
  */
 
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The rps command
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.Message} message The recieved message object
+ * @param {Array} args An array of arguments the user provided
+ * @param {Object} lang The language object for this guild
+ * @param {Function} logger The logger function
+ * @param {Object} guildsettings All settings of this guild
+ * @param {Object} fn The object containing references to functions for easier access
+ */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     function sendresponse(wordarr, decision, result) {
         if (wordarr[0] == decision[0]) return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpstie}`)

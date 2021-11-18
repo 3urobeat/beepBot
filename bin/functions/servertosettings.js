@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:31:22
+ * Last Modified: 18.11.2021 20:26:58
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,15 @@
 //This file contains code of the servertosettings function and is called by bot.js
 //I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The servertosettings helper function
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Function} logger Reference to the logger function
+ * @param {Discord.Guild} guild The Discord guild class
+ * @param {Boolean} removeentry If true the guild will just be removed from the db and nothing else will be done
+ */
 module.exports.run = (bot, logger, guild, removeentry) => {
     //if removeentry is true just remove entry and stop further execution
     if (removeentry) {
