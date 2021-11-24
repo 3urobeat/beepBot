@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:33:21
+ * Last Modified: 24.11.2021 23:32:20
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -295,46 +295,3 @@ var timedmuteloop = setInterval(() => {
         })
     })
 }, 10000); //10 seconds
-
-//X-mas avatar checker
-if (config.loginmode == "normal") {
-    let lastxmascheck = Date.now() - 21600000 //subtract 6 hours so that the first interval will already get executed
-    var currentavatar = ""
-
-    function checkavatar() {
-        if (new Date().getMonth() == "11") { //if month is December (getMonth counts from 0)
-            if (currentavatar == "xmas") return; //seems to be already set to xmas
-            
-            Manager.broadcastEval(client => { client.user.setAvatar(constants.botxmasavatar) })
-                .then(() => { 
-                    logger("info", "controller.js", "Successfully changed avatar to xmas."); 
-                    currentavatar = "xmas" //change to xmas so that the check won't run again
-                    lastxmascheck = Date.now() 
-                })
-                .catch((err) => { //don't set currentavatar so that the check will run again
-                    logger("warn", "controller.js", "Couldn't broadcast xmas avatar change: " + err.stack) 
-                    lastxmascheck = Date.now() - 19800000 //subtract 5.5 hours so that the next check will run in half an hour
-                    return;
-                })
-        } else {
-            if (currentavatar == "normal") return; //seems to be already set to normal
-
-            Manager.broadcastEval(client => { client.user.setAvatar(constants.botdefaultavatar) })
-                .then(() => {
-                    logger("info", "controller.js", "Successfully changed avatar to normal."); 
-                    currentavatar = "normal" //change to normal so that the check won't run again
-                    lastxmascheck = Date.now()
-                })
-                .catch((err) => { //don't set currentavatar so that the check will run again
-                    logger("warn", "controller.js", "Couldn't broadcast normal avatar change: " + err.stack) 
-                    lastxmascheck = Date.now() - 19800000 //subtract 5.5 hours so that the next check will run in half an hour
-                    return;
-                })
-        }
-    }
-
-    var xmasloop = setInterval(() => {
-        if (lastxmascheck + 21600000 > Date.now()) return; //last change is more recent than 6 hours
-        checkavatar();
-    }, 60000) //60 seconds
-}
