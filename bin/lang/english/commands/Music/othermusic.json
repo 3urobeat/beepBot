@@ -42,5 +42,9 @@
     "skipinfodescription": "Skips to the next song in the queue.",
 
     "stopstopped": "Stopped playback.",
-    "stopinfodescription": "Stops playback, deletes the queue and leaves your voice channel."
+    "stopinfodescription": "Stops playback, deletes the queue and leaves your voice channel.",
+
+    "volumecurrent": "Current volume:",
+    "volumesetvolume": "Set volume to:",
+    "volumeinfodescription": "Sets the volume of the current playback."
 }

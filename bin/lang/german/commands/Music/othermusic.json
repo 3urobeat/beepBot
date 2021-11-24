@@ -42,5 +42,9 @@
     "skipinfodescription": "Springt zum nächsten Titel in der Warteschlange.",
 
     "stopstopped": "Wiedergabe gestoppt.",
-    "stopinfodescription": "Stoppt die Wiedergabe, löscht die Warteschlange und verlässt deinen Sprachkanal."
+    "stopinfodescription": "Stoppt die Wiedergabe, löscht die Warteschlange und verlässt deinen Sprachkanal.",
+
+    "volumecurrent": "Aktuelle Lautstärke:",
+    "volumesetvolume": "Lautstärke eingestellt:",
+    "volumeinfodescription": "Stellt die Lautstärke der aktuellen Wiedergabe ein."
 }
