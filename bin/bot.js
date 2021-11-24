@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 15:34:20
+ * Last Modified: 24.11.2021 23:23:39
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -342,64 +342,112 @@ bot.on("ready", async function() {
     //Load music player if shard includes a music enabled guild
     if ([...bot.guilds.cache.keys()].some(e => config.musicenabledguilds.includes(e))) require("./player.js").run(bot, logger)
 
-    //Game rotation
-    if (config.gamerotateseconds <= 10) logger("warn", "controller.js", "gamerotateseconds in config is <= 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true)
-    if (config.gameurl == "") logger("warn", "controller.js", "gameurl in config is empty and will break the bots presence!", true)
-    let currentgameindex = 0
-    let lastPresenceChange = Date.now() //this is useful because intervals can get very unprecise over time
 
-    setInterval(() => {
-        if (lastPresenceChange + (config.gamerotateseconds * 1000) > Date.now()) return; //last change is more recent than gamerotateseconds wants
+    if (thisshard.id == 0) {
+        //Game rotation
+        if (config.gamerotateseconds <= 10) logger("warn", "controller.js", "gamerotateseconds in config is <= 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true)
+        if (config.gameurl == "") logger("warn", "controller.js", "gameurl in config is empty and will break the bots presence!", true)
+        let currentgameindex = 0
+        let lastPresenceChange = Date.now() //this is useful because intervals can get very unprecise over time
 
-        //Refresh config cache to check if gameoverwrite got changed
-        delete require.cache[require.resolve("./config.json")]
-        config = require("./config.json")
+        setInterval(() => {
+            if (lastPresenceChange + (config.gamerotateseconds * 1000) > Date.now()) return; //last change is more recent than gamerotateseconds wants
 
-        if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { //if botowner set a game manually then only change game if the instance isn't already playing it
-            let game = config.gameoverwrite
-            if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
+            //Refresh config cache to check if gameoverwrite got changed
+            delete require.cache[require.resolve("./config.json")]
+            config = require("./config.json")
 
-            if (bot.user.presence.activities[0].name != game) {
-                bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
-            }
+            if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { //if botowner set a game manually then only change game if the instance isn't already playing it
+                let game = config.gameoverwrite
+                if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
 
-            currentgameindex = 0; //reset gameindex
-            lastPresenceChange = Date.now() + 600000 //add 10 min to reduce load a bit
-            return; //don't change anything else if botowner set a game manually
-        }
-
-        currentgameindex++ //set here already so we can't get stuck at one index should an error occur
-        if (currentgameindex == config.gamerotation.length) currentgameindex = 0 //reset
-        lastPresenceChange = Date.now()
-
-        //Replace code in string (${})
-        function processThisGame(thisgame, callback) {
-            try {
-                let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs) //matches will be everything in between a "${" and "}" -> either null or array with results
-
-                if (matches) {
-                    matches.forEach(async (e, i) => {
-                        let evaled = await eval(matches[i]);
-                        thisgame = thisgame.replace(`\${${e}}`, evaled);
-
-                        if (!thisgame.includes("${")) callback(thisgame);
-                    })
-                } else {
-                    callback(thisgame); //nothing to process, callback unprocessed argument
+                if (bot.user.presence.activities[0].name != game) {
+                    bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
                 }
-            
-            } catch(err) {
-                logger("warn", "controller.js", `Couldn't replace gamerotation[${currentgameindex}] in gamerotationloop. Error: ${err.stack}`);
-                return;
+
+                currentgameindex = 0; //reset gameindex
+                lastPresenceChange = Date.now() + 600000 //add 10 min to reduce load a bit
+                return; //don't change anything else if botowner set a game manually
             }
+
+            currentgameindex++ //set here already so we can't get stuck at one index should an error occur
+            if (currentgameindex == config.gamerotation.length) currentgameindex = 0 //reset
+            lastPresenceChange = Date.now()
+
+            //Replace code in string (${})
+            function processThisGame(thisgame, callback) {
+                try {
+                    let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs) //matches will be everything in between a "${" and "}" -> either null or array with results
+
+                    if (matches) {
+                        matches.forEach(async (e, i) => {
+                            let evaled = await eval(matches[i]);
+                            thisgame = thisgame.replace(`\${${e}}`, evaled);
+
+                            if (!thisgame.includes("${")) callback(thisgame);
+                        })
+                    } else {
+                        callback(thisgame); //nothing to process, callback unprocessed argument
+                    }
+                
+                } catch(err) {
+                    logger("warn", "controller.js", `Couldn't replace gamerotation[${currentgameindex}] in gamerotationloop. Error: ${err.stack}`);
+                    return;
+                }
+            }
+
+            processThisGame(config.gamerotation[currentgameindex], (game) => {
+                lastPresenceChange = Date.now() //set again to include processing time
+
+                bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+            })
+        }, 5000)
+
+
+        //Avatar checker for christmas
+        if (config.loginmode == "normal") {
+            let lastxmascheck = Date.now() - 21600000 //subtract 6 hours so that the first interval will already get executed
+            var currentavatar = ""
+
+            function checkavatar() { //eslint-disable-line
+                if (new Date().getMonth() == "11") { //if month is December (getMonth counts from 0)
+                    if (currentavatar == "xmas") return; //seems to be already set to xmas
+                    
+                    bot.user.setAvatar(constants.botxmasavatar)
+                        .then(() => { 
+                            logger("info", "controller.js", "Successfully changed avatar to xmas."); 
+                            currentavatar = "xmas" //change to xmas so that the check won't run again
+                            lastxmascheck = Date.now() 
+                        })
+                        .catch((err) => { //don't set currentavatar so that the check will run again
+                            logger("warn", "controller.js", "Couldn't set xmas avatar: " + err.stack) 
+                            lastxmascheck = Date.now() - 19800000 //subtract 5.5 hours so that the next check will run in half an hour
+                            return;
+                        })
+                } else {
+                    if (currentavatar == "normal") return; //seems to be already set to normal
+
+                    bot.user.setAvatar(constants.botdefaultavatar)
+                        .then(() => {
+                            logger("info", "controller.js", "Successfully changed avatar to normal."); 
+                            currentavatar = "normal" //change to normal so that the check won't run again
+                            lastxmascheck = Date.now()
+                        })
+                        .catch((err) => { //don't set currentavatar so that the check will run again
+                            logger("warn", "controller.js", "Couldn't broadcast normal avatar change: " + err.stack) 
+                            lastxmascheck = Date.now() - 19800000 //subtract 5.5 hours so that the next check will run in half an hour
+                            return;
+                        })
+                }
+            }
+
+            setInterval(() => {
+                if (lastxmascheck + 21600000 > Date.now()) return; //last change is more recent than 6 hours
+                checkavatar();
+            }, 60000) //60 seconds
         }
-
-        processThisGame(config.gamerotation[currentgameindex], (game) => {
-            lastPresenceChange = Date.now() //set again to include processing time
-
-            bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
-        })
-    }, 5000)
+    }
+    
 });
 
 /* ------------ Event Handlers: ------------ */
