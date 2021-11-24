@@ -3,4 +3,16 @@
     "playeraddedtoqueue": "Zur Warteschlange hinzugefügt: trracktitle",
     "playerqueueend": "Keine verbleibenden Titel in der Warteschlange!",
     "playerchannelempty": "Wiedergabe gestoppt da jeder den Sprachkanal verlassen hat.",
+
+    "usernotinchannel": "Bitte betrete zuerst einen Sprachkanal!",
+    "alreadyconnectedtochannel": "Der Bot spielt bereits in einem anderen Sprachkanal!",
+    "channelnotjoinable": "Ich habe entweder nicht genug Rechte um deinem Kanal beizutreten oder er ist voll.",
+    "connectiontochannelfailed": "Ich habe es leider nicht geschafft deinem Kanal beizutreten und eine Verbindung herzustellen.",
+
+    "playnoargs": "Bitte gib einen YouTube Link oder einen Suchbegriff an!",
+    "playsearchingfor": "Suche nach",
+    "playnoresultsfound": "Keine Ergebnisse gefunden!",
+    "playtrackloading": "Lied tracktitle wird geladen...",
+
+    "playinfodescription": "Spielt einen Song von YouTube, Spotify oder SoundCloud ab oder fügt es zur Warteschlange hinzu."
 }
