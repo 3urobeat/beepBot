@@ -38,6 +38,9 @@
     "resumeresumed": "Resumed playback.",
     "resumeinfodescription": "Resumes the current playback.",
 
+    "shuffleshuffled": "The queue has been shuffled.",
+    "shuffleinfodescription": "Shuffles the current queue.",
+
     "skipsongskipped": "Skipped current song!",
     "skipinfodescription": "Skips to the next song in the queue.",
 
