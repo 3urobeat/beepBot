@@ -34,6 +34,9 @@
     "queuenextsongs": "Next songs:",
     "queueinfodescription": "Shows the current queue and allows the removal of one or all songs.",
 
+    "resumeresumed": "Resumed playback.",
+    "resumeinfodescription": "Resumes the current playback.",
+
     "skipsongskipped": "Skipped current song!",
     "skipinfodescription": "Skips to the next song in the queue.",
 
