@@ -42,6 +42,10 @@
     "resumeresumed": "Resumed playback.",
     "resumeinfodescription": "Resumes the current playback.",
 
+    "seekoutofbounds": "The song is shorter than the timestamp to skip to. Please make sure your format is correct:",
+    "seekedto": "Set position to timestamp seconds.",
+    "seekinfodescription": "Skips to timestamp in current song.",
+
     "shuffleshuffled": "The queue has been shuffled.",
     "shuffleinfodescription": "Shuffles the current queue.",
 

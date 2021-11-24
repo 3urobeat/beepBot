@@ -42,6 +42,10 @@
     "resumeresumed": "Wiedergabe fortgesetzt.",
     "resumeinfodescription": "Setzt die aktuelle Wiedergabe fort.",
 
+    "seekoutofbounds": "Der aktuelle Titel ist kürzer als der angegebene Zeitpunkt. Bitte stelle sicher dass du das richtige Format benutzt hast:",
+    "seekedto": "Position zu timestamp Sekunden gesetzt.",
+    "seekinfodescription": "Spult in aktuellem Titel vor oder zurück.",
+
     "shuffleshuffled": "Die Warteschlange wurde gemischt.",
     "shuffleinfodescription": "Mischt die aktuelle Warteschlange.",
 
