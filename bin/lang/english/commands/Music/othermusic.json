@@ -18,6 +18,15 @@
     "playtrackloading": "Loading track tracktitle by trackauthor...",
     "playinfodescription": "Plays a song from YouTube, Spotify or SoundCloud or adds it to the queue.",
 
+    "queueempty": "The queue is empty!",
+    "queue": "Queue",
+    "queueremovenoargs": "Please provide a track number from the queue to remove!",
+    "queueremoveinvalid": "Your track number is either invalid or not included in the queue.",
+    "queueremoved": "Removed tracktitle by trackauthor.",
+    "queuecleared": "Queue cleared!",
+    "queuenextsongs": "Next songs:",
+    "queueinfodescription": "Shows the current queue and allows the removal of one or all songs.",
+
     "skipsongskipped": "Skipped current song!",
     "skipinfodescription": "Skips to the next song in the queue.",
 
