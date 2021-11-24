@@ -9,10 +9,15 @@
     "channelnotjoinable": "Ich habe entweder nicht genug Rechte um deinem Kanal beizutreten oder er ist voll.",
     "connectiontochannelfailed": "Ich habe es leider nicht geschafft deinem Kanal beizutreten und eine Verbindung herzustellen.",
 
+    "botnotplaying": "Der Bot spielt aktuell in keinem Sprachkanal!",
+    "connectedtodifferentchannel": "Du kannst diesen Befehl nur ausführen wenn du im gleichen Kanal wie der Bot bist!",
+
     "playnoargs": "Bitte gib einen YouTube Link oder einen Suchbegriff an!",
     "playsearchingfor": "Suche nach",
     "playnoresultsfound": "Keine Ergebnisse gefunden!",
     "playtrackloading": "Lied tracktitle wird geladen...",
 
     "playinfodescription": "Spielt einen Song von YouTube, Spotify oder SoundCloud ab oder fügt es zur Warteschlange hinzu."
+    "stopstopped": "Wiedergabe gestoppt.",
+    "stopinfodescription": "Stoppt die Wiedergabe, löscht die Warteschlange und verlässt deinen Sprachkanal."
 }
