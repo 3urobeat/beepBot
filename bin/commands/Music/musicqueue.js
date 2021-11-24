@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 17:45:26
+ * Last Modified: 24.11.2021 18:15:16
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -57,13 +57,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             var tracktoremove = tracks[parseInt(args[1]) - 1]
             if (!tracktoremove) return message.channel.send(lf.queueremoveinvalid)
 
-            queue.tracks = tracks.filter(e => e.id != tracktoremove.id) //return all songs that don't match the id of the song to remove and overwrite tracks array
+            queue.remove(tracktoremove);
 
             message.channel.send(lf.queueremoved.replace("tracktitle", `**${tracktoremove.title}**`).replace("trackauthor", `\`${tracktoremove.author}\``))
             break;
 
         case "clear":
-            queue.tracks = []
+            queue.clear();
             message.channel.send(lf.queuecleared)
             break;
 

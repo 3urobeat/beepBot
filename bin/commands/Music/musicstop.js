@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 16:20:48
+ * Last Modified: 24.11.2021 18:11:28
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -41,6 +41,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (queue) {
         queue.manualstop = true;
         queue.destroy();
+    } else {
+        if (message.guild.me.voice) message.guild.me.voice.disconnect(); //check if user tries to disconnect bot which is in the voice channel without having a queue
     }
 
     message.channel.send(lf.stopstopped)
