@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 18:15:16
+ * Last Modified: 24.11.2021 18:47:08
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -46,7 +46,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     //Prepare message
     var embed = {
         title: lf.queue,
-        description: ""
+        description: "".slice(0, 2048) //cut after 2048 characters to fit into limit: https://birdie0.github.io/discord-webhooks-guide/other/field_limits.html
     }
 
     //Handle arguments
@@ -68,13 +68,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             break;
 
         default:
-            embed.description = "▶ " + lf.playernowplaying.replace("tracktitle", queue.current.title).replace("trackauthor", `\`${queue.current.author}\``) + "\n" //Set first line to current track
+            embed.description = "▶ " + lf.queuecurrentsong + "\n" //Set first line to current track
+            embed.description += `**${queue.current.title}** ${lang.general.by} \`${queue.current.author}\`\n`
+            embed.description += queue.createProgressBar();
+            embed.description += "\n"
 
             if (tracks.length > 0) embed.description += `\n🎶 **${lf.queuenextsongs}**`
                 else embed.description += "\n" + lf.queueempty
 
             tracks.forEach((e, i) => {
-                embed.description += `\n**${i + 1}.** ${e.title} ${lang.general.by} ${e.author} | ${e.duration}`
+                embed.description += `\n**${i + 1}.** ${e.title} ${lang.general.by} \`${e.author}\` | ${e.duration}`
             })
 
             message.channel.send({ embeds: [embed] })
@@ -82,7 +85,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 }
 
 module.exports.info = {
-    names: ["queue"],
+    names: ["queue", "nowplaying", "np"],
     description: "cmd.othermusic.queueinfodescription",
     usage: '["list"/"remove" number/"clear"]',
     accessableby: ['all'],

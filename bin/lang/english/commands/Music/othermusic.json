@@ -31,6 +31,7 @@
     "queueremoveinvalid": "Your track number is either invalid or not included in the queue.",
     "queueremoved": "Removed tracktitle by trackauthor.",
     "queuecleared": "Queue cleared!",
+    "queuecurrentsong": "Current song:",
     "queuenextsongs": "Next songs:",
     "queueinfodescription": "Shows the current queue and allows the removal of one or all songs.",
 

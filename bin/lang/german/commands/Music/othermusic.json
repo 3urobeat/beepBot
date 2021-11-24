@@ -31,6 +31,7 @@
     "queueremoveinvalid": "Deine Songnummer ist entweder ungültig oder nicht in der Warteschlange enthalten!",
     "queueremoved": "tracktitle von trackauthor wurde entfernt.",
     "queuecleared": "Warteschlange geleert!",
+    "queuecurrentsong": "Aktuelle Wiedergabe:",
     "queuenextsongs": "Nächste Titel:",
     "queueinfodescription": "Zeigt die aktuelle Warteschlange und erlaubt das Entfernen von einem Song oder allen.",
 
