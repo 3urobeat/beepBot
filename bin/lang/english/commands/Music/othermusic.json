@@ -12,6 +12,10 @@
     "botnotplaying": "The bot is not playing in any channel!",
     "connectedtodifferentchannel": "You can only use this command when you are in the same channel as the bot!",
 
+    "loopnoargs": "Please provide a valid argument!\nYou can set the loop to one of these modes:",
+    "loopmodeset": "Set mode to loopmode.",
+    "loopinfodescription": "Loops the current track, the whole queue or enables autoplay.",
+
     "playnoargs": "Please provide a YouTube link or a search term!",
     "playsearchingfor": "Searching for",
     "playnoresultsfound": "No results found!",

@@ -12,6 +12,10 @@
     "botnotplaying": "Der Bot spielt aktuell in keinem Sprachkanal!",
     "connectedtodifferentchannel": "Du kannst diesen Befehl nur ausführen wenn du im gleichen Kanal wie der Bot bist!",
 
+    "loopnoargs": "Bitte gib einen gültigen Modus an!\nDu kannst dir einen dieser Modi aussuchen:",
+    "loopmodeset": "Modus zu loopmode gesetzt.",
+    "loopinfodescription": "Wiederholt das aktuelle Lied, die gesamte Warteschlange oder aktiviert autoplay.",
+
     "playnoargs": "Bitte gib einen YouTube Link oder einen Suchbegriff an!",
     "playsearchingfor": "Suche nach",
     "playnoresultsfound": "Keine Ergebnisse gefunden!",
