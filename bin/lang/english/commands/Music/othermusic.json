@@ -3,4 +3,16 @@
     "playeraddedtoqueue": "Added to queue: tracktitle",
     "playerqueueend": "Queue finished!",
     "playerchannelempty": "Stopped playing because everyone left the voice channel.",
+
+    "usernotinchannel": "Please join a voice channel first!",
+    "alreadyconnectedtochannel": "The bot already plays music in a different channel!",
+    "channelnotjoinable": "I either don't have permission to join your channel or it is full.",
+    "connectiontochannelfailed": "I was sadly not able to join your channel and create a connection.",
+
+    "playnoargs": "Please provide a YouTube link or a search term!",
+    "playsearchingfor": "Searching for",
+    "playnoresultsfound": "No results found!",
+    "playtrackloading": "Loading track tracktitle...",
+
+    "playinfodescription": "Plays a song from YouTube, Spotify or SoundCloud or adds it to the queue."
 }
