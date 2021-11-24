@@ -16,8 +16,8 @@
     "playsearchingfor": "Suche nach",
     "playnoresultsfound": "Keine Ergebnisse gefunden!",
     "playtrackloading": "Lied tracktitle wird geladen...",
+    "playinfodescription": "Spielt einen Song von YouTube, Spotify oder SoundCloud ab oder fügt es zur Warteschlange hinzu.",
 
-    "playinfodescription": "Spielt einen Song von YouTube, Spotify oder SoundCloud ab oder fügt es zur Warteschlange hinzu."
     "stopstopped": "Wiedergabe gestoppt.",
     "stopinfodescription": "Stoppt die Wiedergabe, löscht die Warteschlange und verlässt deinen Sprachkanal."
 }

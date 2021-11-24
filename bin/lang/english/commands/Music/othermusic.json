@@ -16,8 +16,8 @@
     "playsearchingfor": "Searching for",
     "playnoresultsfound": "No results found!",
     "playtrackloading": "Loading track tracktitle...",
+    "playinfodescription": "Plays a song from YouTube, Spotify or SoundCloud or adds it to the queue.",
 
-    "playinfodescription": "Plays a song from YouTube, Spotify or SoundCloud or adds it to the queue."
     "stopstopped": "Stopped playback.",
     "stopinfodescription": "Stops playback, deletes the queue and leaves your voice channel."
 }
