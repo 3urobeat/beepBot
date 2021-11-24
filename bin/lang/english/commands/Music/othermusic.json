@@ -25,6 +25,10 @@
     "playtrackloading": "Loading track tracktitle by trackauthor...",
     "playinfodescription": "Plays a song from YouTube, Spotify or SoundCloud or adds it to the queue.",
 
+    "previousnotrack": "There was nothing played before the current song.",
+    "previousplayinggprevioussong": "Jumping to the previous song...",
+    "previousinfodescription": "Jumps to the previous song.",
+
     "queueempty": "The queue is empty!",
     "queue": "Queue",
     "queueremovenoargs": "Please provide a track number from the queue to remove!",
