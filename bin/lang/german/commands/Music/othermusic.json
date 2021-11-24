@@ -18,6 +18,15 @@
     "playtrackloading": "Lied tracktitle von trackauthor wird geladen...",
     "playinfodescription": "Spielt einen Song von YouTube, Spotify oder SoundCloud ab oder fügt es zur Warteschlange hinzu.",
 
+    "queueempty": "Die Warteschlange ist leer!",
+    "queue": "Warteschlange",
+    "queueremovenoargs": "Bitte gib die Nummer des Songs an, der aus der Warteschlange gelöscht werden soll!",
+    "queueremoveinvalid": "Deine Songnummer ist entweder ungültig oder nicht in der Warteschlange enthalten!",
+    "queueremoved": "tracktitle von trackauthor wurde entfernt.",
+    "queuecleared": "Warteschlange geleert!",
+    "queuenextsongs": "Nächste Titel:",
+    "queueinfodescription": "Zeigt die aktuelle Warteschlange und erlaubt das Entfernen von einem Song oder allen.",
+
     "skipsongskipped": "Aktueller Titel wurde übersprungen!",
     "skipinfodescription": "Springt zum nächsten Titel in der Warteschlange.",
 
