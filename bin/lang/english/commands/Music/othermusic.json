@@ -16,6 +16,9 @@
     "loopmodeset": "Set mode to loopmode.",
     "loopinfodescription": "Loops the current track, the whole queue or enables autoplay.",
 
+    "pausedpaused": "Paused playback.",
+    "pauseinfodescription": "Pauses the current playback.",
+
     "playnoargs": "Please provide a YouTube link or a search term!",
     "playsearchingfor": "Searching for",
     "playnoresultsfound": "No results found!",
