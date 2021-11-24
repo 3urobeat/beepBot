@@ -4,7 +4,7 @@
  * Created Date: 21.11.2021 15:23:47
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 15:33:30
+ * Last Modified: 24.11.2021 16:21:22
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -63,6 +63,7 @@ module.exports.run = (bot, logger) => {
     });
 
     player.on('queueEnd', queue => {
+        if (queue.manualstop) return; //don't print message if queue was manually destroyed
         if ([...queue.connection.channel.members.keys()].length == 1) return; //dont send message if no one is in the channel anymore (except the bot)
 
         getLang(queue.guild, (lang) => {

@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 16:10:26
+ * Last Modified: 24.11.2021 16:20:48
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -38,7 +38,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     var queue = player.getQueue(message.guild.id)
 
-    if (queue) queue.destroy();
+    if (queue) {
+        queue.manualstop = true;
+        queue.destroy();
+    }
+
     message.channel.send(lf.stopstopped)
 }
 
