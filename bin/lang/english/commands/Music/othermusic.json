@@ -9,10 +9,15 @@
     "channelnotjoinable": "I either don't have permission to join your channel or it is full.",
     "connectiontochannelfailed": "I was sadly not able to join your channel and create a connection.",
 
+    "botnotplaying": "The bot is not playing in any channel!",
+    "connectedtodifferentchannel": "You can only use this command when you are in the same channel as the bot!",
+
     "playnoargs": "Please provide a YouTube link or a search term!",
     "playsearchingfor": "Searching for",
     "playnoresultsfound": "No results found!",
     "playtrackloading": "Loading track tracktitle...",
 
     "playinfodescription": "Plays a song from YouTube, Spotify or SoundCloud or adds it to the queue."
+    "stopstopped": "Stopped playback.",
+    "stopinfodescription": "Stops playback, deletes the queue and leaves your voice channel."
 }
