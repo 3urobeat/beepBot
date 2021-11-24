@@ -16,6 +16,9 @@
     "loopmodeset": "Modus zu loopmode gesetzt.",
     "loopinfodescription": "Wiederholt das aktuelle Lied, die gesamte Warteschlange oder aktiviert autoplay.",
 
+    "pausedpaused": "Wiedergabe pausiert.",
+    "pauseinfodescription": "Pausiert die aktuelle Wiedergabe.",
+
     "playnoargs": "Bitte gib einen YouTube Link oder einen Suchbegriff an!",
     "playsearchingfor": "Suche nach",
     "playnoresultsfound": "Keine Ergebnisse gefunden!",
