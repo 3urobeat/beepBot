@@ -4,7 +4,7 @@
  * Created Date: 02.08.2020 22:07:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:26
+ * Last Modified: 24.11.2021 20:28:46
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -38,6 +38,12 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
     function logDbErr(err) {
         logger("error", "settings.js", `Error updating db of guild ${guildid}. Error: ${err}`)
     }
+
+    //Try to repair role settings if they should include a null for some reason to prevent error
+    guildsettings.adminroles     = guildsettings.adminroles.filter((e) => { return e !== null })
+    guildsettings.moderatorroles = guildsettings.moderatorroles.filter((e) => { return e !== null })
+    guildsettings.memberaddroles = guildsettings.memberaddroles.filter((e) => { return e !== null })
+    
 
     /* --------------- Read settings for this guild --------------- */
 
@@ -137,6 +143,8 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
         try { //get and set roleid once to make code cleaner
             if (!args[2]) return message.channel.send(lf.adminmodmemberaddroleusage);
 
+            args[2] = args[2].replace("<@&", "").replace(">", "") //replace <@& to make arg a roleid if it should be a mention
+            
             if (args[2].length === 18 && /^\d+$/.test(args[2])) { //Check if the arg is 18 chars long and if it is a number to determine if it is the roleid itself
                 return args[2].toString();
             } else {
