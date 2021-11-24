@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 15:28:53
+ * Last Modified: 24.11.2021 15:42:26
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -29,17 +29,7 @@ const Discord      = require('discord.js'); //eslint-disable-line
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     const lf = lang.cmd.othermusic //Should this file use his lang file path often use this var as shorthand
-    const servers = require("../../bot.js").servers;
     const player  = require("../../player.js").player;
-
-    //Check if this server doesn't have an entry yet in the servers storage
-    if (!servers[message.guild.id]) servers[message.guild.id] = {};
-
-    const thisserver = servers[message.guild.id];
-
-    if (!thisserver.queue) thisserver.queue = [];
-    if (!thisserver.volume) thisserver.volume = 50;
-
 
     //Check if bot can join the voice channel
     if (!message.member.voice.channel) return message.channel.send(lf.usernotinchannel) //check if the user is in a voice channel
