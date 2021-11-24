@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 16:25:45
+ * Last Modified: 24.11.2021 18:08:34
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -37,6 +37,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     
     var queue = player.getQueue(message.guild.id)
+
+    if (!queue) return message.channel.send(lf.queueempty)
 
     if (queue && queue.playing) queue.skip();
     message.channel.send(lf.skipsongskipped)
