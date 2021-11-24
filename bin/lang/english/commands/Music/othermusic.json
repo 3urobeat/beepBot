@@ -18,6 +18,9 @@
     "playtrackloading": "Loading track tracktitle...",
     "playinfodescription": "Plays a song from YouTube, Spotify or SoundCloud or adds it to the queue.",
 
+    "skipsongskipped": "Skipped current song!",
+    "skipinfodescription": "Skips to the next song in the queue.",
+
     "stopstopped": "Stopped playback.",
     "stopinfodescription": "Stops playback, deletes the queue and leaves your voice channel."
 }
