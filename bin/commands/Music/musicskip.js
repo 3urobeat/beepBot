@@ -1,10 +1,10 @@
 /*
- * File: musicstop.js
+ * File: musicskip.js
  * Project: beepbot
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 16:07:00
+ * Last Modified: 24.11.2021 16:25:45
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
