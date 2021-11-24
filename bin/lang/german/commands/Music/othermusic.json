@@ -38,6 +38,9 @@
     "resumeresumed": "Wiedergabe fortgesetzt.",
     "resumeinfodescription": "Setzt die aktuelle Wiedergabe fort.",
 
+    "shuffleshuffled": "Die Warteschlange wurde gemischt.",
+    "shuffleinfodescription": "Mischt die aktuelle Warteschlange.",
+
     "skipsongskipped": "Aktueller Titel wurde übersprungen!",
     "skipinfodescription": "Springt zum nächsten Titel in der Warteschlange.",
 
