@@ -1,6 +1,6 @@
 {
-    "playernowplaying": "Wird jetzt gespielt: tracktitle",
-    "playeraddedtoqueue": "Zur Warteschlange hinzugefügt: trracktitle",
+    "playernowplaying": "Wird jetzt gespielt: tracktitle von trackauthor",
+    "playeraddedtoqueue": "Zur Warteschlange hinzugefügt: trracktitle von trackauthor",
     "playerqueueend": "Keine verbleibenden Titel in der Warteschlange!",
     "playerchannelempty": "Wiedergabe gestoppt da jeder den Sprachkanal verlassen hat.",
 
@@ -15,7 +15,7 @@
     "playnoargs": "Bitte gib einen YouTube Link oder einen Suchbegriff an!",
     "playsearchingfor": "Suche nach",
     "playnoresultsfound": "Keine Ergebnisse gefunden!",
-    "playtrackloading": "Lied tracktitle wird geladen...",
+    "playtrackloading": "Lied tracktitle von trackauthor wird geladen...",
     "playinfodescription": "Spielt einen Song von YouTube, Spotify oder SoundCloud ab oder fügt es zur Warteschlange hinzu.",
 
     "skipsongskipped": "Aktueller Titel wurde übersprungen!",

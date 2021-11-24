@@ -20,6 +20,7 @@
     "error": "Fehler: ",
     "anerroroccurred": "Ein Fehler ist aufgetreten: ",
     "dmerr": "Ich konnte dem Nutzer leider keine DM senden. Fehler: ",
+    "pleasetryagain": "Bitte versuche es erneut.",
     "gettimefuncoptions": ["Sekunde(n)", "Minute(n)", "Stunde(n)", "Tag(e)", "Monat(e)", "Jahr(e)"],
     "unsupportedtime": "timeargument wird leider nicht unterstützt. Bitte verwende eines dieser Zeiteinheiten: seconds/minutes/hours/days/months/years",
 

@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 15:52:39
+ * Last Modified: 24.11.2021 16:51:53
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -75,7 +75,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (track) queue.play(track);
         else return searchmsg.edit("❌ " + lf.playnoresultsfound);
 
-    return searchmsg.edit("⏱️ " + lf.playtrackloading.replace("tracktitle", `**${track.title}**`));
+    return searchmsg.edit("⏱️ " + lf.playtrackloading.replace("tracktitle", `**${track.title}**`).replace("trackauthor", `\`${track.author}\``));
 
 }
 

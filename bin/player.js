@@ -4,7 +4,7 @@
  * Created Date: 21.11.2021 15:23:47
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 16:21:22
+ * Last Modified: 24.11.2021 16:56:09
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -38,21 +38,29 @@ module.exports.run = (bot, logger) => {
     
     player.on('error', (queue, error) => {
         logger("error", "player.js", `Error emitted from queue for guild ${queue.guild.id}:\n${error.message}`)
+
+        getLang(queue.guild, (lang) => {
+            queue.metadata.channel.send(lang.general.error + error.message + "\n" + lang.general.pleasetryagain)
+        })
     });
       
     player.on('connectionError', (queue, error) => {
         logger("error", "player.js", `Error emitted from connection for guild ${queue.guild.id}:\n${error.message}`)
+        
+        getLang(queue.guild, (lang) => {
+            queue.metadata.channel.send(lang.general.error + error.message + "\n" + lang.general.pleasetryagain)
+        })
     });
     
     player.on('trackStart', (queue, track) => {
         getLang(queue.guild, (lang) => {
-            queue.metadata.channel.send("▶ " + lang.cmd.othermusic.playernowplaying.replace("tracktitle", `**${track.title}**`))
+            queue.metadata.channel.send("▶ " + lang.cmd.othermusic.playernowplaying.replace("tracktitle", `**${track.title}**`).replace("trackauthor", `\`${track.author}\``))
         })
     });
     
     player.on('trackAdd', (queue, track) => {
         getLang(queue.guild, (lang) => {
-            queue.metadata.channel.send("🎶 " + lang.cmd.othermusic.playeraddedtoqueue.replace("tracktitle", `**${track.title}**`))
+            queue.metadata.channel.send("🎶 " + lang.cmd.othermusic.playeraddedtoqueue.replace("tracktitle", `**${track.title}**`).replace("trackauthor", `\`${track.author}\``))
         })
     });
 

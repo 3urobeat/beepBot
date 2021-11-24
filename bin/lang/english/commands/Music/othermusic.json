@@ -1,6 +1,6 @@
 {
-    "playernowplaying": "Now playing: tracktitle",
-    "playeraddedtoqueue": "Added to queue: tracktitle",
+    "playernowplaying": "Now playing: tracktitle by trackauthor",
+    "playeraddedtoqueue": "Added to queue: tracktitle by trackauthor",
     "playerqueueend": "Queue finished!",
     "playerchannelempty": "Stopped playing because everyone left the voice channel.",
 
@@ -15,7 +15,7 @@
     "playnoargs": "Please provide a YouTube link or a search term!",
     "playsearchingfor": "Searching for",
     "playnoresultsfound": "No results found!",
-    "playtrackloading": "Loading track tracktitle...",
+    "playtrackloading": "Loading track tracktitle by trackauthor...",
     "playinfodescription": "Plays a song from YouTube, Spotify or SoundCloud or adds it to the queue.",
 
     "skipsongskipped": "Skipped current song!",

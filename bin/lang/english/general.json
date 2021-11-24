@@ -19,6 +19,7 @@
     "areyousure": "Are you sure? (Reply with 'y' or 'n')",
     "error": "Error: ",
     "anerroroccurred": "An error occurred: ",
+    "pleasetryagain": "Please try again.",
     "dmerr": "I sadly wasn't able to send the user a DM. Error: ",
     "gettimefuncoptions": ["second(s)", "minute(s)", "hour(s)", "day(s)", "month(s)", "year(s)"],
     "unsupportedtime": "timeargument is sadly not supported. Please use one of these time units: seconds/minutes/hours/days/months/years",
