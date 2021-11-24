@@ -18,6 +18,9 @@
     "playtrackloading": "Lied tracktitle wird geladen...",
     "playinfodescription": "Spielt einen Song von YouTube, Spotify oder SoundCloud ab oder fügt es zur Warteschlange hinzu.",
 
+    "skipsongskipped": "Aktueller Titel wurde übersprungen!",
+    "skipinfodescription": "Springt zum nächsten Titel in der Warteschlange.",
+
     "stopstopped": "Wiedergabe gestoppt.",
     "stopinfodescription": "Stoppt die Wiedergabe, löscht die Warteschlange und verlässt deinen Sprachkanal."
 }
