@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:32:44
+ * Last Modified: 24.11.2021 15:34:20
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -41,6 +41,7 @@ const bot = new Discord.Client({
         Discord.Intents.FLAGS.GUILD_PRESENCES,
         Discord.Intents.FLAGS.GUILD_MESSAGES,
         Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Discord.Intents.FLAGS.GUILD_VOICE_STATES,
         Discord.Intents.FLAGS.DIRECT_MESSAGES,
         Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
     ], 
@@ -337,6 +338,9 @@ bot.on("ready", async function() {
         logger("", "", "", true, true) //Print empty line to clear other stuff
     }, 2500);
 
+
+    //Load music player if shard includes a music enabled guild
+    if ([...bot.guilds.cache.keys()].some(e => config.musicenabledguilds.includes(e))) require("./player.js").run(bot, logger)
 
     //Game rotation
     if (config.gamerotateseconds <= 10) logger("warn", "controller.js", "gamerotateseconds in config is <= 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true)

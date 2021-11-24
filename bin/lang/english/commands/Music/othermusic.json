@@ -1,0 +1,6 @@
+{
+    "playernowplaying": "Now playing: tracktitle",
+    "playeraddedtoqueue": "Added to queue: tracktitle",
+    "playerqueueend": "Queue finished!",
+    "playerchannelempty": "Stopped playing because everyone left the voice channel.",
+}

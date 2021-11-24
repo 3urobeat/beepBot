@@ -1,0 +1,6 @@
+{
+    "playernowplaying": "Wird jetzt gespielt: tracktitle",
+    "playeraddedtoqueue": "Zur Warteschlange hinzugefügt: trracktitle",
+    "playerqueueend": "Keine verbleibenden Titel in der Warteschlange!",
+    "playerchannelempty": "Wiedergabe gestoppt da jeder den Sprachkanal verlassen hat.",
+}
