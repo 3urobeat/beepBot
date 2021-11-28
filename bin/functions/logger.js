@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 21:55:38
+ * Last Modified: 28.11.2021 18:39:13
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -20,90 +20,51 @@
 
 /**
  * Logs text to the terminal and appends it to the output.txt file.
- * @param {Number} bootstart Timestamp of when the bot was started
  * @param {String} type String that determines the type of the log message. Can be info, warn, error, debug or an empty string to not use the field.
- * @param {String} origin Name of the file where the message is coming from
+ * @param {String} origin The origin file
  * @param {String} str The text to log into the terminal
  * @param {Boolean} nodate Setting to true will hide date and time in the message
  * @param {Boolean} remove Setting to true will remove this message with the next one
  * @param {Boolean} logafterlogin Defines if the message should be logged after login
  */
-module.exports.run = (bootstart, type, origin, str, nodate, remove, logafterlogin) => { //eslint-disable-line
-    const readline = require("readline")
-    const fs       = require("fs")
+module.exports.logger = (type, origin, str, nodate, remove, animation, logafterlogin) => { //Function that passes args to my logger library and just exists to handle readyafterlogs atm
+    var outputlogger = require("output-logger") //look Mom, it's my own library!
 
-    var str = String(str)
-    if (str.toLowerCase().includes("error")) var str = `\x1b[31m${str}\x1b[0m`
-
-    //Define type
-    if (type == 'info') {
-        var typestr = `\x1b[96mINFO`
-    } else if (type == 'warn') {
-        var typestr = `\x1b[31mWARN`
-    } else if (type == 'error') {
-        var typestr = `\x1b[31m\x1b[7mERROR\x1b[0m\x1b[31m`
-    } else {
-        var typestr = ''
-    }
-
-    //Define origin
-    if (origin != "") {
-        if (typestr == "") {
-            var originstr = `\x1b[96m${origin}`
-        } else {
-            var originstr = `${origin}`
-        }
-    } else {
-        var originstr = ''
-    }
-
-    //Add date or don't
-    if (nodate) {
-        var date = '';
-    } else { //Only add date to message if it gets called at least 15 sec after bootup. This makes the startup cleaner.
-        if (new Date() - bootstart > 15000) {
-            var date = `\x1b[96m[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}]\x1b[0m `
-        } else {
-            var date = ''
-        }
-    }
-
-    //Add filers
-    var filler1 = ""
-    var filler2 = ""
-    var filler3 = ""
-
-    if (typestr != "" || originstr != "") { 
-        filler1 = "["
-        filler3 = "\x1b[0m] "
-    }
-
-    if (typestr != "" && originstr != "") {
-        filler2 = " | "
-    }
-
-    //Put it together
-    var string = `${filler1}${typestr}${filler2}${originstr}${filler3}${date}${str}`
+    //Configure my logging library (https://github.com/HerrEurobeat/output-logger#options-1)
+    outputlogger.options({
+        msgstructure: "[animation] [type | origin] [date] message",
+        paramstructure: ["type", "origin", "str", "nodate", "remove", "animation"],
+        outputfile: "../../output.txt",
+        animationdelay: 250
+    })
 
     //Push to logafterlogin if bot isn't logged in yet to reduce clutter (logafterlogin will be undefined if shard0 is logged in (see bot.js))
-    if (logafterlogin && !nodate && !remove && !string.toLowerCase().includes("error") && !string.includes("Logging in...") && originstr != "controller.js") {
-        logafterlogin.push(string)
+    if (logafterlogin && !nodate && !remove && !str.toLowerCase().includes("error") && !str.includes("Logging in...") && origin != "controller.js") {
+        logafterlogin.push([ type, origin, str, nodate, remove, animation ])
         return;
-    }
-
-    //Print message with remove or without
-    if (remove) {
-        readline.clearLine(process.stdout, 0) //0 clears entire line
-        process.stdout.write(`${string}\r`)
     } else {
-        readline.clearLine(process.stdout, 0)
-        console.log(`${string}`)
+        outputlogger(type, origin, str, nodate, remove, animation)
     }
+}
 
-    //eslint-disable-next-line
-    fs.appendFileSync('./output.txt', string.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') + '\n', err => { //Regex Credit: https://github.com/Filirom1/stripcolorcodes
-        if(err) console.log('logger function appendFileSync error: ' + err)
-    }) 
 
-    return string; //Return String, maybe it is useful for the calling file
+/**
+ * Returns one of the default animations
+ * @param {String} animation Valid animations: `loading`, `waiting`, `bounce`, `progress`, `arrows` or `bouncearrows`
+ * @returns Array of the chosen animation
+ */
+module.exports.logger.animation = (args) => {
+    var outputlogger = require("output-logger")
+
+    return outputlogger.animation(args)
+}
+
+
+/**
+ * Stops any animation currently active
+ */
+module.exports.logger.stopAnimation = () => {
+    var outputlogger = require("output-logger")
+
+    return outputlogger.stopAnimation
 }

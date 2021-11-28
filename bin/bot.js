@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 23:23:39
+ * Last Modified: 28.11.2021 18:31:19
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -68,10 +68,12 @@ global.config = config;
  * @param {Boolean} remove Setting to true will remove this message with the next one
  * @returns {String} The resulting String
  */
-var logger = (type, origin, str, nodate, remove) => { //Custom logger
+var logger = (type, origin, str, nodate, remove, animation) => { //Custom logger (wrapping it here so that I can pass another argument)
     if (loggedin) logafterlogin = undefined
-    return require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove, logafterlogin) //call the run function of the file which contains the code of this function
+    require("./functions/logger.js").logger(type, origin, str, nodate, remove, animation, logafterlogin)
 }
+logger.animation     = require("./functions/logger.js").logger.animation
+logger.stopAnimation = require("./functions/logger.js").logger.stopAnimation
 
 /**
 * Returns the language obj the specified server has set
@@ -329,7 +331,7 @@ bot.on("ready", async function() {
     loggedin = true
     logafterlogin.forEach(e => {
         if (thisshard.id != 0 && e.includes("Successfully loaded") && e.includes("database")) return; //check if this message is a database loaded message and don't log it again
-        logger("", "", e)
+        logger(e[0], e[1], e[2], e[3], e[4])
     });
 
     bot.commandcount = commandcount //probably useful for a few cmds so lets just add it to the bot obj (export here so the read process is definitely finished)
