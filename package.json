@@ -1,6 +1,6 @@
 {
   "name": "beepbot",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "beepBot - 24/7 online, customizeable, feature rich & scaleable Discord Bot.",
   "main": "start.js",
   "dependencies": {
