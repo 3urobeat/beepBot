@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:19:34
+ * Last Modified: 28.11.2021 16:50:58
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -30,7 +30,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     if (!args[0]) return message.channel.send(lang.cmd.otherbotowner.saymissingargs) //same message so we are just using that
 
-    bot.shard.broadcastEval(client => {
+    bot.shard.broadcastEval((client, context) => {
         client.guilds.cache.forEach((e) => {
             client.settings.findOne({ guildid: e.id }, (err, guildsettings) => {
 
@@ -43,7 +43,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 } else if (guildsettings && guildsettings.modlogchannel) {
                     var channelid = guildsettings.modlogchannel //Check if guild has a modlogchannel set in bot settings
 
-                } else if (args[0] == "true") { //get first best channel if force is true
+                } else if (context.args[0] == "true") { //get first best channel if force is true
                     var channelid = null
 
                     let textchannels = e.channels.cache.filter(c => c.type == "GUILD_TEXT").sort((a, b) => a.rawPosition - b.rawPosition)
@@ -52,10 +52,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 
                 if (!channelid) return; //no channel found
 
-                e.channels.cache.get(String(channelid)).send(args.slice(1).join(" "))
+                e.channels.cache.get(String(channelid)).send(context.args.slice(1).join(" "))
             })
         })
-    })
+    }, { context: { args: args } }) //pass args as context to be able to access it inside)
 
     message.channel.send(lang.cmd.otherbotowner.broadcastmessagesent)
 }

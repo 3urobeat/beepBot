@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 23:32:20
+ * Last Modified: 28.11.2021 16:48:51
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -180,7 +180,8 @@ var tempbanloop = setInterval(() => {
         if (docs.length < 1) return; //nothing found
 
         docs.forEach((e, i) => { //take action for all results
-            Manager.broadcastEval(client => {
+            Manager.broadcastEval((client, context) => {
+                let e     = context.e //make calling e shorter
                 let guild = client.guilds.cache.get(e.guildid)
 
                 if (guild) {
@@ -207,10 +208,11 @@ var tempbanloop = setInterval(() => {
                             if (err != "DiscordAPIError: Unknown Ban") return client.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, recieverobj, [e.banreason, err]) //if unknown ban ignore, user has already been unbanned
                         })
                 }
-            }).catch(err => {
-                logger("warn", "controller.js", "Couldn't broadcast unban: " + err.stack)
-                if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return; //do not remove from db when shards are being spawned
-            })
+            }, { context: { e: e } }) //pass e as context to be able to access it inside
+                .catch(err => {
+                    logger("warn", "controller.js", "Couldn't broadcast unban: " + err.stack)
+                    if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return; //do not remove from db when shards are being spawned
+                })
         })
     })
 }, 10000); //10 seconds
@@ -234,7 +236,8 @@ var timedmuteloop = setInterval(() => {
         docs.forEach((e, i) => { //take action for all results
             if (e.type != "tempmute") return; //only handle mutes that are temporary and should result in a unmute
 
-            Manager.broadcastEval(client => {
+            Manager.broadcastEval((client, context) => {
+                let e     = context.e //make calling e shorter
                 let guild = client.guilds.cache.get(e.guildid)
 
                 if (guild) {
@@ -288,10 +291,11 @@ var timedmuteloop = setInterval(() => {
 
                     client.fn.msgtomodlogchannel(guild, "unmute", authorobj, recieverobj, ["auto", e.mutereason])
                 }
-            }).catch(err => {
-                if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return;
-                logger("warn", "controller.js", "Couldn't broadcast unmute: " + err.stack)
-            }) 
+            }, { context: { e: e } }) //pass e as context to be able to access it inside
+                .catch(err => {
+                    if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return;
+                    logger("warn", "controller.js", "Couldn't broadcast unmute: " + err.stack)
+                }) 
         })
     })
 }, 10000); //10 seconds

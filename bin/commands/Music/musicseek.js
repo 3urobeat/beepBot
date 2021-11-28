@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 20:14:01
+ * Last Modified: 25.11.2021 13:10:04
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -57,7 +57,6 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     } else if (timeargs.length == 2) { //minutes
         totaltime = timeargs[1]
         totaltime += timeargs[0] * 60
-        console.log("hi")
 
     } else if (timeargs.length == 3) { //hours
         totaltime = timeargs[2]

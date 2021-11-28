@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:19:51
+ * Last Modified: 24.11.2021 23:58:19
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -44,12 +44,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err)
         })
 
-        bot.shard.broadcastEval(client => client.user.setPresence({ activities: [{ name: bot.config.gamerotation[0], type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status }))
+        bot.user.setPresence({ activities: [{ name: bot.config.gamerotation[0], type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status })
             .then(() => {
                 message.channel.send(lf.setpresenceupdated)
             })
             .catch(err => { //error will occur when not all shards are started yet
-                logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err.stack)
+                logger("warn", "controller.js", "Couldn't set presence: " + err.stack)
             })
     } else {
         let possibleflags = ["-s", "-gt", "-g", "-url"]
@@ -109,12 +109,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err)
         })
 
-        bot.shard.broadcastEval(client => client.user.setPresence({ activities: [{ name: newgame, type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status }))
+        bot.user.setPresence({ activities: [{ name: newgame, type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status })
             .then(() => {
                 message.channel.send(lf.setpresenceupdated)
             })
             .catch(err => { //error will occur when not all shards are started yet
-                logger("warn", "controller.js", "Couldn't broadcast setPresence: " + err.stack)
+                logger("warn", "controller.js", "Couldn't set presence: " + err.stack)
             })
     }
 }
