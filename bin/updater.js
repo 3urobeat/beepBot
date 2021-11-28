@@ -4,7 +4,7 @@
  * Created Date: 19.01.2021 22:36:00
  * Author: 3urobeat
  * 
- * Last Modified: 17.11.2021 19:33:52
+ * Last Modified: 28.11.2021 18:23:46
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -20,9 +20,7 @@ const fs       = require("fs")
 
 const oldconfig = Object.assign(require("./config.json")) //get content of old config
 
-var logger = (type, origin, str, nodate, remove) => { //Custom logger
-    return require("./functions/logger.js").run(0, type, origin, str, nodate, remove) //call the run function of the file which contains the code of this function
-}
+var logger = require("./functions/logger.js").logger //Custom logger
 
 
 const url = 'https://github.com/HerrEurobeat/beepBot/archive/master.zip';

@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  * 
- * Last Modified: 28.11.2021 16:48:51
+ * Last Modified: 28.11.2021 18:25:05
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -28,19 +28,9 @@ const asciipath = require("./ascii.js")
 var   config    = require('./config.json')
 const constants = require("./constants.json")
 
+//Reference custom logger
+var logger      = require("./functions/logger.js").logger
 
-/**
- * Logs text to the terminal and appends it to the output.txt file.
- * @param {String} type info, warn or error
- * @param {String} origin Filename from where the text originates from
- * @param {String} str The text to log into the terminal
- * @param {Boolean} nodate Setting to true will hide date and time in the message
- * @param {Boolean} remove Setting to true will remove this message with the next one
- * @returns {String} The resulting String
- */
-var logger = (type, origin, str, nodate, remove) => { //Custom logger
-    require("./functions/logger.js").run(bootstart, type, origin, str, nodate, remove) //call the run function of the file which contains the code of this function
-}
 
 /**
  * Returns a random String from an array
@@ -114,14 +104,14 @@ Manager.on('shardCreate', (shard) => {
             if (config.shards > 1) logger(`> ${config.shards} shards running in \x1b[32m${config.loginmode}\x1b[0m mode on ${process.platform}`, true); 
                 else logger("", "", `> Running in \x1b[32m${config.loginmode}\x1b[0m mode on ${process.platform}.`, true);
 
-            if (Manager.totalShards == "auto") logger("", "", `> ShardManager is running in automatic mode...`)
-                else logger("", "", `> ShardManager is running with ${Manager.totalShards} shards...`)
+            if (Manager.totalShards == "auto") logger("", "", `> ShardManager is running in automatic mode...`, true)
+                else logger("", "", `> ShardManager is running with ${Manager.totalShards} shards...`, true)
 
             //too lazy to use a switch case for 3 if statements
             if (config.status == "online") var configstatus = "\x1b[32monline\x1b[0m"
             if (config.status == "idle")   var configstatus = "\x1b[33midle\x1b[0m"
             if (config.status == "dnd")    var configstatus = "\x1b[91mdnd\x1b[0m"
-            logger("", "", `> Set Presence to ${configstatus} - Game Rotation every ${config.gamerotateseconds} sec`)
+            logger("", "", `> Set Presence to ${configstatus} - Game Rotation every ${config.gamerotateseconds} sec`, true)
 
             //End line is located in ready event in bot.js and will be logged by shard 0
         }, 500);
