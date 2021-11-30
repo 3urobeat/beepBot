@@ -13,7 +13,7 @@
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.6",
     "opusscript": "^0.0.8",
-    "output-logger": "^1.3.4",
+    "output-logger": "^1.3.5",
     "superagent": "^6.1.0",
     "systeminformation": "^5.9.9"
   },
