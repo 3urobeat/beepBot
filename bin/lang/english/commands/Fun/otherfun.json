@@ -18,5 +18,7 @@
     "rpswin": "You win!",
     "rpstie": "Tie!",
     "rpsloose": "You lost!",
-    "rpsinfodescription": "Play rock paper scissors against the bot!"
+    "rpsinfodescription": "Play rock paper scissors against the bot!",
+
+    "xkcdinfodescription": "Sends the latest XKCD comic or a random one if the word \"random\" is provided as argument."
 }
