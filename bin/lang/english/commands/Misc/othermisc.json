@@ -17,6 +17,13 @@
 
     "pollinfodescription": "Reacts with thumbs up/down/idc to your command message.",
 
+    "ranktitle": "Rank Card of username",
+    "ranklevel": "Level",
+    "ranktotalxp": "Total XP",
+    "rankmessagessent": "Messages",
+    "rankxpfornextlvl": "XP until next level",
+    "rankinfodescription": "Displays your current rank and XP needed for the next level or of the user you provided.",
+
     "redditsearching": "Searching in sort from subreddit...",
     "redditnotfound": "I sadly couldn't find anything.",
     "redditover18": "Error: The post I found was marked as 18+ but your channel is not set to NSFW. Please try again.\nTo also see NSFW posts in the future please change your channels settings.",
