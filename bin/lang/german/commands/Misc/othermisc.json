@@ -24,6 +24,10 @@
     "rankxpfornextlvl": "XP bis zum nächsten Level",
     "rankinfodescription": "Zeigt deinen aktuellen Rang und XP bis zum nächsten Level an oder des von dir angegebenen Nutzers.",
 
+    "rankstitle": "Top 25: Bestenliste von servername",
+    "ranksmessages": "Nachrichten",
+    "ranksinfodescription": "Zeigt die XP Bestenliste (Top 25) dieses Servers an.",
+
     "redditsearching": "Suche in sort in subreddit...",
     "redditnotfound": "Ich konnte leider nichts finden.",
     "redditover18": "Fehler: Den Post den ich gefunden habe ist als 18+ markiert, der Kanal ist allerdings nicht als NSFW-Kanal festgelegt. Bitte versuche erneut.\nUm in der Zukunft auch NSFW Beiträge zu sehen, ändere bitte die Einstellungen dieses Kanals.",

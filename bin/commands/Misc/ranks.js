@@ -1,0 +1,79 @@
+/*
+ * File: ranks.js
+ * Project: beepbot
+ * Created Date: 09.01.2022 20:16:29
+ * Author: 3urobeat
+ * 
+ * Last Modified: 09.01.2022 20:42:41
+ * Modified By: 3urobeat
+ * 
+ * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>. 
+ */
+
+
+const Discord = require('discord.js'); //eslint-disable-line
+
+/**
+ * The command template
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.Message} message The recieved message object
+ * @param {Array} args An array of arguments the user provided
+ * @param {Object} lang The language object for this guild
+ * @param {Function} logger The logger function
+ * @param {Object} guildsettings All settings of this guild
+ * @param {Object} fn The object containing references to functions for easier access
+ */
+module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+
+    var levelUser = require("../../functions/levelUser");    
+
+    bot.levelsdb.find({ guildid: message.guild.id }, (err, docs) => {
+        if (err) {
+            message.channel.send("Error trying to find user in database: " + err)
+            logger("error", "rank.js", "Error trying to find user in database: " + err)
+            return;
+        }
+
+        if (docs.size < 1) return; //never occurred in my testing but I'm leaving it here just to make sure
+
+        //Create message template
+        var msg = {
+            embeds: [{
+                title: lang.cmd.othermisc.rankstitle.replace("servername", message.guild.name),
+                color: fn.randomhex(),
+                thumbnail: { url: message.guild.iconURL() },
+                fields: []
+            }
+        ]}
+
+        //Sort array by XP
+        docs.sort((a, b) => { return b.xp - a.xp; });
+
+        //Add each element to fields array
+        docs.forEach((e, i) => {
+            if (i >= 25) return; //max field amount is 25: https://birdie0.github.io/discord-webhooks-guide/other/field_limits.html
+
+            let thisuser = message.guild.members.cache.get(e.userid)
+
+            msg.embeds[0].fields.push({
+                name: `${i + 1}. ${thisuser.user.username}#${thisuser.user.discriminator}`,
+                value: `${lang.cmd.othermisc.ranklevel} ${Math.floor(levelUser.xpToLevel(e.xp))}\n${e.xp} XP\n${e.messages} ${lang.cmd.othermisc.ranksmessages}`
+            })
+        });
+
+        message.channel.send(msg)
+    })
+}
+
+module.exports.info = {
+    names: ["ranks", "levels"],
+    description: "cmd.othermisc.ranksinfodescription",
+    usage: '',
+    accessableby: ['all'],
+    allowedindm: false,
+    nsfwonly: false
+}
