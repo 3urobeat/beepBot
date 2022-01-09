@@ -53,6 +53,8 @@
     "voicestateupdatemutereason": "User was previously voice muted by muteauthor. Reason: reasontext",
     "voicestateupdateunmutereason": "User was unmuted after temporary mute by muteauthor expired. Reason: reasontext",
 
+    "levelupmsg": "Congratulations username, you just reached level leveltext!",
+
     "guildnotallowederror": "This server is not allowed to use this command!",
     "nsfwonlyerror": "🔞 You have to use this in a nsfw channel!",
     "owneronlyerror": ["This command is owner only. What did you think?!","You are not the owner.","I'm not dumb.","I'm secure. Secure as hell.","Security does not let you in.","Gotcha! You are not going to harm anyone!"],
