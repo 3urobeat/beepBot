@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:24:53
+ * Last Modified: 09.01.2022 11:09:50
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -87,7 +87,11 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
                 })
                 
                 if (changesmade) bot.settings.update({ guildid: message.guild.id }, guildsettings, (err) => { if (err) logger("error", "message.js", `Error adding missing keys to ${message.guild.id}'s settings db: ${err}`) })
-        } }
+            }
+
+            //Call levelUser helper
+            require("../functions/levelUser.js").levelUser(bot, logger, message, guildsettings);
+        }
 
         //get prefix for this guild or set default prefix if channel is dm
         if (message.channel.type !== "DM") {

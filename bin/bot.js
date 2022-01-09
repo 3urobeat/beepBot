@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 28.11.2021 18:31:19
+ * Last Modified: 09.01.2022 11:02:46
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -273,6 +273,7 @@ const settings = new nedb('./data/settings.db') //initialise database
 const timedbans = new nedb('./data/timedbans.db') //initialise database
 const timedmutes = new nedb('./data/timedmutes.db') //initialise database
 const monitorreactions = new nedb('./data/monitorreactions.db') //initialise database
+const levelsdb = new nedb('./data/levels.db'); //initialise database
 
 settings.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading settings database. Error: " + err)
@@ -294,10 +295,16 @@ monitorreactions.loadDatabase((err) => {
     logger("info", "bot.js", "Successfully loaded monitorreactions database.") //load db content into memory
 });
 
+levelsdb.loadDatabase((err) => {
+    if (err) return logger("error", "bot.js", "Error loading levelsdb database. Error: " + err)
+    logger("info", "bot.js", "Successfully loaded levelsdb database.") //load db content into memory
+})
+
 bot.settings = settings; //add reference to bot obj
 bot.timedbans = timedbans; //add reference to bot obj
 bot.timedmutes = timedmutes; //add reference to bot obj
 bot.monitorreactions = monitorreactions; //add reference to bot obj
+bot.levelsdb = levelsdb; //add reference to bot obj
 
 
 /* ------------ Startup: ------------ */
