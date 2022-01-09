@@ -17,6 +17,13 @@
 
     "pollinfodescription": "Reagiert mit Daumen hoch/runter/Enthaltung auf deine Befehl-Nachricht.",
 
+    "ranktitle": "Levelkarte von username",
+    "ranklevel": "Rang",
+    "ranktotalxp": "Gesamte XP",
+    "rankmessagessent": "Nachrichten",
+    "rankxpfornextlvl": "XP bis zum nächsten Level",
+    "rankinfodescription": "Zeigt deinen aktuellen Rang und XP bis zum nächsten Level an oder des von dir angegebenen Nutzers.",
+
     "redditsearching": "Suche in sort in subreddit...",
     "redditnotfound": "Ich konnte leider nichts finden.",
     "redditover18": "Fehler: Den Post den ich gefunden habe ist als 18+ markiert, der Kanal ist allerdings nicht als NSFW-Kanal festgelegt. Bitte versuche erneut.\nUm in der Zukunft auch NSFW Beiträge zu sehen, ändere bitte die Einstellungen dieses Kanals.",
