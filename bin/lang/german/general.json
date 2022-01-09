@@ -53,6 +53,8 @@
     "voicestateupdatemutereason": "Nutzer wurde von muteauthor stummgeschaltet. Begründung: reasontext",
     "voicestateupdateunmutereason": "Die Stummschaltung wurde nach dem Ablaufen der temporären Stummschaltung von muteauthor wieder aufgehoben. Begründung: reasontext",
 
+    "levelupmsg": "Herzlichen Glückwunsch username, du hast soeben Level leveltext erreicht!",
+
     "guildnotallowederror": "Diesem Server ist es nicht erlaubt diesen Befehl auszuführen!",
     "nsfwonlyerror": "🔞 Dieser Befehl kann nur in einem NSFW-Kanal genutzt werden!",
     "owneronlyerror": ["Dieser Befehl ist nur dem Botowner gestattet. Was hast du erwartet?!","Du bist nicht der Botowner.","Ich bin nicht dumm.","Ich bin sicher. Sicher wie sonst was.","Die Security lässt dich nicht rein.","Hab dich! Du wirst niemandem Schaden zufügen!"],

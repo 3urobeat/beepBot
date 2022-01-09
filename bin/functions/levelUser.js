@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 10:12:16
  * Author: 3urobeat
  * 
- * Last Modified: 09.01.2022 12:24:39
+ * Last Modified: 09.01.2022 17:37:57
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -16,7 +16,6 @@
 
 
 const Discord = require('discord.js'); //eslint-disable-line
-const nedb    = require("@yetzt/nedb"); //eslint-disable-line
 
 var xpHistory = {}; //store recent xp increments in an object
 
@@ -25,13 +24,13 @@ var xpHistory = {}; //store recent xp increments in an object
  * @param {Discord.Client} bot The Discord client class
  * @param {Function} logger The logger function
  * @param {Discord.Message} message The Discord message class
- * @param {nedb} guildsettings The guildsettings object of the guild the message comes from
+ * @param {Object} lang The language object for this guild
  */
-module.exports.levelUser = (bot, logger, message, guildsettings) => { //eslint-disable-line
+module.exports.levelUser = (bot, logger, message, lang) => {
 
-    //don't bother if the user got XP in the last 60 seconds to prevent leveling by spamming 
+    //don't bother if the user got XP in the last 5 seconds to prevent leveling by spamming 
     if (xpHistory[message.guild.id] && xpHistory[message.guild.id][message.author.id] && xpHistory[message.guild.id][message.author.id] + 5000 >= Date.now()) {
-        //logger("debug", "levelUser.js", `XP addition for ${message.author.id} in guild ${message.guild.id} more recent than 60 secs`);
+        //logger("debug", "levelUser.js", `XP addition for ${message.author.id} in guild ${message.guild.id} more recent than 5 secs`);
         return;
     }
     
@@ -42,13 +41,37 @@ module.exports.levelUser = (bot, logger, message, guildsettings) => { //eslint-d
     //logger("debug", "levelUser.js", `Adding ${xpAmount}xp to user ${message.author.id} in guild ${message.guild.id}`)
 
     //increment xp and messages amount for entry that matches this user's id and this guild id
-    bot.levelsdb.update({ $and: [{ userid: message.author.id }, { guildid: message.guild.id }] }, { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: message.author.id, guildid: message.guild.id } }, { upsert: true }, (err) => { 
+    bot.levelsdb.update({ $and: [{ userid: message.author.id }, { guildid: message.guild.id }] }, 
+                        { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: message.author.id, guildid: message.guild.id } }, 
+                        { upsert: true, returnUpdatedDocs: true }, 
+                        (err, numAffected, doc) => {
+                            
         if (err) logger("error", "levelUser.js", `Error updating db of guild ${message.guild.id}. Error: ${err}`) 
-    })
-    
-    //add this action to the xpHistory obj (first check if entry for this guild and user exists, if not then create it)
-    if (!xpHistory[message.guild.id]) xpHistory[message.guild.id] = {}
-    if (!xpHistory[message.guild.id][message.author.id]) xpHistory[message.guild.id][message.author.id] = 0;
 
-    xpHistory[message.guild.id][message.author.id] = Date.now();
+        //add this action to the xpHistory obj (first check if entry for this guild and user exists, if not then create it)
+        if (!xpHistory[message.guild.id]) xpHistory[message.guild.id] = {}
+        if (!xpHistory[message.guild.id][message.author.id]) xpHistory[message.guild.id][message.author.id] = 0;
+
+        xpHistory[message.guild.id][message.author.id] = Date.now();
+
+        //send level up message if user reached new level
+        if (Math.floor(this.xpToLevel(doc.xp)) > Math.floor(this.xpToLevel(doc.xp - xpAmount))) {
+            message.channel.send(lang.general.levelupmsg.replace("username", message.author.username).replace("leveltext", Math.floor(this.xpToLevel(doc.xp))))
+        }
+    })
+}
+
+
+/**
+ * Takes userr xp and returns their level
+ * @param {Number} xp The current total XP
+ * @returns {Number} Current level
+ */
+module.exports.xpToLevel = (xp) => {
+
+    //Use two different functions from level 0-47 and 48-100
+    if (xp <= 226305) return 0.2869 * Math.pow(xp, 0.415); //lvl 47 and lower
+        else return 0.2869 * Math.pow(xp, 0.402) + 7;
+    
+    //My friend and I spent a solid hour trying to balance the XP level calculation to match Mee6's table as closely as possible but just ended up using two functions: https://github.com/Mee6/Mee6-documentation/blob/master/docs/levels_xp.md
 }
