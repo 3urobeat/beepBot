@@ -24,6 +24,10 @@
     "rankxpfornextlvl": "XP until next level",
     "rankinfodescription": "Displays your current rank and XP needed for the next level or of the user you provided.",
 
+    "rankstitle": "Top 25: Leaderboard of servername",
+    "ranksmessages": "messages",
+    "ranksinfodescription": "Shows the XP leaderboard (top 25) of this server.",
+
     "redditsearching": "Searching in sort from subreddit...",
     "redditnotfound": "I sadly couldn't find anything.",
     "redditover18": "Error: The post I found was marked as 18+ but your channel is not set to NSFW. Please try again.\nTo also see NSFW posts in the future please change your channels settings.",
