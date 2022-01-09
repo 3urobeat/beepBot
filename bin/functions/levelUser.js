@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 10:12:16
  * Author: 3urobeat
  * 
- * Last Modified: 09.01.2022 17:37:57
+ * Last Modified: 09.01.2022 19:36:21
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -63,7 +63,7 @@ module.exports.levelUser = (bot, logger, message, lang) => {
 
 
 /**
- * Takes userr xp and returns their level
+ * Takes user xp and returns their level
  * @param {Number} xp The current total XP
  * @returns {Number} Current level
  */
@@ -74,4 +74,17 @@ module.exports.xpToLevel = (xp) => {
         else return 0.2869 * Math.pow(xp, 0.402) + 7;
     
     //My friend and I spent a solid hour trying to balance the XP level calculation to match Mee6's table as closely as possible but just ended up using two functions: https://github.com/Mee6/Mee6-documentation/blob/master/docs/levels_xp.md
+}
+
+
+/**
+ * Takes user level and returns their total xp
+ * @param {Number} level The level
+ * @returns {Number} Current total xp
+ */
+ module.exports.levelToXp = (level) => {
+
+    //Use two different functions from level 0-47 and 48-100
+    if (level <= 47) return 20.2616 * Math.pow(level, 2.40964); //lvl 47 and lower
+        else return 22.3321 * Math.pow(level - 7, 2.48756);
 }
