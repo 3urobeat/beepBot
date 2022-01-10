@@ -18,6 +18,7 @@
     "pollinfodescription": "Reagiert mit Daumen hoch/runter/Enthaltung auf deine Befehl-Nachricht.",
 
     "ranktitle": "Levelkarte von username",
+    "ranklevelsystemdisabled": "Notiz: Das XP/Level System ist aktuell in den Servereinstellungen deaktiviert!",
     "ranklevel": "Rang",
     "ranktotalxp": "Gesamte XP",
     "rankmessagessent": "Nachrichten",
@@ -27,6 +28,7 @@
     "rankstitle": "Top 25: Bestenliste von servername",
     "ranksmessages": "Nachrichten",
     "ranksinfodescription": "Zeigt die XP Bestenliste (Top 25) dieses Servers an.",
+    "rankscheckuser": "Zeig die Statistiken eines bestimmten Nutzers an",
 
     "redditsearching": "Suche in sort in subreddit...",
     "redditnotfound": "Ich konnte leider nichts finden.",
