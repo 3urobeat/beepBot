@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 09.01.2022 17:34:26
+ * Last Modified: 10.01.2022 13:34:43
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -90,7 +90,7 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
             }
 
             //Call levelUser helper
-            require("../functions/levelUser.js").levelUser(bot, logger, message, bot.fn.lang(message.guild.id, guildsettings));
+            require("../functions/levelUser.js").levelUser(bot, logger, message, bot.fn.lang(message.guild.id, guildsettings), guildsettings);
         }
 
         //get prefix for this guild or set default prefix if channel is dm

@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 10:12:16
  * Author: 3urobeat
  * 
- * Last Modified: 09.01.2022 19:36:21
+ * Last Modified: 10.01.2022 13:37:51
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -25,40 +25,52 @@ var xpHistory = {}; //store recent xp increments in an object
  * @param {Function} logger The logger function
  * @param {Discord.Message} message The Discord message class
  * @param {Object} lang The language object for this guild
+ * @param {Object} guildsettings All settings of this guild
  */
-module.exports.levelUser = (bot, logger, message, lang) => {
+module.exports.levelUser = (bot, logger, message, lang, guildsettings) => {
 
-    //don't bother if the user got XP in the last 5 seconds to prevent leveling by spamming 
-    if (xpHistory[message.guild.id] && xpHistory[message.guild.id][message.author.id] && xpHistory[message.guild.id][message.author.id] + 5000 >= Date.now()) {
-        //logger("debug", "levelUser.js", `XP addition for ${message.author.id} in guild ${message.guild.id} more recent than 5 secs`);
-        return;
+    //only increment messages count if level system has been disabled or if last xp gain is more recent than 30 secs
+    if (!guildsettings.levelsystem || (xpHistory[message.guild.id] && xpHistory[message.guild.id][message.author.id] && xpHistory[message.guild.id][message.author.id] + 30000 >= Date.now())) {
+        //logger("debug", "levelUser.js", `Only incrementing messages: Level system disabled or XP addition for ${message.author.id} in guild ${message.guild.id} more recent than 30 secs`);
+
+        //increment xp and messages amount for entry that matches this user's id and this guild id
+        bot.levelsdb.update({ $and: [{ userid: message.author.id }, { guildid: message.guild.id }] }, 
+                            { $inc: { messages: 1 }, $set: { userid: message.author.id, guildid: message.guild.id } }, 
+                            { upsert: true }, 
+                            (err) => {
+                                
+            if (err) logger("error", "levelUser.js", `Error updating db of guild ${message.guild.id}. Error: ${err}`) 
+
+        })
+        
+    } else {
+
+        //random xp amount between 15 and 25 xp
+        var xpAmount = Math.floor(Math.random() * (25 - 15 + 1) + 15);
+
+        //log debug message
+        //logger("debug", "levelUser.js", `Adding ${xpAmount}xp to user ${message.author.id} in guild ${message.guild.id}`)
+
+        //increment xp and messages amount for entry that matches this user's id and this guild id
+        bot.levelsdb.update({ $and: [{ userid: message.author.id }, { guildid: message.guild.id }] }, 
+                            { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: message.author.id, guildid: message.guild.id } }, 
+                            { upsert: true, returnUpdatedDocs: true }, 
+                            (err, numAffected, doc) => {
+                                
+            if (err) logger("error", "levelUser.js", `Error updating db of guild ${message.guild.id}. Error: ${err}`) 
+
+            //add this action to the xpHistory obj (first check if entry for this guild and user exists, if not then create it)
+            if (!xpHistory[message.guild.id]) xpHistory[message.guild.id] = {}
+            if (!xpHistory[message.guild.id][message.author.id]) xpHistory[message.guild.id][message.author.id] = 0;
+
+            xpHistory[message.guild.id][message.author.id] = Date.now();
+
+            //send level up message if user reached new level
+            if (Math.floor(this.xpToLevel(doc.xp)) > Math.floor(this.xpToLevel(doc.xp - xpAmount))) {
+                message.channel.send(lang.general.levelupmsg.replace("username", message.author.username).replace("leveltext", Math.floor(this.xpToLevel(doc.xp))))
+            }
+        })
     }
-    
-    //random xp amount between 15 and 25 xp
-    var xpAmount = Math.floor(Math.random() * (25 - 15 + 1) + 15);
-
-    //log debug message
-    //logger("debug", "levelUser.js", `Adding ${xpAmount}xp to user ${message.author.id} in guild ${message.guild.id}`)
-
-    //increment xp and messages amount for entry that matches this user's id and this guild id
-    bot.levelsdb.update({ $and: [{ userid: message.author.id }, { guildid: message.guild.id }] }, 
-                        { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: message.author.id, guildid: message.guild.id } }, 
-                        { upsert: true, returnUpdatedDocs: true }, 
-                        (err, numAffected, doc) => {
-                            
-        if (err) logger("error", "levelUser.js", `Error updating db of guild ${message.guild.id}. Error: ${err}`) 
-
-        //add this action to the xpHistory obj (first check if entry for this guild and user exists, if not then create it)
-        if (!xpHistory[message.guild.id]) xpHistory[message.guild.id] = {}
-        if (!xpHistory[message.guild.id][message.author.id]) xpHistory[message.guild.id][message.author.id] = 0;
-
-        xpHistory[message.guild.id][message.author.id] = Date.now();
-
-        //send level up message if user reached new level
-        if (Math.floor(this.xpToLevel(doc.xp)) > Math.floor(this.xpToLevel(doc.xp - xpAmount))) {
-            message.channel.send(lang.general.levelupmsg.replace("username", message.author.username).replace("leveltext", Math.floor(this.xpToLevel(doc.xp))))
-        }
-    })
 }
 
 
