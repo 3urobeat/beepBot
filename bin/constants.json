@@ -24,6 +24,7 @@
         "modlogfeatures": ["clear", "kick", "ban", "unban", "movemsg", "mute", "unmute"],
         "greetmsg": null,
         "byemsg": null,
-        "memberaddroles": []
+        "memberaddroles": [],
+        "levelsystem": true
     }
 }
