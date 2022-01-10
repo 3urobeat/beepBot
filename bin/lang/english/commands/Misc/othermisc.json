@@ -18,6 +18,7 @@
     "pollinfodescription": "Reacts with thumbs up/down/idc to your command message.",
 
     "ranktitle": "Rank Card of username",
+    "ranklevelsystemdisabled": "Note: The XP/Level system is currently disabled in the server settings!",
     "ranklevel": "Level",
     "ranktotalxp": "Total XP",
     "rankmessagessent": "Messages",
@@ -27,6 +28,7 @@
     "rankstitle": "Top 25: Leaderboard of servername",
     "ranksmessages": "messages",
     "ranksinfodescription": "Shows the XP leaderboard (top 25) of this server.",
+    "rankscheckuser": "Check the stats of a specific user",
 
     "redditsearching": "Searching in sort from subreddit...",
     "redditnotfound": "I sadly couldn't find anything.",

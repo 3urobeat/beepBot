@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 20:16:29
  * Author: 3urobeat
  * 
- * Last Modified: 09.01.2022 20:42:41
+ * Last Modified: 10.01.2022 14:33:59
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -46,9 +46,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 title: lang.cmd.othermisc.rankstitle.replace("servername", message.guild.name),
                 color: fn.randomhex(),
                 thumbnail: { url: message.guild.iconURL() },
-                fields: []
+                description: "",
+                fields: [],
+                footer: {
+                    text: `${lang.cmd.othermisc.rankscheckuser}: ${guildsettings.prefix}rank [mention/username/userid]`
+                }
             }
         ]}
+
+        //Display warning message if level system is currently disabled
+        if (!guildsettings.levelsystem) msg.embeds[0].description = lang.cmd.othermisc.ranklevelsystemdisabled
 
         //Sort array by XP
         docs.sort((a, b) => { return b.xp - a.xp; });

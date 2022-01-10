@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 17:43:00
  * Author: 3urobeat
  * 
- * Last Modified: 09.01.2022 20:11:17
+ * Last Modified: 10.01.2022 14:33:21
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -51,11 +51,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             doc["messages"] = 0;
         }
 
-        message.channel.send({
+        //Create message template
+        var msg = {
             embeds: [{
                 title: lang.cmd.othermisc.ranktitle.replace("username", `${targetuser.username}#${targetuser.discriminator}`),
                 color: fn.randomhex(),
                 thumbnail: { url: targetuser.displayAvatarURL() },
+                description: "",
                 fields: [{
                     name: lang.cmd.othermisc.ranklevel,
                     value: String(Math.floor(levelUser.xpToLevel(doc.xp))),
@@ -75,14 +77,19 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     value: String(Math.floor(levelUser.levelToXp(Math.floor(levelUser.xpToLevel(doc.xp)) + 1) - doc.xp)) + " XP"
                 }]
             }
-        ]})
+        ]}
+
+        //Display warning message if level system is currently disabled
+        if (!guildsettings.levelsystem) msg.embeds[0].description = lang.cmd.othermisc.ranklevelsystemdisabled
+
+        message.channel.send(msg)
     })
 }
 
 module.exports.info = {
     names: ["rank", "level"],
     description: "cmd.othermisc.rankinfodescription",
-    usage: '[mention/username/userid]',
+    usage: '[mention/username/userid]', //Note: Edit embed footer in ranks.js aswell if the usage changes!
     accessableby: ['all'],
     allowedindm: false,
     nsfwonly: false
