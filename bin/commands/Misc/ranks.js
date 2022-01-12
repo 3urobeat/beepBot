@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 20:16:29
  * Author: 3urobeat
  * 
- * Last Modified: 10.01.2022 14:33:59
+ * Last Modified: 12.01.2022 12:20:44
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -18,7 +18,7 @@
 const Discord = require('discord.js'); //eslint-disable-line
 
 /**
- * The command template
+ * The ranks command
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The recieved message object
  * @param {Array} args An array of arguments the user provided
