@@ -4,7 +4,7 @@
  * Created Date: 12.01.2022 12:19:50
  * Author: 3urobeat
  * 
- * Last Modified: 12.01.2022 13:48:50
+ * Last Modified: 12.01.2022 13:51:51
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -54,7 +54,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                     setTimeout(() => {                        
                         bot.levelsdb.update({ $and: [{ userid: e.id }, { guildid: e.guild_id }] }, 
-                            { $set: { xp: e.xp, messages: e.message_count, userid: e.id, guildid: e.guild_id } }, 
+                            { $set: { xp: e.xp, messages: e.message_count, userid: e.id, guildid: e.guild_id, username: `${e.username}#${e.discriminator}` } }, 
                             { upsert: true }, (err) => {
                                 
                             if (err) logger("error", "levelImport.js", `Error updating db of guild ${message.guild.id}. Error: ${err}`)

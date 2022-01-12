@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 20:16:29
  * Author: 3urobeat
  * 
- * Last Modified: 12.01.2022 12:20:44
+ * Last Modified: 12.01.2022 13:52:56
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -64,10 +64,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         docs.forEach((e, i) => {
             if (i >= 25) return; //max field amount is 25: https://birdie0.github.io/discord-webhooks-guide/other/field_limits.html
 
-            let thisuser = message.guild.members.cache.get(e.userid)
-
             msg.embeds[0].fields.push({
-                name: `${i + 1}. ${thisuser.user.username}#${thisuser.user.discriminator}`,
+                name: `${i + 1}. ${e.username}`,
                 value: `${lang.cmd.othermisc.ranklevel} ${Math.floor(levelUser.xpToLevel(e.xp))}\n${e.xp} XP\n${e.messages} ${lang.cmd.othermisc.ranksmessages}`
             })
         });
