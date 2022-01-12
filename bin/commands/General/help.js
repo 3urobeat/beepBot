@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:16
+ * Last Modified: 12.01.2022 14:48:15
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -108,6 +108,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             //Check if command is allowed on this guild and hide it if it isn't
             if (e.info.allowedguilds && !e.info.allowedguilds.includes(message.guild.id)) return;
+
+            //Check if command is nsfwonly and hide it if guild has nsfw commands disabled
+            if (e.info.nsfwonly && !guildsettings.allownsfw) return;
 
             //Create new Array for category if it doesn't exist yet
             if (!unsortedcategories[e.info.category]) unsortedcategories[e.info.category] = []

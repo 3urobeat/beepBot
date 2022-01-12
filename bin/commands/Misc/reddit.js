@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:21:05
+ * Last Modified: 12.01.2022 14:51:26
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -64,6 +64,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         
         if (post.over_18) {
             if (!message.channel.nsfw) return msg.edit(lf.redditover18) //check if post is 18+ but channel isn't
+            if (!guildsettings.allownsfw) return msg.edit(lf.redditnsfwcmdsdisabled) //check if nsfw commands have been disabled
+
             over18 = "🔞 "; //add over18 emoji
         }
     
