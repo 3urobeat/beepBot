@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 10:12:16
  * Author: 3urobeat
  * 
- * Last Modified: 10.01.2022 13:37:51
+ * Last Modified: 12.01.2022 13:53:45
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -35,7 +35,7 @@ module.exports.levelUser = (bot, logger, message, lang, guildsettings) => {
 
         //increment xp and messages amount for entry that matches this user's id and this guild id
         bot.levelsdb.update({ $and: [{ userid: message.author.id }, { guildid: message.guild.id }] }, 
-                            { $inc: { messages: 1 }, $set: { userid: message.author.id, guildid: message.guild.id } }, 
+                            { $inc: { messages: 1 }, $set: { userid: message.author.id, guildid: message.guild.id, username: `${message.author.username}#${message.author.discriminator}` } }, 
                             { upsert: true }, 
                             (err) => {
                                 
@@ -53,7 +53,7 @@ module.exports.levelUser = (bot, logger, message, lang, guildsettings) => {
 
         //increment xp and messages amount for entry that matches this user's id and this guild id
         bot.levelsdb.update({ $and: [{ userid: message.author.id }, { guildid: message.guild.id }] }, 
-                            { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: message.author.id, guildid: message.guild.id } }, 
+                            { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: message.author.id, guildid: message.guild.id, username: `${message.author.username}#${message.author.discriminator}` } }, 
                             { upsert: true, returnUpdatedDocs: true }, 
                             (err, numAffected, doc) => {
                                 
