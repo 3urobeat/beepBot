@@ -1,3 +1,11 @@
 {
-    "pinginfodescription": "Zeigt den Ping und Heartbeat des Bots an."
+    "pinginfodescription": "Zeigt den Ping und Heartbeat des Bots an.",
+
+    "levelImportconfirm": "Bist du sicher dass du den XP und Level Fortschritt dieses Servers von Mee6 importieren möchtest?\nJeglicher aktueller Level Fortschritt wird veloren gehen!\n\nBitte antworte in den nächsten 15 Sekunden mit 'y' um zu bestätigen oder mit 'n' um abzubrechen.",
+    "levelImportaborted": "Import abgebrochen.",
+    "levelImportimportstart": "Import gestartet...",
+    "levelImportnodata": "Fehler: Es scheint als hätte Mee6 keine XP/Level Fortschritt-Daten für diesen Server gespeichert!",
+    "levelImportdatafound": "XP/Level Fortschritt von useramount Nutzern gefunden! Daten werden in Datenbank geschrieben...",
+    "levelImportfinished": "Daten erfolgreich importiert! Ich habe nun XP/Level Fortschritt-Daten von useramount Nutzern dieses Servers in meiner Datenbank.\nSchau dir die Bestenliste an:",
+    "levelImportinfodescription": "Importiert den XP und Level Fortschritt dieses Servers von Mee6, um ihn mit diesem Levelsystem zu benutzen."
 }
