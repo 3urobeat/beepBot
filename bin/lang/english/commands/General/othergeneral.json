@@ -1,3 +1,11 @@
 {
-    "pinginfodescription": "Returns the ping and heartbeat of the bot."
+    "pinginfodescription": "Returns the ping and heartbeat of the bot.",
+
+    "levelImportconfirm": "Are you sure you want to import the XP and level progress for this server from Mee6?\nAll current level progress will be lost!\n\nPlease reply with 'y' to confirm or 'n' to abort in the next 15 seconds.",
+    "levelImportaborted": "Import aborted.",
+    "levelImportimportstart": "Import initiated...",
+    "levelImportnodata": "Error: It looks like Mee6 has no XP/Level progress data for this guild!",
+    "levelImportdatafound": "Found XP/Level progress of useramount users! Writing data into database...",
+    "levelImportfinished": "Successfully imported data! I now have XP/Level data of useramount users from this server in my database.\nCheckout the leaderboard:",
+    "levelImportinfodescription": "Imports your servers XP and Levels from Mee6 to continue with your progress with this level system."
 }
