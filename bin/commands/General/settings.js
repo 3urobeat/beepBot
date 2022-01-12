@@ -4,7 +4,7 @@
  * Created Date: 02.08.2020 22:07:00
  * Author: 3urobeat
  * 
- * Last Modified: 10.01.2022 13:21:49
+ * Last Modified: 12.01.2022 14:35:30
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -46,10 +46,6 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
     
 
     /* --------------- Read settings for this guild --------------- */
-
-    //XP/Level System
-    if (!guildsettings.levelsystem) var levelsystemstatus = "❌"
-        else var levelsystemstatus = "✅"
 
     //adminroles, moderatorroles & memberaddroles
     if (guildsettings.adminroles && guildsettings.adminroles.length > 0) {
@@ -140,6 +136,13 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
     if (!guildsettings.byemsg) var byemsg = none
         else var byemsg = guildsettings.byemsg
 
+    //XP/Level System
+    if (!guildsettings.levelsystem) var levelsystemstatus = "❌"
+        else var levelsystemstatus = "✅"
+
+    //NSFW
+    if (!guildsettings.allownsfw) var allownsfwstatus = "❌"
+        else var allownsfwstatus = "✅"
 
     
     /* --------------- Code to customize settings --------------- */
@@ -181,9 +184,6 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                         name: `\`${PREFIX}settings lang [${lang.general.language}]\``,
                         value: lf.helplangset },
                     {
-                        name: `\`${PREFIX}settings levelsystem [enable/disable]\``,
-                        value: lf.helplevelsystemset },
-                    {
                         name: `\`${PREFIX}settings adminroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
                         value: lf.helpadminrolesset },
                     {
@@ -207,6 +207,12 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                     {
                         name: `\`${PREFIX}settings joinroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
                         value: lf.helpjoinrolesset },
+                    {
+                        name: `\`${PREFIX}settings levelsystem [enable/disable]\``,
+                        value: lf.helplevelsystemset },
+                    {
+                        name: `\`${PREFIX}settings allownsfw [enable/disable]\``,
+                        value: lf.helpallownsfwset },
                     {
                         name: `\`${PREFIX}settings reset\``,
                         value: lf.helpsettingsreset },
@@ -265,27 +271,6 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                 bot.monitorreactions.update({$and: [{type: "createGuildlang"}, {guildid: message.guild.id}] }, { $set: { enablesettingslangchange: false }}, {multi: true}, (err) => { if (err) logDbErr(err) }) 
                 message.channel.send(`${bot.langObj[args[1].toLowerCase()].cmd.settings.newlangsaved}.`)
             }
-            break;
-
-        case "levelsystem":
-            if (!args[1]) args[1] = ""
-
-            switch(args[1].toLowerCase()) {
-                case "enable":
-                    bot.settings.update({ guildid: guildid }, { $set: { levelsystem: true }}, {}, (err) => { if (err) logDbErr(err) })
-                    message.channel.send(lf.levelsystemenabled)
-                    break;
-
-                case "disable":
-                    bot.settings.update({ guildid: guildid }, { $set: { levelsystem: false }}, {}, (err) => { if (err) logDbErr(err) })
-                    message.channel.send(lf.levelsystemdisabled)
-                    break;
-
-                default:
-                    message.channel.send(lf.levelsystemusage)
-                    return;
-            }
-            
             break;
 
         case "adminroles":
@@ -579,6 +564,48 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
             }
             break;
 
+        case "levelsystem":
+            if (!args[1]) args[1] = ""
+
+            switch(args[1].toLowerCase()) {
+                case "enable":
+                    bot.settings.update({ guildid: guildid }, { $set: { levelsystem: true }}, {}, (err) => { if (err) logDbErr(err) })
+                    message.channel.send(lf.levelsystemenabled)
+                    break;
+
+                case "disable":
+                    bot.settings.update({ guildid: guildid }, { $set: { levelsystem: false }}, {}, (err) => { if (err) logDbErr(err) })
+                    message.channel.send(lf.levelsystemdisabled)
+                    break;
+
+                default:
+                    message.channel.send(lf.levelsystemusage)
+                    return;
+            }
+            
+            break;
+
+        case "allownsfw":
+            if (!args[1]) args[1] = ""
+
+            switch(args[1].toLowerCase()) {
+                case "enable":
+                    bot.settings.update({ guildid: guildid }, { $set: { allownsfw: true }}, {}, (err) => { if (err) logDbErr(err) })
+                    message.channel.send(lf.allownsfwenabled)
+                    break;
+
+                case "disable":
+                    bot.settings.update({ guildid: guildid }, { $set: { allownsfw: false }}, {}, (err) => { if (err) logDbErr(err) })
+                    message.channel.send(lf.allownsfwdisabled)
+                    break;
+
+                default:
+                    message.channel.send(lf.allownsfwusage)
+                    return;
+            }
+            
+            break;
+
         case "reset":
             message.channel.send(lang.general.areyousure)
 
@@ -616,10 +643,6 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                         name: `${lang.general.language}:`, 
                         value: lang.general.thislang, 
                         inline: true },
-                    {
-                        name: `${lf.levelsystemactive}:`,
-                        value: levelsystemstatus,
-                        inline: true },
                     { 
                         name: `${lf.adminroles}:`, 
                         value: adminroles },
@@ -645,7 +668,15 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                         value: byemsg },
                     {
                         name: `${lf.addroleonjoin}:`,
-                        value: memberaddroles
+                        value: memberaddroles },
+                    {
+                        name: `${lf.levelsystemactive}:`,
+                        value: levelsystemstatus,
+                        inline: true },
+                    {
+                        name: `${lf.allownsfw}:`,
+                        value: allownsfwstatus,
+                        inline: true
                     }
                 ],
                 footer: {

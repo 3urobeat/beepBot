@@ -11,6 +11,7 @@
     "helpbyemsgset": "Sets the message that will be sent in the systemchannel when a user leaves the server.",
     "helpjoinrolesset": "Adds, removes or removes all roles a new user will get when joining the server.",
     "helplevelsystemset": "Enables or disabled the XP/level gain when sending messages in the chat.",
+    "helpallownsfwset": "Enables or disables all NSFW (18+) commmands.",
     "helpsettingsreset": "Resets your settings.",
     "helpadvice": "Tip: Type the command but leave out any argument to see a detailed help message about that setting.\ne.g. `prefixsettings greetmsg`",
 
@@ -24,6 +25,7 @@
     "channelname": "channel name",
     "channelid": "channel id",
     "recommendation": "Recommendation",
+
     "prefixmissingargs": "Error: Please provide a valid prefix",
     "newprefixset": "New prefix has been saved",
     "supportedlang": "These languages are being supported",
@@ -53,10 +55,13 @@
     "levelsystemenabled": "The XP/Level system has been enabled!",
     "levelsystemdisabled": "The XP/Level system has been disabled!\nNote: XP and level progress won't be deleted.",
     "levelsystemusage": "To enable the level system use the argument 'enable' and use 'disable' to disable it.",
+    "allownsfwenabled": "NSFW commands have been enabled.",
+    "allownsfwdisabled": "NSFW commands have been disabled.",
+    "allownsfwusage": "To enable NSFW commands use the argument 'enable' and use 'disable' to disable them.",
     "settingsreset": "Your settings have been reset.",
+
     "settingsfor": "Settings for",
     "embeddescription": "Type `prefixsettings help` to get a help page on how to easily adjust the settings to your liking!",
-    "levelsystemactive": "XP/Level system active",
     "adminroles": "Administrator roles",
     "moderatorroles": "Moderator roles",
     "systemchannel": "Channel for broadcasts",
@@ -65,6 +70,8 @@
     "greetmsg": "User join message",
     "byemsg": "User leave message",
     "addroleonjoin": "Role added when user joins",
+    "levelsystemactive": "XP/Level system active",
+    "allownsfw": "NSFW commands allowed",
 
     "infodescription": "Configure the bot individually for your server!"
 }
