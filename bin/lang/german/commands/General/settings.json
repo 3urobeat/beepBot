@@ -11,6 +11,7 @@
     "helpbyemsgset": "Setzt die Nachricht fest, die im Kanal für Durchsagen gesendet wird, wenn ein Nutzer den Server verlässt.",
     "helpjoinrolesset": "Fügt hinzu, entfernt oder entfernt alle Rollen, die ein neuer Nutzer zugewiesen bekommt.",
     "helplevelsystemset": "Aktiviert oder deaktiviert das Verdienen von XP/Leveln durch senden von Nachrichten im Chat.",
+    "helpallownsfwset": "Aktiviert oder deaktiviert alle NSFW (18+) Befehle.",
     "helpsettingsreset": "Setzt deine Einstellungen zurück.",
     "helpadvice": "Tipp: Wenn du einen Befehl benutzt, aber kein Argument angibst, bekommst du eine detaillierte Hilfe Nachricht zu der bestimmten Einstellung.\nz.B. `prefixsettings greetmsg`",
 
@@ -24,6 +25,7 @@
     "channelname": "Kanalname",
     "channelid": "Kanal-ID",
     "recommendation": "Vorschlag",
+
     "prefixmissingargs": "Um einen Befehl-Prefix festzulegen, benutze das Argument 'set (prefix)'.\nUm den Prefix zur Grundeinstellung zurückzusetzen, benutze 'remove'.",
     "newprefixset": "Neuer Prefix wurde gespeichert",
     "supportedlang": "Es werden diese Sprachen unterstützt",
@@ -53,10 +55,13 @@
     "levelsystemenabled": "Das XP/Level System wurde aktiviert!",
     "levelsystemdisabled": "Das XP/Level System wurde deaktiviert!\nNotiz: Der XP und Level Fortschritt wird nicht gelöscht.",
     "levelsystemusage": "Nutze das Argument 'enable' um das Level System zu aktivieren und 'disable' um es zu deaktivieren.",
+    "allownsfwenabled": "NSFW Befehle wurden aktiviert.",
+    "allownsfwdisabled": "NSFW Befehle wurden deaktiviert.",
+    "allownsfwusage": "Nutze das Argument 'enable' um NSFW Befehle zu aktivieren und 'disable' um sie zu deaktivieren.",
     "settingsreset": "Deine Einstellungen wurden zurückgesetzt.",
+
     "settingsfor": "Einstellungen für",
     "embeddescription": "Tippe `prefixsetings help` um eine Hile zu erhalten wie du ganz einfach die Einstellungen an deine Vorlieben anpassen kannst!",
-    "levelsystemactive": "XP/Level-System aktiv",
     "adminroles": "Administrator-Rollen",
     "moderatorroles": "Moderator-Rollen",
     "systemchannel": "Kanal für Durchsagen",
@@ -65,6 +70,8 @@
     "greetmsg": "Nachricht bei Beitritt eines Nutzers",
     "byemsg": "Nachricht beim Verlassen eines Nutzers",
     "addroleonjoin": "Bei Beitritt zugewiesene Rolle",
+    "levelsystemactive": "XP/Level-System aktiv",
+    "allownsfw": "NSFW Befehle erlaubt",
 
     "infodescription": "Konfiguriere den Bot individuell für deinen Server!"
 }

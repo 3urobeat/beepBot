@@ -25,6 +25,7 @@
         "greetmsg": null,
         "byemsg": null,
         "memberaddroles": [],
-        "levelsystem": true
+        "levelsystem": true,
+        "allownsfw": true
     }
 }
