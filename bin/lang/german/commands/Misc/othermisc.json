@@ -32,7 +32,8 @@
 
     "redditsearching": "Suche in sort in subreddit...",
     "redditnotfound": "Ich konnte leider nichts finden.",
-    "redditover18": "Fehler: Den Post den ich gefunden habe ist als 18+ markiert, der Kanal ist allerdings nicht als NSFW-Kanal festgelegt. Bitte versuche erneut.\nUm in der Zukunft auch NSFW Beiträge zu sehen, ändere bitte die Einstellungen dieses Kanals.",
+    "redditover18": "Fehler: Den Post den ich gefunden habe ist als 18+ markiert, der Kanal ist allerdings nicht als NSFW-Kanal festgelegt. Bitte versuche es erneut.\nUm in der Zukunft auch NSFW Beiträge zu sehen, ändere bitte die Einstellungen dieses Kanals.",
+    "redditnsfwcmdsdisabled": "Fehler: Den Post den ich gefunden habe ist als 18+ markiert, dieser Server hat allerdings NSFW Befehle ausgeschaltet. Bitte versuche es erneut.",
     "redditnodescription": "Keine Beschreibung.",
     "redditratio": "Verhältnis",
     "redditcomments": "Kommentare",

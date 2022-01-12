@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 10.01.2022 13:34:43
+ * Last Modified: 12.01.2022 14:42:14
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -138,6 +138,9 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
 
             //Check if command is allowed on this guild and respond with error message if it isn't
             if (cmd.info.allowedguilds && !cmd.info.allowedguilds.includes(message.guild.id)) return message.channel.send(bot.fn.lang(message.guild.id, guildsettings).general.guildnotallowederror);
+
+            //Check if server admins disabled nsfw commands
+            if (cmd.info.nsfwonly && !guildsettings.allownsfw) return message.channel.send(bot.fn.lang(message.guild.id, guildsettings).general.allownsfwdisablederror)
 
 
             if (!ab.includes("all")) { //check if user is allowed to use this command
