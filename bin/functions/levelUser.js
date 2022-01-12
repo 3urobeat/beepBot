@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 10:12:16
  * Author: 3urobeat
  * 
- * Last Modified: 12.01.2022 13:53:45
+ * Last Modified: 12.01.2022 14:00:59
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -65,8 +65,8 @@ module.exports.levelUser = (bot, logger, message, lang, guildsettings) => {
 
             xpHistory[message.guild.id][message.author.id] = Date.now();
 
-            //send level up message if user reached new level
-            if (Math.floor(this.xpToLevel(doc.xp)) > Math.floor(this.xpToLevel(doc.xp - xpAmount))) {
+            //send level up message if user reached new level (except for level 1, you only need one message to get it, that would be stupid)
+            if (Math.floor(this.xpToLevel(doc.xp)) > 1 && Math.floor(this.xpToLevel(doc.xp)) > Math.floor(this.xpToLevel(doc.xp - xpAmount))) {
                 message.channel.send(lang.general.levelupmsg.replace("username", message.author.username).replace("leveltext", Math.floor(this.xpToLevel(doc.xp))))
             }
         })
