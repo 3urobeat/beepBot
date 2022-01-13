@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 15:15:19
  * Author: 3urobeat
  * 
- * Last Modified: 13.01.2022 14:35:32
+ * Last Modified: 13.01.2022 18:26:27
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -88,23 +88,33 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
     guild.roles.cache.get(guild.id).setPermissions(guild.roles.cache.get(guild.id).permissions.remove("MANAGE_ROLES"), "Needed so that users are unable to remove the beepBot Muted role from their own roles.") //permissions.remove only returns the changed bitfield
         .catch((err) => channelToSend.send("I was unable to remove the 'Manage Roles' permission from the `@everyone` role!\nPlease do this manually as otherwise muted users will be able to remove the 'beepBot Muted' role from themselves, effectively unmuting themselves again!\n|| Error: " + err + " ||")) //this doesn't need to be in a language file as the user didn't have the opportunity yet to change the lang anyway
 
-    //Create beepBot Muted role (this code is used again in mute.js)
-    guild.roles.create({
-        name: "beepBot Muted",
-        color: "#99AAB5",
-        reason: "Role needed to chat-mute users using the mute command." 
-    })
-        .then((role) => { //after creating role change permissions of every text channel
-            var errormsgsent = false
 
-            guild.channels.cache.forEach((channel) => {
-                if (channel.type != "GUILD_TEXT") return;
+    //Update perms of role in all channels (function because I need to call it two times from different blocks below)
+    function updatePerms(role) {
+        var errormsgsent = false
 
-                channel.permissionOverwrites.create(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, "Needed change so that a muted user will be unable to send and react to messages.")
-                    .catch((err) => { 
-                        if (!errormsgsent) guild.channels.cache.get(welcomechannel).send(`I was sadly unable to change the permissions of the 'beepBot Muted' role in all channels.\nYou can fix this by checking/correcting my permissions and then running the mute command once.\nError: ${err}`) //message can technically only be in English - also: send this message only once
-                    })
-            }) 
+        guild.channels.cache.forEach((channel) => {
+            if (channel.type != "GUILD_TEXT") return;
+
+            channel.permissionOverwrites.create(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, "Needed change so that a muted user will be unable to send and react to messages.")
+                .catch((err) => { 
+                    if (!errormsgsent) guild.channels.cache.get(welcomechannel).send(`I was sadly unable to change the permissions of the 'beepBot Muted' role in all channels.\nYou can fix this by checking/correcting my permissions and then running the mute command once.\nError: ${err}`) //message can technically only be in English - also: send this message only once
+                })
+        }) 
+    }
+
+    //Create beepBot Muted role if it doesn't exist (this code is used again in mute.js)
+    var mutedRole = guild.roles.cache.find(role => role.name == "beepBot Muted")
+
+    if (!mutedRole) {
+        guild.roles.create({
+            name: "beepBot Muted",
+            color: "#99AAB5",
+            reason: "Role needed to chat-mute users using the mute command." 
         })
-        .catch((err) => { guild.channels.cache.get(welcomechannel).send(`I was unable to create the 'beepBot Muted' role.\nError: ${err}`) }) //message can only be in English and shouldn't even occurr because the permission is already included in the invite link (same with the error above but you never know)
+            .then((role) => { updatePerms(role) }) //after creating role change permissions of every text channel
+            .catch((err) => { guild.channels.cache.get(welcomechannel).send(`I was unable to create the 'beepBot Muted' role.\nError: ${err}`) }) //message can only be in English and shouldn't even occurr because the permission is already included in the invite link (same with the error above but you never know)    
+    } else {
+        updatePerms(mutedRole);
+    }
 }
