@@ -48,8 +48,7 @@
     "botaddtitle": "Thanks for adding me to your server!",
     "botadddesc": "There are a few things left to do.\nPlease move the role 'beepBot' which I created to the top of the list of roles in your server's settings so that you are able to use all of my functions.\nNote: Should you have a sort of 'Member' role which everyone has then it must have 'Manage Roles' turned off!\n",
     "botadddesc2": "\nAfter you have done that type `prefixsettings` and configure my settings to your liking.\nTo get instructions on how to use the command, type `prefixsettings help`.\nNow you are ready to check out all of my commands by typing `prefixhelp`!\n\nEnjoy!",
-    "botaddfooter": "You can react to a flag to change the language of this message!",
-    "botaddfooternoreactperm": "I have no permissions to react to this language. You are therefore sadly unable to change the language of this message :(",
+    "botaddchooselang": "Select a language!",
 
     "voicestateupdatemutereason": "User was previously voice muted by muteauthor. Reason: reasontext",
     "voicestateupdateunmutereason": "User was unmuted after temporary mute by muteauthor expired. Reason: reasontext",

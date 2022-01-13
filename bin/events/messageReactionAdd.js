@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 21:39:50
+ * Last Modified: 13.01.2022 14:01:50
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -61,40 +61,6 @@ module.exports.run = (bot, logger, reaction, user) => { //eslint-disable-line
                     return;
                 }
 
-                break;
-
-            case "createGuildlang": //for language reactions on createGuild welcome message
-                var requestedlang = {}
-                var requestedlangname = ""
-
-                Object.keys(bot.langObj).every((e) => {
-                    if (bot.langObj[e]["general"]["langemote"] == reaction._emoji.name) { 
-                        requestedlang = bot.langObj[e]
-                        requestedlangname = e
-                        return false; //stops loop
-                    } else {
-                        return true; //continues with next iteration
-                    }
-                })
-
-                //uhh this next line shouldn't trigger
-                if (Object.keys(requestedlang).length == 0) return logger("warn", "messageReactionAdd.js", "I could't find a language to a createGuildlang reaction. :/ Emote: " + reaction._emoji.name)
-                
-                bot.channels.cache.get(doc.channelid).messages.cache.get(doc.msg).edit({
-                    embeds: [{
-                        title: requestedlang.general.botaddtitle,
-                        description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
-                        thumbnail: { url: bot.user.displayAvatarURL() },
-                        footer: {
-                            text: requestedlang.general.botaddfooter 
-                        } 
-                    }] 
-                }).then(() => {
-                    reaction.users.remove(user).catch(() => {}) //catch but ignore error
-                })
-
-                //if the user didn't change the lang using the settings cmd we are still allowed to do that automatically to bring in some "magic"! (I feel like Apple rn lol)
-                if (doc.enablesettingslangchange) bot.settings.update({ guildid: doc.guildid }, { $set: { lang: requestedlangname }}, {}, () => { }) //catch but ignore error
                 break;
                 
             default:
