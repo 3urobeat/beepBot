@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 15:15:19
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:23:42
+ * Last Modified: 13.01.2022 12:53:36
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -104,11 +104,8 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
 
     //Create beepBot Muted role (this code is used again in mute.js)
     guild.roles.create({
-        data: {
-            name: "beepBot Muted",
-            color: "#99AAB5",
-            permissions: []
-        },
+        name: "beepBot Muted",
+        color: "#99AAB5",
         reason: "Role needed to chat-mute users using the mute command." 
     })
         .then((role) => { //after creating role change permissions of every text channel
@@ -117,7 +114,7 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
             guild.channels.cache.forEach((channel) => {
                 if (channel.type != "GUILD_TEXT") return;
 
-                channel.updateOverwrite(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, "Needed change so that a muted user will be unable to send and react to messages.")
+                channel.permissionOverwrites.create(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, "Needed change so that a muted user will be unable to send and react to messages.")
                     .catch((err) => { 
                         if (!errormsgsent) guild.channels.cache.get(welcomechannel).send(`I was sadly unable to change the permissions of the 'beepBot Muted' role in all channels.\nYou can fix this by checking/correcting my permissions and then running the mute command once.\nError: ${err}`) //message can technically only be in English - also: send this message only once
                     })

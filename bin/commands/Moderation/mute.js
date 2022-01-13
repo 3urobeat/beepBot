@@ -4,7 +4,7 @@
  * Created Date: 11.02.2021 18:54:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:21:47
+ * Last Modified: 13.01.2022 12:54:13
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -38,17 +38,15 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             if (!mutedrole) {
                 message.guild.roles.create({
-                    data: {
-                        name: "beepBot Muted",
-                        color: "#99AAB5",
-                        permissions: [] },
+                    name: "beepBot Muted",
+                    color: "#99AAB5",
                     reason: lf.rolecreatereason
                 })
                     .then((role) => { //after creating role change permissions of every text channel           
                         message.guild.channels.cache.forEach((channel) => {
                             if (channel.type != "GUILD_TEXT") return;
             
-                            channel.updateOverwrite(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
+                            channel.permissionOverwrites.create(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
                                 .catch((err) => {
                                     if (errorcount < 1) message.channel.send(`${lf.rolechannelpermerror}\n${lang.general.error}: ${err}`)
                                     errorcount++ //we don't want to spam the channel
@@ -68,7 +66,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     if (channel.type != "GUILD_TEXT") return;
                     if (!channel.permissionsFor(mutedrole).has("SEND_MESSAGES") && !channel.permissionsFor(mutedrole).has("ADD_REACTIONS")) return; //if this channel already has both perms set to false then skip this iteration
     
-                    channel.updateOverwrite(mutedrole, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
+                    channel.permissionOverwrites.create(mutedrole, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
                         .catch((err) => {
                             if (errorcount < 1) message.channel.send(`${lf.rolechannelpermerror}\n${lang.general.error}: ${err}`)
                             errorcount++ //we don't want to spam the channel
