@@ -1,24 +1,50 @@
-<div align="center">
-	<h1 align="center">~ beepBot ~</h1>
-	<strong>beepBot - 24/7 hosted and customizeable Discord Bot for all your needs.</strong><br />Get an overview of 30+ commands with `*help`<br /><br />
+<div align="center" markdown=1>
+	<p align="center"><img width=45% src="https://3urobeat.com/beepBot/profilepic.png"></p>
+	<strong>beepBot - 24/7 hosted, feature-rich and customizable Discord Bot for all your needs.</strong>
+	<br>Invite him to your server with the link below!<br>
+	<p></p>
 </div>
 
-## Version 3.0 is finally out!  
-**Featuring a settings command to configure the bot for your server and much more!**  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+[![nodejs](https://img.shields.io/badge/discord.js-v13-brightgreen)](https://discord.js.org)
+[![Star](https://img.shields.io/badge/-Give%20this%20repo%20a%20star!-yellow)](https://github.com/HerrEurobeat/beepBot)
+[![Invite](https://img.shields.io/badge/Invite%20me%20to%20your%20server!-blue)](https://discord.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=8)
+[![Donate](https://img.shields.io/badge/donate-%241-orange)](https://paypal.me/3urobeat)
 
-[Invite my bot to your server!](https://discordapp.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=502787199)
+&nbsp;  
 
-If you want, you can donate a few bucks on my [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VAVVKE4L962H6&source=url)!  
-I would **really** appreciate it!  
+## **Features**:
+* **50+** commands - ranging from Fun and Information to Moderation
+* Customizable settings for your server
+* Multiple languages (Currently English & German)
+* XP/Level System **with import from Mee6!**
+* Moderation commands, including moving messages or whole conversations to another channel, with logging
+* Join/Leave messages and automatically assign roles
+* ...and much more
+  
+&nbsp;  
+## **Music:**
+Music support can be enabled for your server for a [one-time donation of 20€](https://paypal.me/3urobeat) to help me pay for server cost.  
+**Please include your Server ID!**  
+If you need help, message me: `3urobeat#0975`  or create an issue here.
 
-If you've got a question or something like that then feel free to add me on Discord:  
-3urobeat#0975
+&nbsp;  
+## **Invite:**
+
+[Invite my bot to your server!](https://discord.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=8)  
+
+If you like my work I would really appreciate a small donation on [PayPal](https://paypal.me/3urobeat)!
+
+&nbsp;  
+&nbsp;  
 
 This bot is not intended to be downloaded and used privatly. This repo will miss some important files you would need to run it on your computer.  
 Instead, add the bot to your server with the invite link above.  
 
+&nbsp;  
+&nbsp;  
 
-<div align="left">
+<div align="center">
 	<a href="https://discordbots.org/bot/265162449441783808">
 	  <img src="https://discordbots.org/api/widget/265162449441783808.svg" />
 	</a>
