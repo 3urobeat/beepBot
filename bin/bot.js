@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 09.01.2022 11:02:46
+ * Last Modified: 13.01.2022 13:21:58
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -479,6 +479,10 @@ bot.on("guildMemberAdd", member => {
 bot.on("guildMemberRemove", member => {
     require("./events/guildMemberRemove.js").run(bot, member) //call the run function of the file which contains the code of this event
 });
+
+bot.on("interactionCreate", interaction => {
+    require("./events/interactionCreate.js").run(bot, interaction)
+})
 
 bot.on("messageReactionAdd", (reaction, user) => {
     require("./events/messageReactionAdd.js").run(bot, logger, reaction, user) //call the run function of the file which contains the code of this event
