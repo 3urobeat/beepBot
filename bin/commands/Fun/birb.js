@@ -4,7 +4,7 @@
  * Created Date: 12.01.2022 14:01:56
  * Author: 3urobeat
  * 
- * Last Modified: 12.01.2022 14:11:57
+ * Last Modified: 15.01.2022 15:14:42
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["birb", "bird", "parrot"],
     description: "cmd.otherfun.birbinfodescription",
-    usage: '',
+    options: [],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

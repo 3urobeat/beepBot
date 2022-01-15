@@ -4,7 +4,7 @@
  * Created Date: 29.11.2020 14:24:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:19:45
+ * Last Modified: 15.01.2022 12:59:25
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -41,7 +41,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["say"],
     description: "cmd.otherbotowner.sayinfodescription",
-    usage: "(text)",
+    options: [
+        {
+            name: "text",
+            description: "The text the bot should send",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ],
     accessableby: ['botowner'],
     allowedindm: true,
     nsfwonly: false

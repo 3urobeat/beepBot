@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 20:16:29
  * Author: 3urobeat
  * 
- * Last Modified: 12.01.2022 13:52:56
+ * Last Modified: 15.01.2022 15:45:07
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -77,7 +77,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["ranks", "levels"],
     description: "cmd.othermisc.ranksinfodescription",
-    usage: '',
+    options: [],
     accessableby: ['all'],
     allowedindm: false,
     nsfwonly: false

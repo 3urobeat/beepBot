@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:22:47
+ * Last Modified: 15.01.2022 20:27:24
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -56,6 +56,7 @@ module.exports.info = {
     names: ["4k"],
     description: "cmd.othernsfw.4kinfodescription",
     usage: "",
+    options: [],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: true

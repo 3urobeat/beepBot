@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:56
+ * Last Modified: 15.01.2022 15:39:40
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -84,7 +84,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
     names: ["lyrics", "l"], //Array<String> with all aliases
     description: "cmd.othermisc.lyricsinfodescription",
-    usage: "(song name)",
+    options: [
+        {
+            name: "song name",
+            description: "The name of the song to search lyrics for",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ],
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
     nsfwonly: false

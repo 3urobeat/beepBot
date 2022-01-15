@@ -4,7 +4,7 @@
  * Created Date: 02.08.2020 22:07:00
  * Author: 3urobeat
  * 
- * Last Modified: 12.01.2022 14:35:30
+ * Last Modified: 15.01.2022 15:29:03
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -693,7 +693,14 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
 module.exports.info = {
     names: ["settings", "set"],
     description: "cmd.settings.infodescription",
-    usage: "['help']",
+    options: [
+        {
+            name: "help",
+            description: "Responds with a help message",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+        }
+    ],
     accessableby: ['admins'],
     allowedindm: false,
     nsfwonly: false

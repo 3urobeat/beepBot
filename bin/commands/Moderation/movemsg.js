@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 28.11.2021 17:30:28
+ * Last Modified: 15.01.2022 20:15:26
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -254,7 +254,26 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["movemsg", "movemessage"],
     description: "cmd.movemsg.infodescription",
-    usage: "(use cmd in reply/message id/message link/amount of messages) (channelname/channelmention) [-r reason]",
+    options: [
+        {
+            name: "message",
+            description: "ID/URL of the msg or a number of msgs to move. Pass a 0 if you use this cmd in a reply",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: "channel",
+            description: "The channel where the message(s) should be moved to",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.CHANNEL
+        },
+        {
+            name: "reason",
+            description: "The reason of the move",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ],
     accessableby: ['moderators'],
     allowedindm: false,
     nsfwonly: false

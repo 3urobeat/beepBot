@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 23:58:19
+ * Last Modified: 15.01.2022 17:07:58
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -122,7 +122,43 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
     names: ["setpresence"],
     description: "cmd.otherbotowner.setpresenceinfodescription",
-    usage: "['remove'/'default'] [-s 'online'/'idle'/'dnd'/'invisible'] [-gt 'playing'/'streaming'/'listening'/'watching'/'competing'] [-g gametext/'default'] [-url Stream URL/'default']",
+    options: [
+        {
+            name: "preset",
+            description: "Removes current status or loads default status settings",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "Remove current status", value: "remove" },
+                { name: "Load default status settings", value: "default" }
+            ]
+        },
+        {
+            name: "gametype",
+            description: "Sets a game type",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "Select gametype playing", value: "playing" },
+                { name: "Select gametype streaming", value: "streaming" },
+                { name: "Select gametype listening", value: "listening" },
+                { name: "Select gametype watching", value: "watching" },
+                { name: "Select gametype competing", value: "competing" }
+            ]
+        },
+        {
+            name: "gametext",
+            description: "Set a custom game text or type 'default' to load default text",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+        },
+        {
+            name: "url",
+            description: "Set a custom stream url or type 'default' to load default url",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+        }
+    ],
     accessableby: ['botowner'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
     nsfwonly: false

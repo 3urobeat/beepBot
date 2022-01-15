@@ -4,7 +4,7 @@
  * Created Date: 02.08.2020 22:07:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:20
+ * Last Modified: 15.01.2022 15:23:57
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -53,7 +53,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ['ping', 'pong'],
     description: "cmd.othergeneral.pinginfodescription",
-    usage: "",
+    options: [],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

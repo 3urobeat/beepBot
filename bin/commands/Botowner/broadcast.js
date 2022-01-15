@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 28.11.2021 16:50:58
+ * Last Modified: 15.01.2022 12:58:56
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -63,7 +63,20 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["broadcast"],
     description: "cmd.otherbotowner.broadcastinfodescription",
-    usage: '(force "true"/"false") (message)',
+    options: [
+        {
+            name: "force",
+            description: "Force this message to be sent even if no suitable channel was found (will use first channel with permission to send messages)",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+        },
+        {
+            name: "message",
+            description: "The message that should be broadcasted",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ],
     accessableby: ['botowner'],
     allowedindm: true,
     nsfwonly: false

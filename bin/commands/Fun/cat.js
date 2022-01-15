@@ -4,7 +4,7 @@
  * Created Date: 12.01.2022 14:01:47
  * Author: 3urobeat
  * 
- * Last Modified: 12.01.2022 14:05:11
+ * Last Modified: 15.01.2022 15:16:03
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["cat", "meow"],
     description: "cmd.otherfun.catinfodescription",
-    usage: '',
+    options: [],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false
