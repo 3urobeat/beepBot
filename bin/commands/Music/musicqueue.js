@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 18:47:08
+ * Last Modified: 15.01.2022 20:24:38
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -87,7 +87,24 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["queue", "nowplaying", "np"],
     description: "cmd.othermusic.queueinfodescription",
-    usage: '["list"/"remove" number/"clear"]',
+    options: [
+        {
+            name: "option",
+            description: "List or clear the queue",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "List queue", value: "list" },
+                { name: "Clear queue", value: "queue" }
+            ]
+        },
+        {
+            name: "remove",
+            description: "Remove a specific element in the queue",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER
+        }
+    ],
     accessableby: ['all'],
     allowedindm: false,
     nsfwonly: false,

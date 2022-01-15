@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 24.11.2021 18:27:43
+ * Last Modified: 15.01.2022 20:21:17
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -72,7 +72,20 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["loop"],
     description: "cmd.othermusic.loopinfodescription",
-    usage: '["off"/"track"/"queue"/"autoplay"]',
+    options: [
+        {
+            name: "mode",
+            description: "Select the loop mode",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "Turn off", value: "off" },
+                { name: "Loop this track", value: "track" },
+                { name: "Loop the queue", value: "queue" },
+                { name: "Enable autoplay", value: "autoplay" }
+            ]
+        }
+    ],
     accessableby: ['all'],
     allowedindm: false,
     nsfwonly: false,

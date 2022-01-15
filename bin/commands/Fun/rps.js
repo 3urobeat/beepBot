@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:12
+ * Last Modified: 15.01.2022 15:20:14
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -62,7 +62,19 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["rps"],
     description: "cmd.otherfun.rpsinfodescription",
-    usage: "('r'/'rock'/'p'/'paper'/'s'/'scissors')",
+    options: [
+        {
+            name: "choice",
+            description: "Your choice",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "Rock", value: "rock" },
+                { name: "Paper", value: "paper" },
+                { name: "Scissors", value: "scissors" }
+            ]
+        }
+    ],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

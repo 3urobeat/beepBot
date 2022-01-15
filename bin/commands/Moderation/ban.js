@@ -4,7 +4,7 @@
  * Created Date: 31.12.2020 17:05:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:21:24
+ * Last Modified: 15.01.2022 19:53:46
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -108,6 +108,46 @@ module.exports.info = {
     names: ["ban"],
     description: "cmd.ban.infodescription",
     usage: '(mention/username) [-r reason] [-time/-t Number "seconds"/"minutes"/"hours"/"days"/"months"/"years"] [-notify/-n]',
+    options: [
+        {
+            name: "user",
+            description: "The user to ban",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+        },
+        {
+            name: "reason",
+            description: "The reason of the ban",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: "time",
+            description: "Provide a duration and timeframe to only temporary ban the user",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "timeframe",          //I still don't like this separation of these two values but couldn't find a better way as of now
+            description: "Timeframe",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "Seconds", value: "seconds" },
+                { name: "Minutes", value: "minutes" },
+                { name: "Hours", value: "hours" },
+                { name: "Days", value: "days" },
+                { name: "Months", value: "months" },
+                { name: "Years", value: "years" }
+            ]
+        },
+        {
+            name: "notify",
+            description: "If the user should be notified of the ban and reason",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+        }
+    ],
     accessableby: ['admins'],
     allowedindm: false,
     nsfwonly: false

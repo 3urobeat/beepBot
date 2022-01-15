@@ -4,7 +4,7 @@
  * Created Date: 13.12.2020 17:41:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:21:32
+ * Last Modified: 15.01.2022 19:54:28
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -82,7 +82,26 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["kick"],
     description: "cmd.kick.infodescription",
-    usage: "(mention/username) [-r reason] [-notify/-n]",
+    options: [
+        {
+            name: "user",
+            description: "The user to kick",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+        },
+        {
+            name: "reason",
+            description: "The reason of the kick",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: "notify",
+            description: "If the user should be notified of the kick and reason",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+        }
+    ],
     accessableby: ['moderators'],
     allowedindm: false,
     nsfwonly: false

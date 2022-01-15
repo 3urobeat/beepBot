@@ -4,7 +4,7 @@
  * Created Date: 19.01.2021 22:36:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:19:48
+ * Last Modified: 15.01.2022 13:00:42
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -92,7 +92,20 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
     names: ["setconfig"], //Array<String> with all aliases
     description: "cmd.otherbotowner.setconfiginfodescription", //Path to lang file entry (example: "cmd.othergeneral.pinginfodescription")
-    usage: '[config value] [new value]',
+    options: [
+        {
+            name: "config value",
+            description: "The config key to change",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: "new value",
+            description: "The new value of the key to change",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ],
     accessableby: ['botowner'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
     nsfwonly: false

@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:21:20
+ * Last Modified: 15.01.2022 16:49:37
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -198,7 +198,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["weather"],
     description: "cmd.weather.infodescription",
-    usage: "(city name)",
+    options: [
+        {
+            name: "city name",
+            description: "Which city to get the weather of",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        },
+    ],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

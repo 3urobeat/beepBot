@@ -4,7 +4,7 @@
  * Created Date: 06.09.2021 13:12:42
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:07
+ * Last Modified: 15.01.2022 15:16:21
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -54,7 +54,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["joke", "dadjoke", "jokes"],
     description: "cmd.otherfun.jokeinfodescription",
-    usage: "",
+    options: [],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

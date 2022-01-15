@@ -4,7 +4,7 @@
  * Created Date: 07.10.2020 20:44:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:03
+ * Last Modified: 15.01.2022 15:16:17
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -34,7 +34,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["f"],
     description: "cmd.otherfun.finfodescription",
-    usage: "",
+    options: [],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

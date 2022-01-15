@@ -4,7 +4,7 @@
  * Created Date: 07.08.2020 20:02:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:45
+ * Last Modified: 15.01.2022 15:36:45
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -34,7 +34,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["coinflip", "coin", "flip"],
     description: "cmd.othermisc.coinflipinfodescription",
-    usage: "",
+    options: [],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

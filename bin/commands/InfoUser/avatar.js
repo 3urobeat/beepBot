@@ -4,7 +4,7 @@
  * Created Date: 07.08.2020 20:02:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:34
+ * Last Modified: 15.01.2022 15:30:23
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -59,7 +59,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["avatar", "useravatar"],
     description: "cmd.otherinfouser.avatarinfodescription",
-    usage: "[mention/username/userid]",
+    options: [
+        {
+            name: "user",
+            description: "Gets the avatar of a specific user",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+        }
+    ],
     accessableby: ['all'],
     allowedindm: false,
     nsfwonly: false

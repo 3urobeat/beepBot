@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 25.11.2021 13:10:04
+ * Last Modified: 15.01.2022 20:25:59
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -78,7 +78,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["seek"],
     description: "cmd.othermusic.seekinfodescription",
-    usage: '(seconds/minutes:seconds/hours:minutes:seconds)',
+    options: [
+        {
+            name: "timestamp",
+            description: "Timestamp where to skip to. Format: seconds or min:sec or hour:min:sec",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ],
     accessableby: ['all'],
     allowedindm: false,
     nsfwonly: false,

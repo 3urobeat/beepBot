@@ -4,7 +4,7 @@
  * Created Date: 07.10.2020 20:44:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:37
+ * Last Modified: 15.01.2022 15:36:23
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -284,7 +284,25 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["info"],
     description: "cmd.info.infodescription",
-    usage: '["bot"/"user"/"server"] ["mobile"]',
+    options: [
+        {
+            name: "mode",
+            description: "Select if information should be shown about the bot, user (you) or the server",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "Bot", value: "bot" },
+                { name: "User", value: "user" },
+                { name: "Server", value: "server" }
+            ]
+        },
+        {
+            name: "mobile",
+            description: "Set to true to get a response that is readable on mobile devices",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+        }
+    ],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

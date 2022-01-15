@@ -4,7 +4,7 @@
  * Created Date: 07.08.2020 20:02:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:50
+ * Last Modified: 15.01.2022 15:38:15
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -44,7 +44,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["dice", "roll"],
     description: "cmd.othermisc.diceinfodescription",
-    usage: "(limit)",
+    options: [
+        {
+            name: "limit",
+            description: "Set the maximum result possible",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER
+        }
+    ],
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
     nsfwonly: false

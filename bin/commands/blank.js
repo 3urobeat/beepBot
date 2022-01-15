@@ -4,7 +4,7 @@
  * Created Date: 02.08.2020 22:07:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:23:30
+ * Last Modified: 15.01.2022 20:27:46
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -36,7 +36,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
     names: [], //Array<String> with all aliases
     description: "", //Path to lang file entry (example: "cmd.othergeneral.pinginfodescription")
-    usage: '',
+    options: [],
     accessableby: [''], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
     nsfwonly: false,

@@ -4,7 +4,7 @@
  * Created Date: 16.12.2021 11:31:39
  * Author: 3urobeat
  * 
- * Last Modified: 16.12.2021 13:01:41
+ * Last Modified: 15.01.2022 15:21:56
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -106,7 +106,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["xkcd"],
     description: "cmd.otherfun.xkcdinfodescription",
-    usage: "[\"random\"]",
+    options: [
+        {
+            name: "random",
+            description: "Gets a random comic instead of the latest one",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+        }
+    ],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

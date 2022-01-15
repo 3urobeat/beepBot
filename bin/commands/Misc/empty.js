@@ -4,7 +4,7 @@
  * Created Date: 29.11.2020 14:24:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:53
+ * Last Modified: 15.01.2022 15:38:35
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -2029,7 +2029,7 @@ __`)
 module.exports.info = { 
     names: ["empty", "space"],
     description: "cmd.othermisc.emptyinfodescription",
-    usage: "",
+    options: [],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

@@ -4,7 +4,7 @@
  * Created Date: 07.10.2020 20:44:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:20:09
+ * Last Modified: 15.01.2022 15:18:28
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -36,7 +36,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["magic8", "8ball", "8b"],
     description: "cmd.otherfun.magic8infodescription",
-    usage: "(question)",
+    options: [
+        {
+            name: "question",
+            description: "The question to ask the magic 8ball",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        }
+    ],
     accessableby: ['all'],
     allowedindm: true,
     nsfwonly: false

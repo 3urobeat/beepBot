@@ -4,7 +4,7 @@
  * Created Date: 11.02.2021 18:54:00
  * Author: 3urobeat
  * 
- * Last Modified: 13.01.2022 12:54:13
+ * Last Modified: 15.01.2022 20:18:58
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -180,6 +180,57 @@ module.exports.info = {
     names: ["mute"],
     description: "cmd.mute.infodescription",
     usage: '("voice"/"chat"/"all") (mention/username) [-r reason] [-time/-t Number "seconds"/"minutes"/"hours"/"days"/"months"/"years"] [-notify/-n]',
+    options: [
+        {
+            name: "type",
+            description: "Select if the user should be muted in voice, chat or both",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "Voice", value: "voice" },
+                { name: "Chat", value: "chat" },
+                { name: "Both", value: "all" }
+            ]
+        },
+        {
+            name: "user",
+            description: "The user to mute",
+            required: true,
+            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+        },
+        {
+            name: "reason",
+            description: "The reason of the mute",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+        },
+        {
+            name: "time",
+            description: "Provide a duration and timeframe to only temporary mute the user",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "timeframe",          //I still don't like this separation of these two values but couldn't find a better way as of now
+            description: "Timeframe",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "Seconds", value: "seconds" },
+                { name: "Minutes", value: "minutes" },
+                { name: "Hours", value: "hours" },
+                { name: "Days", value: "days" },
+                { name: "Months", value: "months" },
+                { name: "Years", value: "years" }
+            ]
+        },
+        {
+            name: "notify",
+            description: "If the user should be notified of the mute and reason",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+        }
+    ],
     accessableby: ['moderators'],
     allowedindm: false,
     nsfwonly: false
