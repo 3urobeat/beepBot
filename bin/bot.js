@@ -181,39 +181,9 @@ var owneronlyerror = (lang) => { return randomstring(lang.general.owneronlyerror
 var usermissperm   = (lang) => { return randomstring(lang.general.usermissperm) + " (Role permission-Error)" }
 
 
-/* -------------- Command reader -------------- */
-bot.commands = new Discord.Collection()
+/* ------------ Run the command reader ------------ */
+require("./helpers/commandReader.js").run(bot); //Function returns amount of commands (without aliases found)
 
-var commandcount = 0;
-const dirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory())
-
-dirs('./bin/commands').forEach((k) => {
-    fs.readdir(`./bin/commands/${k}`, (err, files) => {
-        if (err) logger('error', 'bot.js', err);
-        var jsfiles = files.filter(p => p.split('.').pop() === 'js');
-        
-        jsfiles.forEach((f) => {
-            var cmd = require(`./commands/${k}/${f}`);
-
-            for(let j = 0; j < cmd.info.names.length; j++) { //get all aliases of each command
-                var tempcmd = JSON.parse(JSON.stringify(cmd)) //Yes, this practice of a deep copy is probably bad but everything else also modified other Collection entries and I sat at this problem for 3 fucking hours now
-                tempcmd["run"] = cmd.run //Add command code to new deep copy because that got lost somehow
-                tempcmd.info.category = k
-
-                if (bot.commands.get(tempcmd.info.names[j])) return logger("warn", "bot.js", `Duplicate command name found! Command: ${tempcmd.info.names[j]}`, true)
-
-                if (j != 0) {
-                    tempcmd.info.thisisanalias = true //seems like this is an alias
-                } else { 
-                    commandcount++
-                    tempcmd.info.thisisanalias = false
-                }
-
-                bot.commands.set(tempcmd.info.names[j], tempcmd)
-            }
-        })
-    })
-})
 
 /* -------------- Create lang object -------------- */
 /**
@@ -322,6 +292,10 @@ bot.on("ready", async function() {
         bot.user.setPresence({ activities: [{ name: config.gamerotation[0], type: config.gametype, url: config.gameurl }], status: config.status })
     }
 
+    //Read amount of commands found without aliases
+    var commandcount = [...bot.commands.values()].filter(e => !e.info.thisisanalias).length
+
+    //Print last part of ready message when this is shard 0, otherwise print small ready message for this shard
     if (thisshard.id == 0) {
         if (bootstart - Number(shardArgs[2]) < 10000) { //if difference is more than 10 seconds it must be a restart
             //Finish startup messages from controller.js
