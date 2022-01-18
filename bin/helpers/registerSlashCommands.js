@@ -4,7 +4,7 @@
  * Created Date: 14.01.2022 21:01:23
  * Author: 3urobeat
  * 
- * Last Modified: 14.01.2022 22:03:44
+ * Last Modified: 18.01.2022 15:04:45
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -41,9 +41,14 @@ module.exports.run = (bot, logger) => {
         if (e.info.accessableby.includes("botowner")) return;
         if (e.info.thisisanalias) return; //don't include aliases, this would be too much
 
+        //test if command name or option names do not match restrictions
+        if (!/^[\w-]{1,32}$/.test(e.info.names[0]) || e.info.options.some(e => !/^[\w-]{1,32}$/.test(e.name))) return logger("error", "registerSlashCommands.js", `Command name ${e.info.names[0]} or one of the options does not match command name restrictions!\nhttps://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming`)
+        
+
         commands.create({
             name: e.info.names[0],            //sadly we can only provide the english command description as of now since we don't know which lang the guild is using
-            description: require("lodash").get(bot.langObj["english"], e.info.description) //lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
+            description: require("lodash").get(bot.langObj["english"], e.info.description), //lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
+            options: e.info.options
         })
     })
 
