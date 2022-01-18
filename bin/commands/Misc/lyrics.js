@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:39:40
+ * Last Modified: 18.01.2022 15:04:26
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -86,7 +86,7 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
     description: "cmd.othermisc.lyricsinfodescription",
     options: [
         {
-            name: "song name",
+            name: "song-name",
             description: "The name of the song to search lyrics for",
             required: true,
             type: Discord.Constants.ApplicationCommandOptionTypes.STRING

@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 16:45:58
+ * Last Modified: 18.01.2022 15:05:18
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -69,7 +69,7 @@ module.exports.info = {
     description: "cmd.othermisc.udinfodescription",
     options: [
         {
-            name: "search word",
+            name: "search-word",
             description: "What to search the urban dictionary",
             required: true,
             type: Discord.Constants.ApplicationCommandOptionTypes.STRING

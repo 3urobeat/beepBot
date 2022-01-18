@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:23:32
+ * Last Modified: 18.01.2022 15:03:42
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -165,7 +165,7 @@ module.exports.info = {
     description: "cmd.help.infodescription",
     options: [
         {
-            name: "command name",
+            name: "command-name",
             description: "Povide a command name to get detailed information about this command",
             required: false,
             type: Discord.Constants.ApplicationCommandOptionTypes.STRING
