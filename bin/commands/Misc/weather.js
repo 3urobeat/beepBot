@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 16:49:37
+ * Last Modified: 18.01.2022 15:05:24
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -200,7 +200,7 @@ module.exports.info = {
     description: "cmd.weather.infodescription",
     options: [
         {
-            name: "city name",
+            name: "city-name",
             description: "Which city to get the weather of",
             required: true,
             type: Discord.Constants.ApplicationCommandOptionTypes.STRING
