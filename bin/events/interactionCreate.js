@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 14:02:18
+ * Last Modified: 19.01.2022 14:15:01
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -151,6 +151,9 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
         switch (interaction.customId) {
             case "welcomeLang":
                 if (!interaction.isSelectMenu()) return;
+
+                if (!interaction.memberPermissions.has("MANAGE_MESSAGES")) return interaction.reply({ ephemeral: true, content: "Only members with 'Manage Messages' permission are allowed to change the language of this message." }); //don't let every user interact to prevent a bit of chaos
+                if (interaction.message.createdTimestamp + 7200000 < Date.now()) return interaction.reply({ ephemeral: true, content: "Changing the language of the welcome message is disabled after 2 hours to prevent users from changing the server's language.\nIf you are an admin please use the `settings` command instead to change the language of this server." })
 
                 var requestedlang = bot.langObj[interaction.values[0]]
 
