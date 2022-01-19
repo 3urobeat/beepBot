@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 12:56:34
+ * Last Modified: 19.01.2022 13:28:21
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -116,8 +116,8 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
 
                 if (!ab.includes("all")) { //check if user is allowed to use this command
                     if (ab.includes("botowner")) {
-                        if (interaction.author.id !== '231827708198256642') return interaction.reply(bot.fn.owneronlyerror(bot.fn.lang(interaction.guild.id, guildsettings)))
-                    } else if (guildowner && interaction.author.id == guildowner.user.id) { //check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
+                        if (interaction.member.user.id !== '231827708198256642') return interaction.reply(bot.fn.owneronlyerror(bot.fn.lang(interaction.guild.id, guildsettings)))
+                    } else if (guildowner && interaction.member.user.id == guildowner.user.id) { //check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
                         //nothing to do here, just not returning an error message and let the server owner do what he wants
                     } else if (ab.includes("admins")) {
                         if (!guildsettings.adminroles.filter(element => interaction.member.roles.cache.has(element)).length > 0) return interaction.reply(bot.fn.usermissperm(bot.fn.lang(interaction.guild.id, guildsettings)))
@@ -134,6 +134,8 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
                 }
 
                 interaction.deferReply(); //For now I'm going to defer instantly so that I don't need to revamp *every* channel.send() call. If I implement slash commands better in the future, this will be optimized.
+
+                interaction["author"] = interaction.member.user //Add author field with slight workaround to provide compatibility with message object
 
                 if (!interaction.inGuild()) {
                     cmd.run(bot, interaction, args, bot.langObj["english"], logger, guildsettings, bot.fn)
