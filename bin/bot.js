@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.01.2022 12:34:13
+ * Last Modified: 18.01.2022 17:37:37
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -458,7 +458,7 @@ bot.on("guildMemberRemove", member => {
 });
 
 bot.on("interactionCreate", interaction => {
-    require("./events/interactionCreate.js").run(bot, interaction)
+    require("./events/interactionCreate.js").run(bot, logger, interaction)
 })
 
 bot.on("messageReactionAdd", (reaction, user) => {
