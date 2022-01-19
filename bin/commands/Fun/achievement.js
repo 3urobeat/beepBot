@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:14:11
+ * Last Modified: 19.01.2022 13:10:19
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -36,16 +36,14 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     
     if (contents.length > 22) return message.channel.send(lang.cmd.otherfun.achievementtoolongtext)
 
-    let url = `https://www.minecraftskinstealer.com/achievement/a.php?i=${rnd}&h=${encodeURIComponent(title)}&t=${encodeURIComponent(contents)}`
-    
-    require("node-fetch")(url)
-        .then(res => { message.channel.send({ files: [{ attachment: res.body }] }) })
-        .catch(err => {
-            if (err) { //lets check that before successful requests get logged as "null" error
-                logger("error", "achievement.js", "API Error: " + err)
-                message.channel.send(`minecraftskinstealer.com API ${lang.general.error}: ${err}`) 
-            }
-        })
+    try {
+        let { body } = await require("superagent").get(`https://www.minecraftskinstealer.com/achievement/a.php?i=${rnd}&h=${encodeURIComponent(title)}&t=${encodeURIComponent(contents)}`)
+
+        message.channel.send({ files: [{ attachment: body }] })
+    } catch (err) {
+        logger("error", "achievement.js", "API Error: " + err)
+        message.channel.send(`minecraftskinstealer.com API ${lang.general.error}: ${err}`) 
+    }
 }
 
 module.exports.info = {
