@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 15:15:19
  * Author: 3urobeat
  * 
- * Last Modified: 13.01.2022 18:26:27
+ * Last Modified: 19.01.2022 14:02:57
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -75,7 +75,7 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
     channelToSend.send({
         embeds: [{
             title: bot.langObj["english"].general.botaddtitle,
-            description: bot.langObj["english"].general.botadddesc + bot.langObj["english"].general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
+            description: bot.langObj["english"].general.botadddesc + bot.langObj["english"].general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX) + bot.langObj["english"].general.botadddesc3.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
             thumbnail: { url: bot.user.displayAvatarURL() }
         }],
         components: langComponents
