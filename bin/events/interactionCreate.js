@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  * 
- * Last Modified: 13.01.2022 17:35:29
+ * Last Modified: 19.01.2022 12:56:34
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -22,48 +22,171 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Interaction} interaction The interaction which was created
  */
-module.exports.run = async (bot, interaction) => { //eslint-disable-line
+module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
 
-    switch (interaction.customId) {
-        case "welcomeLang":
-            if (!interaction.isSelectMenu()) return;
+    //Check if this is a command first or another general interaction
+    if (interaction.isCommand()) {
 
-            var requestedlang = bot.langObj[interaction.values[0]]
+        //Set thisshard if in guild otherwise set 0
+        if (interaction.inGuild()) var thisshard = interaction.guild.shard
+            else var thisshard = { id: 0 };
 
-            //Construct menu again in order to be able to update the placeholder (I just couldn't find a better way yet and interaction.update always reset the user's choice)
-            var langArray = []
+        //Get guildsettings from db
+        if (interaction.inGuild()) var guildid = interaction.guild.id
+            else var guildid = 0
 
-            Object.values(bot.langObj).forEach((e, i) => { //push each language to the array
-                langArray.push({
-                    label: e.general.thislang,
-                    emoji: e.general.langemote,
-                    value: Object.keys(bot.langObj)[i]
+        bot.settings.findOne({ guildid: guildid }, async (err, guildsettings) => {
+            if (err) {
+                logger("error", "message.js", "msg Event: Error fetching guild from database: " + err)
+                interaction.reply("Something went wrong getting your guild's settings from the database. Please try again later.")
+                return;
+            }
+
+            //Check if guild is in settings db and add it if it isn't
+            if (interaction.inGuild()) {
+                if (!guildsettings) {
+                    bot.fn.servertosettings(interaction.guild)
+            
+                    //quickly construct guildsettings object to be able to carry on
+                    if (bot.config.loginmode == "normal") var prefix = bot.constants.DEFAULTPREFIX
+                        else var prefix = bot.constants.DEFAULTTESTPREFIX
+
+                    guildsettings = bot.constants.defaultguildsettings
+                    guildsettings["guildid"] = guildid
+                    guildsettings["prefix"] = prefix
+
+                } else {
+
+                    var changesmade = false
+
+                    Object.keys(bot.constants.defaultguildsettings).forEach((e, i) => { //check if this guild's settings is missing a key (update proofing!)
+                        if (!Object.keys(guildsettings).includes(e)) { 
+                            guildsettings[e] = Object.values(bot.constants.defaultguildsettings)[i]
+                            changesmade = true
+                        }
+                    })
+                    
+                    if (changesmade) bot.settings.update({ guildid: guildid }, guildsettings, (err) => { if (err) logger("error", "message.js", `Error adding missing keys to ${guildid}'s settings db: ${err}`) })
+                }
+
+                //Call levelUser helper
+                require("../functions/levelUser.js").levelUser(bot, logger, interaction.member.user, interaction.guild, interaction.channel, bot.fn.lang(guildid, guildsettings), guildsettings);
+            }
+
+
+            //Get command
+            var cmd = bot.commands.get(interaction.commandName);
+
+            //Create old styled args array (I should implement the new way of getting arguments using an obj to make using them easier, however I didn't find a nice way to make it compatible with the old message event which I would like to keep active)
+            //var args = {}; //these two lines would be how to map the new obj easily
+            //interaction.options.data.map((e) => args[e.name] = e.value )
+
+            var args = []
+
+            interaction.options.data.forEach((e) => {
+                if (typeof(e.value) == "boolean" && !e.value) return; //Check if value is a boolean and set to false and don't include it (as for example -n false would still trigger notify code execution as it only checks for the param -n, not for the following value)
+
+                //Check if this option has a prefix that is normally included in the args array when coming from the normal messageCreate event and push it first
+                let optionprefix = cmd.info.options.filter(f => f.name == e.name)[0]["prefix"];
+                if (optionprefix) args.push(optionprefix)
+
+                args.push(String(e.value))
+            })
+
+            //log interaction when in testing mode
+            if (bot.config.loginmode == "test") logger("info", "interactionCreate.js", `Shard ${thisshard.id}: Interaction with /${interaction.commandName} ${args.join(" ")}`)
+
+            //Check for restrictions and stuff
+            if (cmd) {
+                if (!interaction.inGuild() && !cmd.info.allowedindm) return interaction.reply(bot.fn.randomstring(["That cannot work in a dm. :face_palm:","That won't work in a DM...","This command in a DM? No.","Sorry but no. Try it on a server.","You need to be on a server!"]) + " (DM-Error)")
+
+                if (cmd.info.nsfwonly == true && !interaction.channel.nsfw) return interaction.reply(bot.fn.lang(interaction.guild.id, guildsettings).general.nsfwonlyerror)
+
+                //Check if user is allowed to use this command
+                var ab = cmd.info.accessableby
+                
+                var guildowner = await interaction.guild.fetchOwner();
+
+                //Check if command is allowed on this guild and respond with error message if it isn't
+                if (cmd.info.allowedguilds && !cmd.info.allowedguilds.includes(interaction.guild.id)) return interaction.reply(bot.fn.lang(interaction.guild.id, guildsettings).general.guildnotallowederror);
+
+                //Check if server admins disabled nsfw commands
+                if (cmd.info.nsfwonly && !guildsettings.allownsfw) return interaction.reply(bot.fn.lang(interaction.guild.id, guildsettings).general.allownsfwdisablederror)
+
+
+                if (!ab.includes("all")) { //check if user is allowed to use this command
+                    if (ab.includes("botowner")) {
+                        if (interaction.author.id !== '231827708198256642') return interaction.reply(bot.fn.owneronlyerror(bot.fn.lang(interaction.guild.id, guildsettings)))
+                    } else if (guildowner && interaction.author.id == guildowner.user.id) { //check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
+                        //nothing to do here, just not returning an error message and let the server owner do what he wants
+                    } else if (ab.includes("admins")) {
+                        if (!guildsettings.adminroles.filter(element => interaction.member.roles.cache.has(element)).length > 0) return interaction.reply(bot.fn.usermissperm(bot.fn.lang(interaction.guild.id, guildsettings)))
+                    } else if (ab.includes("moderators")) {
+                        //check if user doesn't have admin nor modrole because admins should be able to execute mod commands
+                        if (!guildsettings.moderatorroles.filter(element => interaction.member.roles.cache.has(element)).length > 0 && !guildsettings.adminroles.filter(element => interaction.member.roles.cache.has(element)).length > 0) {
+                            return interaction.reply(bot.fn.usermissperm(bot.fn.lang(interaction.guild.id, guildsettings)))
+                        }
+                    } else {
+                        interaction.reply(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${BOTOWNER} will probably see this error and fix it.`) //eslint-disable-line no-undef
+                        logger('error', 'message.js', `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${interaction.commandName}'\x1b[0m to prevent safety issues.`)
+                        return;
+                    }
+                }
+
+                interaction.deferReply(); //For now I'm going to defer instantly so that I don't need to revamp *every* channel.send() call. If I implement slash commands better in the future, this will be optimized.
+
+                if (!interaction.inGuild()) {
+                    cmd.run(bot, interaction, args, bot.langObj["english"], logger, guildsettings, bot.fn)
+                } else {
+                    require("fs").appendFile("./bin/cmduse.txt", `[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}] (Guild ${interaction.guild.id}) /${interaction.commandName} ${args.join(" ")}\n`, () => {}) //add cmd usage to cmduse.txt
+                    cmd.run(bot, interaction, args, bot.fn.lang(interaction.guild.id, guildsettings), logger, guildsettings, bot.fn) //run the command after lang function callback
+                }
+            }
+        })
+        
+    } else {
+
+        switch (interaction.customId) {
+            case "welcomeLang":
+                if (!interaction.isSelectMenu()) return;
+
+                var requestedlang = bot.langObj[interaction.values[0]]
+
+                //Construct menu again in order to be able to update the placeholder (I just couldn't find a better way yet and interaction.update always reset the user's choice)
+                var langArray = []
+
+                Object.values(bot.langObj).forEach((e, i) => { //push each language to the array
+                    langArray.push({
+                        label: e.general.thislang,
+                        emoji: e.general.langemote,
+                        value: Object.keys(bot.langObj)[i]
+                    })
                 })
-            })
 
-            var langComponents = [
-                new Discord.MessageActionRow()
-                    .addComponents(
-                        new Discord.MessageSelectMenu()
-                            .setCustomId('welcomeLang')
-                            .setPlaceholder(`${requestedlang.general.langemote} ${requestedlang.general.botaddchooselang}`)
-                            .addOptions(langArray)
-                    )
-            ]
+                var langComponents = [
+                    new Discord.MessageActionRow()
+                        .addComponents(
+                            new Discord.MessageSelectMenu()
+                                .setCustomId('welcomeLang')
+                                .setPlaceholder(`${requestedlang.general.langemote} ${requestedlang.general.botaddchooselang}`)
+                                .addOptions(langArray)
+                        )
+                ]
 
-            //Update message with new language
-            interaction.update({
-                embeds: [{
-                    title: requestedlang.general.botaddtitle,
-                    description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
-                    thumbnail: { url: bot.user.displayAvatarURL() }
-                }],
-                components: langComponents
-            })
+                //Update message with new language
+                interaction.update({
+                    embeds: [{
+                        title: requestedlang.general.botaddtitle,
+                        description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
+                        thumbnail: { url: bot.user.displayAvatarURL() }
+                    }],
+                    components: langComponents
+                })
 
-            //update guilds language aswell
-            bot.settings.update({ guildid: interaction.guild.id }, { $set: { lang: interaction.values[0] }}, {}, () => { }) //catch but ignore error
-            break;
+                //update guilds language aswell
+                bot.settings.update({ guildid: interaction.guild.id }, { $set: { lang: interaction.values[0] }}, {}, () => { }) //catch but ignore error
+                break;
+        }
     }
 
 }
