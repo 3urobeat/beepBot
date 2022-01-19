@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:28:21
+ * Last Modified: 19.01.2022 14:02:18
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -179,7 +179,7 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
                 interaction.update({
                     embeds: [{
                         title: requestedlang.general.botaddtitle,
-                        description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
+                        description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX) + requestedlang.general.botadddesc3.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
                         thumbnail: { url: bot.user.displayAvatarURL() }
                     }],
                     components: langComponents

@@ -47,7 +47,8 @@
 
     "botaddtitle": "Danke, dass du mich zu deinem Server hinzugefügt hast!",
     "botadddesc": "Es gibt noch ein paar Kleinigkeiten zu erledigen.\nBitte bewege in den Servereinstellungen die von mir erstellte Rolle 'beepBot' ganz nach oben, damit du alle meine Funktionen benutzen kannst.\nNotiz: Solltest du eine eigene Art 'Mitglied' Rolle haben, die jeder besitzt, muss diese 'Rollen verwalten' ausgeschaltet haben!\n",
-    "botadddesc2": "\nNachdem du dies getan hast, tippe `prefixsettings` und konfiguriere meine Einstellungen nach deinem Belieben.\nUm eine Anleitung zu bekommen, wie der Befehl zu nutzen ist, tippe `prefixsettings help`.\nNun bist du bereit alle meine Befehle zu begutachten, indem du `prefixhelp` schreibst!\n\nViel Spaß!",
+    "botadddesc2": "\nNachdem du dies getan hast, tippe `prefixsettings` und konfiguriere meine Einstellungen nach deinem Belieben.\nUm eine Anleitung zu bekommen, wie der Befehl zu nutzen ist, tippe `prefixsettings help`.\n\nNun bist du bereit alle meine Befehle zu begutachten, indem du `prefixhelp` schreibst!",
+    "botadddesc3": "\n\nSolltest du vorher Mee6 benutzt haben um XP & Level zu sammeln, dann importiere diese Daten mit dem Befehl `prefixlevelimport`!\n\nViel Spaß!",
     "botaddchooselang": "Wähle eine Sprache aus!",
 
     "voicestateupdatemutereason": "Nutzer wurde von muteauthor stummgeschaltet. Begründung: reasontext",
