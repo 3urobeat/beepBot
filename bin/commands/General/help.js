@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.01.2022 15:03:42
+ * Last Modified: 19.01.2022 13:38:45
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -163,6 +163,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["help", "h", "commands"],
     description: "cmd.help.infodescription",
+    usage: "[command name]",
     options: [
         {
             name: "command-name",

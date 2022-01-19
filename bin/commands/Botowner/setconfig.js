@@ -4,7 +4,7 @@
  * Created Date: 19.01.2021 22:36:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 13:00:42
+ * Last Modified: 19.01.2022 13:37:20
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -92,6 +92,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
     names: ["setconfig"], //Array<String> with all aliases
     description: "cmd.otherbotowner.setconfiginfodescription", //Path to lang file entry (example: "cmd.othergeneral.pinginfodescription")
+    usage: '[config value] [new value]',
     options: [
         {
             name: "config value",

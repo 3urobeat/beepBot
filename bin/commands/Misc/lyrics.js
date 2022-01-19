@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.01.2022 15:04:26
+ * Last Modified: 19.01.2022 13:40:06
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -84,6 +84,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = { //Note to self: If you add more restrictions you need to add them to the restrictions field in the help cmd!
     names: ["lyrics", "l"], //Array<String> with all aliases
     description: "cmd.othermisc.lyricsinfodescription",
+    usage: "(song name)",
     options: [
         {
             name: "song-name",

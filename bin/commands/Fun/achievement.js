@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:10:19
+ * Last Modified: 19.01.2022 13:37:44
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -49,6 +49,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["achievement"],
     description: "cmd.otherfun.achievementinfodescription",
+    usage: "(text)",
     options: [
         {
             name: "text",

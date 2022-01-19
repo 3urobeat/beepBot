@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.01.2022 15:05:18
+ * Last Modified: 19.01.2022 13:41:09
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -67,6 +67,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["urban", "urbandictionary", "ud"],
     description: "cmd.othermisc.udinfodescription",
+    usage: "(search word)",
     options: [
         {
             name: "search-word",

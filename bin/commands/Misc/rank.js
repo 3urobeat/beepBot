@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 17:43:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:42:12
+ * Last Modified: 19.01.2022 13:40:45
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -89,6 +89,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["rank", "level"],
     description: "cmd.othermisc.rankinfodescription",
+    usage: "[mention/username/userid]",
     options: [ //Note: Edit embed footer in ranks.js aswell if the usage changes!
         {
             name: "user",

@@ -4,7 +4,7 @@
  * Created Date: 13.12.2020 17:41:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 12:42:09
+ * Last Modified: 19.01.2022 13:41:52
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -82,6 +82,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["kick"],
     description: "cmd.kick.infodescription",
+    usage: "(mention/username) [-r reason] [-notify/-n]",
     options: [
         {
             name: "user",

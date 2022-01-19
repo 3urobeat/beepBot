@@ -4,7 +4,7 @@
  * Created Date: 16.12.2021 11:31:39
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:21:56
+ * Last Modified: 19.01.2022 13:38:36
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -106,6 +106,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["xkcd"],
     description: "cmd.otherfun.xkcdinfodescription",
+    usage: "[\"random\"]",
     options: [
         {
             name: "random",

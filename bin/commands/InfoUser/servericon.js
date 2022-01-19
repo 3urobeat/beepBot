@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:36:35
+ * Last Modified: 19.01.2022 13:39:42
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -50,6 +50,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["servericon"],
     description: "cmd.otherinfouser.servericoninfodescription",
+    usage: "",
     options: [],
     accessableby: ['all'],
     allowedindm: false,

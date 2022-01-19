@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 20:27:14
+ * Last Modified: 19.01.2022 13:43:57
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -50,6 +50,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["volume"],
     description: "cmd.othermusic.volumeinfodescription",
+    usage: "[number]",
     options: [
         {
             name: "number",

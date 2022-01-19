@@ -4,7 +4,7 @@
  * Created Date: 12.01.2022 12:19:50
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:23:51
+ * Last Modified: 19.01.2022 13:38:51
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -83,6 +83,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["levelimport"],
     description: "cmd.othergeneral.levelImportinfodescription",
+    usage: "",
     options: [],
     accessableby: ['admins'],
     allowedindm: false,
