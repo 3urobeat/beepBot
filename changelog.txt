@@ -102,3 +102,5 @@ Version 3.1: Updated to discord.js v13, which included chaging and fixing alot o
 Version 3.1.1: Moved avatar changing out of broadcastEval to fix errors. Fixed a few broadcastEvals that broke with discord.js v13 which I hadn't noticed yet. Fixed movemsg.js not using getreasonfrommsg() function. Switched logger function to my outputlogger library.
 
 Version 3.2: Added XP/Level System with mee6 data import! Added setting to disable NSFW commands. Added xkcd, rank, ranks, levelimport, birb, cat and dog commands.
+
+Version 3.3: Added experimental support for slash commands and interactions! Replaced language selection in welcome message with new drop down menu. Fixed a few bugs/errors ocurring on invite and in general. Fixed achievement command not working. Other minor changes.

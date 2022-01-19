@@ -1,7 +1,7 @@
 {
     "loginmode": "normal",
     "filetostart": "./bin/controller.js",
-    "version": "3.2.0",
+    "version": "3.3.0",
     "status": "online",
     "gametype": "PLAYING",
     "gamerotation": [
@@ -14,7 +14,8 @@
         "Being a cool bot since 01.01.2017!",
         "I have translations for ${bot.shard.broadcastEval(() => Object.keys(this.langObj).length, 0).then(res => res)} languages!",
         "Tip: You can also mention the bot instead of using a prefix!",
-        "Have a nice day!"
+        "Have a nice day!",
+        "Now with support for slash commands!"
     ],
     "gamerotateseconds": 60,
     "gameoverwrite": "",
