@@ -4,7 +4,7 @@
  * Created Date: 11.02.2021 18:54:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 20:18:58
+ * Last Modified: 19.01.2022 12:46:37
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -202,13 +202,15 @@ module.exports.info = {
             name: "reason",
             description: "The reason of the mute",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            prefix: "-r"
         },
         {
             name: "time",
             description: "Provide a duration and timeframe to only temporary mute the user",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER
+            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER,
+            prefix: "-t"
         },
         {
             name: "timeframe",          //I still don't like this separation of these two values but couldn't find a better way as of now
@@ -228,7 +230,8 @@ module.exports.info = {
             name: "notify",
             description: "If the user should be notified of the mute and reason",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN,
+            prefix: "-n"
         }
     ],
     accessableby: ['moderators'],
