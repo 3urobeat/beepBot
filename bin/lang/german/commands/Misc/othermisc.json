@@ -4,7 +4,7 @@
     "coinflipinfodescription": "Wirft eine Münze.",
 
     "dicenomaxprovided": "Du musst dem endlosen Würfel ein Maximum geben! `2-∞`",
-    "dicerandommsg": ["Der Würfel rollt... Stopp! Es ist eine","Der Würfel ist stehengeblieben:","Deine Zahl:","...und es ist eine","Werde nicht süchtig!","Es ist wie Lotto! Hast du gewonnen?"],
+    "dicerandommsg": ["Der Würfel rollt... Stopp! Es ist eine","Der Würfel ist stehengeblieben:","Deine Zahl:","...und es ist eine","Werde nicht süchtig!","Es ist wie Glückspiel! Hast du gewonnen?"],
     "diceinfodescription": "Rollt einen Würfel mit einem einstellbaren Maximum.",
 
     "emptyinfodescription": "Sendet eine sehr lange, leere Nachricht.",
