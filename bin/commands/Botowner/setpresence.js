@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 17:07:58
+ * Last Modified: 19.01.2022 12:09:09
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -131,6 +131,18 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
             choices: [
                 { name: "Remove current status", value: "remove" },
                 { name: "Load default status settings", value: "default" }
+            ]
+        },
+        {
+            name: "status",
+            description: "Sets an online status",
+            required: false,
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            choices: [
+                { name: "Select status online", value: "online" },
+                { name: "Select status idle", value: "idle" },
+                { name: "Select status do-not-disturb", value: "dnd" },
+                { name: "Select status invisible", value: "invisible" }
             ]
         },
         {
