@@ -4,7 +4,7 @@
  * Created Date: 07.08.2020 18:02:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 19:50:14
+ * Last Modified: 19.01.2022 13:41:45
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -58,6 +58,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["clear", "delete"],
     description: "cmd.othermoderation.clearinfodescription",
+    usage: "(amount of messages)",
     options: [
         {
             name: "amount",

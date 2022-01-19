@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 12:46:00
+ * Last Modified: 19.01.2022 13:42:01
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -254,6 +254,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["movemsg", "movemessage"],
     description: "cmd.movemsg.infodescription",
+    usage: "(use cmd in reply/message id/message link/amount of messages) (channelname/channelmention) [-r reason]",
     options: [
         {
             name: "message",

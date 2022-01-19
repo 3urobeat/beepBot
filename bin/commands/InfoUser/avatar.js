@@ -4,7 +4,7 @@
  * Created Date: 07.08.2020 20:02:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:30:23
+ * Last Modified: 19.01.2022 13:39:28
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -59,6 +59,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["avatar", "useravatar"],
     description: "cmd.otherinfouser.avatarinfodescription",
+    usage: "[mention/username/userid]",
     options: [
         {
             name: "user",

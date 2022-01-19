@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 20:27:32
+ * Last Modified: 19.01.2022 13:44:09
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -58,6 +58,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["boobs", "tits"],
     description: "cmd.othernsfw.boobsinfodescription",
+    usage: "",
     options: [],
     accessableby: ['all'],
     allowedindm: true,

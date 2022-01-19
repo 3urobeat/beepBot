@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 20:27:42
+ * Last Modified: 19.01.2022 13:44:18
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -55,6 +55,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["pussy", "pussies"],
     description: "cmd.othernsfw.pussyinfodescription",
+    usage: "",
     options: [],
     accessableby: ['all'],
     allowedindm: true,

@@ -4,7 +4,7 @@
  * Created Date: 07.10.2020 20:44:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:36:23
+ * Last Modified: 19.01.2022 13:39:35
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -284,6 +284,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["info"],
     description: "cmd.info.infodescription",
+    usage: '["bot"/"user"/"server"] ["mobile"]',
     options: [
         {
             name: "mode",

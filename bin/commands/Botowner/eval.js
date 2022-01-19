@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 12:59:10
+ * Last Modified: 19.01.2022 13:36:56
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -56,9 +56,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["eval"],
     description: "cmd.otherbotowner.evalinfodescription",
+    usage: '(javascript code)',
     options: [
         {
-            name: "javascript code",
+            name: "javascript-code",
             description: "JavaScript Code that will be executed",
             required: true,
             type: Discord.Constants.ApplicationCommandOptionTypes.STRING

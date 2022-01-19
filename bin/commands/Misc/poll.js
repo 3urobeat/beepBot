@@ -4,7 +4,7 @@
  * Created Date: 07.08.2020 20:02:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:40:50
+ * Last Modified: 19.01.2022 13:40:20
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -47,6 +47,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["poll", "vote", "survey"],
     description: "cmd.othermisc.pollinfodescription",
+    usage: "(description)",
     options: [
         {
             name: "description",
