@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 12:09:09
+ * Last Modified: 19.01.2022 12:17:05
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -143,7 +143,8 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
                 { name: "Select status idle", value: "idle" },
                 { name: "Select status do-not-disturb", value: "dnd" },
                 { name: "Select status invisible", value: "invisible" }
-            ]
+            ],
+            prefix: "-s"
         },
         {
             name: "gametype",
@@ -156,19 +157,22 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
                 { name: "Select gametype listening", value: "listening" },
                 { name: "Select gametype watching", value: "watching" },
                 { name: "Select gametype competing", value: "competing" }
-            ]
+            ],
+            prefix: "-gt"
         },
         {
             name: "gametext",
             description: "Set a custom game text or type 'default' to load default text",
             required: false,
             type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            prefix: "-g"
         },
         {
             name: "url",
             description: "Set a custom stream url or type 'default' to load default url",
             required: false,
             type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            prefix: "-url"
         }
     ],
     accessableby: ['botowner'], //Valid restrictions (high -> low): botowner, admins, moderators, all

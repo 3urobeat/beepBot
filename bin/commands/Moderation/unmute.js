@@ -4,7 +4,7 @@
  * Created Date: 11.02.2021 18:54:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 20:19:35
+ * Last Modified: 19.01.2022 12:46:54
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -118,7 +118,8 @@ module.exports.info = {
             name: "reason",
             description: "The reason of the unmute",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            prefix: "-r"
         }
     ],
     accessableby: ['moderators'],

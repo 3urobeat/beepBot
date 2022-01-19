@@ -4,7 +4,7 @@
  * Created Date: 13.12.2020 17:41:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 19:54:28
+ * Last Modified: 19.01.2022 12:42:09
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -93,13 +93,15 @@ module.exports.info = {
             name: "reason",
             description: "The reason of the kick",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            prefix: "-r"
         },
         {
             name: "notify",
             description: "If the user should be notified of the kick and reason",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN,
+            prefix: "-n"
         }
     ],
     accessableby: ['moderators'],

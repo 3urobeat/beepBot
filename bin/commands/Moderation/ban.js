@@ -4,7 +4,7 @@
  * Created Date: 31.12.2020 17:05:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 19:53:46
+ * Last Modified: 19.01.2022 12:20:02
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -119,13 +119,15 @@ module.exports.info = {
             name: "reason",
             description: "The reason of the ban",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            prefix: "-r"
         },
         {
             name: "time",
             description: "Provide a duration and timeframe to only temporary ban the user",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER
+            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER,
+            prefix: "-t"
         },
         {
             name: "timeframe",          //I still don't like this separation of these two values but couldn't find a better way as of now
@@ -145,7 +147,8 @@ module.exports.info = {
             name: "notify",
             description: "If the user should be notified of the ban and reason",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN,
+            prefix: "-n"
         }
     ],
     accessableby: ['admins'],
