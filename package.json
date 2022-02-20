@@ -6,7 +6,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.7.0",
     "@yetzt/nedb": "^1.8.0",
-    "discord-player": "^5.2.1",
+    "discord-player": "^5.2.2",
     "discord.js": "^13.6.0",
     "download": "^8.0.0",
     "ffmpeg-static": "^4.4.1",
@@ -14,8 +14,8 @@
     "opusscript": "^0.0.8",
     "output-logger": "^2.0.0",
     "superagent": "^7.1.1",
-    "systeminformation": "^5.11.0",
-    "ytdl-core": "^4.10.0"
+    "systeminformation": "^5.11.4",
+    "ytdl-core": "^4.10.1"
   },
   "scripts": {
     "start": "node start.js"
