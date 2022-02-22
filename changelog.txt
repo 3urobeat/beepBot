@@ -104,3 +104,4 @@ Version 3.1.1: Moved avatar changing out of broadcastEval to fix errors. Fixed a
 Version 3.2: Added XP/Level System with mee6 data import! Added setting to disable NSFW commands. Added xkcd, rank, ranks, levelimport, birb, cat and dog commands.
 
 Version 3.3: Added experimental support for slash commands and interactions! Replaced language selection in welcome message with new drop down menu. Fixed a few bugs/errors ocurring on invite and in general. Fixed achievement command not working. Other minor changes.
+Version 3.3.1: Music: Bot should now only join voice channel if requested song was found. Fixed musicplay search function not working. Fixed urbandictionary command. Updated dependencies. Fixed undefined parameter in logger call bugging message content.
