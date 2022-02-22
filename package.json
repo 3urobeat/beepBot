@@ -15,6 +15,7 @@
     "output-logger": "^2.0.1",
     "superagent": "^7.1.1",
     "systeminformation": "^5.11.4",
+    "undici": "^4.14.1",
     "ytdl-core": "^4.10.1"
   },
   "scripts": {
