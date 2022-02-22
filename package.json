@@ -12,7 +12,7 @@
     "ffmpeg-static": "^4.4.1",
     "lodash": "^4.17.21",
     "opusscript": "^0.0.8",
-    "output-logger": "^2.0.0",
+    "output-logger": "^2.0.1",
     "superagent": "^7.1.1",
     "systeminformation": "^5.11.4",
     "ytdl-core": "^4.10.1"

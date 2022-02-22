@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 10:12:16
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 11:26:30
+ * Last Modified: 22.02.2022 13:42:29
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -33,7 +33,7 @@ module.exports.levelUser = (bot, logger, author, guild, channel, lang, guildsett
 
     //only increment messages count if level system has been disabled or if last xp gain is more recent than 30 secs
     if (!guildsettings.levelsystem || (xpHistory[guild.id] && xpHistory[guild.id][author.id] && xpHistory[guild.id][author.id] + 30000 >= Date.now())) {
-        //logger("debug", "levelUser.js", `Only incrementing messages: Level system disabled or XP addition for ${author.id} in guild ${guild.id} more recent than 30 secs`);
+        logger("debug", "levelUser.js", `Only incrementing messages: Level system disabled or XP addition for ${author.id} in guild ${guild.id} more recent than 30 secs`);
 
         //increment xp and messages amount for entry that matches this user's id and this guild id
         bot.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] }, 
@@ -51,7 +51,7 @@ module.exports.levelUser = (bot, logger, author, guild, channel, lang, guildsett
         var xpAmount = Math.floor(Math.random() * (25 - 15 + 1) + 15);
 
         //log debug message
-        //logger("debug", "levelUser.js", `Adding ${xpAmount}xp to user ${author.id} in guild ${guild.id}`)
+        logger("debug", "levelUser.js", `Adding ${xpAmount}xp to user ${author.id} in guild ${guild.id}`)
 
         //increment xp and messages amount for entry that matches this user's id and this guild id
         bot.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] }, 
