@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:41:09
+ * Last Modified: 22.02.2022 14:31:24
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -31,33 +31,33 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     try {
         if (!args[0]) return message.channel.send(lang)
 
-        let { body } = await require("superagent").get(`http://urbanscraper.herokuapp.com/define/${args.join(" ")}`)
-        let bodyurl = body.url.replace(/\s/g, '')
+        let { body } = await require("superagent").get(`https://api.urbandictionary.com/v0/define?term=${args.join(" ")}`)
+        let res      = body.list[0];
+
+        if (!res) return message.channel.send(lang.cmd.othermisc.udnotfound); //send nothing found message if array is empty
 
         message.channel.send({
             embeds: [{
-                title: body.term.charAt(0).toUpperCase() + body.term.slice(1) + " - Urban Dictionary",
-                url: bodyurl,
+                title: res.word + " - Urban Dictionary",
+                url: res.permalink,
                 color: fn.randomhex(),
                 description: "** **", //Produces an empty field which looks better
                 fields: [
                     {
                         name: lang.cmd.othermisc.uddefinition,
-                        value: `** **\n${body.definition}` },
+                        value: res.definition },
                     {
                         name: `${lang.general.example}:`,
-                        value: `** **\n${body.example}` }
+                        value: res.example }
                 ],
                 footer: {
-                    text: `${lang.general.by} ${body.author}`
+                    text: `${lang.general.by} ${res.author}`
                 },
-                timestamp: body.posted
+                timestamp: res.written_on
             }]
         })
         
     } catch (err) {
-        if (err == "Error: Not Found") return message.channel.send(lang.cmd.othermisc.udnotfound); //Send custom error message that nothing has been found about this search term
-
         logger("error", "urbandictionary.js", "API Error: " + err)
         message.channel.send(`urbandictionary API ${lang.general.error}: ${err}`)
     }
