@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:42:44
+ * Last Modified: 22.02.2022 13:35:18
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -51,18 +51,6 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         leaveOnEmptyCooldown: 30000, //leave after 30 seconds if voice channel is empty
         metadata: { channel: message.channel } //add the text channel as metadata to make sending messages to that channel from player.js easy
     })
-    
-    try {
-        if (!queue.connection) await queue.connect(message.member.voice.channel);
-
-    } catch (err) {
-        //Connection seems to have failed, so lets return an error and destroy the connection (cleaning time!)
-        queue.destroy();
-        message.channel.send(`${lf.connectiontochannelfailed}\n${lang.general.error}: ${err}`)
-        logger("error", "musicplay.js", "Error connecting to channel: " + err)
-        return;
-    }
-
 
     //Try to find track the user searched for
     var searchmsg = await message.channel.send(`${lf.playsearchingfor} \`${searchword}\`...`);
@@ -71,9 +59,23 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         requestedBy: message.author
     }).then(res => res.tracks[0])
 
-    //Play track or respond with error if no track was found
-    if (track) queue.play(track);
-        else return searchmsg.edit("❌ " + lf.playnoresultsfound);
+    //Check for connection, join channel and play track or respond with error if no track was found
+    if (track) {
+        try {
+            if (!queue.connection) await queue.connect(message.member.voice.channel);
+    
+        } catch (err) {
+            //Connection seems to have failed, so lets return an error and destroy the connection (cleaning time!)
+            queue.destroy();
+            message.channel.send(`${lf.connectiontochannelfailed}\n${lang.general.error}: ${err}`)
+            logger("error", "musicplay.js", "Error connecting to channel: " + err)
+            return;
+        }
+        
+        queue.play(track);
+    } else {
+        return searchmsg.edit("❌ " + lf.playnoresultsfound);
+    }
 
     return searchmsg.edit("⏱️ " + lf.playtrackloading.replace("tracktitle", `**${track.title}**`).replace("trackauthor", `\`${track.author}\``));
 
