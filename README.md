@@ -25,13 +25,14 @@
 &nbsp;  
 ## **Music:**
 Music support can be enabled for your server for a [one-time donation of 20€](https://paypal.me/3urobeat) to help me pay for server cost.  
-**Please include your Server ID!**  
+**Please contact me on the Support Server and include your Server ID!**  
 If you need help, message me: `3urobeat#0975`  or create an issue here.
 
 &nbsp;  
-## **Invite:**
+## **Invite and Support:**
 
 [Invite my bot to your server!](https://discord.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=8)  
+Need help? Join the [Support Server](https://discord.gg/9Yaj5qSbc8) and feel free to ask!  
 
 If you like my work I would really appreciate a small donation on [PayPal](https://paypal.me/3urobeat)!
 
