@@ -21,6 +21,8 @@ This document does not supersede the [Discord Developer Terms of Service](https:
 **- Role IDs**: Used to store your settings.  
   
 ### **Data stored when enabled:**
+Use the `settings` command to enable/disable the level system and modlog messages. This will control data collection & storage of this category.  
+  
 **- Guild IDs**: Used to store user levels and modlog messages remove reactions.  
 **- User IDs**: Used to store user levels.  
 **- User tags**: Used to store user levels.  
