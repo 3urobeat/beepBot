@@ -39,6 +39,8 @@ If you like my work I would really appreciate a small donation on [PayPal](https
 &nbsp;  
 &nbsp;  
 
+Privacy Policy: [Click to read](https://github.com/HerrEurobeat/beepBot/blob/master/legal/privacy_policy.md)  
+  
 This bot is not intended to be downloaded and used privatly. This repo will miss some important files you would need to run it on your computer.  
 Instead, add the bot to your server with the invite link above.  
 
