@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 19:35:46
+ * Last Modified: 19.08.2022 23:37:18
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -43,7 +43,7 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
     }
 
     //if (message.guild.id != "232550371191554051" && message.guild.id != "331822220051611648" && message.guild.id != "643117199791226880") return; //don't respond to other guilds when testing with normal loginmode (for testing)
-    if (message.channel.type == Discord.ChannelType.GuildText && bot.config.loginmode == "test") logger("info", "message.js", `Shard ${thisshard.id}: ${message}`) //log messages when testing
+    if (message.channel.type == Discord.ChannelType.GuildText && bot.config.loginmode == "test") logger("info", "message.js", `Shard ${thisshard.id}: ${message.content}`) //log messages when testing
 
     //Confuse the db searching into finding nothing but not throwing an error when the channel is a dm
     if (message.channel.type == Discord.ChannelType.DM) {

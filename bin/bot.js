@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 18:46:34
+ * Last Modified: 19.08.2022 23:42:04
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -43,7 +43,8 @@ const bot = new Discord.Client({
         Discord.GatewayIntentBits.GuildMessageReactions,
         Discord.GatewayIntentBits.GuildVoiceStates,
         Discord.GatewayIntentBits.DirectMessages,
-        Discord.GatewayIntentBits.DirectMessageReactions
+        Discord.GatewayIntentBits.DirectMessageReactions,
+        Discord.GatewayIntentBits.MessageContent
     ], 
     partials: [Discord.Partials.Message, Discord.Partials.Reaction] //partials are messages that are not fully cached and have to be fetched manually
 })
