@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 18:41:00
+ * Last Modified: 19.08.2022 22:22:34
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -36,7 +36,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (message.member.voice.channel.full || !message.member.voice.channel.joinable) message.channel.send(lf.channelnotjoinable) //Check if bot can't join the channel
 
     //Check if bot is already connected to a different voice channel
-    if ((message.guild.me.voice.channel && message.guild.me.voice.channel.id != null) && message.member.voice.channel.id != message.guild.me.voice.channel.id) return message.channel.send(lf.alreadyconnectedtochannel); //Refuse new connection
+    if ((message.guild.members.me.voice.channel && message.guild.members.me.voice.channel.id != null) && message.member.voice.channel.id != message.guild.members.me.voice.channel.id) return message.channel.send(lf.alreadyconnectedtochannel); //Refuse new connection
 
 
     //try to establish connection using discord-player
