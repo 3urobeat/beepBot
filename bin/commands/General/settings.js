@@ -4,7 +4,7 @@
  * Created Date: 02.08.2020 22:07:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:39:10
+ * Last Modified: 19.08.2022 20:18:51
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -378,7 +378,7 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                     }
 
                     //check if the bot has permissions to send messages to that channel
-                    if (!message.guild.channels.cache.get(channelid).permissionsFor(bot.user).has("SEND_MESSAGES")) return message.channel.send(lf.channelnoperm)
+                    if (!message.guild.channels.cache.get(channelid).permissionsFor(bot.user).has(Discord.PermissionFlagsBits.SendMessages)) return message.channel.send(lf.channelnoperm)
 
                     bot.settings.update({ guildid: guildid }, { $set: { systemchannel: channelid }}, {}, (err) => { if (err) logDbErr(err) })
                     message.channel.send(`${lf.channelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
@@ -415,7 +415,7 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                     }
 
                     //check if the bot has permissions to send messages to that channel
-                    if (!message.guild.channels.cache.get(channelid).permissionsFor(bot.user).has("SEND_MESSAGES")) return message.channel.send(lf.channelnoperm)
+                    if (!message.guild.channels.cache.get(channelid).permissionsFor(bot.user).has(Discord.PermissionFlagsBits.SendMessages)) return message.channel.send(lf.channelnoperm)
 
                     bot.settings.update({ guildid: guildid }, { $set: { modlogchannel: channelid }}, {}, (err) => { if (err) logDbErr(err) })
                     message.channel.send(`${lf.channelset}: ${message.guild.channels.cache.get(channelid).name} (${channelid})`)
@@ -699,7 +699,7 @@ module.exports.info = {
             name: "help",
             description: "Responds with a help message",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+            type: Discord.ApplicationCommandOptionType.Boolean
         }
     ],
     accessableby: ['admins'],

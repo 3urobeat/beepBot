@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:38:28
+ * Last Modified: 19.08.2022 18:41:01
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -68,7 +68,7 @@ module.exports.info = {
             name: "choice",
             description: "Your choice",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Rock", value: "rock" },
                 { name: "Paper", value: "paper" },

@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:43:57
+ * Last Modified: 19.08.2022 18:41:12
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -56,7 +56,7 @@ module.exports.info = {
             name: "number",
             description: "Volume percentage",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER,
+            type: Discord.ApplicationCommandOptionType.Number,
             min_value: 0
         }
     ],

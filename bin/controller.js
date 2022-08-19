@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  * 
- * Last Modified: 28.11.2021 18:25:05
+ * Last Modified: 19.08.2022 20:01:43
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -201,7 +201,7 @@ var tempbanloop = setInterval(() => {
             }, { context: { e: e } }) //pass e as context to be able to access it inside
                 .catch(err => {
                     logger("warn", "controller.js", "Couldn't broadcast unban: " + err.stack)
-                    if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return; //do not remove from db when shards are being spawned
+                    if (err == "Error [ShardingInProcess]: Shards are still being spawned") return; //do not remove from db when shards are being spawned
                 })
         })
     })
@@ -283,7 +283,7 @@ var timedmuteloop = setInterval(() => {
                 }
             }, { context: { e: e } }) //pass e as context to be able to access it inside
                 .catch(err => {
-                    if (err == "Error [SHARDING_IN_PROCESS]: Shards are still being spawned") return;
+                    if (err == "Error [ShardingInProcess]: Shards are still being spawned") return;
                     logger("warn", "controller.js", "Couldn't broadcast unmute: " + err.stack)
                 }) 
         })

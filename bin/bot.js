@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.01.2022 17:37:37
+ * Last Modified: 19.08.2022 18:46:34
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -34,18 +34,18 @@ const constants  = require("./constants.json")
 //I hate intents
 const bot = new Discord.Client({
     intents: [ 
-        Discord.Intents.FLAGS.GUILDS, 
-        Discord.Intents.FLAGS.GUILD_MEMBERS, 
-        Discord.Intents.FLAGS.GUILD_BANS,
-        Discord.Intents.FLAGS.GUILD_INVITES,
-        Discord.Intents.FLAGS.GUILD_PRESENCES,
-        Discord.Intents.FLAGS.GUILD_MESSAGES,
-        Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Discord.Intents.FLAGS.GUILD_VOICE_STATES,
-        Discord.Intents.FLAGS.DIRECT_MESSAGES,
-        Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+        Discord.GatewayIntentBits.Guilds, 
+        Discord.GatewayIntentBits.GuildMembers, 
+        Discord.GatewayIntentBits.GuildBans,
+        Discord.GatewayIntentBits.GuildInvites,
+        Discord.GatewayIntentBits.GuildPresences,
+        Discord.GatewayIntentBits.GuildMessages,
+        Discord.GatewayIntentBits.GuildMessageReactions,
+        Discord.GatewayIntentBits.GuildVoiceStates,
+        Discord.GatewayIntentBits.DirectMessages,
+        Discord.GatewayIntentBits.DirectMessageReactions
     ], 
-    partials: ['MESSAGE', 'REACTION'] //partials are messages that are not fully cached and have to be fetched manually
+    partials: [Discord.Partials.Message, Discord.Partials.Reaction] //partials are messages that are not fully cached and have to be fetched manually
 })
 
 var fn = {} //object that will contain all functions to be accessible from commands
