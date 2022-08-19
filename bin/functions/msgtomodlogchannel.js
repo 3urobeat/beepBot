@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 15:43:03
  * Author: 3urobeat
  * 
- * Last Modified: 18.11.2021 20:26:44
+ * Last Modified: 19.08.2022 20:32:44
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -45,8 +45,8 @@ module.exports.run = (bot, logger, guild, action, author, reciever, details) => 
                     guildsettings.modlogchannel = null //better set it to null to avoid potential problems
 
                     //get all text channels into array and sort them by ascending rawPositions
-                    let textchannels = guild.channels.cache.filter(c => c.type == "GUILD_TEXT").sort((a, b) => a.rawPosition - b.rawPosition)
-                    guildsettings.modlogchannel = textchannels.find(c => c.permissionsFor(bot.user).has("SEND_MESSAGES")).id //find the first channel with perms
+                    let textchannels = guild.channels.cache.filter(c => c.type == Discord.ChannelType.GuildText).sort((a, b) => a.rawPosition - b.rawPosition)
+                    guildsettings.modlogchannel = textchannels.find(c => c.permissionsFor(bot.user).has(Discord.PermissionFlagsBits.SendMessages)).id //find the first channel with perms
 
                     if (!guildsettings.modlogchannel) return; //if it couldn't find a channel then stop
                 }
@@ -170,7 +170,7 @@ module.exports.run = (bot, logger, guild, action, author, reciever, details) => 
             return;
         }
         
-        if (!modlogchannel.permissionsFor(bot.user).has("ADD_REACTIONS")) embed.footer.text = guildlang.general.modlognoaddreactionsperm //change footer text
+        if (!modlogchannel.permissionsFor(bot.user).has(Discord.PermissionFlagsBits.AddReactions)) embed.footer.text = guildlang.general.modlognoaddreactionsperm //change footer text
 
         guild.channels.cache.get(guildsettings.modlogchannel).send({ embeds: [embed] })
             .then((msg) => { //don't need to ask shard manager

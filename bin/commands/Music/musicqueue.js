@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:42:59
+ * Last Modified: 19.08.2022 18:41:12
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -93,7 +93,7 @@ module.exports.info = {
             name: "option",
             description: "List or clear the queue",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "List queue", value: "list" },
                 { name: "Clear queue", value: "queue" }
@@ -103,7 +103,7 @@ module.exports.info = {
             name: "remove",
             description: "Remove a specific element in the queue",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER
+            type: Discord.ApplicationCommandOptionType.Number
         }
     ],
     accessableby: ['all'],

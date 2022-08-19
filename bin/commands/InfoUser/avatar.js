@@ -4,7 +4,7 @@
  * Created Date: 07.08.2020 20:02:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:39:28
+ * Last Modified: 19.08.2022 18:41:37
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -65,7 +65,7 @@ module.exports.info = {
             name: "user",
             description: "Gets the avatar of a specific user",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+            type: Discord.ApplicationCommandOptionType.User
         }
     ],
     accessableby: ['all'],

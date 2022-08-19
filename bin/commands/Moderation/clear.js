@@ -4,7 +4,7 @@
  * Created Date: 07.08.2020 18:02:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:41:45
+ * Last Modified: 19.08.2022 20:20:37
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (isNaN(messagecount)) return message.channel.send(invalidamount);
     if (messagecount > 100 || messagecount < 1) return message.channel.send(invalidamount);
 
-    if (message.member.permissions.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES, Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+    if (message.member.permissions.has(Discord.PermissionFlagsBits.ManageMessages, Discord.PermissionFlagsBits.Administrator)) {
 
         message.channel.messages.fetch({ limit: messagecount + 1 })
             .then((messages) => {
@@ -64,7 +64,7 @@ module.exports.info = {
             name: "amount",
             description: "The amount of messages to delete",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER,
+            type: Discord.ApplicationCommandOptionType.Number,
             min_value: 1,
             max_value: 100
         },

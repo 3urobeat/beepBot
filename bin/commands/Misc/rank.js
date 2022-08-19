@@ -4,7 +4,7 @@
  * Created Date: 09.01.2022 17:43:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:40:45
+ * Last Modified: 19.08.2022 18:41:37
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -95,7 +95,7 @@ module.exports.info = {
             name: "user",
             description: "Get the rank of a specific user",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+            type: Discord.ApplicationCommandOptionType.User
         }
     ],
     accessableby: ['all'],

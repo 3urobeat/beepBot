@@ -4,7 +4,7 @@
  * Created Date: 31.12.2020 17:05:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 12:20:02
+ * Last Modified: 19.08.2022 20:20:19
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -54,7 +54,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     })
 
     //Checks user perms and ban
-    if (message.member.permissions.has(Discord.Permissions.FLAGS.BAN_MEMBERS, Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+    if (message.member.permissions.has(Discord.PermissionFlagsBits.BanMembers, Discord.PermissionFlagsBits.Administrator)) {
         message.guild.members.cache.get(banuser.id).ban({ reason: banreason }).then(() => {
             var notifytimetext = lang.cmd.ban.permanent //if not permanent it will get changed by the time argument code block
 
@@ -113,27 +113,27 @@ module.exports.info = {
             name: "user",
             description: "The user to ban",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+            type: Discord.ApplicationCommandOptionType.User
         },
         {
             name: "reason",
             description: "The reason of the ban",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             prefix: "-r"
         },
         {
             name: "time",
             description: "Provide a duration and timeframe to only temporary ban the user",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER,
+            type: Discord.ApplicationCommandOptionType.Number,
             prefix: "-t"
         },
         {
             name: "timeframe",          //I still don't like this separation of these two values but couldn't find a better way as of now
             description: "Timeframe",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Seconds", value: "seconds" },
                 { name: "Minutes", value: "minutes" },
@@ -147,7 +147,7 @@ module.exports.info = {
             name: "notify",
             description: "If the user should be notified of the ban and reason",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN,
+            type: Discord.ApplicationCommandOptionType.Boolean,
             prefix: "-n"
         }
     ],

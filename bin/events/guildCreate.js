@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 15:15:19
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 14:02:57
+ * Last Modified: 19.08.2022 20:29:59
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -38,8 +38,8 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
     } else {
         //well then try and get the first channel (rawPosition) where the bot has permissions to send a message
         //get all text channels into array and sort them by ascending rawPositions
-        let textchannels = guild.channels.cache.filter(c => c.type == "GUILD_TEXT").sort((a, b) => a.rawPosition - b.rawPosition)
-        welcomechannel = textchannels.find(c => c.permissionsFor(bot.user).has("SEND_MESSAGES")).id //find the first channel with perms
+        let textchannels = guild.channels.cache.filter(c => c.type == Discord.ChannelType.GuildText).sort((a, b) => a.rawPosition - b.rawPosition)
+        welcomechannel = textchannels.find(c => c.permissionsFor(bot.user).has(Discord.PermissionFlagsBits.SendMessages)).id //find the first channel with perms
     }
 
     //if no channel was found try to contact the guild owner
@@ -58,9 +58,9 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
     })
 
     var langComponents = [
-        new Discord.MessageActionRow()
+        new Discord.ActionRowBuilder()
             .addComponents(
-                new Discord.MessageSelectMenu()
+                new Discord.SelectMenuBuilder()
                     .setCustomId('welcomeLang')
                     .setPlaceholder(`${bot.langObj["english"].general.langemote} ${bot.langObj["english"].general.botaddchooselang}`)
                     .addOptions(langArray)
@@ -85,7 +85,7 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
 
     //Handle beepBot muted roles
     //Ensure that @everyone hasn't manage role enabled so that users can't remove the muted role from them
-    guild.roles.cache.get(guild.id).setPermissions(guild.roles.cache.get(guild.id).permissions.remove("MANAGE_ROLES"), "Needed so that users are unable to remove the beepBot Muted role from their own roles.") //permissions.remove only returns the changed bitfield
+    guild.roles.cache.get(guild.id).setPermissions(guild.roles.cache.get(guild.id).permissions.remove(Discord.PermissionFlagsBits.ManageRoles), "Needed so that users are unable to remove the beepBot Muted role from their own roles.") //permissions.remove only returns the changed bitfield
         .catch((err) => channelToSend.send("I was unable to remove the 'Manage Roles' permission from the `@everyone` role!\nPlease do this manually as otherwise muted users will be able to remove the 'beepBot Muted' role from themselves, effectively unmuting themselves again!\n|| Error: " + err + " ||")) //this doesn't need to be in a language file as the user didn't have the opportunity yet to change the lang anyway
 
 
@@ -94,9 +94,9 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
         var errormsgsent = false
 
         guild.channels.cache.forEach((channel) => {
-            if (channel.type != "GUILD_TEXT") return;
+            if (channel.type != Discord.ChannelType.GuildText) return;
 
-            channel.permissionOverwrites.create(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, "Needed change so that a muted user will be unable to send and react to messages.")
+            channel.permissionOverwrites.create(role, { 'SendMessages': false, 'AddReactions': false }, "Needed change so that a muted user will be unable to send and react to messages.")
                 .catch((err) => { 
                     if (!errormsgsent) guild.channels.cache.get(welcomechannel).send(`I was sadly unable to change the permissions of the 'beepBot Muted' role in all channels.\nYou can fix this by checking/correcting my permissions and then running the mute command once.\nError: ${err}`) //message can technically only be in English - also: send this message only once
                 })

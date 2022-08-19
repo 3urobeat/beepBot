@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:42:19
+ * Last Modified: 19.08.2022 18:41:00
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -78,7 +78,7 @@ module.exports.info = {
             name: "mode",
             description: "Select the loop mode",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Turn off", value: "off" },
                 { name: "Loop this track", value: "track" },

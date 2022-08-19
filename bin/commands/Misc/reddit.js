@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 15.01.2022 15:58:12
+ * Last Modified: 19.08.2022 18:41:00
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -167,13 +167,13 @@ module.exports.info = {
             name: "subreddit",
             description: "Get a random post of a specific subreddit",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.ApplicationCommandOptionType.String
         },
         {
             name: "sort",
             description: "Sort subreddit",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "random", value: "random" },
                 { name: "hot", value: "hot" },

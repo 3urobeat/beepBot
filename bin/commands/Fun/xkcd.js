@@ -4,7 +4,7 @@
  * Created Date: 16.12.2021 11:31:39
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:38:36
+ * Last Modified: 19.08.2022 18:40:50
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -112,7 +112,7 @@ module.exports.info = {
             name: "random",
             description: "Gets a random comic instead of the latest one",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+            type: Discord.ApplicationCommandOptionType.Boolean
         }
     ],
     accessableby: ['all'],
