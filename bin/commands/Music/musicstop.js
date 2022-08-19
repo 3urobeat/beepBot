@@ -4,7 +4,7 @@
  * Created Date: 16.11.2021 22:43:34
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:43:45
+ * Last Modified: 19.08.2022 22:22:34
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -32,8 +32,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     const player  = require("../../player.js").player;
 
     //Check if bot is not connected or connected to a different voice channel
-    if (!message.guild.me.voice.channel || message.guild.me.voice.channel.id == null) return message.channel.send(lf.botnotplaying)
-    if (!message.member.voice.channel || message.member.voice.channel.id != message.guild.me.voice.channel.id) return message.channel.send(lf.connectedtodifferentchannel); //Refuse new connection
+    if (!message.guild.members.me.voice.channel || message.guild.members.me.voice.channel.id == null) return message.channel.send(lf.botnotplaying)
+    if (!message.member.voice.channel || message.member.voice.channel.id != message.guild.members.me.voice.channel.id) return message.channel.send(lf.connectedtodifferentchannel); //Refuse new connection
 
 
     var queue = player.getQueue(message.guild.id)
@@ -42,7 +42,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         queue.manualstop = true;
         queue.destroy();
     } else {
-        if (message.guild.me.voice) message.guild.me.voice.disconnect(); //check if user tries to disconnect bot which is in the voice channel without having a queue
+        if (message.guild.members.me.voice) message.guild.members.me.voice.disconnect(); //check if user tries to disconnect bot which is in the voice channel without having a queue
     }
 
     message.channel.send(lf.stopstopped)
