@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 20:31:53
+ * Last Modified: 19.08.2022 22:43:33
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -25,7 +25,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
 
     //Check if this is a command first or another general interaction
-    if (interaction.isCommand()) {
+    if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
         //Set thisshard if in guild otherwise set 0
         if (interaction.inGuild()) var thisshard = interaction.guild.shard
