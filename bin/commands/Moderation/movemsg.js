@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 18:42:10
+ * Last Modified: 19.08.2022 22:49:01
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -166,7 +166,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             } else { //one message
 
-                var originalmsg = await message.channel.messages.fetch(String(msgid))
+                var originalmsg = await message.channel.messages.fetch({ message: String(msgid) })
                 if (!originalmsg) return message.channel.send(lf.messagenotfound)
 
                 var originalcontent = originalmsg.content
