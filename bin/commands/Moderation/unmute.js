@@ -4,7 +4,7 @@
  * Created Date: 11.02.2021 18:54:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 12:46:54
+ * Last Modified: 19.08.2022 18:41:37
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -101,7 +101,7 @@ module.exports.info = {
             name: "type",
             description: "Select if the user should be unmuted in voice, chat or both",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Voice", value: "voice" },
                 { name: "Chat", value: "chat" },
@@ -112,13 +112,13 @@ module.exports.info = {
             name: "user",
             description: "The user to unmute",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+            type: Discord.ApplicationCommandOptionType.User
         },
         {
             name: "reason",
             description: "The reason of the unmute",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             prefix: "-r"
         }
     ],

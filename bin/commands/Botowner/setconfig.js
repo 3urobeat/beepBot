@@ -4,7 +4,7 @@
  * Created Date: 19.01.2021 22:36:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:37:20
+ * Last Modified: 19.08.2022 18:41:01
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -98,13 +98,13 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
             name: "config value",
             description: "The config key to change",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.ApplicationCommandOptionType.String
         },
         {
             name: "new value",
             description: "The new value of the key to change",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.ApplicationCommandOptionType.String
         }
     ],
     accessableby: ['botowner'], //Valid restrictions (high -> low): botowner, admins, moderators, all

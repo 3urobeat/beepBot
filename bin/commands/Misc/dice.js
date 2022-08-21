@@ -4,7 +4,7 @@
  * Created Date: 07.08.2020 20:02:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:39:54
+ * Last Modified: 19.08.2022 18:41:12
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -50,7 +50,7 @@ module.exports.info = {
             name: "limit",
             description: "Set the maximum result possible",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER
+            type: Discord.ApplicationCommandOptionType.Number
         }
     ],
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all

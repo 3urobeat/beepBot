@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:36:31
+ * Last Modified: 19.08.2022 20:18:18
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -46,8 +46,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 } else if (context.args[0] == "true") { //get first best channel if force is true
                     var channelid = null
 
-                    let textchannels = e.channels.cache.filter(c => c.type == "GUILD_TEXT").sort((a, b) => a.rawPosition - b.rawPosition)
-                    var channelid = textchannels.find(c => c.permissionsFor(client.user).has("SEND_MESSAGES")).id
+                    let textchannels = e.channels.cache.filter(c => c.type == Discord.ChannelType.GuildText).sort((a, b) => a.rawPosition - b.rawPosition)
+                    var channelid = textchannels.find(c => c.permissionsFor(client.user).has(Discord.PermissionFlagsBits.SendMessages)).id
                 }
                 
                 if (!channelid) return; //no channel found
@@ -69,13 +69,13 @@ module.exports.info = {
             name: "force",
             description: "Force this message to be sent even if no suitable channel was found (will use first channel with permission to send messages)",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+            type: Discord.ApplicationCommandOptionType.Boolean
         },
         {
             name: "message",
             description: "The message that should be broadcasted",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.ApplicationCommandOptionType.String
         }
     ],
     accessableby: ['botowner'],

@@ -4,7 +4,7 @@
  * Created Date: 11.02.2021 18:54:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 12:46:37
+ * Last Modified: 19.08.2022 20:29:11
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -44,9 +44,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 })
                     .then((role) => { //after creating role change permissions of every text channel           
                         message.guild.channels.cache.forEach((channel) => {
-                            if (channel.type != "GUILD_TEXT") return;
+                            if (channel.type != Discord.ChannelType.GuildText) return;
             
-                            channel.permissionOverwrites.create(role, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
+                            channel.permissionOverwrites.create(role, { 'SendMessages': false, 'AddReactions': false }, lf.rolechannelpermreason)
                                 .catch((err) => {
                                     if (errorcount < 1) message.channel.send(`${lf.rolechannelpermerror}\n${lang.general.error}: ${err}`)
                                     errorcount++ //we don't want to spam the channel
@@ -63,10 +63,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             } else { //role seems to exist so lets check if all channels have it added to their permissions
                 message.guild.channels.cache.forEach((channel) => {
-                    if (channel.type != "GUILD_TEXT") return;
-                    if (!channel.permissionsFor(mutedrole).has("SEND_MESSAGES") && !channel.permissionsFor(mutedrole).has("ADD_REACTIONS")) return; //if this channel already has both perms set to false then skip this iteration
+                    if (channel.type != Discord.ChannelType.GuildText) return;
+                    if (!channel.permissionsFor(mutedrole).has(Discord.PermissionFlagsBits.SendMessages) && !channel.permissionsFor(mutedrole).has(Discord.PermissionFlagsBits.AddReactions)) return; //if this channel already has both perms set to false then skip this iteration
     
-                    channel.permissionOverwrites.create(mutedrole, { SEND_MESSAGES: false, ADD_REACTIONS: false }, lf.rolechannelpermreason)
+                    channel.permissionOverwrites.create(mutedrole, { 'SendMessages': false, 'AddReactions': false }, lf.rolechannelpermreason)
                         .catch((err) => {
                             if (errorcount < 1) message.channel.send(`${lf.rolechannelpermerror}\n${lang.general.error}: ${err}`)
                             errorcount++ //we don't want to spam the channel
@@ -185,7 +185,7 @@ module.exports.info = {
             name: "type",
             description: "Select if the user should be muted in voice, chat or both",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Voice", value: "voice" },
                 { name: "Chat", value: "chat" },
@@ -196,27 +196,27 @@ module.exports.info = {
             name: "user",
             description: "The user to mute",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+            type: Discord.ApplicationCommandOptionType.User
         },
         {
             name: "reason",
             description: "The reason of the mute",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             prefix: "-r"
         },
         {
             name: "time",
             description: "Provide a duration and timeframe to only temporary mute the user",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER,
+            type: Discord.ApplicationCommandOptionType.Number,
             prefix: "-t"
         },
         {
             name: "timeframe",          //I still don't like this separation of these two values but couldn't find a better way as of now
             description: "Timeframe",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Seconds", value: "seconds" },
                 { name: "Minutes", value: "minutes" },
@@ -230,7 +230,7 @@ module.exports.info = {
             name: "notify",
             description: "If the user should be notified of the mute and reason",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN,
+            type: Discord.ApplicationCommandOptionType.Boolean,
             prefix: "-n"
         }
     ],

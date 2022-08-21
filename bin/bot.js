@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 18.01.2022 17:37:37
+ * Last Modified: 21.08.2022 22:33:51
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -34,18 +34,19 @@ const constants  = require("./constants.json")
 //I hate intents
 const bot = new Discord.Client({
     intents: [ 
-        Discord.Intents.FLAGS.GUILDS, 
-        Discord.Intents.FLAGS.GUILD_MEMBERS, 
-        Discord.Intents.FLAGS.GUILD_BANS,
-        Discord.Intents.FLAGS.GUILD_INVITES,
-        Discord.Intents.FLAGS.GUILD_PRESENCES,
-        Discord.Intents.FLAGS.GUILD_MESSAGES,
-        Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Discord.Intents.FLAGS.GUILD_VOICE_STATES,
-        Discord.Intents.FLAGS.DIRECT_MESSAGES,
-        Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+        Discord.GatewayIntentBits.Guilds, 
+        Discord.GatewayIntentBits.GuildMembers, 
+        Discord.GatewayIntentBits.GuildBans,
+        Discord.GatewayIntentBits.GuildInvites,
+        Discord.GatewayIntentBits.GuildPresences,
+        Discord.GatewayIntentBits.GuildMessages,
+        Discord.GatewayIntentBits.GuildMessageReactions,
+        Discord.GatewayIntentBits.GuildVoiceStates,
+        Discord.GatewayIntentBits.DirectMessages,
+        Discord.GatewayIntentBits.DirectMessageReactions,
+        Discord.GatewayIntentBits.MessageContent
     ], 
-    partials: ['MESSAGE', 'REACTION'] //partials are messages that are not fully cached and have to be fetched manually
+    partials: [Discord.Partials.Message, Discord.Partials.Reaction] //partials are messages that are not fully cached and have to be fetched manually
 })
 
 var fn = {} //object that will contain all functions to be accessible from commands
@@ -287,9 +288,9 @@ bot.on("ready", async function() {
         let game = config.gameoverwrite
         if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
 
-        bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+        bot.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status })
     } else {
-        bot.user.setPresence({ activities: [{ name: config.gamerotation[0], type: config.gametype, url: config.gameurl }], status: config.status })
+        bot.user.setPresence({ activities: [{ name: config.gamerotation[0], type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status })
     }
 
     //Read amount of commands found without aliases
@@ -348,7 +349,7 @@ bot.on("ready", async function() {
                 if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
 
                 if (bot.user.presence.activities[0].name != game) {
-                    bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+                    bot.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status })
                 }
 
                 currentgameindex = 0; //reset gameindex
@@ -385,7 +386,7 @@ bot.on("ready", async function() {
             processThisGame(config.gamerotation[currentgameindex], (game) => {
                 lastPresenceChange = Date.now() //set again to include processing time
 
-                bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+                bot.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status })
             })
         }, 5000)
 

@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:40:06
+ * Last Modified: 19.08.2022 18:41:01
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -90,7 +90,7 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
             name: "song-name",
             description: "The name of the song to search lyrics for",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.ApplicationCommandOptionType.String
         }
     ],
     accessableby: ['all'], //Valid restrictions (high -> low): botowner, admins, moderators, all
