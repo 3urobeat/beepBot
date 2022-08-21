@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 22.02.2022 14:31:24
+ * Last Modified: 19.08.2022 18:41:00
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -73,7 +73,7 @@ module.exports.info = {
             name: "search-word",
             description: "What to search the urban dictionary",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.ApplicationCommandOptionType.String
         },
     ],
     accessableby: ['all'],

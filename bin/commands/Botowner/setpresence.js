@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:37:31
+ * Last Modified: 21.08.2022 22:34:28
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -44,7 +44,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err)
         })
 
-        bot.user.setPresence({ activities: [{ name: bot.config.gamerotation[0], type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status })
+        bot.user.setPresence({ activities: [{ name: bot.config.gamerotation[0], type: bot.constants.gametypetranslation[bot.config.gametype], url: bot.config.gameurl }], status: bot.config.status })
             .then(() => {
                 message.channel.send(lf.setpresenceupdated)
             })
@@ -109,7 +109,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err)
         })
 
-        bot.user.setPresence({ activities: [{ name: newgame, type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status })
+        bot.user.setPresence({ activities: [{ name: newgame, type: bot.constants.gametypetranslation[bot.config.gametype], url: bot.config.gameurl }], status: bot.config.status })
             .then(() => {
                 message.channel.send(lf.setpresenceupdated)
             })
@@ -128,7 +128,7 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
             name: "preset",
             description: "Removes current status or loads default status settings",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Remove current status", value: "remove" },
                 { name: "Load default status settings", value: "default" }
@@ -138,7 +138,7 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
             name: "status",
             description: "Sets an online status",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Select status online", value: "online" },
                 { name: "Select status idle", value: "idle" },
@@ -151,7 +151,7 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
             name: "gametype",
             description: "Sets a game type",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Select gametype playing", value: "playing" },
                 { name: "Select gametype streaming", value: "streaming" },
@@ -165,14 +165,14 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
             name: "gametext",
             description: "Set a custom game text or type 'default' to load default text",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             prefix: "-g"
         },
         {
             name: "url",
             description: "Set a custom stream url or type 'default' to load default url",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             prefix: "-url"
         }
     ],

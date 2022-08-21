@@ -4,7 +4,7 @@
  * Created Date: 07.10.2020 20:44:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:39:35
+ * Last Modified: 19.08.2022 19:35:24
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -49,7 +49,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     switch(args[0].toLowerCase()) {
         case "user":
-            if (!args[1] || message.channel.type == "DM") {
+            if (!args[1] || message.channel.type == Discord.ChannelType.DM) {
                 var whichmember = message.guild.members.cache.get(message.author.id)
 
             } else if (message.guild.members.cache.find(member => member.user.username == args[1])) {
@@ -82,7 +82,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 }
             })
 
-            if (message.channel.type == "DM" || whichmember.nickname == null) usernickname = "/"
+            if (message.channel.type == Discord.ChannelType.DM || whichmember.nickname == null) usernickname = "/"
                 else usernickname = whichmember.nickname
 
             if (args[1].toLowerCase() == "mobile") { //Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
@@ -137,7 +137,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             break;
 
         case "server":
-            if (message.channel.type == "DM") return message.channel.send(lf.serverdmerror)
+            if (message.channel.type == Discord.ChannelType.DM) return message.channel.send(lf.serverdmerror)
 
             thumbnailurl = message.guild.iconURL()
 
@@ -290,7 +290,7 @@ module.exports.info = {
             name: "mode",
             description: "Select if information should be shown about the bot, user (you) or the server",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             choices: [
                 { name: "Bot", value: "bot" },
                 { name: "User", value: "user" },
@@ -301,7 +301,7 @@ module.exports.info = {
             name: "mobile",
             description: "Set to true to get a response that is readable on mobile devices",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN
+            type: Discord.ApplicationCommandOptionType.Boolean
         }
     ],
     accessableby: ['all'],

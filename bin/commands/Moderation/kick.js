@@ -4,7 +4,7 @@
  * Created Date: 13.12.2020 17:41:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:41:52
+ * Last Modified: 19.08.2022 20:25:44
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -58,7 +58,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     })
 
     //Checks user perms and kick
-    if (message.member.permissions.has(Discord.Permissions.FLAGS.KICK_MEMBERS, Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+    if (message.member.permissions.has(Discord.PermissionFlagsBits.KickMembers, Discord.PermissionFlagsBits.Administrator)) {
         message.guild.members.cache.get(kickuser.id).kick(kickreason).then(() => {
             message.channel.send(lang.cmd.kick.kickmsg.replace("username", kickuser.username).replace("kickreasontext", kickreasontext))
             message.react("✅").catch(() => {}) //catch but ignore error
@@ -88,20 +88,20 @@ module.exports.info = {
             name: "user",
             description: "The user to kick",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.USER
+            type: Discord.ApplicationCommandOptionType.User
         },
         {
             name: "reason",
             description: "The reason of the kick",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             prefix: "-r"
         },
         {
             name: "notify",
             description: "If the user should be notified of the kick and reason",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.BOOLEAN,
+            type: Discord.ApplicationCommandOptionType.Boolean,
             prefix: "-n"
         }
     ],

@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 14:15:01
+ * Last Modified: 19.08.2022 22:43:33
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -25,7 +25,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
 
     //Check if this is a command first or another general interaction
-    if (interaction.isCommand()) {
+    if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
         //Set thisshard if in guild otherwise set 0
         if (interaction.inGuild()) var thisshard = interaction.guild.shard
@@ -152,7 +152,7 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
             case "welcomeLang":
                 if (!interaction.isSelectMenu()) return;
 
-                if (!interaction.memberPermissions.has("MANAGE_MESSAGES")) return interaction.reply({ ephemeral: true, content: "Only members with 'Manage Messages' permission are allowed to change the language of this message." }); //don't let every user interact to prevent a bit of chaos
+                if (!interaction.memberPermissions.has(Discord.PermissionFlagsBits.ManageMessages)) return interaction.reply({ ephemeral: true, content: "Only members with 'Manage Messages' permission are allowed to change the language of this message." }); //don't let every user interact to prevent a bit of chaos
                 if (interaction.message.createdTimestamp + 7200000 < Date.now()) return interaction.reply({ ephemeral: true, content: "Changing the language of the welcome message is disabled after 2 hours to prevent users from changing the server's language.\nIf you are an admin please use the `settings` command instead to change the language of this server." })
 
                 var requestedlang = bot.langObj[interaction.values[0]]
@@ -169,9 +169,9 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
                 })
 
                 var langComponents = [
-                    new Discord.MessageActionRow()
+                    new Discord.ActionRowBuilder()
                         .addComponents(
-                            new Discord.MessageSelectMenu()
+                            new Discord.SelectMenuBuilder()
                                 .setCustomId('welcomeLang')
                                 .setPlaceholder(`${requestedlang.general.langemote} ${requestedlang.general.botaddchooselang}`)
                                 .addOptions(langArray)

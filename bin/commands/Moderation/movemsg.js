@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:42:01
+ * Last Modified: 19.08.2022 22:49:01
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -166,7 +166,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             } else { //one message
 
-                var originalmsg = await message.channel.messages.fetch(String(msgid))
+                var originalmsg = await message.channel.messages.fetch({ message: String(msgid) })
                 if (!originalmsg) return message.channel.send(lf.messagenotfound)
 
                 var originalcontent = originalmsg.content
@@ -260,19 +260,19 @@ module.exports.info = {
             name: "message",
             description: "ID/URL of the msg or a number of msgs to move. Pass a 0 if you use this cmd in a reply",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.ApplicationCommandOptionType.String
         },
         {
             name: "channel",
             description: "The channel where the message(s) should be moved to",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.CHANNEL
+            type: Discord.ApplicationCommandOptionType.Channel
         },
         {
             name: "reason",
             description: "The reason of the move",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+            type: Discord.ApplicationCommandOptionType.String,
             prefix: "-r"
         }
     ],

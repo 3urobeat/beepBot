@@ -4,7 +4,7 @@
  * Created Date: 07.10.2020 20:44:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:38:17
+ * Last Modified: 19.08.2022 18:41:01
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -42,7 +42,7 @@ module.exports.info = {
             name: "question",
             description: "The question to ask the magic 8ball",
             required: true,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.ApplicationCommandOptionType.String
         }
     ],
     accessableby: ['all'],

@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:38:45
+ * Last Modified: 20.08.2022 00:03:37
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -94,7 +94,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 thumbnail: { url: bot.user.avatarURL() },
                 fields: [],
                 footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username}` },
-                timestamp: Date.now()
+                timestamp: new Date().toISOString()
             }]
         }
 
@@ -169,7 +169,7 @@ module.exports.info = {
             name: "command-name",
             description: "Povide a command name to get detailed information about this command",
             required: false,
-            type: Discord.Constants.ApplicationCommandOptionTypes.STRING
+            type: Discord.ApplicationCommandOptionType.String
         }
     ],
     accessableby: ['all'],
