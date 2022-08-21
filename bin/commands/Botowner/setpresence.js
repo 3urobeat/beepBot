@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 18:41:00
+ * Last Modified: 21.08.2022 22:34:28
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -44,7 +44,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err)
         })
 
-        bot.user.setPresence({ activities: [{ name: bot.config.gamerotation[0], type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status })
+        bot.user.setPresence({ activities: [{ name: bot.config.gamerotation[0], type: bot.constants.gametypetranslation[bot.config.gametype], url: bot.config.gameurl }], status: bot.config.status })
             .then(() => {
                 message.channel.send(lf.setpresenceupdated)
             })
@@ -109,7 +109,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err)
         })
 
-        bot.user.setPresence({ activities: [{ name: newgame, type: bot.config.gametype, url: bot.config.gameurl }], status: bot.config.status })
+        bot.user.setPresence({ activities: [{ name: newgame, type: bot.constants.gametypetranslation[bot.config.gametype], url: bot.config.gameurl }], status: bot.config.status })
             .then(() => {
                 message.channel.send(lf.setpresenceupdated)
             })
