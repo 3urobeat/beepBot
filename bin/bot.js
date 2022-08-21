@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 23:42:04
+ * Last Modified: 21.08.2022 22:33:51
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -288,9 +288,9 @@ bot.on("ready", async function() {
         let game = config.gameoverwrite
         if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
 
-        bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+        bot.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status })
     } else {
-        bot.user.setPresence({ activities: [{ name: config.gamerotation[0], type: config.gametype, url: config.gameurl }], status: config.status })
+        bot.user.setPresence({ activities: [{ name: config.gamerotation[0], type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status })
     }
 
     //Read amount of commands found without aliases
@@ -349,7 +349,7 @@ bot.on("ready", async function() {
                 if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = `Happy Birthday beepBot!`
 
                 if (bot.user.presence.activities[0].name != game) {
-                    bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+                    bot.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status })
                 }
 
                 currentgameindex = 0; //reset gameindex
@@ -386,7 +386,7 @@ bot.on("ready", async function() {
             processThisGame(config.gamerotation[currentgameindex], (game) => {
                 lastPresenceChange = Date.now() //set again to include processing time
 
-                bot.user.setPresence({ activities: [{ name: game, type: config.gametype, url: config.gameurl }], status: config.status })
+                bot.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status })
             })
         }, 5000)
 
