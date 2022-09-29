@@ -4,7 +4,7 @@
  * Created Date: 02.08.2020 22:07:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.01.2022 13:44:23
+ * Last Modified: 29.09.2022 14:12:18
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -40,6 +40,5 @@ module.exports.info = { //Note to self: If you add more restrictions you need to
     options: [],
     accessableby: [''], //Valid restrictions (high -> low): botowner, admins, moderators, all
     allowedindm: true,
-    nsfwonly: false,
-    allowedguilds: config.musicenabledguilds //Optional value. Provide array with guildids as Strings that should only be allowed to use this command
+    nsfwonly: false
 }
