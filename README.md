@@ -14,7 +14,7 @@
 &nbsp;  
 
 ## **Features**:
-* **50+** commands - ranging from Fun and Information to Moderation
+* **40+** commands - ranging from Fun and Information to Moderation
 * Customizable settings for your server
 * Multiple languages (Currently English & German)
 * XP/Level System **with import from Mee6!**
