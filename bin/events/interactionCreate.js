@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 22:43:33
+ * Last Modified: 29.09.2022 16:46:26
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -136,6 +136,7 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
                 interaction.deferReply(); //For now I'm going to defer instantly so that I don't need to revamp *every* channel.send() call. If I implement slash commands better in the future, this will be optimized.
 
                 interaction["author"] = interaction.member.user //Add author field with slight workaround to provide compatibility with message object
+                interaction["react"]  = () => { return new Promise(() => { })} //Prevent error by doing nothing when calling react() as we can't react to an interaction
 
                 if (!interaction.inGuild()) {
                     cmd.run(bot, interaction, args, bot.langObj["english"], logger, guildsettings, bot.fn)
