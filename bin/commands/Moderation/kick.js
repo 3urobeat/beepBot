@@ -4,7 +4,7 @@
  * Created Date: 13.12.2020 17:41:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 20:25:44
+ * Last Modified: 29.09.2022 16:29:58
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -30,7 +30,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { 
     var Discord = require("discord.js");
 
-    var kickuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-n"]);
+    var kickuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
     if (!kickuser) return message.channel.send(lang.general.usernotfound)
     if (typeof (kickuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", kickuser))
 
@@ -63,9 +63,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             message.channel.send(lang.cmd.kick.kickmsg.replace("username", kickuser.username).replace("kickreasontext", kickreasontext))
             message.react("✅").catch(() => {}) //catch but ignore error
 
-            fn.msgtomodlogchannel(message.guild, "kick", message.author, kickuser, [kickreasontext, message.content.includes("-notify") || message.content.includes("-n")]) //details[1] results in boolean
+            fn.msgtomodlogchannel(message.guild, "kick", message.author, kickuser, [kickreasontext, args.includes("-notify") || args.includes("-n")]) //details[1] results in boolean
             
-            if (message.content.includes("-notify") || message.content.includes("-n")) {
+            if (args.includes("-notify") || args.includes("-n")) {
                 if (!kickuser.bot) kickuser.send(lang.cmd.kick.kicknotifymsg.replace("servername", message.guild.name).replace("kickreasontext", kickreasontext)).catch(err => {
                     message.channel.send(lang.general.dmerr + err)
                 })

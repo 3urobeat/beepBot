@@ -4,7 +4,7 @@
  * Created Date: 11.02.2021 18:54:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 20:29:11
+ * Last Modified: 29.09.2022 16:50:32
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -86,7 +86,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let args0 = ["chat", "voice", "all"] //things args[0] should be
     if (!args0.includes(args[0])) return message.channel.send(lf.invalidargs.replace("prefix", guildsettings.prefix))
 
-    var muteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-n"]);
+    var muteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
     if (!muteuser) return message.channel.send(lang.general.usernotfound)
     if (typeof (muteuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", muteuser))
 
@@ -129,7 +129,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     //Add timed mute to db and respond with msg
     var notifytimetext = lang.cmd.ban.permanent //needed for notify - if not permanent it will get changed by the time argument code block below (and yes just hijack the translation from the ban cmd)
 
-    if (message.content.includes("-time") || message.content.includes("-t")) { //timed mute
+    if (args.includes("-time") || args.includes("-t")) { //timed mute
         fn.gettimefrommsg(args, (timeinms, unitindex, arrcb) => { //the 3 arguments inside brackets are arguments from the callback
             if (!timeinms) return message.channel.send(lang.general.unsupportedtime.replace("timeargument", arrcb[1]))
 
@@ -166,10 +166,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     }
 
     message.react("✅").catch(() => {}) //catch but ignore error
-    fn.msgtomodlogchannel(message.guild, "mute", message.author, muteuser, [args[0].toLowerCase(), mutereasontext, notifytimetext, message.content.includes("-notify") || message.content.includes("-n")]) //details[2] results in boolean
+    fn.msgtomodlogchannel(message.guild, "mute", message.author, muteuser, [args[0].toLowerCase(), mutereasontext, notifytimetext, args.includes("-notify") || args.includes("-n")]) //details[2] results in boolean
 
     //Notify user if author provided argument
-    if (message.content.includes("-notify") || message.content.includes("-n")) {
+    if (args.includes("-notify") || args.includes("-n")) {
         if (!muteuser.bot) muteuser.send(lf.mutenotifymsg.replace("servername", message.guild.name).replace("mutereasontext", mutereasontext).replace("timetext", notifytimetext)).catch(err => {
             message.channel.send(lang.general.dmerror + err)
         })

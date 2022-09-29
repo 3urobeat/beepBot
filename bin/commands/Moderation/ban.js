@@ -4,7 +4,7 @@
  * Created Date: 31.12.2020 17:05:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 20:20:19
+ * Last Modified: 29.09.2022 16:01:46
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -59,7 +59,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             var notifytimetext = lang.cmd.ban.permanent //if not permanent it will get changed by the time argument code block
 
             //Time Argument
-            if (message.content.includes("-time") || message.content.includes("-t")) {
+            if (args.includes("-time") || args.includes("-t")) {
                 fn.gettimefrommsg(args, (timeinms, unitindex, arrcb) => { //the 3 arguments inside brackets are arguments from the callback
                     if (!timeinms) return message.channel.send(lang.general.unsupportedtime.replace("timeargument", arrcb[1]))
 
@@ -78,16 +78,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     message.channel.send(lang.cmd.ban.tempbanmsg.replace("username", banuser.username).replace("timetext", notifytimetext).replace("banreasontext", banreasontext))
                     message.react("✅").catch(() => {}) //catch but ignore error
 
-                    fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, notifytimetext, message.content.includes("-notify") || message.content.includes("-n")]) //details[2] results in boolean
+                    fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, notifytimetext, args.includes("-notify") || args.includes("-n")]) //details[2] results in boolean
                 })
             } else {
                 message.channel.send(lang.cmd.ban.permbanmsg.replace("username", banuser.username).replace("banreasontext", banreasontext))
                 message.react("✅").catch(() => {}) //catch but ignore error
-                fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, lang.cmd.ban.permanent, message.content.includes("-notify") || message.content.includes("-n")]) //details[2] results in boolean
+                fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, lang.cmd.ban.permanent, args.includes("-notify") || args.includes("-n")]) //details[2] results in boolean
             }
 
             //Notify argument
-            if (message.content.includes("-notify") || message.content.includes("-n")) {
+            if (args.includes("-notify") || args.includes("-n")) {
                 if (!banuser.bot) banuser.send(lang.cmd.ban.bannotifymsg.replace("servername", message.guild.name).replace("banreasontext", banreasontext).replace("timetext", notifytimetext)).catch(err => {
                     message.channel.send(lang.general.dmerror + err)
                 })
