@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  * 
- * Last Modified: 21.08.2022 22:33:51
+ * Last Modified: 29.09.2022 14:11:47
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -322,9 +322,6 @@ bot.on("ready", async function() {
         logger("", "", "", true, true) //Print empty line to clear other stuff
     }, 2500);
 
-
-    //Load music player if shard includes a music enabled guild
-    if ([...bot.guilds.cache.keys()].some(e => config.musicenabledguilds.includes(e))) require("./player.js").run(bot, logger)
 
     //Register all slash commands
     require("./helpers/registerSlashCommands.js").run(bot, logger);
