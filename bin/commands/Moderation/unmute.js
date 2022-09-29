@@ -4,7 +4,7 @@
  * Created Date: 11.02.2021 18:54:00
  * Author: 3urobeat
  * 
- * Last Modified: 19.08.2022 18:41:37
+ * Last Modified: 29.09.2022 16:30:05
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -34,7 +34,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let args0 = ["chat", "voice", "all"] //things args[0] should be
     if (!args0.includes(args[0])) return message.channel.send(lf.unmuteinvalidargs.replace("prefix", guildsettings.prefix))
 
-    var unmuteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-n"]);
+    var unmuteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
     if (!unmuteuser) return message.channel.send(lang.general.usernotfound)
     if (typeof (unmuteuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", unmuteuser))
 
