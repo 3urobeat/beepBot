@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  * 
- * Last Modified: 22.02.2022 13:43:15
+ * Last Modified: 29.09.2022 14:54:53
  * Modified By: 3urobeat
  * 
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -34,7 +34,7 @@ module.exports.logger = (type, origin, str, nodate, remove, animation, logafterl
     outputlogger.options({
         msgstructure: `[${outputlogger.Const.ANIMATION}] [${outputlogger.Const.TYPE} | ${outputlogger.Const.ORIGIN}] [${outputlogger.Const.DATE}] ${outputlogger.Const.MESSAGE}`,
         paramstructure: [outputlogger.Const.TYPE, outputlogger.Const.ORIGIN, outputlogger.Const.MESSAGE, "nodate", "remove", outputlogger.Const.ANIMATION],
-        outputfile: "../../output.txt",
+        outputfile: "./output.txt",
         animationdelay: 250,
         printdebug: false
     })
