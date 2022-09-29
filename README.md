@@ -21,12 +21,6 @@
 * Moderation commands, including moving messages or whole conversations to another channel, with logging
 * Join/Leave messages and automatically assign roles
 * ...and much more
-  
-&nbsp;  
-## **Music:**
-Music support can be enabled for your server for a [one-time donation of 20€](https://paypal.me/3urobeat) to help me pay for server cost.  
-**Please contact me on the Support Server and include your Server ID!**  
-If you need help, message me: `3urobeat#0975`  or create an issue here.
 
 &nbsp;  
 ## **Invite and Support:**
