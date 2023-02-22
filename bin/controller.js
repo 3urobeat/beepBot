@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 19.08.2022 20:01:43
+ * Last Modified: 22.02.2023 17:42:15
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -47,7 +47,7 @@ process.on("uncaughtException", (reason) => {
     logger("error", "controller.js", `Uncaught Exception! Reason: ${reason.stack}`);
 });
 
-/* ------------ Initialise startup ------------ */
+/* ------------ Initialize startup ------------ */
 let ascii = randomstring(asciipath.ascii); // Set random ascii for this bootup
 
 logger("", "", "\n\n", true, true);
@@ -154,9 +154,9 @@ if(typeof checkm8 == "undefined"){process.stdout.write("\x07");logger("", "", `\
 if(checkm8!="b754jfJNgZWGnzogvl<rsHGTR4e368essegs9<"){process.stdout.write("\x07");logger(`\n\n\x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}\x1b[0m`,true);process.exit(0)}
 
 //Unban checker
-const timedbans = new nedb('./data/timedbans.db') //initialise database
+const timedbans = new nedb('./data/timedbans.db') // Initialize database
     
-let lastTempBanCheck = Date.now() //this is useful because intervals can get unprecise over time
+let lastTempBanCheck = Date.now() // This is useful because intervals can get unprecise over time
 
 var tempbanloop = setInterval(() => {
     if (lastTempBanCheck + 10000 > Date.now()) return; //last check is more recent than 10 seconds
@@ -177,12 +177,12 @@ var tempbanloop = setInterval(() => {
                 if (guild) {
                     //Add ids as fallback option for msgtomodlogchannel
                     var authorobj = guild.members.cache.get(e.authorid) //try to populate obj with actual data
-                    var recieverobj = guild.members.cache.get(e.userid)
+                    var receiverobj = guild.members.cache.get(e.userid)
 
                     if (!authorobj) authorobj = {} //set blank if check failed
-                    if (!recieverobj) recieverobj = {}
+                    if (!receiverobj) receiverobj = {}
                     authorobj["userid"] = e.authorid //add id as fallback should getting actual data failed
-                    recieverobj["userid"] = e.userid
+                    receiverobj["userid"] = e.userid
 
                     client.timedbans.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }] }, (err) => {
                         if (err) logger("error", "controller.js", `Error removing ${e.userid} from timedbans: ${err}`)
@@ -190,12 +190,12 @@ var tempbanloop = setInterval(() => {
 
                     guild.members.unban(e.userid)
                         .then(res => {
-                            if (Object.keys(res).length > 1) recieverobj = res //overwrite recieverobj if we actually have data from the unban response
+                            if (Object.keys(res).length > 1) receiverobj = res //overwrite receiverobj if we actually have data from the unban response
 
-                            client.fn.msgtomodlogchannel(guild, "unban", authorobj, recieverobj, [e.banreason]) 
+                            client.fn.msgtomodlogchannel(guild, "unban", authorobj, receiverobj, [e.banreason]) 
                         })
                         .catch(err => {
-                            if (err != "DiscordAPIError: Unknown Ban") return client.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, recieverobj, [e.banreason, err]) //if unknown ban ignore, user has already been unbanned
+                            if (err != "DiscordAPIError: Unknown Ban") return client.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, receiverobj, [e.banreason, err]) //if unknown ban ignore, user has already been unbanned
                         })
                 }
             }, { context: { e: e } }) //pass e as context to be able to access it inside
@@ -208,7 +208,7 @@ var tempbanloop = setInterval(() => {
 }, 10000); //10 seconds
 
 //Unmute checker
-const timedmutes = new nedb('./data/timedmutes.db') //initialise database
+const timedmutes = new nedb('./data/timedmutes.db') //Initialize database
     
 let lastTempMuteCheck = Date.now() //this is useful because intervals can get unprecise over time
 
@@ -233,12 +233,12 @@ var timedmuteloop = setInterval(() => {
                 if (guild) {
                     //Add ids as fallback option for msgtomodlogchannel
                     var authorobj = guild.members.cache.get(e.authorid).user //try to populate obj with actual data
-                    var recieverobj = guild.members.cache.get(e.userid).user
+                    var receiverobj = guild.members.cache.get(e.userid).user
 
                     if (!authorobj) authorobj = {} //set blank if check failed
-                    if (!recieverobj) recieverobj = {}
+                    if (!receiverobj) receiverobj = {}
                     authorobj["userid"] = e.authorid //add id as fallback should getting actual data failed
-                    recieverobj["userid"] = e.userid
+                    receiverobj["userid"] = e.userid
 
                     if (e.where == "chat" || e.where == "all") { //user was muted in chat
                         let mutedrole = guild.roles.cache.find(role => role.name == "beepBot Muted")
@@ -246,7 +246,7 @@ var timedmuteloop = setInterval(() => {
                         if (mutedrole) { //only proceed if role still exists
                             //Remove role
                             guild.members.cache.get(e.userid).roles.remove(mutedrole).catch(err => { //catch error of role adding
-                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, [e.mutereason, err])
+                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, receiverobj, [e.mutereason, err])
                             })
                         }
                     }
@@ -260,7 +260,7 @@ var timedmuteloop = setInterval(() => {
                         //Remove voice mute
                         if (guild.members.cache.get(e.userid).voice.channel != null) { 
                             guild.members.cache.get(e.userid).voice.setMute(false).catch(err => {
-                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, [e.mutereason, err])
+                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, receiverobj, [e.mutereason, err])
                             }) 
                         } else {
                             //if the user can't be unmuted right now push it into the db and handle it with the voiceStateUpdate event
@@ -279,7 +279,7 @@ var timedmuteloop = setInterval(() => {
                         }
                     }
 
-                    client.fn.msgtomodlogchannel(guild, "unmute", authorobj, recieverobj, ["auto", e.mutereason])
+                    client.fn.msgtomodlogchannel(guild, "unmute", authorobj, receiverobj, ["auto", e.mutereason])
                 }
             }, { context: { e: e } }) //pass e as context to be able to access it inside
                 .catch(err => {

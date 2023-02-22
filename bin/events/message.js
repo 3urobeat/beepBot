@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 19.08.2022 23:37:18
+ * Last Modified: 22.02.2023 17:40:09
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -21,7 +21,7 @@
 const Discord = require('discord.js'); //eslint-disable-line
 
 /**
- * The mesageCreate event (named message discord.js version <12)
+ * The messageCreate event (named message discord.js version <12)
  * @param {Discord.Client} bot The Discord client class
  * @param {Function} logger The logger function
  * @param {Discord.Message} message The Discord message class
@@ -147,7 +147,7 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
                 if (ab.includes("botowner")) {
                     if (message.author.id !== "231827708198256642") return message.channel.send(bot.fn.owneronlyerror(bot.fn.lang(message.guild.id, guildsettings)));
                 } else if (guildowner && message.author.id == guildowner.user.id) { // Check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
-                    // nothing to do here, just not returning an error message and let the server owner do what he wants
+                    // Nothing to do here, just not returning an error message and let the server owner do what he wants
                 } else if (ab.includes("admins")) {
                     if (!guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id, guildsettings)));
                 } else if (ab.includes("moderators")) {

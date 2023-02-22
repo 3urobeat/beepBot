@@ -4,7 +4,7 @@
  * Created Date: 12.02.2021 19:25:00
  * Author: 3urobeat
  *
- * Last Modified: 18.11.2021 20:26:26
+ * Last Modified: 22.02.2023 17:36:37
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -22,7 +22,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 
 /**
  * The getuserfrommsg helper function
- * @param {Discord.Message} message The recieved message object
+ * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {Number} startindex The index where to start searching in the args array
  * @param {Number} endindex The index where to stop searching in the args array

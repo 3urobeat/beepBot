@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  *
- * Last Modified: 29.09.2022 16:46:26
+ * Last Modified: 22.02.2023 17:40:20
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -118,7 +118,7 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
                     if (ab.includes("botowner")) {
                         if (interaction.member.user.id !== "231827708198256642") return interaction.reply(bot.fn.owneronlyerror(bot.fn.lang(interaction.guild.id, guildsettings)));
                     } else if (guildowner && interaction.member.user.id == guildowner.user.id) { // Check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
-                        // nothing to do here, just not returning an error message and let the server owner do what he wants
+                        // Nothing to do here, just not returning an error message and let the server owner do what he wants
                     } else if (ab.includes("admins")) {
                         if (!guildsettings.adminroles.filter(element => interaction.member.roles.cache.has(element)).length > 0) return interaction.reply(bot.fn.usermissperm(bot.fn.lang(interaction.guild.id, guildsettings)));
                     } else if (ab.includes("moderators")) {
@@ -189,7 +189,7 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
                     components: langComponents
                 });
 
-                // Update guilds language aswell
+                // Update guilds language as well
                 bot.settings.update({ guildid: interaction.guild.id }, { $set: { lang: interaction.values[0] }}, {}, () => { }); // Catch but ignore error
                 break;
         }

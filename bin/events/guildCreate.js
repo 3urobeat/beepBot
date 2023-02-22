@@ -37,7 +37,7 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
         welcomechannel = guild.systemChannelId; // Then check if guild has a systemChannel set
     } else {
         // Well then try and get the first channel (rawPosition) where the bot has permissions to send a message
-        // get all text channels into array and sort them by ascending rawPositions
+        // Get all text channels into array and sort them by ascending rawPositions
         let textchannels = guild.channels.cache.filter(c => c.type == Discord.ChannelType.GuildText).sort((a, b) => a.rawPosition - b.rawPosition);
         welcomechannel = textchannels.find(c => c.permissionsFor(bot.user).has(Discord.PermissionFlagsBits.SendMessages)).id; // Find the first channel with perms
     }

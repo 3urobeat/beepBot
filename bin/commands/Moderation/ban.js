@@ -4,7 +4,7 @@
  * Created Date: 31.12.2020 17:05:00
  * Author: 3urobeat
  *
- * Last Modified: 29.09.2022 16:01:46
+ * Last Modified: 22.02.2023 17:36:37
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -20,7 +20,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 /**
  * The broadcast command
  * @param {Discord.Client} bot The Discord client class
- * @param {Discord.Message} message The recieved message object
+ * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {Object} lang The language object for this guild
  * @param {Function} logger The logger function

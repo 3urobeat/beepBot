@@ -4,7 +4,7 @@
  * Created Date: 16.12.2021 11:31:39
  * Author: 3urobeat
  *
- * Last Modified: 19.08.2022 18:40:50
+ * Last Modified: 22.02.2023 17:36:37
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -23,7 +23,7 @@ var lastMaxNumRefresh = 0;
 /**
  * The xkcd command
  * @param {Discord.Client} bot The Discord client class
- * @param {Discord.Message} message The recieved message object
+ * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {Object} lang The language object for this guild
  * @param {Function} logger The logger function

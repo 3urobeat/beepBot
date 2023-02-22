@@ -4,7 +4,7 @@
  * Created Date: 19.01.2021 22:36:00
  * Author: 3urobeat
  *
- * Last Modified: 28.11.2021 18:23:46
+ * Last Modified: 22.02.2023 17:34:28
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -24,7 +24,7 @@ var logger = require("./functions/logger.js").logger; // Custom logger
 
 
 const url = "https://github.com/HerrEurobeat/beepBot/archive/master.zip";
-const dontdelete = [".git", "node_modules", "data", ".eslintrc.json", "beepBot.code-workspace", "changelog.txt", "nodemon.json", "output.txt"];
+const dontdelete = [".git", "node_modules", "data", ".eslintrc.json", "beepBot.code-workspace", "changelog.txt", "output.txt"];
 
 logger("", "", "", true);
 logger("info", "updater.js", "Downloading new files...");
