@@ -3,15 +3,15 @@
  * Project: beepbot
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
- * 
+ *
  * Last Modified: 19.08.2022 18:41:01
  * Modified By: 3urobeat
- * 
+ *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>. 
+ * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 
@@ -29,35 +29,35 @@ const Discord = require('discord.js'); //eslint-disable-line
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     function sendresponse(wordarr, decision, result) {
-        if (wordarr[0] == decision[0]) return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpstie}`)
+        if (wordarr[0] == decision[0]) return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpstie}`);
 
-        if (result == "win") return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpswin}`)
-            else return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpsloose}`)
+        if (result == "win") return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpswin}`);
+            else return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpsloose}`);
     }
-        
-    var word     = args[0]
-    let decision = fn.randomstring([[0, ":rocket:"], [1, ":newspaper:"], [2, ":scissors:"]]) //get decision by index ["rock", "paper", "scissors"]
-   
-    switch (word) { //user decision
+
+    var word     = args[0];
+    let decision = fn.randomstring([[0, ":rocket:"], [1, ":newspaper:"], [2, ":scissors:"]]); // Get decision by index ["rock", "paper", "scissors"]
+
+    switch (word) { // User decision
         case "r":
         case "rock":
-            if (decision == 2) sendresponse([0, ":rocket:"], decision, "win") //user wins
-                else sendresponse([0, ":rocket:"], decision, "loose") //user looses (or tie but that gets handled by function)
+            if (decision == 2) sendresponse([0, ":rocket:"], decision, "win"); // User wins
+                else sendresponse([0, ":rocket:"], decision, "loose"); // User looses (or tie but that gets handled by function)
             break;
         case "p":
         case "paper":
-            if (decision == 1) sendresponse([1, ":newspaper:"], decision, "win")
-                else sendresponse([1, ":newspaper:"], decision, "loose")
+            if (decision == 1) sendresponse([1, ":newspaper:"], decision, "win");
+                else sendresponse([1, ":newspaper:"], decision, "loose");
             break;
         case "s":
         case "scissors":
-            if (decision == 0) sendresponse([2, ":scissors:"], decision, "win")
-                else sendresponse([2, ":scissors:"], decision, "loose")
+            if (decision == 0) sendresponse([2, ":scissors:"], decision, "win");
+                else sendresponse([2, ":scissors:"], decision, "loose");
             break;
         default:
-            return message.channel.send(lang.cmd.otherfun.rpsusage)
+            return message.channel.send(lang.cmd.otherfun.rpsusage);
     }
-}
+};
 
 module.exports.info = {
     names: ["rps"],
@@ -76,7 +76,7 @@ module.exports.info = {
             ]
         }
     ],
-    accessableby: ['all'],
+    accessableby: ["all"],
     allowedindm: true,
     nsfwonly: false
-}
+};
