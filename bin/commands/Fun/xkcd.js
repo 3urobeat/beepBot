@@ -3,15 +3,15 @@
  * Project: beepbot
  * Created Date: 16.12.2021 11:31:39
  * Author: 3urobeat
- * 
- * Last Modified: 19.08.2022 18:40:50
+ *
+ * Last Modified: 22.02.2023 17:36:37
  * Modified By: 3urobeat
- * 
+ *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>. 
+ * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 
@@ -23,7 +23,7 @@ var lastMaxNumRefresh = 0;
 /**
  * The xkcd command
  * @param {Discord.Client} bot The Discord client class
- * @param {Discord.Message} message The recieved message object
+ * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {Object} lang The language object for this guild
  * @param {Function} logger The logger function
@@ -31,15 +31,15 @@ var lastMaxNumRefresh = 0;
  * @param {Object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    //Refresh maxNum every 24 hours to be able to get a random comic
+    // Refresh maxNum every 24 hours to be able to get a random comic
     if (lastMaxNumRefresh + 86400000 <= Date.now()) {
-        let { body } = await require("superagent").get("https://xkcd.com/info.0.json")
-        
+        let { body } = await require("superagent").get("https://xkcd.com/info.0.json");
+
         maxNum = body.num;
     }
-    
 
-    //Create template message
+
+    // Create template message
     var msg = {
         embeds: [{
             title: "",
@@ -52,16 +52,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 text: ""
             }
         }]
-    }
+    };
 
-    //Send random xkcd or todays comic
+    // Send random xkcd or todays comic
     if (args[0] && args[0] == "random") {
         try {
-            var random = Math.floor(Math.random() * maxNum) + 1; //get ra random number between 0 and maxNum
+            var random = Math.floor(Math.random() * maxNum) + 1; // Get ra random number between 0 and maxNum
 
-            let { body } = await require("superagent").get(`https://xkcd.com/${random}/info.0.json`)
+            let { body } = await require("superagent").get(`https://xkcd.com/${random}/info.0.json`);
 
-            //Make dates great again
+            // Make dates great again
             if (body.day < 10) body.day = "0" + body.day.toString();
             if (body.month < 10) body.month = "0" + body.month.toString();
 
@@ -72,17 +72,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             msg.embeds[0].footer.text = `XKCD #${body.num} - ${body.day}.${body.month}.${body.year}`;
 
             message.channel.send(msg);
-            
+
         } catch (err) {
-            logger("error", "xkcd.js", "API Error: " + err)
-            message.channel.send(`xkcd.com 4k API ${lang.general.error}: ${err}`)
+            logger("error", "xkcd.js", "API Error: " + err);
+            message.channel.send(`xkcd.com 4k API ${lang.general.error}: ${err}`);
         }
 
     } else {
         try {
-            let { body } = await require("superagent").get("https://xkcd.com/info.0.json")
+            let { body } = await require("superagent").get("https://xkcd.com/info.0.json");
 
-            //Make dates great again
+            // Make dates great again
             if (body.day < 10) body.day = "0" + body.day.toString();
             if (body.month < 10) body.month = "0" + body.month.toString();
 
@@ -95,13 +95,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             message.channel.send(msg);
 
         } catch (err) {
-            logger("error", "xkcd.js", "API Error: " + err)
-            message.channel.send(`xkcd.com API ${lang.general.error}: ${err}`)
+            logger("error", "xkcd.js", "API Error: " + err);
+            message.channel.send(`xkcd.com API ${lang.general.error}: ${err}`);
         }
-    
+
     }
-    
-}
+
+};
 
 module.exports.info = {
     names: ["xkcd"],
@@ -115,7 +115,7 @@ module.exports.info = {
             type: Discord.ApplicationCommandOptionType.Boolean
         }
     ],
-    accessableby: ['all'],
+    accessableby: ["all"],
     allowedindm: true,
     nsfwonly: false
-}
+};
