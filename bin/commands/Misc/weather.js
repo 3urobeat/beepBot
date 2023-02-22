@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  *
- * Last Modified: 19.08.2022 18:41:00
+ * Last Modified: 22.02.2023 17:36:37
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -20,7 +20,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 /**
  * The weather command
  * @param {Discord.Client} bot The Discord client class
- * @param {Discord.Message} message The recieved message object
+ * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {Object} lang The language object for this guild
  * @param {Function} logger The logger function
@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 
     // Yes this bot will probably never support so many languages but since it should be as dynamic and scaleable as possible try and get a fitting language
-    // lang doc: https://openweathermap.org/current#multi
+    // Lang doc: https://openweathermap.org/current#multi
     let supportedlangs = {
         "afrikaans": "af",
         "albanian": "al",

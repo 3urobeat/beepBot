@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 29.09.2022 14:11:47
+ * Last Modified: 22.02.2023 17:41:53
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -146,11 +146,11 @@ var getreasonfrommsg = (args, stoparguments, callback) => {
  * @param {Discord.Guild} guild The guild obj
  * @param {String} action Type of action
  * @param {Discord.User} author Initiator of the action
- * @param {Discord.User} reciever The affected user of the action
+ * @param {Discord.User} receiver The affected user of the action
  * @param {Array<String>} details Additional details
  */
-var msgtomodlogchannel = (guild, action, author, reciever, details) => {
-    require("./functions/msgtomodlogchannel.js").run(bot, logger, guild, action, author, reciever, details); // Call the run function of the file which contains the code of this function
+var msgtomodlogchannel = (guild, action, author, receiver, details) => {
+    require("./functions/msgtomodlogchannel.js").run(bot, logger, guild, action, author, receiver, details); // Call the run function of the file which contains the code of this function
 };
 
 /**
@@ -240,11 +240,11 @@ process.on("uncaughtException", (reason) => {
 
 
 /* -------------- Load databases -------------- */
-const settings = new nedb("./data/settings.db"); // Initialise database
-const timedbans = new nedb("./data/timedbans.db"); // Initialise database
-const timedmutes = new nedb("./data/timedmutes.db"); // Initialise database
-const monitorreactions = new nedb("./data/monitorreactions.db"); // Initialise database
-const levelsdb = new nedb("./data/levels.db"); // Initialise database
+const settings = new nedb("./data/settings.db"); // Initialize database
+const timedbans = new nedb("./data/timedbans.db"); // Initialize database
+const timedmutes = new nedb("./data/timedmutes.db"); // Initialize database
+const monitorreactions = new nedb("./data/monitorreactions.db"); // Initialize database
+const levelsdb = new nedb("./data/levels.db"); // Initialize database
 
 settings.loadDatabase((err) => {
     if (err) return logger("error", "bot.js", "Error loading settings database. Error: " + err);

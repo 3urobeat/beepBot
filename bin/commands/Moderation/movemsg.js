@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  *
- * Last Modified: 19.08.2022 22:49:01
+ * Last Modified: 22.02.2023 17:36:37
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -20,7 +20,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 /**
  * The movemsg command
  * @param {Discord.Client} bot The Discord client class
- * @param {Discord.Message} message The recieved message object
+ * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {Object} lang The language object for this guild
  * @param {Function} logger The logger function
@@ -66,7 +66,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (typeof(msgid) == "undefined") return; // Continue to wait if msgid is still undefined
         clearInterval(waitformsgid); // Clear interval now so that the code below can't possibly get executed twice
 
-        // get channel to move msg to
+        // Get channel to move msg to
         if (!args[1]) return message.channel.send(lf.missingchannel);
 
         try {
@@ -88,7 +88,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             if (movereason.length >= 1500) var movereason = movereason.slice(0, 1500) + "..."; // Don't want the footer to be longer than 1500 (although it supports up to 2048 but wtf and even 1500 is way too long)
 
 
-            // get the message(s) to move
+            // Get the message(s) to move
             var embed = {};
             if (typeof (msgid) == "object") { // Multiple fetched messages
 
@@ -153,7 +153,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                     if (originalcontent.length == 0) return; // Something probably went wrong but this message appears to be empty so lets stop to suppress an error
 
-                    // if the author is the same as from the last iteration/message and the last message is more recent than 1 min then attach it to the last field - otherwise create new field
+                    // If the author is the same as from the last iteration/message and the last message is more recent than 1 min then attach it to the last field - otherwise create new field
                     if (i > 0 && sortedarray[i - 1].author.id == e.author.id && sortedarray[i - 1].createdTimestamp - e.createdTimestamp < 60000) {
                         embed.fields[embed.fields.length - 1].value += `\n${originalcontent}`;
                     } else {
