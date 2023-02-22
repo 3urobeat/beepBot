@@ -4,7 +4,7 @@
  * Created Date: 12.01.2021 18:34:00
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:36:37
+ * Last Modified: 22.02.2023 20:14:33
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -131,7 +131,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                     // Handle embed as we can't display it and content is usually empty
                     if (e.embeds.length > 0) {
-                        if (originalcontent > 0) originalcontent += "\n\n"; // If there is text put a new line between the text and the embed note
+                        if (originalcontent.length > 0) originalcontent += "\n\n"; // If there is text put a new line between the text and the embed note
                         originalcontent += lf.isembed.replace("embedtitle", e.embeds[0].title);
                     }
 
@@ -175,7 +175,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                 // Handle embed as we can't display it and content is usually empty
                 if (originalmsg.embeds.length > 0) {
-                    if (originalcontent > 0) originalcontent += "\n\n"; // If there is text put a new line between the text and the embed note
+                    if (originalcontent.length > 0) originalcontent += "\n\n"; // If there is text put a new line between the text and the embed note
                     originalcontent += lf.isembed.replace("embedtitle", originalmsg.embeds[0].title);
                 }
 
