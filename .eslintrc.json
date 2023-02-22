@@ -24,7 +24,7 @@
         "no-unexpected-multiline": "error",
 
         // Styling
-        "camelcase": "warn",
+        "camelcase": ["warn", { "allow": ["icon_url", "min_value", "max_value"] }], // Ignore snake_case object keys used by discord.js
         "capitalized-comments": ["warn", "always", { "ignoreConsecutiveComments": true }],
         "comma-spacing": ["warn", { "before": false, "after": true }],
         "func-call-spacing": ["error", "never"],
