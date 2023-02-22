@@ -5,12 +5,12 @@
   "main": "start.js",
   "dependencies": {
     "@yetzt/nedb": "^1.8.0",
-    "discord.js": "^14.5.0",
+    "discord.js": "^14.7.1",
     "download": "^8.0.0",
     "lodash": "^4.17.21",
     "output-logger": "^2.2.3",
-    "superagent": "^8.0.0",
-    "systeminformation": "^5.12.6"
+    "superagent": "^8.0.9",
+    "systeminformation": "^5.17.9"
   },
   "scripts": {
     "start": "node start.js"
