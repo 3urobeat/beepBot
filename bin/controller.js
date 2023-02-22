@@ -3,33 +3,33 @@
  * Project: beepbot
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
- * 
- * Last Modified: 19.08.2022 20:01:43
+ *
+ * Last Modified: 22.02.2023 17:42:15
  * Modified By: 3urobeat
- * 
+ *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>. 
+ * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 
-//This file starts all shards and can coordinate actions between them
+// This file starts all shards and can coordinate actions between them
 var bootstart  = 0;
-var bootstart  = Date.now()
+var bootstart  = Date.now();
 
-const Discord   = require('discord.js');
-const nedb      = require("@yetzt/nedb")
-const fs        = require("fs")
+const Discord   = require("discord.js");
+const nedb      = require("@yetzt/nedb");
+const fs        = require("fs");
 
-const tokenpath = require("../../token.json")
-const asciipath = require("./ascii.js")
-var   config    = require('./config.json')
-const constants = require("./constants.json")
+const tokenpath = require("../../token.json");
+const asciipath = require("./ascii.js");
+var   config    = require("./config.json");
+const constants = require("./constants.json");
 
-//Reference custom logger
-var logger      = require("./functions/logger.js").logger
+// Reference custom logger
+var logger      = require("./functions/logger.js").logger;
 
 
 /**
@@ -37,34 +37,34 @@ var logger      = require("./functions/logger.js").logger
  * @param {Array<String>} arr An Array with Strings to choose from
  * @returns {String} A random String from the provided array
  */
-var randomstring = arr => arr[Math.floor(Math.random() * arr.length)]
+var randomstring = arr => arr[Math.floor(Math.random() * arr.length)];
 
-process.on('unhandledRejection', (reason) => {
-    logger('error', 'controller.js', `Unhandled Rejection! Reason: ${reason.stack}`)
+process.on("unhandledRejection", (reason) => {
+    logger("error", "controller.js", `Unhandled Rejection! Reason: ${reason.stack}`);
 });
 
-process.on('uncaughtException', (reason) => {
-    logger('error', 'controller.js', `Uncaught Exception! Reason: ${reason.stack}`)
+process.on("uncaughtException", (reason) => {
+    logger("error", "controller.js", `Uncaught Exception! Reason: ${reason.stack}`);
 });
 
-/* ------------ Initialise startup ------------ */
-let ascii = randomstring(asciipath.ascii) //set random ascii for this bootup
+/* ------------ Initialize startup ------------ */
+let ascii = randomstring(asciipath.ascii); // Set random ascii for this bootup
 
-logger("", "", "\n\n", true, true)
-logger('info', 'controller.js', `Initiating bootup sequence...`)
-logger("", "", `\n${ascii}\n`, true)
-logger('info', 'controller.js', "Loading...", true)
+logger("", "", "\n\n", true, true);
+logger("info", "controller.js", "Initiating bootup sequence...");
+logger("", "", `\n${ascii}\n`, true);
+logger("info", "controller.js", "Loading...", true);
 
-//Log the startup in the cmduse.txt file
-fs.appendFile("./bin/cmduse.txt", `\n\n[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}] Starting beepBot version ${config.version} in ${config.loginmode} mode\n`, err => {
-    if (err) logger('error', 'controller.js', "writing startup to cmduse.txt error: " + err)
+// Log the startup in the cmduse.txt file
+fs.appendFile("./bin/cmduse.txt", `\n\n[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, " ").replace(/\..+/, "")}] Starting beepBot version ${config.version} in ${config.loginmode} mode\n`, err => {
+    if (err) logger("error", "controller.js", "writing startup to cmduse.txt error: " + err);
 });
 
-if (process.platform == "win32") { //set node process name to find it in task manager etc.
-    process.title = `3urobeat's beepBot v${config.version} | ${process.platform}` //Windows allows long terminal/process names
+if (process.platform == "win32") { // Set node process name to find it in task manager etc.
+    process.title = `3urobeat's beepBot v${config.version} | ${process.platform}`; // Windows allows long terminal/process names
 } else {
-    process.stdout.write(`${String.fromCharCode(27)}]0;3urobeat's beepBot v${config.version} | ${process.platform}${String.fromCharCode(7)}`) //sets terminal title (thanks: https://stackoverflow.com/a/30360821/12934162)
-    process.title = `beepBot` //sets process title in task manager etc.
+    process.stdout.write(`${String.fromCharCode(27)}]0;3urobeat's beepBot v${config.version} | ${process.platform}${String.fromCharCode(7)}`); // Sets terminal title (thanks: https://stackoverflow.com/a/30360821/12934162)
+    process.title = "beepBot"; // Sets process title in task manager etc.
 }
 
 
@@ -154,9 +154,9 @@ if(typeof checkm8 == "undefined"){process.stdout.write("\x07");logger("", "", `\
 if(checkm8!="b754jfJNgZWGnzogvl<rsHGTR4e368essegs9<"){process.stdout.write("\x07");logger(`\n\n\x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}\x1b[0m`,true);process.exit(0)}
 
 //Unban checker
-const timedbans = new nedb('./data/timedbans.db') //initialise database
+const timedbans = new nedb('./data/timedbans.db') // Initialize database
     
-let lastTempBanCheck = Date.now() //this is useful because intervals can get unprecise over time
+let lastTempBanCheck = Date.now() // This is useful because intervals can get unprecise over time
 
 var tempbanloop = setInterval(() => {
     if (lastTempBanCheck + 10000 > Date.now()) return; //last check is more recent than 10 seconds
@@ -177,12 +177,12 @@ var tempbanloop = setInterval(() => {
                 if (guild) {
                     //Add ids as fallback option for msgtomodlogchannel
                     var authorobj = guild.members.cache.get(e.authorid) //try to populate obj with actual data
-                    var recieverobj = guild.members.cache.get(e.userid)
+                    var receiverobj = guild.members.cache.get(e.userid)
 
                     if (!authorobj) authorobj = {} //set blank if check failed
-                    if (!recieverobj) recieverobj = {}
+                    if (!receiverobj) receiverobj = {}
                     authorobj["userid"] = e.authorid //add id as fallback should getting actual data failed
-                    recieverobj["userid"] = e.userid
+                    receiverobj["userid"] = e.userid
 
                     client.timedbans.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }] }, (err) => {
                         if (err) logger("error", "controller.js", `Error removing ${e.userid} from timedbans: ${err}`)
@@ -190,12 +190,12 @@ var tempbanloop = setInterval(() => {
 
                     guild.members.unban(e.userid)
                         .then(res => {
-                            if (Object.keys(res).length > 1) recieverobj = res //overwrite recieverobj if we actually have data from the unban response
+                            if (Object.keys(res).length > 1) receiverobj = res //overwrite receiverobj if we actually have data from the unban response
 
-                            client.fn.msgtomodlogchannel(guild, "unban", authorobj, recieverobj, [e.banreason]) 
+                            client.fn.msgtomodlogchannel(guild, "unban", authorobj, receiverobj, [e.banreason]) 
                         })
                         .catch(err => {
-                            if (err != "DiscordAPIError: Unknown Ban") return client.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, recieverobj, [e.banreason, err]) //if unknown ban ignore, user has already been unbanned
+                            if (err != "DiscordAPIError: Unknown Ban") return client.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, receiverobj, [e.banreason, err]) //if unknown ban ignore, user has already been unbanned
                         })
                 }
             }, { context: { e: e } }) //pass e as context to be able to access it inside
@@ -208,7 +208,7 @@ var tempbanloop = setInterval(() => {
 }, 10000); //10 seconds
 
 //Unmute checker
-const timedmutes = new nedb('./data/timedmutes.db') //initialise database
+const timedmutes = new nedb('./data/timedmutes.db') //Initialize database
     
 let lastTempMuteCheck = Date.now() //this is useful because intervals can get unprecise over time
 
@@ -233,12 +233,12 @@ var timedmuteloop = setInterval(() => {
                 if (guild) {
                     //Add ids as fallback option for msgtomodlogchannel
                     var authorobj = guild.members.cache.get(e.authorid).user //try to populate obj with actual data
-                    var recieverobj = guild.members.cache.get(e.userid).user
+                    var receiverobj = guild.members.cache.get(e.userid).user
 
                     if (!authorobj) authorobj = {} //set blank if check failed
-                    if (!recieverobj) recieverobj = {}
+                    if (!receiverobj) receiverobj = {}
                     authorobj["userid"] = e.authorid //add id as fallback should getting actual data failed
-                    recieverobj["userid"] = e.userid
+                    receiverobj["userid"] = e.userid
 
                     if (e.where == "chat" || e.where == "all") { //user was muted in chat
                         let mutedrole = guild.roles.cache.find(role => role.name == "beepBot Muted")
@@ -246,7 +246,7 @@ var timedmuteloop = setInterval(() => {
                         if (mutedrole) { //only proceed if role still exists
                             //Remove role
                             guild.members.cache.get(e.userid).roles.remove(mutedrole).catch(err => { //catch error of role adding
-                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, [e.mutereason, err])
+                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, receiverobj, [e.mutereason, err])
                             })
                         }
                     }
@@ -260,7 +260,7 @@ var timedmuteloop = setInterval(() => {
                         //Remove voice mute
                         if (guild.members.cache.get(e.userid).voice.channel != null) { 
                             guild.members.cache.get(e.userid).voice.setMute(false).catch(err => {
-                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, recieverobj, [e.mutereason, err])
+                                return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, receiverobj, [e.mutereason, err])
                             }) 
                         } else {
                             //if the user can't be unmuted right now push it into the db and handle it with the voiceStateUpdate event
@@ -279,7 +279,7 @@ var timedmuteloop = setInterval(() => {
                         }
                     }
 
-                    client.fn.msgtomodlogchannel(guild, "unmute", authorobj, recieverobj, ["auto", e.mutereason])
+                    client.fn.msgtomodlogchannel(guild, "unmute", authorobj, receiverobj, ["auto", e.mutereason])
                 }
             }, { context: { e: e } }) //pass e as context to be able to access it inside
                 .catch(err => {

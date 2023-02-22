@@ -3,15 +3,15 @@
  * Project: beepbot
  * Created Date: 07.08.2020 18:02:00
  * Author: 3urobeat
- * 
- * Last Modified: 19.08.2022 20:20:37
+ *
+ * Last Modified: 22.02.2023 17:36:37
  * Modified By: 3urobeat
- * 
+ *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>. 
+ * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 
@@ -20,7 +20,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 /**
  * The clear command
  * @param {Discord.Client} bot The Discord client class
- * @param {Discord.Message} message The recieved message object
+ * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {Object} lang The language object for this guild
  * @param {Function} logger The logger function
@@ -30,7 +30,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
     var Discord = require("discord.js");
 
-    let invalidamount = lang.cmd.othermoderation.clearinvalidamount
+    let invalidamount = lang.cmd.othermoderation.clearinvalidamount;
     if (!args[0]) return message.channel.send(invalidamount);
 
     var messagecount = parseInt(args[0]);
@@ -41,19 +41,19 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
         message.channel.messages.fetch({ limit: messagecount + 1 })
             .then((messages) => {
-                message.channel.bulkDelete(messages)
+                message.channel.bulkDelete(messages);
             }).catch(err => {
-                message.channel.send(`${lang.general.anerroroccurred} ${err}`)
-                message.react("❌").catch(() => {}) //catch but ignore error
+                message.channel.send(`${lang.general.anerroroccurred} ${err}`);
+                message.react("❌").catch(() => {}); // Catch but ignore error
                 return;
-            })
-        
-        fn.msgtomodlogchannel(message.guild, "clear", message.author, {}, [messagecount, message.channel])
+            });
+
+        fn.msgtomodlogchannel(message.guild, "clear", message.author, {}, [messagecount, message.channel]);
     } else {
-        message.channel.send(fn.usermissperm(lang))
-        message.react("❌").catch(() => {}) //catch but ignore error
+        message.channel.send(fn.usermissperm(lang));
+        message.react("❌").catch(() => {}); // Catch but ignore error
     }
-}
+};
 
 module.exports.info = {
     names: ["clear", "delete"],
@@ -69,7 +69,7 @@ module.exports.info = {
             max_value: 100
         },
     ],
-    accessableby: ['moderators'],
+    accessableby: ["moderators"],
     allowedindm: false,
     nsfwonly: false
-}
+};
