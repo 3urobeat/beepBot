@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:40:20
+ * Last Modified: 22.02.2023 19:07:37
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -24,64 +24,63 @@ const Discord = require('discord.js'); //eslint-disable-line
  */
 module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
 
-    // Check if this is a command first or another general interaction
-    if (interaction.type == Discord.InteractionType.ApplicationCommand) {
+    // Set thisshard if in guild otherwise set 0
+    let thisshard = { id: 0 };
+    if (interaction.inGuild()) thisshard = interaction.guild.shard;
 
-        // Set thisshard if in guild otherwise set 0
-        if (interaction.inGuild()) var thisshard = interaction.guild.shard;
-            else var thisshard = { id: 0 };
+    // Get guildsettings from db
+    let guildid = 0;
+    if (interaction.inGuild()) guildid = interaction.guild.id;
 
-        // Get guildsettings from db
-        if (interaction.inGuild()) var guildid = interaction.guild.id;
-            else var guildid = 0;
+    bot.settings.findOne({ guildid: guildid }, async (err, guildsettings) => {
+        if (err) {
+            logger("error", "message.js", "msg Event: Error fetching guild from database: " + err);
+            interaction.reply({ content: "Something went wrong getting your guild's settings from the database. Please try again later.", ephemeral: true });
+            return;
+        }
 
-        bot.settings.findOne({ guildid: guildid }, async (err, guildsettings) => {
-            if (err) {
-                logger("error", "message.js", "msg Event: Error fetching guild from database: " + err);
-                interaction.reply("Something went wrong getting your guild's settings from the database. Please try again later.");
-                return;
+        // Check if guild is in settings db and add it if it isn't
+        if (interaction.inGuild()) {
+            if (!guildsettings) {
+                bot.fn.servertosettings(interaction.guild);
+
+                // Quickly construct guildsettings object to be able to carry on
+                if (bot.config.loginmode == "normal") var prefix = bot.constants.DEFAULTPREFIX;
+                    else var prefix = bot.constants.DEFAULTTESTPREFIX;
+
+                guildsettings = bot.constants.defaultguildsettings;
+                guildsettings["guildid"] = guildid;
+                guildsettings["prefix"] = prefix;
+
+            } else {
+
+                let changesmade = false;
+
+                Object.keys(bot.constants.defaultguildsettings).forEach((e, i) => { // Check if this guild's settings is missing a key (update proofing!)
+                    if (!Object.keys(guildsettings).includes(e)) {
+                        guildsettings[e] = Object.values(bot.constants.defaultguildsettings)[i];
+                        changesmade = true;
+                    }
+                });
+
+                if (changesmade) bot.settings.update({ guildid: guildid }, guildsettings, (err) => { if (err) logger("error", "message.js", `Error adding missing keys to ${guildid}'s settings db: ${err}`); });
             }
 
-            // Check if guild is in settings db and add it if it isn't
-            if (interaction.inGuild()) {
-                if (!guildsettings) {
-                    bot.fn.servertosettings(interaction.guild);
+            // Call levelUser helper
+            require("../functions/levelUser.js").levelUser(bot, logger, interaction.member.user, interaction.guild, interaction.channel, bot.fn.lang(guildid, guildsettings), guildsettings);
+        }
 
-                    // Quickly construct guildsettings object to be able to carry on
-                    if (bot.config.loginmode == "normal") var prefix = bot.constants.DEFAULTPREFIX;
-                        else var prefix = bot.constants.DEFAULTTESTPREFIX;
-
-                    guildsettings = bot.constants.defaultguildsettings;
-                    guildsettings["guildid"] = guildid;
-                    guildsettings["prefix"] = prefix;
-
-                } else {
-
-                    var changesmade = false;
-
-                    Object.keys(bot.constants.defaultguildsettings).forEach((e, i) => { // Check if this guild's settings is missing a key (update proofing!)
-                        if (!Object.keys(guildsettings).includes(e)) {
-                            guildsettings[e] = Object.values(bot.constants.defaultguildsettings)[i];
-                            changesmade = true;
-                        }
-                    });
-
-                    if (changesmade) bot.settings.update({ guildid: guildid }, guildsettings, (err) => { if (err) logger("error", "message.js", `Error adding missing keys to ${guildid}'s settings db: ${err}`); });
-                }
-
-                // Call levelUser helper
-                require("../functions/levelUser.js").levelUser(bot, logger, interaction.member.user, interaction.guild, interaction.channel, bot.fn.lang(guildid, guildsettings), guildsettings);
-            }
-
+        // Check if this is a command first or another general interaction
+        if (interaction.type == Discord.InteractionType.ApplicationCommand) {
 
             // Get command
-            var cmd = bot.commands.get(interaction.commandName);
+            let cmd = bot.commands.get(interaction.commandName);
 
             // Create old styled args array (I should implement the new way of getting arguments using an obj to make using them easier, however I didn't find a nice way to make it compatible with the old message event which I would like to keep active)
             // var args = {}; //these two lines would be how to map the new obj easily
             // interaction.options.data.map((e) => args[e.name] = e.value )
 
-            var args = [];
+            let args = [];
 
             interaction.options.data.forEach((e) => {
                 if (typeof(e.value) == "boolean" && !e.value) return; // Check if value is a boolean and set to false and don't include it (as for example -n false would still trigger notify code execution as it only checks for the param -n, not for the following value)
@@ -103,9 +102,9 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
                 if (cmd.info.nsfwonly == true && !interaction.channel.nsfw) return interaction.reply(bot.fn.lang(interaction.guild.id, guildsettings).general.nsfwonlyerror);
 
                 // Check if user is allowed to use this command
-                var ab = cmd.info.accessableby;
+                let ab = cmd.info.accessableby;
 
-                var guildowner = await interaction.guild.fetchOwner();
+                let guildowner = await interaction.guild.fetchOwner();
 
                 // Check if command is allowed on this guild and respond with error message if it isn't
                 if (cmd.info.allowedguilds && !cmd.info.allowedguilds.includes(interaction.guild.id)) return interaction.reply(bot.fn.lang(interaction.guild.id, guildsettings).general.guildnotallowederror);
@@ -145,54 +144,57 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
                     cmd.run(bot, interaction, args, bot.fn.lang(interaction.guild.id, guildsettings), logger, guildsettings, bot.fn); // Run the command after lang function callback
                 }
             }
-        });
 
-    } else {
+        } else {
 
-        switch (interaction.customId) {
-            case "welcomeLang":
-                if (!interaction.isSelectMenu()) return;
+            switch (interaction.customId) {
+                case "welcomeLang":
+                    if (!interaction.isSelectMenu()) return;
 
-                if (!interaction.memberPermissions.has(Discord.PermissionFlagsBits.ManageMessages)) return interaction.reply({ ephemeral: true, content: "Only members with 'Manage Messages' permission are allowed to change the language of this message." }); // Don't let every user interact to prevent a bit of chaos
-                if (interaction.message.createdTimestamp + 7200000 < Date.now()) return interaction.reply({ ephemeral: true, content: "Changing the language of the welcome message is disabled after 2 hours to prevent users from changing the server's language.\nIf you are an admin please use the `settings` command instead to change the language of this server." });
+                    if (!interaction.memberPermissions.has(Discord.PermissionFlagsBits.ManageMessages)) return interaction.reply({ ephemeral: true, content: "Only members with 'Manage Messages' permission are allowed to change the language of this message." }); // Don't let every user interact to prevent a bit of chaos
+                    if (interaction.message.createdTimestamp + 7200000 < Date.now()) return interaction.reply({ ephemeral: true, content: "Changing the language of the welcome message is disabled after 2 hours to prevent users from changing the server's language.\nIf you are an admin please use the `settings` command instead to change the language of this server." });
 
-                var requestedlang = bot.langObj[interaction.values[0]];
+                    var requestedlang = bot.langObj[interaction.values[0]];
 
-                // Construct menu again in order to be able to update the placeholder (I just couldn't find a better way yet and interaction.update always reset the user's choice)
-                var langArray = [];
+                    // Construct menu again in order to be able to update the placeholder (I just couldn't find a better way yet and interaction.update always reset the user's choice)
+                    var langArray = [];
 
-                Object.values(bot.langObj).forEach((e, i) => { // Push each language to the array
-                    langArray.push({
-                        label: e.general.thislang,
-                        emoji: e.general.langemote,
-                        value: Object.keys(bot.langObj)[i]
+                    Object.values(bot.langObj).forEach((e, i) => { // Push each language to the array
+                        langArray.push({
+                            label: e.general.thislang,
+                            emoji: e.general.langemote,
+                            value: Object.keys(bot.langObj)[i]
+                        });
                     });
-                });
 
-                var langComponents = [
-                    new Discord.ActionRowBuilder()
-                        .addComponents(
-                            new Discord.SelectMenuBuilder()
-                                .setCustomId("welcomeLang")
-                                .setPlaceholder(`${requestedlang.general.langemote} ${requestedlang.general.botaddchooselang}`)
-                                .addOptions(langArray)
-                        )
-                ];
+                    var langComponents = [
+                        new Discord.ActionRowBuilder()
+                            .addComponents(
+                                new Discord.SelectMenuBuilder()
+                                    .setCustomId("welcomeLang")
+                                    .setPlaceholder(`${requestedlang.general.langemote} ${requestedlang.general.botaddchooselang}`)
+                                    .addOptions(langArray)
+                            )
+                    ];
 
-                // Update message with new language
-                interaction.update({
-                    embeds: [{
-                        title: requestedlang.general.botaddtitle,
-                        description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX) + requestedlang.general.botadddesc3.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
-                        thumbnail: { url: bot.user.displayAvatarURL() }
-                    }],
-                    components: langComponents
-                });
+                    // Update message with new language
+                    interaction.update({
+                        embeds: [{
+                            title: requestedlang.general.botaddtitle,
+                            description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, bot.constants.DEFAULTPREFIX) + requestedlang.general.botadddesc3.replace(/prefix/g, bot.constants.DEFAULTPREFIX),
+                            thumbnail: { url: bot.user.displayAvatarURL() }
+                        }],
+                        components: langComponents
+                    });
 
-                // Update guilds language as well
-                bot.settings.update({ guildid: interaction.guild.id }, { $set: { lang: interaction.values[0] }}, {}, () => { }); // Catch but ignore error
-                break;
+                    // Update guilds language as well
+                    bot.settings.update({ guildid: interaction.guild.id }, { $set: { lang: interaction.values[0] }}, {}, () => { }); // Catch but ignore error
+                    break;
+
+                default:
+                    return logger("error", "interactionCreate.js", "Invalid interaction ID received: " + interaction.customId);
+            }
         }
-    }
+    });
 
 };
