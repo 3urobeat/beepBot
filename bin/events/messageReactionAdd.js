@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 13.01.2022 14:01:50
+ * Last Modified: 22.02.2023 18:44:29
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -43,25 +43,7 @@ module.exports.run = (bot, logger, reaction, user) => { //eslint-disable-line
         if (err) return logger("error", "messageReactionAdd.js", "Error searching in db: " + err);
 
         switch (doc.type) {
-            case "modlog": // For wastebasket reaction on modlog messages
-                var guildowner = await reaction.message.guild.fetchOwner();
-
-                if (doc.allowedroles.filter(element => reaction.message.guild.members.cache.get(user.id).roles.cache.has(element)).length > 0 || user.id == guildowner.user.id) { // Either user has role or is owner of guild
-                    reaction.message.delete()
-                        .then(() => {
-                            bot.monitorreactions.remove({ reaction: reaction._emoji.name }, {}, (err) => {
-                                if (err) logger("error", "messageReactionAdd.js", `Error removing ${reaction._emoji.name} of msg ${reaction.message.id} from db after deleting msg: ${err}`);
-                            });
-
-                            return;
-                        })
-                        .catch(err => { reaction.message.channel.send(`Error deleting message: ${err}`);
-                    });
-                } else {
-                    return;
-                }
-
-                break;
+            // Currently nothing is using this db but I didn't dare to remove it
 
             default:
                 return logger("error", "messageReactionAdd.js", "Invalid monitorreactions type in db! Fix this please: " + doc.type);

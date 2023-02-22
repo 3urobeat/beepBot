@@ -4,7 +4,7 @@
  * Created Date: 13.01.2022 13:20:08
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 19:07:37
+ * Last Modified: 22.02.2023 19:31:37
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -25,12 +25,12 @@ const Discord = require('discord.js'); //eslint-disable-line
 module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
 
     // Set thisshard if in guild otherwise set 0
-    let thisshard = { id: 0 };
-    if (interaction.inGuild()) thisshard = interaction.guild.shard;
+    if (interaction.inGuild()) var thisshard = interaction.guild.shard;
+        else var thisshard = { id: 0 };
 
     // Get guildsettings from db
-    let guildid = 0;
-    if (interaction.inGuild()) guildid = interaction.guild.id;
+    if (interaction.inGuild()) var guildid = interaction.guild.id;
+        else var guildid = 0;
 
     bot.settings.findOne({ guildid: guildid }, async (err, guildsettings) => {
         if (err) {
@@ -147,6 +147,9 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
 
         } else {
 
+            // Log interaction when in testing mode
+            if (bot.config.loginmode == "test") logger("info", "interactionCreate.js", `Shard ${thisshard.id}: General interaction with id ${interaction.customId}`);
+
             switch (interaction.customId) {
                 case "welcomeLang":
                     if (!interaction.isSelectMenu()) return;
@@ -189,6 +192,24 @@ module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line
 
                     // Update guilds language as well
                     bot.settings.update({ guildid: interaction.guild.id }, { $set: { lang: interaction.values[0] }}, {}, () => { }); // Catch but ignore error
+                    break;
+
+                // Wastebucket button on modlog messages that should delete the message
+                case "modlogMessageDeleteButton":
+
+                    // Check if user is allowed to use this button (admin or the guild owner)
+                    if (guildsettings.adminroles.filter(element => interaction.member.roles.cache.has(element)).length > 0 || interaction.user.id == interaction.guild.ownerId) { // Either user has role or is owner of guild
+                        interaction.message.delete()
+                            .catch(err => interaction.reply({ content: `Error deleting message: ${err}`, ephemeral: true }));
+
+                    } else {
+
+                        // Send ephermal missing permissions error message
+                        interaction.reply({ content: bot.fn.usermissperm(bot.fn.lang(interaction.guild.id, guildsettings)), ephemeral: true });
+
+                        return;
+                    }
+
                     break;
 
                 default:

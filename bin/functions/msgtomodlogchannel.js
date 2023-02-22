@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 15:43:03
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:40:00
+ * Last Modified: 22.02.2023 18:39:59
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -65,7 +65,9 @@ module.exports.run = (bot, logger, guild, action, author, receiver, details) => 
         if (!receiver["username"]) receiver["username"] = "ID: " + receiver.userid;
         if (!receiver["discriminator"]) receiver["discriminator"] = "????";
 
-        var embed = {
+
+        // Construct the embed to send
+        let embed = {
             title: "",
             color: null,
             fields: [],
@@ -162,25 +164,32 @@ module.exports.run = (bot, logger, guild, action, author, receiver, details) => 
                 return logger("error", "msgtomodlogchannel.js", "Unsupported action: " + action);
         }
 
-        var modlogchannel = guild.channels.cache.get(guildsettings.modlogchannel);
 
-        if (!modlogchannel) { // Check if modlogchannel can't be found
+        // Construct the delete message button component
+        let buttonComponent = new Discord.ActionRowBuilder().addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId("modlogMessageDeleteButton") // Give the button an ID so that our interaction event handler knows what to do with it
+                .setEmoji("🗑️")
+                .setStyle(Discord.ButtonStyle.Secondary)
+        );
+
+
+        // Find our modlogchannel
+        let modlogchannel = guild.channels.cache.get(guildsettings.modlogchannel);
+
+        // Abort if modlogchannel can't be found
+        if (!modlogchannel) {
             bot.fn.msgtomodlogchannel(guild, "modlogmsgerr", author, receiver, [guildlang.general.modlogchannelnotfound.replace("channelid", guildsettings.modlogchannel), embed.title]);
             bot.settings.update({ guildid: guild.id }, { $set: { modlogchannel: bot.constants.defaultguildsettings.modlogchannel }}, {}, () => { }); // Reset setting
             return;
         }
 
-        if (!modlogchannel.permissionsFor(bot.user).has(Discord.PermissionFlagsBits.AddReactions)) embed.footer.text = guildlang.general.modlognoaddreactionsperm; // Change footer text
 
-        guild.channels.cache.get(guildsettings.modlogchannel).send({ embeds: [embed] })
-            .then((msg) => { // Don't need to ask shard manager
-                msg.react("🗑️")
-                    .then(res => {
-                        // Add res to monitorreactions db
-                        bot.monitorreactions.insert({ type: "modlog", msg: res.message.id, reaction: res._emoji.name, guildid: guild.id, allowedroles: guildsettings.adminroles, until: Date.now() + 31557600000 }, (err) => { if (err) logger("error", "msgtomodlogchannel.js", "Error inserting modlogmsg reaction to db: " + err); }); // Message also contains guild and timestamp | 31557600000 ms = 12 months
-                    })
-                    .catch(() => {}); // Reaction err catch -> ignore error
-            })
+        // Send message into modlogchannel with embed and delete button
+        guild.channels.cache.get(guildsettings.modlogchannel).send({
+            embeds: [embed],
+            components: [buttonComponent]
+        })
             .catch((err) => { // Sendmsg error catch
                 if (err) return bot.fn.msgtomodlogchannel(guild, "modlogmsgerr", author, receiver, [err, embed.title]); // Call this same function again to notify that modlogmsgs can't be sent (won't end in a loop because if no channel can be found on err then it will stop)
             });

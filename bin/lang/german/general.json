@@ -41,7 +41,6 @@
     "modlogchannelnotfound": "Fehler: Der Moderator-Logs Kanal (channelid) konnte nicht gefunden werden. Bitte korrigiere diesen Fehler indem du einen korrekten Kanal mit dem settings Befehl festlegst.",
     "modlogmsgerrtitle": "Fehler eine modlog Nachricht zu senden!",
     "modlogdeletewithreaction": "Klicke auf 🗑️ um die Nachricht zu löschen (Admins)",
-    "modlognoaddreactionsperm": "Der Bot hat keine Berechtigung auf diese Nachricht eine Reaktion hinzufügen.",
 
     "imagehyperlink": "Bild lädt nicht? Klick hier!",
 
