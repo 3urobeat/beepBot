@@ -3,15 +3,15 @@
  * Project: beepbot
  * Created Date: 12.01.2022 14:01:47
  * Author: 3urobeat
- * 
+ *
  * Last Modified: 19.01.2022 13:38:01
  * Modified By: 3urobeat
- * 
+ *
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>. 
+ * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 
@@ -29,7 +29,7 @@ const Discord = require('discord.js'); //eslint-disable-line
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     try {
-        let { body } = await require("superagent").get('http://aws.random.cat/meow')
+        let { body } = await require("superagent").get("http://aws.random.cat/meow");
 
         message.channel.send({
             embeds: [{
@@ -44,20 +44,20 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 timestamp: message.createdAt,
                 color: fn.randomhex()
             }]
-        })
+        });
 
     } catch (err) {
-        logger("error", "cat.js", "API Error: " + err)
-        message.channel.send(`random.cat API ${lang.general.error}: ${err}`)
+        logger("error", "cat.js", "API Error: " + err);
+        message.channel.send(`random.cat API ${lang.general.error}: ${err}`);
     }
-}
+};
 
 module.exports.info = {
     names: ["cat", "meow"],
     description: "cmd.otherfun.catinfodescription",
     usage: "",
     options: [],
-    accessableby: ['all'],
+    accessableby: ["all"],
     allowedindm: true,
     nsfwonly: false
-}
+};

@@ -3,33 +3,33 @@
  * Project: beepbot
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
- * 
+ *
  * Last Modified: 19.08.2022 20:01:43
  * Modified By: 3urobeat
- * 
+ *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>. 
+ * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 
-//This file starts all shards and can coordinate actions between them
+// This file starts all shards and can coordinate actions between them
 var bootstart  = 0;
-var bootstart  = Date.now()
+var bootstart  = Date.now();
 
-const Discord   = require('discord.js');
-const nedb      = require("@yetzt/nedb")
-const fs        = require("fs")
+const Discord   = require("discord.js");
+const nedb      = require("@yetzt/nedb");
+const fs        = require("fs");
 
-const tokenpath = require("../../token.json")
-const asciipath = require("./ascii.js")
-var   config    = require('./config.json')
-const constants = require("./constants.json")
+const tokenpath = require("../../token.json");
+const asciipath = require("./ascii.js");
+var   config    = require("./config.json");
+const constants = require("./constants.json");
 
-//Reference custom logger
-var logger      = require("./functions/logger.js").logger
+// Reference custom logger
+var logger      = require("./functions/logger.js").logger;
 
 
 /**
@@ -37,34 +37,34 @@ var logger      = require("./functions/logger.js").logger
  * @param {Array<String>} arr An Array with Strings to choose from
  * @returns {String} A random String from the provided array
  */
-var randomstring = arr => arr[Math.floor(Math.random() * arr.length)]
+var randomstring = arr => arr[Math.floor(Math.random() * arr.length)];
 
-process.on('unhandledRejection', (reason) => {
-    logger('error', 'controller.js', `Unhandled Rejection! Reason: ${reason.stack}`)
+process.on("unhandledRejection", (reason) => {
+    logger("error", "controller.js", `Unhandled Rejection! Reason: ${reason.stack}`);
 });
 
-process.on('uncaughtException', (reason) => {
-    logger('error', 'controller.js', `Uncaught Exception! Reason: ${reason.stack}`)
+process.on("uncaughtException", (reason) => {
+    logger("error", "controller.js", `Uncaught Exception! Reason: ${reason.stack}`);
 });
 
 /* ------------ Initialise startup ------------ */
-let ascii = randomstring(asciipath.ascii) //set random ascii for this bootup
+let ascii = randomstring(asciipath.ascii); // Set random ascii for this bootup
 
-logger("", "", "\n\n", true, true)
-logger('info', 'controller.js', `Initiating bootup sequence...`)
-logger("", "", `\n${ascii}\n`, true)
-logger('info', 'controller.js', "Loading...", true)
+logger("", "", "\n\n", true, true);
+logger("info", "controller.js", "Initiating bootup sequence...");
+logger("", "", `\n${ascii}\n`, true);
+logger("info", "controller.js", "Loading...", true);
 
-//Log the startup in the cmduse.txt file
-fs.appendFile("./bin/cmduse.txt", `\n\n[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, ' ').replace(/\..+/, '')}] Starting beepBot version ${config.version} in ${config.loginmode} mode\n`, err => {
-    if (err) logger('error', 'controller.js', "writing startup to cmduse.txt error: " + err)
+// Log the startup in the cmduse.txt file
+fs.appendFile("./bin/cmduse.txt", `\n\n[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, " ").replace(/\..+/, "")}] Starting beepBot version ${config.version} in ${config.loginmode} mode\n`, err => {
+    if (err) logger("error", "controller.js", "writing startup to cmduse.txt error: " + err);
 });
 
-if (process.platform == "win32") { //set node process name to find it in task manager etc.
-    process.title = `3urobeat's beepBot v${config.version} | ${process.platform}` //Windows allows long terminal/process names
+if (process.platform == "win32") { // Set node process name to find it in task manager etc.
+    process.title = `3urobeat's beepBot v${config.version} | ${process.platform}`; // Windows allows long terminal/process names
 } else {
-    process.stdout.write(`${String.fromCharCode(27)}]0;3urobeat's beepBot v${config.version} | ${process.platform}${String.fromCharCode(7)}`) //sets terminal title (thanks: https://stackoverflow.com/a/30360821/12934162)
-    process.title = `beepBot` //sets process title in task manager etc.
+    process.stdout.write(`${String.fromCharCode(27)}]0;3urobeat's beepBot v${config.version} | ${process.platform}${String.fromCharCode(7)}`); // Sets terminal title (thanks: https://stackoverflow.com/a/30360821/12934162)
+    process.title = "beepBot"; // Sets process title in task manager etc.
 }
 
 
