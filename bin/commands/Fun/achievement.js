@@ -4,7 +4,7 @@
  * Created Date: 09.01.2021 21:11:00
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:36:37
+ * Last Modified: 27.02.2023 15:52:52
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -37,12 +37,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (contents.length > 22) return message.channel.send(lang.cmd.otherfun.achievementtoolongtext);
 
     try {
-        let { body } = await require("superagent").get(`https://www.minecraftskinstealer.com/achievement/a.php?i=${rnd}&h=${encodeURIComponent(title)}&t=${encodeURIComponent(contents)}`);
+        let { body } = await require("superagent").get(`https://skinmc.net/en/achievement/${rnd}/${encodeURIComponent(title)}/${encodeURIComponent(contents)}`);
 
         message.channel.send({ files: [{ attachment: body }] });
     } catch (err) {
         logger("error", "achievement.js", "API Error: " + err);
-        message.channel.send(`minecraftskinstealer.com API ${lang.general.error}: ${err}`);
+        message.channel.send(`skinmc.net API ${lang.general.error}: ${err}`);
     }
 };
 
