@@ -19,6 +19,9 @@
     "magic8responses": ["Yes","Yep.","Outlook good","Most definitely yes","My sources say yes","I think yes","No","Definitely no","Probably not","Nope","My sources say no","Dont even think about it","Most likely no","Not sure","Maybe","I'll think about it..."],
     "magic8infodescription": "Answers even your toughest questions.",
 
+    "nobitchesmissingargs": "Error: You need to provide some text!",
+    "nobitchesinfodescription": "Sends a 'No Bitches?' meme with your text.",
+
     "rpsusage": "Provide one from the possibilities 'rock'/'paper'/'scissors' or their abbreviation 'r'/'p'/'s' as an argument\nto play rock paper scissors against the bot.",
     "rpsresponses": ["Rock", "Paper", "Scissors"],
     "rpswin": "You win!",
