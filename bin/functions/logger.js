@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 29.09.2022 14:54:53
+ * Last Modified: 27.02.2023 18:26:13
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -18,6 +18,10 @@
 // This file contains code of the logger function and is called by bot.js
 // I did this to reduce the amount of lines in bot.js to make finding stuff easier.
 
+
+const outputlogger = require("output-logger");
+
+
 /**
  * Logs text to the terminal and appends it to the output.txt file.
  * @param {String} type String that determines the type of the log message. Can be info, warn, error, debug or an empty string to not use the field.
@@ -28,7 +32,6 @@
  * @param {Boolean} logafterlogin Defines if the message should be logged after login
  */
 module.exports.logger = (type, origin, str, nodate, remove, animation, logafterlogin) => { // Function that passes args to my logger library and just exists to handle readyafterlogs atm
-    var outputlogger = require("output-logger"); // Look Mom, it's my own library!
 
     // Configure my logging library (https://github.com/HerrEurobeat/output-logger#options-1)
     outputlogger.options({
@@ -55,8 +58,6 @@ module.exports.logger = (type, origin, str, nodate, remove, animation, logafterl
  * @returns Array of the chosen animation
  */
 module.exports.logger.animation = (args) => {
-    var outputlogger = require("output-logger");
-
     return outputlogger.animation(args);
 };
 
@@ -65,7 +66,5 @@ module.exports.logger.animation = (args) => {
  * Stops any animation currently active
  */
 module.exports.logger.stopAnimation = () => {
-    var outputlogger = require("output-logger");
-
     return outputlogger.stopAnimation;
 };
