@@ -4,7 +4,7 @@
  * Created Date: 04.10.2020 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:41:53
+ * Last Modified: 27.02.2023 17:40:14
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -434,43 +434,20 @@ bot.on("ready", async function() {
 
 });
 
+
 /* ------------ Event Handlers: ------------ */
-bot.on("guildCreate", guild => {
-    require("./events/guildCreate.js").run(bot, logger, guild); // Call the run function of the file which contains the code of this event
-});
+bot.on("guildCreate",        (guild)              => require("./events/guildCreate.js").run(bot, logger, guild));
+bot.on("guildDelete",        (guild)              => require("./events/guildDelete.js").run(bot, logger, guild));
+bot.on("guildMemberAdd",     (member)             => require("./events/guildMemberAdd.js").run(bot, member));
+bot.on("guildMemberRemove",  (member)             => require("./events/guildMemberRemove.js").run(bot, member));
+bot.on("interactionCreate",  (interaction)        => require("./events/interactionCreate.js").run(bot, logger, interaction));
+bot.on("messageReactionAdd", (reaction, user)     => require("./events/messageReactionAdd.js").run(bot, logger, reaction, user));
+bot.on("voiceStateUpdate",   (oldstate, newstate) => require("./events/voiceStateUpdate.js").run(bot, oldstate, newstate));
 
-bot.on("guildDelete", guild => {
-    bot.shard.fetchClientValues("guilds.cache.size").then(res => { // Wait for promise
-        logger("info", "bot.js", `I have been removed from: ${guild.name} (${guild.id}). I'm now in ${res} servers.`);
-    });
-
-    servertosettings(guild, true); // True argument will remove function from db
-});
-
-bot.on("guildMemberAdd", member => {
-    require("./events/guildMemberAdd.js").run(bot, member); // Call the run function of the file which contains the code of this event
-});
-
-bot.on("guildMemberRemove", member => {
-    require("./events/guildMemberRemove.js").run(bot, member); // Call the run function of the file which contains the code of this event
-});
-
-bot.on("interactionCreate", interaction => {
-    require("./events/interactionCreate.js").run(bot, logger, interaction);
-});
-
-bot.on("messageReactionAdd", (reaction, user) => {
-    require("./events/messageReactionAdd.js").run(bot, logger, reaction, user); // Call the run function of the file which contains the code of this event
-});
-
-bot.on("voiceStateUpdate", (oldstate, newstate) => {
-    require("./events/voiceStateUpdate.js").run(bot, oldstate, newstate);
-});
 
 /* ------------ Message Handler: ------------ */
-bot.on("messageCreate", (message) => {
-    require("./events/message.js").run(bot, logger, message); // Call the run function of the file which contains the code of this event
-});
+bot.on("messageCreate",      (message)            => require("./events/message.js").run(bot, logger, message));
+
 
 logger("info", "bot.js", "Logging in...", false, true);
 bot.login(); // Token is provided by the shard manager
