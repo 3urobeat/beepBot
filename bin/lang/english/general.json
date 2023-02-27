@@ -18,7 +18,7 @@
     "details": "Details",
     "channels": "Channels",
     "areyousure": "Are you sure? (Reply with 'y' or 'n')",
-    "error": "Error: ",
+    "error": "Error",
     "anerroroccurred": "An error occurred: ",
     "pleasetryagain": "Please try again.",
     "dmerr": "I sadly wasn't able to send the user a DM. Error: ",

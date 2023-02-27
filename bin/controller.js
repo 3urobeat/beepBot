@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:42:15
+ * Last Modified: 27.02.2023 15:21:05
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -118,7 +118,7 @@ Manager.on('shardCreate', (shard) => {
     }
 });
 
-if ((process.env.LOGNAME !== 'tomg' && process.env.LOGNAME !== 'pi' && process.env.USER !== 'tom') || (require('os').hostname() !== 'Toms-Hoellenmaschine' && require('os').hostname() !== 'raspberrypi' && require('os').hostname() !== 'Toms-Thinkpad')) {
+if ((process.env.LOGNAME !== 'tomg' && process.env.LOGNAME !== 'pi' && process.env.USER !== 'tom') || (require('os').hostname() !== 'Toms-PC' && require('os').hostname() !== 'raspberrypi' && require('os').hostname() !== 'Toms-Thinkpad')) {
     let errormsg = '\x1b[31m\x1b[7mERROR\x1b[0m \x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \n\x1b[0m' + constants.botinvitelink;
     let filewrite = `\nconsole.log('\x1b[31m\x1b[7mERROR\x1b[0m \x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}')\nprocess.kill(0)\n`
     logger("", "", errormsg)
