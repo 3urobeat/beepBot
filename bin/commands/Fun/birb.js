@@ -4,7 +4,7 @@
  * Created Date: 12.01.2022 14:01:56
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:36:37
+ * Last Modified: 27.02.2023 15:55:10
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -29,7 +29,7 @@ const Discord = require('discord.js'); //eslint-disable-line
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     try {
-        let { body } = await require("superagent").get("https://some-random-api.ml/img/birb");
+        let { body } = await require("superagent").get("https://some-random-api.ml/img/bird");
 
         message.channel.send({
             embeds: [{
