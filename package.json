@@ -8,9 +8,9 @@
     "discord.js": "^14.7.1",
     "download": "^8.0.0",
     "lodash": "^4.17.21",
-    "output-logger": "^2.2.3",
+    "output-logger": "^2.2.4",
     "superagent": "^8.0.9",
-    "systeminformation": "^5.17.9"
+    "systeminformation": "^5.17.11"
   },
   "scripts": {
     "start": "node start.js"
