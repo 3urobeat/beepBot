@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 11.03.2023 22:08:52
+ * Last Modified: 11.03.2023 23:46:47
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -45,38 +45,59 @@ module.exports.run = (bot, logger, guild, removeentry) => {
         return;
     }
 
-    
-    if (!guild.id) return logger("error", "servertosettings.js", "Can't write guild to settings because guild id is undefined!"); // Missing guildid will make entry unuseable
 
+    // Check if guild id is missing as it will make the entry unuseable
+    if (!guild.id) return logger("error", "servertosettings.js", "Can't write guild to settings because guild id is undefined!");
+
+
+    // Reset expireTimestamp for existing db entries for this guild
+    bot.settings.update(  { guildid: guild.id }, { $unset: { expireTimestamp: true } }, { multi: true }, (err) => { if (err) logDbErr(err); });
+    bot.timedbans.update( { guildid: guild.id }, { $unset: { expireTimestamp: true } }, { multi: true }, (err) => { if (err) logDbErr(err); });
+    bot.timedmutes.update({ guildid: guild.id }, { $unset: { expireTimestamp: true } }, { multi: true }, (err) => { if (err) logDbErr(err); });
+    bot.levelsdb.update(  { guildid: guild.id }, { $unset: { expireTimestamp: true } }, { multi: true }, (err) => { if (err) logDbErr(err); });
+
+
+    // Fetch existing settings entry for this guild if there is one
     bot.settings.findOne({ guildid: guild.id }, (err, data) => {
-        // Adding prefix to server nickname
-        if (guild.members.cache.get(bot.user.id).nickname === null) { // Bot has no nickname, start nickname with username
-            var nickname = bot.user.username;
+
+        // Get current name or existing nickname to add prefix to
+        let nickname;
+
+        if (!guild.members.cache.get(bot.user.id).nickname) { // Bot has no nickname, start nickname with username
+            nickname = bot.user.username;
         } else {
-            if (!data || !data.prefix) {
-                var nickname = guild.members.cache.get(String(bot.user.id).nickname); // Get nickname without trying to replace old prefix if server has no entry in settings.json yet
-            } else {
-                var nickname = guild.members.cache.get(String(bot.user.id)).nickname.replace(` [${data.prefix}]`, "");
-            }
+            if (!data || !data.prefix) nickname = guild.members.cache.get(String(bot.user.id).nickname); // Get nickname without trying to replace old prefix if server has no entry in settings db yet
+                else nickname = guild.members.cache.get(String(bot.user.id)).nickname.replace(` [${data.prefix}]`, ""); // Replace old prefix in nickname
         }
 
-        if (bot.config.loginmode == "normal") {
-            var prefix = bot.constants.DEFAULTPREFIX;
+
+        // Get the correct prefix and update nickname
+        let prefix;
+
+        if (bot.config.loginmode == "normal") prefix = bot.constants.DEFAULTPREFIX;
+            else prefix = bot.constants.DEFAULTTESTPREFIX;
+
+        if (!nickname) nickname = bot.user.username; // Since nickname can still somehow be undefined check one last time
+        
+        guild.members.cache.get(String(bot.user.id)).setNickname(`${nickname} [${prefix}]`).catch(() => {}); // Set nickname to existing name plus prefix and catch error but ignore it
+
+
+        // Add entry with default settings to db if no entry exists yet
+        if (!data) {
+            let defaultguildsettings = bot.constants.defaultguildsettings;
+            defaultguildsettings["guildid"] = guild.id;
+            defaultguildsettings["prefix"] = prefix;
+
+            logger("info", "servertosettings.js", `Adding ${guild.id} to settings database with default settings...`, false, true);
+
+            bot.settings.insert(defaultguildsettings, (err) => { if (err) logger("error", "servertosettings.js", "Error inserting guild: " + err); });
+
         } else {
-            var prefix = bot.constants.DEFAULTTESTPREFIX;
+
+            logger("info", "servertosettings.js", `An existing entry was found for guild ${guild.id} in settings.db. Reusing existing entry with removed expiration timestamp.`, false, true);
+            
         }
 
-        if (nickname == undefined) var nickname = bot.user.username; // Since nickname can still somehow be undefined check one last time
-        guild.members.cache.get(String(bot.user.id)).setNickname(`${nickname} [${prefix}]`).catch(() => {}); // Catch error but ignore it
-
-        let defaultguildsettings = bot.constants.defaultguildsettings;
-        defaultguildsettings["guildid"] = guild.id;
-        defaultguildsettings["prefix"] = prefix;
-
-        logger("info", "servertosettings.js", `Adding ${guild.id} to settings database with default settings...`, false, true);
-        if (data) bot.settings.remove({ guildid: guild.id }, (err) => { if (err) logger("error", "servertosettings.js", `Error removing guild ${guild.id}: ${err}`); });
-
-        bot.settings.insert(defaultguildsettings, (err) => { if (err) logger("error", "servertosettings.js", "Error inserting guild: " + err); });
     });
 
 };
