@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 18.11.2021 20:26:58
+ * Last Modified: 11.03.2023 22:08:52
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -25,16 +25,27 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Function} logger Reference to the logger function
  * @param {Discord.Guild} guild The Discord guild class
- * @param {Boolean} removeentry If true the guild will just be removed from the db and nothing else will be done
+ * @param {Boolean} removeentry Set to true if this function is called from guildDelete event. It will mark db entries for this server to expire in 7 days.
  */
 module.exports.run = (bot, logger, guild, removeentry) => {
-    // If removeentry is true just remove entry and stop further execution
+
+    // If removeentry is true set all db entries to expire in 7 days and stop further execution
     if (removeentry) {
-        logger("info", "servertosettings.js", `removeentry: Removing ${guild.id} from settings database...`, false, true);
-        bot.settings.remove({ guildid: guild.id }, (err) => { if (err) logger("error", "servertosettings.js", `Error removing guild ${guild.id}: ${err}`); });
+        logger("info", "servertosettings.js", `Marking all database entries for guild ${guild.id} to expire in 7 days...`, false, true);
+
+        // Helper function that avoids having to copy paste the same msg and makes changing it easier
+        function logDbErr(err) { logger("error", "servertosettings.js", `Error updating db of guild ${guildid}. Error: ${err}`); }
+
+        // Add or update expireTimestamp in all databases for this guild id
+        bot.settings.update(  { guildid: guild.id }, { $set: { expireTimestamp: Date.now() + 6.048e+8 } }, { multi: true }, (err) => { if (err) logDbErr(err); });
+        bot.timedbans.update( { guildid: guild.id }, { $set: { expireTimestamp: Date.now() + 6.048e+8 } }, { multi: true }, (err) => { if (err) logDbErr(err); });
+        bot.timedmutes.update({ guildid: guild.id }, { $set: { expireTimestamp: Date.now() + 6.048e+8 } }, { multi: true }, (err) => { if (err) logDbErr(err); });
+        bot.levelsdb.update(  { guildid: guild.id }, { $set: { expireTimestamp: Date.now() + 6.048e+8 } }, { multi: true }, (err) => { if (err) logDbErr(err); });
+        
         return;
     }
 
+    
     if (!guild.id) return logger("error", "servertosettings.js", "Can't write guild to settings because guild id is undefined!"); // Missing guildid will make entry unuseable
 
     bot.settings.findOne({ guildid: guild.id }, (err, data) => {
@@ -67,4 +78,5 @@ module.exports.run = (bot, logger, guild, removeentry) => {
 
         bot.settings.insert(defaultguildsettings, (err) => { if (err) logger("error", "servertosettings.js", "Error inserting guild: " + err); });
     });
+
 };
