@@ -7,9 +7,9 @@ This document does not supersede the [Discord Developer Terms of Service](https:
 ## Terminology
 **- the bot**: The Discord profile shown as user `beepBot#5190` which is controlled by this application  
 **- me**: The bot developer, owner and host shown as user `3urobeat#0975`  
-**- server manager**: Anyone who has permissions to add/remove bots on a discord server  
-**- server member**: Anyone who is a member of a discord server the bot  
-**- guild**: A Discord server, also called guild  
+**- server manager**: Anyone who has permission to add/remove bots on a discord server  
+**- server member**: Anyone who is a member of a discord server the bot is on  
+**- guild**: Synonym for a Discord server  
 
 &nbsp;  
 
@@ -40,7 +40,8 @@ Use the `settings` command to enable/disable the level system and modlog message
 The data listed above is only stored to provide functionality and provide me information about when the bot is added to a server.  
 Your data is **not** being analyzed except for when needed to provide functionality (for example a user using the command `rank` to see their level).  
   
-All data is stored on my personal, protected Linux server, in a database or log text file and deleted when not needed anymore.  
+All data is stored on my personal, protected Linux server, in a database or log text file.  
+The data is only kept for as long as needed. If you remove the bot from your server the data will be deleted after 7 days.  
 The server is kept up to date, is password and Cloudflare protected and no one else has physical or remote access to it.  
 All data is being backed up every day to an encrypted and 2FA protected online storage to be able to recover from a potential data loss.  
 
@@ -51,8 +52,8 @@ Your data is **not** being shared with any third parties!
 ### **Data access and removal:**
 To access your data, please contact me on the [Discord Support Server](https://discord.gg/9Yaj5qSbc8).  
   
-Your data is only stored for as long as needed.  
-To get your data deleted manually you can remove the bot from your server and contact me on the [Discord Support Server](https://discord.gg/9Yaj5qSbc8).  
+To get your data deleted, remove the bot from your server.  
+If the bot won't be readded within 7 days then the data will be deleted.  
   
 &nbsp;  
 

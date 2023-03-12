@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 27.02.2023 15:21:05
+ * Last Modified: 12.03.2023 11:42:34
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -150,10 +150,12 @@ monitorreactions.loadDatabase((err) => { //needs to be loaded with each iteratio
     })
 });
 
+
 if(typeof checkm8 == "undefined"){process.stdout.write("\x07");logger("", "", `\n\n\x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}\x1b[0m`,true);process.exit(0)}
 if(checkm8!="b754jfJNgZWGnzogvl<rsHGTR4e368essegs9<"){process.stdout.write("\x07");logger(`\n\n\x1b[31mThis program is not intended do be used on a different machine! Please invite the bot to your Discord server via this link: \x1b[0m${constants.botinvitelink}\x1b[0m`,true);process.exit(0)}
 
-//Unban checker
+
+// Unban checker
 const timedbans = new nedb('./data/timedbans.db') // Initialize database
     
 let lastTempBanCheck = Date.now() // This is useful because intervals can get unprecise over time
@@ -207,7 +209,8 @@ var tempbanloop = setInterval(() => {
     })
 }, 10000); //10 seconds
 
-//Unmute checker
+
+// Unmute checker
 const timedmutes = new nedb('./data/timedmutes.db') //Initialize database
     
 let lastTempMuteCheck = Date.now() //this is useful because intervals can get unprecise over time
@@ -289,3 +292,59 @@ var timedmuteloop = setInterval(() => {
         })
     })
 }, 10000); //10 seconds
+
+
+// Database 7 days data expiration
+const settings = new nedb('./data/settings.db') // Initialize database
+const levelsdb = new nedb('./data/levels.db') // Initialize database
+
+let lastDbExpirationCheck = Date.now() - 360000; // Subtract 1 hour so that the first interval will already get executed
+
+setInterval(() => {
+    if (lastDbExpirationCheck + 360000 > Date.now()) return; // Last change is more recent than 1 hour
+
+    // Load all dbs to get changes
+    settings.loadDatabase((err)   => { if (err) return logger("warn", "controller.js", "Error loading settings database: " + err) });
+    timedbans.loadDatabase((err)  => { if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
+    timedmutes.loadDatabase((err) => { if (err) return logger("warn", "controller.js", "Error loading timedmutes database: " + err) });
+    levelsdb.loadDatabase((err)   => { if (err) return logger("warn", "controller.js", "Error loading levelsdb database: " + err) });
+
+
+    // Check all databases for expired entries and remove them
+    settings.remove({ expireTimestamp: { $lte: Date.now() } }, { multi: true }, (err, num) => { // Find all entries with expireTimestamp less than now
+        if (err) logger("error", "controller.js", `Error removing all settings entries that are greater than ${Date.now()}: ${err}`, true);
+
+        if (num > 0) {
+            logger("info", "controller.js", `Cleaned up settings db and removed ${num} entries!`, true);
+            settings.persistence.compactDatafile();
+        }
+    });
+
+    timedbans.remove({ expireTimestamp: { $lte: Date.now() } }, { multi: true }, (err, num) => { // Find all entries with expireTimestamp less than now
+        if (err) logger("error", "controller.js", `Error removing all timedbans entries that are greater than ${Date.now()}: ${err}`, true);
+
+        if (num > 0) {
+            logger("info", "controller.js", `Cleaned up timedbans db and removed ${num} entries!`, true);
+            timedbans.persistence.compactDatafile();
+        }
+    });
+
+    timedmutes.remove({ expireTimestamp: { $lte: Date.now() } }, { multi: true }, (err, num) => { // Find all entries with expireTimestamp less than now
+        if (err) logger("error", "controller.js", `Error removing all timedmutes entries that are greater than ${Date.now()}: ${err}`, true);
+
+        if (num > 0) {
+            logger("info", "controller.js", `Cleaned up timedmutes db and removed ${num} entries!`, true);
+            timedmutes.persistence.compactDatafile();
+        }
+    });
+
+    levelsdb.remove({ expireTimestamp: { $lte: Date.now() } }, { multi: true }, (err, num) => { // Find all entries with expireTimestamp less than now
+        if (err) logger("error", "controller.js", `Error removing all levelsdb entries that are greater than ${Date.now()}: ${err}`, true);
+
+        if (num > 0) {
+            logger("info", "controller.js", `Cleaned up levelsdb db and removed ${num} entries!`, true);
+            levelsdb.persistence.compactDatafile();
+        }
+    });
+
+}, 60000); // 60 seconds
