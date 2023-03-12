@@ -4,7 +4,7 @@
  * Created Date: 01.10.2020 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 12.03.2023 01:09:55
+ * Last Modified: 12.03.2023 11:42:34
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -304,10 +304,10 @@ setInterval(() => {
     if (lastDbExpirationCheck + 360000 > Date.now()) return; // Last change is more recent than 1 hour
 
     // Load all dbs to get changes
-    settings.loadDatabase((err) => { if (err) return logger("warn", "controller.js", "Error loading settings database: " + err) });
-    timedbans.loadDatabase((err) => { if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
+    settings.loadDatabase((err)   => { if (err) return logger("warn", "controller.js", "Error loading settings database: " + err) });
+    timedbans.loadDatabase((err)  => { if (err) return logger("warn", "controller.js", "Error loading timedbans database: " + err) });
     timedmutes.loadDatabase((err) => { if (err) return logger("warn", "controller.js", "Error loading timedmutes database: " + err) });
-    levelsdb.loadDatabase((err) => { if (err) return logger("warn", "controller.js", "Error loading levelsdb database: " + err) });
+    levelsdb.loadDatabase((err)   => { if (err) return logger("warn", "controller.js", "Error loading levelsdb database: " + err) });
 
 
     // Check all databases for expired entries and remove them
