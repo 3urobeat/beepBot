@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 11.03.2023 23:46:47
+ * Last Modified: 12.03.2023 11:42:21
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -49,6 +49,12 @@ module.exports.run = (bot, logger, guild, removeentry) => {
     // Check if guild id is missing as it will make the entry unuseable
     if (!guild.id) return logger("error", "servertosettings.js", "Can't write guild to settings because guild id is undefined!");
 
+
+    // Reload databases to make sure removed data is not being reused
+    bot.settings.loadDatabase((err)   => { if (err) return logger("warn", "servertosettings.js", "Error loading settings database: " + err) });
+    bot.timedbans.loadDatabase((err)  => { if (err) return logger("warn", "servertosettings.js", "Error loading timedbans database: " + err) });
+    bot.timedmutes.loadDatabase((err) => { if (err) return logger("warn", "servertosettings.js", "Error loading timedmutes database: " + err) });
+    bot.levelsdb.loadDatabase((err)   => { if (err) return logger("warn", "servertosettings.js", "Error loading levelsdb database: " + err) });
 
     // Reset expireTimestamp for existing db entries for this guild
     bot.settings.update(  { guildid: guild.id }, { $unset: { expireTimestamp: true } }, { multi: true }, (err) => { if (err) logDbErr(err); });
