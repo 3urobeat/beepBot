@@ -4,7 +4,7 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 12.03.2023 11:42:21
+ * Last Modified: 12.03.2023 11:55:19
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -29,19 +29,19 @@ const Discord = require('discord.js'); //eslint-disable-line
  */
 module.exports.run = (bot, logger, guild, removeentry) => {
 
+    // Helper function that avoids having to copy paste the same msg and makes changing it easier
+    function logDbErr(err) { logger("error", "servertosettings.js", `Error updating db of guild ${guild.id}. Error: ${err}`); } // eslint-ignore-line no-inner-declarations
+
     // If removeentry is true set all db entries to expire in 7 days and stop further execution
     if (removeentry) {
         logger("info", "servertosettings.js", `Marking all database entries for guild ${guild.id} to expire in 7 days...`, false, true);
-
-        // Helper function that avoids having to copy paste the same msg and makes changing it easier
-        function logDbErr(err) { logger("error", "servertosettings.js", `Error updating db of guild ${guildid}. Error: ${err}`); }
 
         // Add or update expireTimestamp in all databases for this guild id
         bot.settings.update(  { guildid: guild.id }, { $set: { expireTimestamp: Date.now() + 6.048e+8 } }, { multi: true }, (err) => { if (err) logDbErr(err); });
         bot.timedbans.update( { guildid: guild.id }, { $set: { expireTimestamp: Date.now() + 6.048e+8 } }, { multi: true }, (err) => { if (err) logDbErr(err); });
         bot.timedmutes.update({ guildid: guild.id }, { $set: { expireTimestamp: Date.now() + 6.048e+8 } }, { multi: true }, (err) => { if (err) logDbErr(err); });
         bot.levelsdb.update(  { guildid: guild.id }, { $set: { expireTimestamp: Date.now() + 6.048e+8 } }, { multi: true }, (err) => { if (err) logDbErr(err); });
-        
+
         return;
     }
 
@@ -51,10 +51,10 @@ module.exports.run = (bot, logger, guild, removeentry) => {
 
 
     // Reload databases to make sure removed data is not being reused
-    bot.settings.loadDatabase((err)   => { if (err) return logger("warn", "servertosettings.js", "Error loading settings database: " + err) });
-    bot.timedbans.loadDatabase((err)  => { if (err) return logger("warn", "servertosettings.js", "Error loading timedbans database: " + err) });
-    bot.timedmutes.loadDatabase((err) => { if (err) return logger("warn", "servertosettings.js", "Error loading timedmutes database: " + err) });
-    bot.levelsdb.loadDatabase((err)   => { if (err) return logger("warn", "servertosettings.js", "Error loading levelsdb database: " + err) });
+    bot.settings.loadDatabase((err)   => { if (err) return logger("warn", "servertosettings.js", "Error loading settings database: " + err); });
+    bot.timedbans.loadDatabase((err)  => { if (err) return logger("warn", "servertosettings.js", "Error loading timedbans database: " + err); });
+    bot.timedmutes.loadDatabase((err) => { if (err) return logger("warn", "servertosettings.js", "Error loading timedmutes database: " + err); });
+    bot.levelsdb.loadDatabase((err)   => { if (err) return logger("warn", "servertosettings.js", "Error loading levelsdb database: " + err); });
 
     // Reset expireTimestamp for existing db entries for this guild
     bot.settings.update(  { guildid: guild.id }, { $unset: { expireTimestamp: true } }, { multi: true }, (err) => { if (err) logDbErr(err); });
@@ -84,7 +84,7 @@ module.exports.run = (bot, logger, guild, removeentry) => {
             else prefix = bot.constants.DEFAULTTESTPREFIX;
 
         if (!nickname) nickname = bot.user.username; // Since nickname can still somehow be undefined check one last time
-        
+
         guild.members.cache.get(String(bot.user.id)).setNickname(`${nickname} [${prefix}]`).catch(() => {}); // Set nickname to existing name plus prefix and catch error but ignore it
 
 
@@ -101,7 +101,7 @@ module.exports.run = (bot, logger, guild, removeentry) => {
         } else {
 
             logger("info", "servertosettings.js", `An existing entry was found for guild ${guild.id} in settings.db. Reusing existing entry with removed expiration timestamp.`, false, true);
-            
+
         }
 
     });
