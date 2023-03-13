@@ -4,7 +4,7 @@
  * Created Date: 02.08.2020 22:07:00
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:36:37
+ * Last Modified: 13.03.2023 21:03:11
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -165,7 +165,8 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
 
     if (!args[0]) args[0] = "";
 
-    const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 10000});
+    const filter    = m => m.author.id === message.author.id;
+    const collector = message.channel.createMessageCollector({ filter, time: 10000 });
 
     switch(args[0].toLowerCase()) {
         case "-h":

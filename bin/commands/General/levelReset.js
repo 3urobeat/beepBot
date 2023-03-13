@@ -4,7 +4,7 @@
  * Created Date: 13.03.2023 19:03:48
  * Author: 3urobeat
  *
- * Last Modified: 13.03.2023 19:59:52
+ * Last Modified: 13.03.2023 21:02:05
  * Modified By: 3urobeat
  *
  * Copyright (c) 2023 3urobeat <https://github.com/HerrEurobeat>
@@ -42,9 +42,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         message.channel.send(lf.levelResetuserconfirm.replace("username", `${resetUser.username}#${resetUser.discriminator}`).replace("userid", resetUser.id));
 
         // Define message collector and set timeout to 15 sec
-        const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 15000 });
+        const filter    = m => m.author.id === message.author.id;
+        const collector = message.channel.createMessageCollector({ filter, time: 15000 });
 
-        collector.on("collect", async (msg) => {
+        collector.on("collect", (msg) => {
             if (message.author.id !== msg.author.id) return; // Only the original author is allowed to answer
 
             if (msg.content == "y") {
@@ -71,9 +72,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         message.channel.send(lf.levelResetconfirm);
 
         // Define message collector and set timeout to 15 sec
-        const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 15000});
+        const filter    = m => m.author.id === message.author.id;
+        const collector = message.channel.createMessageCollector({ filter, time: 15000 });
 
-        collector.on("collect", async (msg) => {
+        collector.on("collect", (msg) => {
             if (message.author.id !== msg.author.id) return; // Only the original author is allowed to answer
 
             if (msg.content == "y") {
