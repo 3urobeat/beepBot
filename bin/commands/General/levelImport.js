@@ -4,7 +4,7 @@
  * Created Date: 12.01.2022 12:19:50
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:36:37
+ * Last Modified: 13.03.2023 21:02:44
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 3urobeat <https://github.com/HerrEurobeat>
@@ -33,7 +33,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     message.channel.send(lang.cmd.othergeneral.levelImportconfirm);
 
     // Define message collector and set timeout to 15 sec
-    const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 15000});
+    const filter    = m => m.author.id === message.author.id;
+    const collector = message.channel.createMessageCollector({ filter, time: 15000 });
 
     collector.on("collect", async (msg) => {
         if (message.author.id !== msg.author.id) return; // Only the original author is allowed to answer
