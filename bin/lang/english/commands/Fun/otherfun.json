@@ -29,5 +29,6 @@
     "rpsloose": "You lost!",
     "rpsinfodescription": "Play rock paper scissors against the bot!",
 
+    "xkcdidnotfound": "Error: I couldn't find any comic with that ID.",
     "xkcdinfodescription": "Sends the latest XKCD comic or a random one if the word \"random\" is provided as argument."
 }
