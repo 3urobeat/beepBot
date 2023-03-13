@@ -29,5 +29,6 @@
     "rpsloose": "Du verlierst!",
     "rpsinfodescription": "Spiel Schere Stein Papier gegen den Bot!",
 
+    "xkcdidnotfound": "Fehler: Ich konnte keinen Comic mit dieser ID finden.",
     "xkcdinfodescription": "Sendet den neusten XKCD Comic, oder einen Zufälligen wenn das Wort \"random\" angegeben wurde."
 }

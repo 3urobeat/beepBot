@@ -4,7 +4,7 @@
  * Created Date: 16.12.2021 11:31:39
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:36:37
+ * Last Modified: 13.03.2023 12:47:01
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
@@ -54,9 +54,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         }]
     };
 
-    // Send random xkcd or todays comic
-    if (args[0] && args[0] == "random") {
-        try {
+
+    try {
+
+        // Send random xkcd, specifc one or todays comic
+        if (args[0] && args[0] == "random") {
+
             var random = Math.floor(Math.random() * maxNum) + 1; // Get ra random number between 0 and maxNum
 
             let { body } = await require("superagent").get(`https://xkcd.com/${random}/info.0.json`);
@@ -73,13 +76,27 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             message.channel.send(msg);
 
-        } catch (err) {
-            logger("error", "xkcd.js", "API Error: " + err);
-            message.channel.send(`xkcd.com 4k API ${lang.general.error}: ${err}`);
-        }
+        } else if (args[0] && !isNaN(Number(args[0]))) {
 
-    } else {
-        try {
+            // Check if provided ID is greater than the latest released comic
+            if (Number(args[0]) > maxNum) return message.channel.send(lang.cmd.otherfun.xkcdidnotfound);
+
+            let { body } = await require("superagent").get(`https://xkcd.com/${Number(args[0])}/info.0.json`);
+
+            // Make dates great again
+            if (body.day < 10) body.day = "0" + body.day.toString();
+            if (body.month < 10) body.month = "0" + body.month.toString();
+
+            msg.embeds[0].title       = body.safe_title;
+            msg.embeds[0].description = body.alt;
+            msg.embeds[0].url         = "https://xkcd.com/" + random;
+            msg.embeds[0].image.url   = body.img;
+            msg.embeds[0].footer.text = `XKCD #${body.num} - ${body.day}.${body.month}.${body.year}`;
+
+            message.channel.send(msg);
+
+        } else {
+
             let { body } = await require("superagent").get("https://xkcd.com/info.0.json");
 
             // Make dates great again
@@ -94,11 +111,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             message.channel.send(msg);
 
-        } catch (err) {
-            logger("error", "xkcd.js", "API Error: " + err);
-            message.channel.send(`xkcd.com API ${lang.general.error}: ${err}`);
         }
 
+    } catch (err) {
+        logger("error", "xkcd.js", "API Error: " + err);
+        message.channel.send(`xkcd.com API ${lang.general.error}: ${err}`);
     }
 
 };
@@ -106,13 +123,19 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 module.exports.info = {
     names: ["xkcd"],
     description: "cmd.otherfun.xkcdinfodescription",
-    usage: "[\"random\"]",
+    usage: "[comicID/\"random\"]",
     options: [
         {
             name: "random",
             description: "Gets a random comic instead of the latest one",
             required: false,
             type: Discord.ApplicationCommandOptionType.Boolean
+        },
+        {
+            name: "id",
+            description: "Gets a specific comic by ID instead of the latest one",
+            required: false,
+            type: Discord.ApplicationCommandOptionType.Number
         }
     ],
     accessableby: ["all"],
