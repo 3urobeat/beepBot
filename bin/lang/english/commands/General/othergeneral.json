@@ -7,5 +7,12 @@
     "levelImportnodata": "Error: It looks like Mee6 has no XP/Level progress data for this guild!",
     "levelImportdatafound": "Found XP/Level progress of useramount users! Writing data into database...",
     "levelImportfinished": "Successfully imported data! I now have XP/Level data of useramount users from this server in my database.\nCheckout the leaderboard:",
-    "levelImportinfodescription": "Imports your servers XP and Levels from Mee6 to continue with your progress with this level system."
+    "levelImportinfodescription": "Imports your servers XP and Levels from Mee6 to continue with your progress with this level system.",
+
+    "levelResetuserconfirm": "Are you sure that you want to reset the XP and level progress of user username (userid)?\nThis step cannot be reversed.\n\nPlease reply with 'y' to confirm or 'n' to abort in the next 15 seconds.",
+    "levelResetusernotfound": "Error: I was unable to find an database entry for this user!",
+    "levelResetconfirm": "Are you sure that you want to reset the XP and level progress of every user on this server?\nThis step cannot be reversed.\n\nPlease reply with 'y' to confirm or 'n' to abort in the next 15 seconds.",
+    "levelResetaborted": "Reset aborted.",
+    "levelResetfinished": "XP and level progress of useramount user(s) was reset successfully.",
+    "levelResetinfodescription": "Resets the XP, level and message count of every or one specific user on this server back to 0."
 }

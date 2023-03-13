@@ -7,5 +7,12 @@
     "levelImportnodata": "Fehler: Es scheint als hätte Mee6 keine XP/Level Fortschritt-Daten für diesen Server gespeichert!",
     "levelImportdatafound": "XP/Level Fortschritt von useramount Nutzern gefunden! Daten werden in Datenbank geschrieben...",
     "levelImportfinished": "Daten erfolgreich importiert! Ich habe nun XP/Level Fortschritt-Daten von useramount Nutzern dieses Servers in meiner Datenbank.\nSchau dir die Bestenliste an:",
-    "levelImportinfodescription": "Importiert den XP und Level Fortschritt dieses Servers von Mee6, um ihn mit diesem Levelsystem zu benutzen."
+    "levelImportinfodescription": "Importiert den XP und Level Fortschritt dieses Servers von Mee6, um ihn mit diesem Levelsystem zu benutzen.",
+
+    "levelResetuserconfirm": "Bist du dir sicher dass du den XP und Level Fortschritt des Nutzers username (userid) zurücksetzen möchtest?\nDieser Schritt kann nicht rückgängig gemacht werden!\n\nBitte antworte in den nächsten 15 Sekunden mit 'y' um zu bestätigen oder mit 'n' um abzubrechen.",
+    "levelResetusernotfound": "Fehler: Ich konnte keinen Eintrag für diesen Nutzer in der Datenbank finden!",
+    "levelResetconfirm": "Bist du dir sicher dass du den XP und Level Fortschritt für jeden Nutzer dieses Servers auf 0 zurücksetzen möchtest?\nDieser Schritt kann nicht rückgängig gemacht werden!\n\nBitte antworte in den nächsten 15 Sekunden mit 'y' um zu bestätigen oder mit 'n' um abzubrechen.",
+    "levelResetaborted": "Reset abgebrochen.",
+    "levelResetfinished": "Die XP und Level Fortschritte von useramount Nutzer(n) wurde(n) erfolgreich zurückgesetzt.",
+    "levelResetinfodescription": "Setzt den XP und Level Fortschritt, sowie Nachrichtenanzahl für jeden oder einen spezifischen Nutzer dieses Servers auf 0 zurück."
 }
