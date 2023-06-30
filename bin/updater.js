@@ -4,10 +4,10 @@
  * Created Date: 19.01.2021 22:36:00
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:34:28
+ * Last Modified: 30.06.2023 09:44:28
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
+ * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -23,7 +23,7 @@ const oldconfig = Object.assign(require("./config.json")); // Get content of old
 var logger = require("./functions/logger.js").logger; // Custom logger
 
 
-const url = "https://github.com/HerrEurobeat/beepBot/archive/master.zip";
+const url = "https://github.com/3urobeat/beepBot/archive/master.zip";
 const dontdelete = [".git", "node_modules", "data", ".eslintrc.json", "beepBot.code-workspace", "changelog.txt", "output.txt"];
 
 logger("", "", "", true);

@@ -4,10 +4,10 @@
  * Created Date: 07.02.2021 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 27.02.2023 18:26:13
+ * Last Modified: 30.06.2023 09:44:28
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
+ * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -33,7 +33,7 @@ const outputlogger = require("output-logger");
  */
 module.exports.logger = (type, origin, str, nodate, remove, animation, logafterlogin) => { // Function that passes args to my logger library and just exists to handle readyafterlogs atm
 
-    // Configure my logging library (https://github.com/HerrEurobeat/output-logger#options-1)
+    // Configure my logging library (https://github.com/3urobeat/output-logger#options-1)
     outputlogger.options({
         msgstructure: `[${outputlogger.Const.ANIMATION}] [${outputlogger.Const.TYPE} | ${outputlogger.Const.ORIGIN}] [${outputlogger.Const.DATE}] ${outputlogger.Const.MESSAGE}`,
         paramstructure: [outputlogger.Const.TYPE, outputlogger.Const.ORIGIN, outputlogger.Const.MESSAGE, "nodate", "remove", outputlogger.Const.ANIMATION],

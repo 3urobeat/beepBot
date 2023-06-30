@@ -5,11 +5,14 @@
 	<p></p>
 </div>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<div align="center">
+
 [![nodejs](https://img.shields.io/badge/discord.js-v13-brightgreen)](https://discord.js.org)
-[![Star](https://img.shields.io/badge/-Give%20this%20repo%20a%20star!-yellow)](https://github.com/HerrEurobeat/beepBot)
+[![Star](https://img.shields.io/badge/-Give%20this%20repo%20a%20star!-yellow)](https://github.com/3urobeat/beepBot)
 [![Invite](https://img.shields.io/badge/Invite%20me%20to%20your%20server!-blue)](https://discord.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=8)
 [![Donate](https://img.shields.io/badge/donate-%241-orange)](https://paypal.me/3urobeat)
+
+</div>
 
 &nbsp;  
 
@@ -33,7 +36,7 @@ If you like my work I would really appreciate a small donation on [PayPal](https
 &nbsp;  
 &nbsp;  
 
-Privacy Policy: [Click to read](https://github.com/HerrEurobeat/beepBot/blob/master/legal/privacy_policy.md)  
+Privacy Policy: [Click to read](https://github.com/3urobeat/beepBot/blob/master/legal/privacy_policy.md)  
   
 This bot is not intended to be downloaded and used privatly. This repo will miss some important files you would need to run it on your computer.  
 Instead, add the bot to your server with the invite link above.  

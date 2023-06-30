@@ -4,10 +4,10 @@
  * Created Date: 19.01.2021 22:36:00
  * Author: 3urobeat
  *
- * Last Modified: 22.02.2023 17:36:37
+ * Last Modified: 30.06.2023 09:44:28
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/HerrEurobeat>
+ * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -32,7 +32,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     var   config = bot.config;
     var   lf     = lang.cmd.otherbotowner;
 
-    // Code is from my Steam Comment Bot !settings cmd so I hope it doesn't look weird here - https://github.com/HerrEurobeat/steam-comment-service-bot/blob/master/src/bot.js
+    // Code is from my Steam Comment Bot !settings cmd so I hope it doesn't look weird here - https://github.com/3urobeat/steam-comment-service-bot/blob/master/src/bot.js
     if (!args[0]) {
         fs.readFile("./bin/config.json", function(err, data) { // Use readFile to get an unprocessed object
             if (err) return logger("error", "setconfig.js", `read config values error: ${err}`);
