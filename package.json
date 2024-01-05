@@ -1,25 +1,27 @@
 {
   "name": "beepbot",
-  "version": "3.3.4",
+  "version": "4.0.0",
   "description": "beepBot - 24/7 online, customizeable, feature rich & scaleable Discord Bot.",
   "main": "start.js",
   "dependencies": {
-    "@yetzt/nedb": "^1.8.0",
-    "discord.js": "^14.13.0",
-    "download": "^8.0.0",
-    "lodash": "^4.17.21",
-    "output-logger": "^2.3.7",
-    "superagent": "^8.1.2",
-    "systeminformation": "^5.21.13"
+      "@seald-io/nedb": "^4.0.3",
+      "discord.js": "^14.14.1",
+      "download": "^8.0.0",
+      "output-logger": "^2.3.7"
   },
   "scripts": {
-    "start": "node start.js"
+      "start": "node start.js"
   },
   "author": "3urobeat",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/3urobeat/beepBot/issues"
+      "url": "https://github.com/3urobeat/beepbot/issues"
   },
   "homepage": "https://github.com/3urobeat",
-  "repository": "https://github.com/3urobeat/beepBot"
+  "repository": "https://github.com/3urobeat/beepbot",
+  "devDependencies": {
+      "eslint": "^8.56.0",
+      "eslint-plugin-jsdoc": "^46.9.1",
+      "tsd-jsdoc": "^2.5.0"
+  }
 }
