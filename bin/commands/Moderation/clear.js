@@ -22,18 +22,18 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    var Discord = require("discord.js");
+    let Discord = require("discord.js");
 
     let invalidamount = lang.cmd.othermoderation.clearinvalidamount;
     if (!args[0]) return message.channel.send(invalidamount);
 
-    var messagecount = parseInt(args[0]);
+    let messagecount = parseInt(args[0]);
     if (isNaN(messagecount)) return message.channel.send(invalidamount);
     if (messagecount > 100 || messagecount < 1) return message.channel.send(invalidamount);
 

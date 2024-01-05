@@ -22,19 +22,23 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     const Discord = require("discord.js");
 
-    var guildid   = message.guild.id;
-    var none      = "**/**";
-    var lf        = lang.cmd.settings;
+    let guildid   = message.guild.id;
+    let none      = "**/**";
+    let lf        = lang.cmd.settings;
 
     // Helper function that avoids having to copy paste the same msg and makes changing it easier
+    /**
+     *
+     * @param err
+     */
     function logDbErr(err) {
         logger("error", "settings.js", `Error updating db of guild ${guildid}. Error: ${err}`);
     }
@@ -146,6 +150,9 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
 
 
     /* --------------- Code to customize settings --------------- */
+    /**
+     *
+     */
     function roleid() {
         try { // Get and set roleid once to make code cleaner
             if (!args[2]) return message.channel.send(lf.adminmodmemberaddroleusage);
@@ -179,49 +186,49 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
             message.channel.send({ embeds: [{
                 title: `${lf.settings} - ${lang.cmd.help.help}`,
                 fields: [{
-                        name: `\`${PREFIX}settings prefix (new prefix)\``,
-                        value: lf.helpprefixset },
-                    {
-                        name: `\`${PREFIX}settings lang [${lang.general.language}]\``,
-                        value: lf.helplangset },
-                    {
-                        name: `\`${PREFIX}settings adminroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
-                        value: lf.helpadminrolesset },
-                    {
-                        name: `\`${PREFIX}settings modroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
-                        value: lf.helpmodrolesset },
-                    {
-                        name: `\`${PREFIX}settings systemchannel [set/remove] [${lf.channelname}/${lf.channelid}]\``,
-                        value: lf.helpsystemchannelset },
-                    {
-                        name: `\`${PREFIX}settings modlogchannel [set/remove] [${lf.channelname}/${lf.channelid}]\``,
-                        value: lf.helpmodlogchannelset },
-                    {
-                        name: `\`${PREFIX}settings modlogfeatures [enable/disable/enableall/disableall] [${lf.featurename}]\``,
-                        value: lf.helpmodlogfeaturesset },
-                    {
-                        name: `\`${PREFIX}settings greetmsg [set/remove] [${lang.general.message}]\``,
-                        value: lf.helpgreetmsgset},
-                    {
-                        name: `\`${PREFIX}settings byemsg [set/remove] [${lang.general.message}]\``,
-                        value: lf.helpbyemsgset },
-                    {
-                        name: `\`${PREFIX}settings joinroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
-                        value: lf.helpjoinrolesset },
-                    {
-                        name: `\`${PREFIX}settings levelsystem [enable/disable]\``,
-                        value: lf.helplevelsystemset },
-                    {
-                        name: `\`${PREFIX}settings allownsfw [enable/disable]\``,
-                        value: lf.helpallownsfwset },
-                    {
-                        name: `\`${PREFIX}settings reset\``,
-                        value: lf.helpsettingsreset },
-                    {
-                        name: "** **",
-                        value: lf.helpadvice.replace("prefix", PREFIX)
-                    }]
+                    name: `\`${PREFIX}settings prefix (new prefix)\``,
+                    value: lf.helpprefixset },
+                {
+                    name: `\`${PREFIX}settings lang [${lang.general.language}]\``,
+                    value: lf.helplangset },
+                {
+                    name: `\`${PREFIX}settings adminroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
+                    value: lf.helpadminrolesset },
+                {
+                    name: `\`${PREFIX}settings modroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
+                    value: lf.helpmodrolesset },
+                {
+                    name: `\`${PREFIX}settings systemchannel [set/remove] [${lf.channelname}/${lf.channelid}]\``,
+                    value: lf.helpsystemchannelset },
+                {
+                    name: `\`${PREFIX}settings modlogchannel [set/remove] [${lf.channelname}/${lf.channelid}]\``,
+                    value: lf.helpmodlogchannelset },
+                {
+                    name: `\`${PREFIX}settings modlogfeatures [enable/disable/enableall/disableall] [${lf.featurename}]\``,
+                    value: lf.helpmodlogfeaturesset },
+                {
+                    name: `\`${PREFIX}settings greetmsg [set/remove] [${lang.general.message}]\``,
+                    value: lf.helpgreetmsgset},
+                {
+                    name: `\`${PREFIX}settings byemsg [set/remove] [${lang.general.message}]\``,
+                    value: lf.helpbyemsgset },
+                {
+                    name: `\`${PREFIX}settings joinroles [add/remove/removeall] [${lf.rolename}/${lf.roleid}]\``,
+                    value: lf.helpjoinrolesset },
+                {
+                    name: `\`${PREFIX}settings levelsystem [enable/disable]\``,
+                    value: lf.helplevelsystemset },
+                {
+                    name: `\`${PREFIX}settings allownsfw [enable/disable]\``,
+                    value: lf.helpallownsfwset },
+                {
+                    name: `\`${PREFIX}settings reset\``,
+                    value: lf.helpsettingsreset },
+                {
+                    name: "** **",
+                    value: lf.helpadvice.replace("prefix", PREFIX)
                 }]
+            }]
             });
 
             break;
@@ -637,57 +644,57 @@ module.exports.run = (bot, message, args, lang, logger, guildsettings, fn) => { 
                 description: embeddescription,
                 thumbnail: { url: message.guild.iconURL },
                 fields: [{
-                        name: "Prefix:",
-                        value: `\`${guildsettings.prefix}\``,
-                        inline: true },
-                    {
-                        name: `${lang.general.language}:`,
-                        value: lang.general.thislang,
-                        inline: true },
-                    {
-                        name: `${lf.adminroles}:`,
-                        value: adminroles },
-                    {
-                        name: `${lf.moderatorroles}:`,
-                        value: moderatorroles },
-                    {
-                        name: `${lf.systemchannel}:`,
-                        value: systemchannel },
-                    {
-                        name: `${lf.modlogchannel}:`,
-                        value: modlogchannel,
-                        inline: true },
-                    {
-                        name: `${lf.modlogfeatures}:`,
-                        value: modlogfeatures,
-                        inline: true },
-                    {
-                        name: `${lf.greetmsg}:`,
-                        value: greetmsg },
-                    {
-                        name: `${lf.byemsg}:`,
-                        value: byemsg },
-                    {
-                        name: `${lf.addroleonjoin}:`,
-                        value: memberaddroles },
-                    {
-                        name: `${lf.levelsystemactive}:`,
-                        value: levelsystemstatus,
-                        inline: true },
-                    {
-                        name: `${lf.allownsfw}:`,
-                        value: allownsfwstatus,
-                        inline: true
-                    }
+                    name: "Prefix:",
+                    value: `\`${guildsettings.prefix}\``,
+                    inline: true },
+                {
+                    name: `${lang.general.language}:`,
+                    value: lang.general.thislang,
+                    inline: true },
+                {
+                    name: `${lf.adminroles}:`,
+                    value: adminroles },
+                {
+                    name: `${lf.moderatorroles}:`,
+                    value: moderatorroles },
+                {
+                    name: `${lf.systemchannel}:`,
+                    value: systemchannel },
+                {
+                    name: `${lf.modlogchannel}:`,
+                    value: modlogchannel,
+                    inline: true },
+                {
+                    name: `${lf.modlogfeatures}:`,
+                    value: modlogfeatures,
+                    inline: true },
+                {
+                    name: `${lf.greetmsg}:`,
+                    value: greetmsg },
+                {
+                    name: `${lf.byemsg}:`,
+                    value: byemsg },
+                {
+                    name: `${lf.addroleonjoin}:`,
+                    value: memberaddroles },
+                {
+                    name: `${lf.levelsystemactive}:`,
+                    value: levelsystemstatus,
+                    inline: true },
+                {
+                    name: `${lf.allownsfw}:`,
+                    value: allownsfwstatus,
+                    inline: true
+                }
                 ],
                 footer: {
                     icon_url: message.author.displayAvatarURL(),
                     text: `${lang.general.requestedby} ${message.author.username} • ${lang.cmd.help.help}: ${guildsettings.prefix}settings help`
                 }
             }]
-        });
+            });
 
-        return;
+            return;
     }
 };
 

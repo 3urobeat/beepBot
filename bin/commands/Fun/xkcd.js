@@ -17,18 +17,18 @@
 
 const Discord = require('discord.js'); //eslint-disable-line
 
-var maxNum = 0;
-var lastMaxNumRefresh = 0;
+let maxNum = 0;
+let lastMaxNumRefresh = 0;
 
 /**
  * The xkcd command
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     // Refresh maxNum every 24 hours to be able to get a random comic
@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 
     // Create template message
-    var msg = {
+    let msg = {
         embeds: [{
             title: "",
             description: "",

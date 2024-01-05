@@ -21,10 +21,10 @@
 /**
  * The gettimefrommsg helper function
  * @param {Array} args An array of arguments the user provided
- * @param {function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
+ * @param {Function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
  */
 module.exports.run = (args, callback) => { //eslint-disable-line
-    var arr = [];
+    let arr = [];
 
     if (args.includes("-t")) {
         arr = [args[args.indexOf("-t") + 1], args[args.indexOf("-t") + 2]]; // Result example: ["2", "minutes"]

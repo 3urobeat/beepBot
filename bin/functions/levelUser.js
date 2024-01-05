@@ -17,7 +17,7 @@
 
 const Discord = require('discord.js'); //eslint-disable-line
 
-var xpHistory = {}; // Store recent xp increments in an object
+let xpHistory = {}; // Store recent xp increments in an object
 
 /**
  * Handles the xp addition and level up messages
@@ -26,8 +26,8 @@ var xpHistory = {}; // Store recent xp increments in an object
  * @param {Discord.User} author The user who sent the message
  * @param {Discord.Guild} guild The guild of the message
  * @param {Discord.GuildChannel} channel The channel in which the message was sent
- * @param {Object} lang The language object for this guild
- * @param {Object} guildsettings All settings of this guild
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
 module.exports.levelUser = (bot, logger, author, guild, channel, lang, guildsettings) => {
 
@@ -37,27 +37,27 @@ module.exports.levelUser = (bot, logger, author, guild, channel, lang, guildsett
 
         // Increment xp and messages amount for entry that matches this user's id and this guild id
         bot.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] },
-                            { $inc: { messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `${author.username}#${author.discriminator}` } },
-                            { upsert: true },
-                            (err) => {
+            { $inc: { messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `${author.username}#${author.discriminator}` } },
+            { upsert: true },
+            (err) => {
 
             if (err) logger("error", "levelUser.js", `Error updating db of guild ${guild.id}. Error: ${err}`);
 
-        });
+            });
 
     } else {
 
         // Random xp amount between 15 and 25 xp
-        var xpAmount = Math.floor(Math.random() * (25 - 15 + 1) + 15);
+        let xpAmount = Math.floor(Math.random() * (25 - 15 + 1) + 15);
 
         // Log debug message
         logger("debug", "levelUser.js", `Adding ${xpAmount}xp to user ${author.id} in guild ${guild.id}`);
 
         // Increment xp and messages amount for entry that matches this user's id and this guild id
         bot.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] },
-                            { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `${author.username}#${author.discriminator}` } },
-                            { upsert: true, returnUpdatedDocs: true },
-                            (err, numAffected, doc) => {
+            { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `${author.username}#${author.discriminator}` } },
+            { upsert: true, returnUpdatedDocs: true },
+            (err, numAffected, doc) => {
 
             if (err) logger("error", "levelUser.js", `Error updating db of guild ${guild.id}. Error: ${err}`);
 
@@ -71,15 +71,15 @@ module.exports.levelUser = (bot, logger, author, guild, channel, lang, guildsett
             if (Math.floor(this.xpToLevel(doc.xp)) > 1 && Math.floor(this.xpToLevel(doc.xp)) > Math.floor(this.xpToLevel(doc.xp - xpAmount))) {
                 channel.send(lang.general.levelupmsg.replace("username", author.username).replace("leveltext", Math.floor(this.xpToLevel(doc.xp))));
             }
-        });
+            });
     }
 };
 
 
 /**
  * Takes user xp and returns their level
- * @param {Number} xp The current total XP
- * @returns {Number} Current level
+ * @param {number} xp The current total XP
+ * @returns {number} Current level
  */
 module.exports.xpToLevel = (xp) => {
 
@@ -93,10 +93,10 @@ module.exports.xpToLevel = (xp) => {
 
 /**
  * Takes user level and returns their total xp
- * @param {Number} level The level
- * @returns {Number} Current total xp
+ * @param {number} level The level
+ * @returns {number} Current total xp
  */
- module.exports.levelToXp = (level) => {
+module.exports.levelToXp = (level) => {
 
     // Use two different functions from level 0-47 and 48-100
     if (level <= 47) return 20.2616 * Math.pow(level, 2.40964); // Lvl 47 and lower

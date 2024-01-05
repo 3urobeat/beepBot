@@ -22,14 +22,14 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     const fs = require("fs");
-    var   lf = lang.cmd.otherbotowner;
+    let   lf = lang.cmd.otherbotowner;
     // Note: Gametype must be caps
 
     if (!args[0]) return message.channel.send(lf.setpresencemissingargs);

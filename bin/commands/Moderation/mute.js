@@ -22,19 +22,22 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     let lf = lang.cmd.mute;
 
     // Check if role was successfully created by guildCreate.js (where this code is also used)
+    /**
+     *
+     */
     function checkMutedRole() {
         return new Promise((resolve, reject) => {
-            var mutedrole = message.guild.roles.cache.find(role => role.name == "beepBot Muted");
-            var errorcount = 0;
+            let mutedrole = message.guild.roles.cache.find(role => role.name == "beepBot Muted");
+            let errorcount = 0;
 
             if (!mutedrole) {
                 message.guild.roles.create({
@@ -86,7 +89,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let args0 = ["chat", "voice", "all"]; // Things args[0] should be
     if (!args0.includes(args[0])) return message.channel.send(lf.invalidargs.replace("prefix", guildsettings.prefix));
 
-    var muteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
+    let muteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
     if (!muteuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (muteuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", muteuser));
 
@@ -95,7 +98,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 
     // Get reason if there is one provided
-    var mutereason, mutereasontext = "";
+    let mutereason, mutereasontext = "";
 
     fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         mutereason = reason;
@@ -112,8 +115,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 .catch(err => { // Catch error of role adding
                     return message.channel.send(`${lf.roleadderror.replace("muteuser", muteuser.username)}\n${lang.general.error}: ${err}`);
                 });
-            }
         }
+    }
 
     if (args[0].toLowerCase() == "voice" || args[0].toLowerCase() == "all") {
         // Apply voicemute if muteuser is in voice chat, if not the voiceStateUpdate event in bot.js will handle muting
@@ -127,7 +130,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 
     // Add timed mute to db and respond with msg
-    var notifytimetext = lang.cmd.ban.permanent; // Needed for notify - if not permanent it will get changed by the time argument code block below (and yes just hijack the translation from the ban cmd)
+    let notifytimetext = lang.cmd.ban.permanent; // Needed for notify - if not permanent it will get changed by the time argument code block below (and yes just hijack the translation from the ban cmd)
 
     if (args.includes("-time") || args.includes("-t")) { // Timed mute
         fn.gettimefrommsg(args, (timeinms, unitindex, arrcb) => { // The 3 arguments inside brackets are arguments from the callback

@@ -77,7 +77,7 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
 
             } else {
 
-                var changesmade = false;
+                let changesmade = false;
 
                 Object.keys(bot.constants.defaultguildsettings).forEach((e, i) => { // Check if this guild's settings is missing a key (update proofing!)
                     if (!Object.keys(guildsettings).includes(e)) {
@@ -122,8 +122,8 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
 
         if (!cont[0]) return; // Message is empty after prefix I guess
 
-        var args = cont.slice(1);
-        var cmd  = bot.commands.get(cont[0].toLowerCase());
+        let args = cont.slice(1);
+        let cmd  = bot.commands.get(cont[0].toLowerCase());
 
         if (message.channel.type === "DM") {
             if (cmd && cmd.info.allowedindm === false) return message.channel.send(bot.fn.randomstring(["That cannot work in a dm. :face_palm:", "That won't work in a DM...", "This command in a DM? No.", "Sorry but no. Try it on a server.", "You need to be on a server!"]) + " (DM-Error)");
@@ -132,9 +132,9 @@ module.exports.run = (bot, logger, message) => { //eslint-disable-line
         if (cmd) { // Check if command is existing and run it
             if (cmd.info.nsfwonly == true && !message.channel.nsfw) return message.channel.send(bot.fn.lang(message.guild.id, guildsettings).general.nsfwonlyerror);
 
-            var ab = cmd.info.accessableby;
+            let ab = cmd.info.accessableby;
 
-            var guildowner = await message.guild.fetchOwner();
+            let guildowner = await message.guild.fetchOwner();
 
             // Check if command is allowed on this guild and respond with error message if it isn't
             if (cmd.info.allowedguilds && !cmd.info.allowedguilds.includes(message.guild.id)) return message.channel.send(bot.fn.lang(message.guild.id, guildsettings).general.guildnotallowederror);

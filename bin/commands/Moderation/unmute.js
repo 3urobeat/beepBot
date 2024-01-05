@@ -22,10 +22,10 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     let lf = lang.cmd.othermoderation;
@@ -34,13 +34,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let args0 = ["chat", "voice", "all"]; // Things args[0] should be
     if (!args0.includes(args[0])) return message.channel.send(lf.unmuteinvalidargs.replace("prefix", guildsettings.prefix));
 
-    var unmuteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
+    let unmuteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
     if (!unmuteuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (unmuteuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", unmuteuser));
 
 
     // Get reason if there is one provided
-    var unmutereason, unmutereasontext = "";
+    let unmutereason, unmutereasontext = "";
 
     fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         unmutereason = reason;

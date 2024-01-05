@@ -24,12 +24,13 @@ const outputlogger = require("output-logger");
 
 /**
  * Logs text to the terminal and appends it to the output.txt file.
- * @param {String} type String that determines the type of the log message. Can be info, warn, error, debug or an empty string to not use the field.
- * @param {String} origin The origin file
- * @param {String} str The text to log into the terminal
- * @param {Boolean} nodate Setting to true will hide date and time in the message
- * @param {Boolean} remove Setting to true will remove this message with the next one
- * @param {Boolean} logafterlogin Defines if the message should be logged after login
+ * @param {string} type String that determines the type of the log message. Can be info, warn, error, debug or an empty string to not use the field.
+ * @param {string} origin The origin file
+ * @param {string} str The text to log into the terminal
+ * @param {boolean} nodate Setting to true will hide date and time in the message
+ * @param {boolean} remove Setting to true will remove this message with the next one
+ * @param animation
+ * @param {boolean} logafterlogin Defines if the message should be logged after login
  */
 module.exports.logger = (type, origin, str, nodate, remove, animation, logafterlogin) => { // Function that passes args to my logger library and just exists to handle readyafterlogs atm
 
@@ -54,7 +55,8 @@ module.exports.logger = (type, origin, str, nodate, remove, animation, logafterl
 
 /**
  * Returns one of the default animations
- * @param {String} animation Valid animations: `loading`, `waiting`, `bounce`, `progress`, `arrows` or `bouncearrows`
+ * @param {string} animation Valid animations: `loading`, `waiting`, `bounce`, `progress`, `arrows` or `bouncearrows`
+ * @param args
  * @returns Array of the chosen animation
  */
 module.exports.logger.animation = (args) => {

@@ -22,14 +22,14 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
 
-    var levelUser = require("../../functions/levelUser");
+    let levelUser = require("../../functions/levelUser");
 
     bot.levelsdb.find({ guildid: message.guild.id }, (err, docs) => {
         if (err) {
@@ -41,7 +41,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (docs.size < 1) return; // Never occurred in my testing but I'm leaving it here just to make sure
 
         // Create message template
-        var msg = {
+        let msg = {
             embeds: [{
                 title: lang.cmd.othermisc.rankstitle.replace("servername", message.guild.name),
                 color: fn.randomhex(),
@@ -52,7 +52,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     text: `${lang.cmd.othermisc.rankscheckuser}: ${guildsettings.prefix}rank [mention/username/userid]`
                 }
             }
-        ]};
+            ]};
 
         // Display warning message if level system is currently disabled
         if (!guildsettings.levelsystem) msg.embeds[0].description = lang.cmd.othermisc.ranklevelsystemdisabled;
