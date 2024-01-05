@@ -1,13 +1,13 @@
 /*
  * File: registerSlashCommands.js
  * Project: beepbot
- * Created Date: 14.01.2022 21:01:23
+ * Created Date: 2022-01-14 21:01:23
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-05 23:23:45
  * Modified By: 3urobeat
  *
- * Copyright (c) 2022 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -33,7 +33,7 @@ module.exports.run = (bot, logger) => {
     logger("info", "registerSlashCommands.js", "Registering slash commands...", false, true);
 
     // eslint-ignore-next-line
-    //commands.set([]); // Uncomment to reset registered slash commands 
+    //commands.set([]); // Uncomment to reset registered slash commands
 
     // Convert Collection to Array and register all commands that were already read by the command reader
     [...bot.commands.values()].forEach((e) => {
