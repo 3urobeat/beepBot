@@ -1,13 +1,13 @@
 /*
  * File: controller.js
  * Project: beepbot
- * Created Date: 01.10.2020 18:53:00
+ * Created Date: 2020-10-01 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-05 23:23:05
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -25,19 +25,19 @@ const fs        = require("fs");
 
 const tokenpath = require("../../token.json");
 const asciipath = require("./ascii.js");
-var   config    = require("./config.json");
+let   config    = require("./config.json");
 const constants = require("./constants.json");
 
 // Reference custom logger
-var logger      = require("./functions/logger.js").logger;
+let logger      = require("./functions/logger.js").logger;
 
 
 /**
  * Returns a random String from an array
- * @param {Array<String>} arr An Array with Strings to choose from
- * @returns {String} A random String from the provided array
+ * @param {Array<string>} arr An Array with Strings to choose from
+ * @returns {string} A random String from the provided array
  */
-var randomstring = arr => arr[Math.floor(Math.random() * arr.length)];
+let randomstring = arr => arr[Math.floor(Math.random() * arr.length)];
 
 process.on("unhandledRejection", (reason) => {
     logger("error", "controller.js", `Unhandled Rejection! Reason: ${reason.stack}`);
@@ -75,7 +75,7 @@ if (config.loginmode === "normal") {
     BOTAVATAR = constants.botdefaultavatar;
     token     = tokenpath.token //get token to let Manager know how many shards it has to start
     respawnb  = true
-} else { 
+} else {
     BOTNAME   = "beepTestBot";
     BOTAVATAR = constants.testbotdefaultavatar;
     token     = tokenpath.testtoken
@@ -92,7 +92,7 @@ const Manager = new Discord.ShardingManager('./bin/bot.js', {
 /* eslint-disable */
 
 /* -------------- shardCreate Event -------------- */
-Manager.on('shardCreate', (shard) => { 
+Manager.on('shardCreate', (shard) => {
     logger('info', 'controller.js', `Spawned shard ${shard.id}!`, false, true)
 
     if (shard.id == 0) {
@@ -101,7 +101,7 @@ Manager.on('shardCreate', (shard) => {
             logger("", "", "\n*---------=----------[\x1b[96mINFO | controller.js\x1b[0m]---------=----------*", true)
             logger("", "", `> Started ${constants.BOTNAME} ${config.version} by ${constants.BOTOWNER}`, true)
 
-            if (config.shards > 1) logger(`> ${config.shards} shards running in \x1b[32m${config.loginmode}\x1b[0m mode on ${process.platform}`, true); 
+            if (config.shards > 1) logger(`> ${config.shards} shards running in \x1b[32m${config.loginmode}\x1b[0m mode on ${process.platform}`, true);
                 else logger("", "", `> Running in \x1b[32m${config.loginmode}\x1b[0m mode on ${process.platform}.`, true);
 
             if (Manager.totalShards == "auto") logger("", "", `> ShardManager is running in automatic mode...`, true)
@@ -138,7 +138,7 @@ Manager.spawn({ amount: Manager.totalShards }).catch(err => { //respawn delay is
 const monitorreactions = new nedb('./data/monitorreactions.db')
 
 monitorreactions.loadDatabase((err) => { //needs to be loaded with each iteration so that changes get loaded
-    if (err) return logger("error", "controller.js", "Error loading timedbans database: " + err) 
+    if (err) return logger("error", "controller.js", "Error loading timedbans database: " + err)
 
     monitorreactions.remove({ until: { $lte: Date.now() } }, {}, (err, num) => { //until is a date in ms, so we remove all entries that are greater than right now
         if (err) logger("error", "controller.js", `Error removing all monitorreactions entries that are greater than ${Date.now()}: ${err}`, true)
@@ -157,7 +157,7 @@ if(checkm8!="b754jfJNgZWGnzogvl<rsHGTR4e368essegs9<"){process.stdout.write("\x07
 
 // Unban checker
 const timedbans = new nedb('./data/timedbans.db') // Initialize database
-    
+
 let lastTempBanCheck = Date.now() // This is useful because intervals can get unprecise over time
 
 var tempbanloop = setInterval(() => {
@@ -194,7 +194,7 @@ var tempbanloop = setInterval(() => {
                         .then(res => {
                             if (Object.keys(res).length > 1) receiverobj = res //overwrite receiverobj if we actually have data from the unban response
 
-                            client.fn.msgtomodlogchannel(guild, "unban", authorobj, receiverobj, [e.banreason]) 
+                            client.fn.msgtomodlogchannel(guild, "unban", authorobj, receiverobj, [e.banreason])
                         })
                         .catch(err => {
                             if (err != "DiscordAPIError: Unknown Ban") return client.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, receiverobj, [e.banreason, err]) //if unknown ban ignore, user has already been unbanned
@@ -212,7 +212,7 @@ var tempbanloop = setInterval(() => {
 
 // Unmute checker
 const timedmutes = new nedb('./data/timedmutes.db') //Initialize database
-    
+
 let lastTempMuteCheck = Date.now() //this is useful because intervals can get unprecise over time
 
 var timedmuteloop = setInterval(() => {
@@ -253,18 +253,18 @@ var timedmuteloop = setInterval(() => {
                             })
                         }
                     }
-                    
+
                     //remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
                     client.timedmutes.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }]}, (err) => {
                         if (err) client.fn.logger("error", "controller.js", `Error removing ${e.userid} from timedmutes: ${err}`)
                     })
-                
+
                     if (e.where == "voice" || e.where == "all") { //user was banned in voice
                         //Remove voice mute
-                        if (guild.members.cache.get(e.userid).voice.channel != null) { 
+                        if (guild.members.cache.get(e.userid).voice.channel != null) {
                             guild.members.cache.get(e.userid).voice.setMute(false).catch(err => {
                                 return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, receiverobj, [e.mutereason, err])
-                            }) 
+                            })
                         } else {
                             //if the user can't be unmuted right now push it into the db and handle it with the voiceStateUpdate event
                             let unmuteobj = {
@@ -275,8 +275,8 @@ var timedmuteloop = setInterval(() => {
                                 authorid: e.authorid,
                                 mutereason: e.mutereason
                             }
-                            
-                            client.timedmutes.insert(unmuteobj, (err) => { 
+
+                            client.timedmutes.insert(unmuteobj, (err) => {
                                 if (err) client.fn.logger("error", "controller.js", "error updating db: " + err) //insert new obj instead of updating old one so that the db remove call won't remove it
                             })
                         }
@@ -288,7 +288,7 @@ var timedmuteloop = setInterval(() => {
                 .catch(err => {
                     if (err == "Error [ShardingInProcess]: Shards are still being spawned") return;
                     logger("warn", "controller.js", "Couldn't broadcast unmute: " + err.stack)
-                }) 
+                })
         })
     })
 }, 10000); //10 seconds
