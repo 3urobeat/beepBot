@@ -25,7 +25,7 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Function} logger Reference to the logger function
  * @param {Discord.Guild} guild The Discord guild class
- * @param {String} action The type of the modlog event (clear, unban, kick, etc.)
+ * @param {string} action The type of the modlog event (clear, unban, kick, etc.)
  * @param {Discord.User} author The Discord user class of the message author
  * @param {Discord.User} receiver The Discord user class of the action recipient
  * @param {Array} details Array containing further information like the reasontext and if the user should be notified
@@ -92,9 +92,9 @@ module.exports.run = (bot, logger, guild, action, author, receiver, details) => 
                 embed.color = 16711680; // Red
                 embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[0] });
                 embed.fields.push({ name: `${guildlang.general.details}:`,
-                                        value: `${guildlang.general.length}: ${details[1]}
+                    value: `${guildlang.general.length}: ${details[1]}
                                                 ${guildlang.general.modloguserwasnotified}${String(details[2]).replace("true", "✅").replace("false", "❌")}`
-                                    });
+                });
                 break;
 
             case "unban":
@@ -132,10 +132,10 @@ module.exports.run = (bot, logger, guild, action, author, receiver, details) => 
                 embed.color = 16753920; // Orange
                 embed.fields.push({ name: `${guildlang.general.reason}:`, value: details[1] });
                 embed.fields.push({ name: `${guildlang.general.details}:`,
-                                    value: `${guildlang.general.where}: ${details[0]}
+                    value: `${guildlang.general.where}: ${details[0]}
                                             ${guildlang.general.length}: ${details[2]}
                                             ${guildlang.general.modloguserwasnotified}${String(details[3]).replace("true", "✅").replace("false", "❌")}`
-                                    });
+                });
                 break;
 
             case "unmute":

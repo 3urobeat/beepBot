@@ -43,11 +43,11 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
     }
 
     // If no channel was found try to contact the guild owner
-    var guildowner = await guild.fetchOwner();
+    let guildowner = await guild.fetchOwner();
 
 
     // Prepare language select menu
-    var langArray = [];
+    let langArray = [];
 
     Object.values(bot.langObj).forEach((e, i) => { // Push each language to the array
         langArray.push({
@@ -57,7 +57,7 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
         });
     });
 
-    var langComponents = [
+    let langComponents = [
         new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.SelectMenuBuilder()
@@ -90,8 +90,12 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
 
 
     // Update perms of role in all channels (function because I need to call it two times from different blocks below)
+    /**
+     *
+     * @param role
+     */
     function updatePerms(role) {
-        var errormsgsent = false;
+        let errormsgsent = false;
 
         guild.channels.cache.forEach((channel) => {
             if (channel.type != Discord.ChannelType.GuildText) return;
@@ -104,7 +108,7 @@ module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
     }
 
     // Create beepBot Muted role if it doesn't exist (this code is used again in mute.js)
-    var mutedRole = guild.roles.cache.find(role => role.name == "beepBot Muted");
+    let mutedRole = guild.roles.cache.find(role => role.name == "beepBot Muted");
 
     if (!mutedRole) {
         guild.roles.create({

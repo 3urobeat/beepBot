@@ -24,7 +24,7 @@ const Discord = require('discord.js'); //eslint-disable-line
  */
 module.exports.run = (bot, logger) => {
 
-    var commands;
+    let commands;
 
     // Either register guild or global slash commands, depending on loginmode
     if (bot.config.loginmode == "test") commands = bot.guilds.cache.get(bot.constants.testguildid).commands;
@@ -33,7 +33,7 @@ module.exports.run = (bot, logger) => {
     logger("info", "registerSlashCommands.js", "Registering slash commands...", false, true);
 
     // eslint-ignore-next-line
-    //commands.set([]); // Uncomment to reset registered slash commands
+    // commands.set([]); // Uncomment to reset registered slash commands
 
     // Convert Collection to Array and register all commands that were already read by the command reader
     [...bot.commands.values()].forEach((e) => {

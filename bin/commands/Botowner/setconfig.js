@@ -22,15 +22,15 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     const fs     = require("fs");
-    var   config = bot.config;
-    var   lf     = lang.cmd.otherbotowner;
+    let   config = bot.config;
+    let   lf     = lang.cmd.otherbotowner;
 
     // Code is from my Steam Comment Bot !settings cmd so I hope it doesn't look weird here - https://github.com/3urobeat/steam-comment-service-bot/blob/master/src/bot.js
     if (!args[0]) {

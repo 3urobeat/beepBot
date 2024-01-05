@@ -22,20 +22,27 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     const lf         = lang.cmd.info;
     const si         = require("systeminformation");
     const Discord    = require("discord.js");
 
-    var infofields   = [];
-    var thumbnailurl = "";
+    let infofields   = [];
+    let thumbnailurl = "";
 
     // Small function to avoid repeating code
+    /**
+     *
+     * @param index
+     * @param name
+     * @param value
+     * @param inline
+     */
     function quickInfoField(index, name, value, inline) {
         return infofields[index] = {
             name: lf[name],

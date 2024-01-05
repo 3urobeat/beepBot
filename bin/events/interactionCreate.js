@@ -20,6 +20,7 @@ const Discord = require('discord.js'); //eslint-disable-line
 /**
  * The interactionCreate event
  * @param {Discord.Client} bot The Discord client class
+ * @param logger
  * @param {Discord.Interaction} interaction The interaction which was created
  */
 module.exports.run = async (bot, logger, interaction) => { //eslint-disable-line

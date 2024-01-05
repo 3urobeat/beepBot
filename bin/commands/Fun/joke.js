@@ -22,22 +22,22 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    var https = require("https");
+    let https = require("https");
 
-    var options = {
+    let options = {
         hostname: "icanhazdadjoke.com",
         port: 443,
         method: "GET",
         headers: { "Accept": "application/json" }
     };
 
-    var req = https.request(options, res => {
+    let req = https.request(options, res => {
         res.on("data", (data) => {
             message.channel.send(JSON.parse(data).joke);
         });

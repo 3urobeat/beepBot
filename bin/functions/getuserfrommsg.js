@@ -24,13 +24,13 @@ const Discord = require('discord.js'); //eslint-disable-line
  * The getuserfrommsg helper function
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Number} startindex The index where to start searching in the args array
- * @param {Number} endindex The index where to stop searching in the args array
- * @param {Boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
+ * @param {number} startindex The index where to start searching in the args array
+ * @param {number} endindex The index where to stop searching in the args array
+ * @param {boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
  * @param {Array} stoparguments An array of arguments that will stop the loop if found at the current position
  */
 module.exports.run = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
-    var searchfor = "";
+    let searchfor = "";
     if (!endindex) endindex = 99999999;
     if (!stoparguments) stoparguments = [];
 

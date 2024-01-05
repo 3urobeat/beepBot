@@ -32,13 +32,13 @@ module.exports.run = (bot) => {
     dirs("./bin/commands").forEach((k) => {
         fs.readdir(`./bin/commands/${k}`, (err, files) => {
             if (err) logger("error", "bot.js", err);
-            var jsfiles = files.filter(p => p.split(".").pop() === "js");
+            let jsfiles = files.filter(p => p.split(".").pop() === "js");
 
             jsfiles.forEach((f) => {
-                var cmd = require(`../commands/${k}/${f}`);
+                let cmd = require(`../commands/${k}/${f}`);
 
                 for(let j = 0; j < cmd.info.names.length; j++) { // Get all aliases of each command
-                    var tempcmd = JSON.parse(JSON.stringify(cmd)); // Yes, this practice of a deep copy is probably bad but everything else also modified other Collection entries and I sat at this problem for 3 fucking hours now
+                    let tempcmd = JSON.parse(JSON.stringify(cmd)); // Yes, this practice of a deep copy is probably bad but everything else also modified other Collection entries and I sat at this problem for 3 fucking hours now
                     tempcmd["run"] = cmd.run; // Add command code to new deep copy because that got lost somehow
                     tempcmd.info.category = k;
 

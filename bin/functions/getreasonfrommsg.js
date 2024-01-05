@@ -22,10 +22,10 @@
  * The getreasonfrommsg helper function
  * @param {Array} args An array of arguments the user provided
  * @param {Array} stoparguments Array of flags
- * @param {function} [callback] Called with `reason` (String or undefined) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
+ * @param {Function} [callback] Called with `reason` (String or undefined) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
  */
 module.exports.run = (args, stoparguments, callback) => {
-    var searchfor = "";
+    let searchfor = "";
     let startindex = args.indexOf("-r") + 1;
     if (startindex == 0) return callback(undefined, "/"); // Seems like no reason was provided
 

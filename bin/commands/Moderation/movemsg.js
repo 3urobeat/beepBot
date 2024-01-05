@@ -22,10 +22,10 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
     let lf = lang.cmd.movemsg;
@@ -38,7 +38,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         args.unshift(msgid); // Add msgid to beginning of the array so that the next channelcheck doesn't get confused because otherwise the channel arg would now be index 0 and not 1
 
     } else if (args[0].startsWith("https://discord.com/channels/")) { // Check if user linked the message
-        var newargs = args[0].toLowerCase().replace("https://discord.com/channels/", "").split("/");
+        let newargs = args[0].toLowerCase().replace("https://discord.com/channels/", "").split("/");
         if (newargs[0] != message.guild.id || newargs[1] != message.channel.id) return message.channel.send(lf.wrongchannel);
 
         var msgid = newargs[2];
@@ -89,7 +89,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 
             // Get the message(s) to move
-            var embed = {};
+            let embed = {};
             if (typeof (msgid) == "object") { // Multiple fetched messages
 
                 embed = {
@@ -103,12 +103,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                 // Sort the collection by timestamp because Discord fetches it without the right order
                 // Credit: https://stackoverflow.com/a/5073866/12934162
-                var sort = function (prop, arr) {
+                let sort = function (prop, arr) {
                     prop = prop.split(".");
-                    var len = prop.length;
+                    let len = prop.length;
 
                     arr.sort(function (a, b) {
-                        var i = 0;
+                        let i = 0;
                         while( i < len ) { a = a[prop[i]]; b = b[prop[i]]; i++; }
                         if (a < b) {
                             return -1;
@@ -127,7 +127,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 sortedarray.forEach((e, i) => {
                     if (e.id == message.id) return; // Stop if this is the command message
 
-                    var originalcontent = e.content;
+                    let originalcontent = e.content;
 
                     // Handle embed as we can't display it and content is usually empty
                     if (e.embeds.length > 0) {
@@ -143,7 +143,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                     // Check if message is a beepBot command and suppress markdown
                     if (e.content.startsWith(guildsettings.prefix)) {
-                        var cont = e.content.slice(guildsettings.prefix.length).split(" "); // Slice prefix from message
+                        let cont = e.content.slice(guildsettings.prefix.length).split(" "); // Slice prefix from message
                         if (bot.commands.get(cont[0].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``); // Check if command exists and if so add ` around prefix in message (replace applies to first occurrence)
                     }
 
@@ -169,8 +169,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 var originalmsg = await message.channel.messages.fetch({ message: String(msgid) });
                 if (!originalmsg) return message.channel.send(lf.messagenotfound);
 
-                var originalcontent = originalmsg.content;
-                var thumbnail = null; // Set to null so that if it isn't getting changed the embed thumbnail will stay empty
+                let originalcontent = originalmsg.content;
+                let thumbnail = null; // Set to null so that if it isn't getting changed the embed thumbnail will stay empty
                 var originalattachments = []; // Same as line above but for files
 
                 // Handle embed as we can't display it and content is usually empty
@@ -195,7 +195,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                 // Check if message is a beepBot command and suppress markdown
                 if (originalmsg.content.startsWith(guildsettings.prefix)) {
-                    var cont = message.content.slice(guildsettings.prefix.length).split(" "); // Slice prefix from message
+                    let cont = message.content.slice(guildsettings.prefix.length).split(" "); // Slice prefix from message
                     if (bot.commands.get(cont[1].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``); // Check if command exists and if so add ` around prefix in message
                 }
 
@@ -230,7 +230,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                         fn.msgtomodlogchannel(message.guild, "movemsg", message.author, "", ["convo", args[0], movereason, message.channel.id, movechannelid]); // Pass information to modlog function
                     } else {
                         // Put all attachments into message as we won't bother with files in the modlogmsg so the code from above won't work here
-                        var modlogcontent = originalmsg.content;
+                        let modlogcontent = originalmsg.content;
 
                         if ([...originalmsg.attachments.values()].length > 0) {
                             if (modlogcontent.length > 0) modlogcontent += "\n\n"; // If there is text put a new line between the text and attachment url

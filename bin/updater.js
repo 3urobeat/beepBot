@@ -20,7 +20,7 @@ const fs       = require("fs");
 
 const oldconfig = Object.assign(require("./config.json")); // Get content of old config
 
-var logger = require("./functions/logger.js").logger; // Custom logger
+let logger = require("./functions/logger.js").logger; // Custom logger
 
 
 const url = "https://github.com/3urobeat/beepBot/archive/master.zip";

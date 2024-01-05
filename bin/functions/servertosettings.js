@@ -25,11 +25,15 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Function} logger Reference to the logger function
  * @param {Discord.Guild} guild The Discord guild class
- * @param {Boolean} removeentry Set to true if this function is called from guildDelete event. It will mark db entries for this server to expire in 7 days.
+ * @param {boolean} removeentry Set to true if this function is called from guildDelete event. It will mark db entries for this server to expire in 7 days.
  */
 module.exports.run = (bot, logger, guild, removeentry) => {
 
     // Helper function that avoids having to copy paste the same msg and makes changing it easier
+    /**
+     *
+     * @param err
+     */
     function logDbErr(err) { logger("error", "servertosettings.js", `Error updating db of guild ${guild.id}. Error: ${err}`); } // eslint-ignore-line no-inner-declarations
 
     // If removeentry is true set all db entries to expire in 7 days and stop further execution

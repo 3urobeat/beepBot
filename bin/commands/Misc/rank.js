@@ -22,17 +22,17 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
 
-    var levelUser = require("../../functions/levelUser");
+    let levelUser = require("../../functions/levelUser");
 
     // Get avatar of targeted user
-    var targetuser = fn.getuserfrommsg(message, args, 0, null, true);
+    let targetuser = fn.getuserfrommsg(message, args, 0, null, true);
     if (!targetuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (targetuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", targetuser));
 
@@ -52,7 +52,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         }
 
         // Create message template
-        var msg = {
+        let msg = {
             embeds: [{
                 title: lang.cmd.othermisc.ranktitle.replace("username", `${targetuser.username}#${targetuser.discriminator}`),
                 color: fn.randomhex(),
@@ -77,7 +77,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     value: String(Math.floor(levelUser.levelToXp(Math.floor(levelUser.xpToLevel(doc.xp)) + 1) - doc.xp)) + " XP"
                 }]
             }
-        ]};
+            ]};
 
         // Display warning message if level system is currently disabled
         if (!guildsettings.levelsystem) msg.embeds[0].description = lang.cmd.othermisc.ranklevelsystemdisabled;

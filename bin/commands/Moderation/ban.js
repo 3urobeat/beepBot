@@ -22,15 +22,15 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    var Discord = require("discord.js");
+    let Discord = require("discord.js");
 
-    var banuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
+    let banuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
     if (!banuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (banuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", banuser));
 
@@ -46,7 +46,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     }
 
     // Get reason if there is one provided
-    var banreason, banreasontext = "";
+    let banreason, banreasontext = "";
 
     fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         banreason = reason;
@@ -56,7 +56,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     // Checks user perms and ban
     if (message.member.permissions.has(Discord.PermissionFlagsBits.BanMembers, Discord.PermissionFlagsBits.Administrator)) {
         message.guild.members.cache.get(banuser.id).ban({ reason: banreason }).then(() => {
-            var notifytimetext = lang.cmd.ban.permanent; // If not permanent it will get changed by the time argument code block
+            let notifytimetext = lang.cmd.ban.permanent; // If not permanent it will get changed by the time argument code block
 
             // Time Argument
             if (args.includes("-time") || args.includes("-t")) {

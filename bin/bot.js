@@ -28,7 +28,7 @@ const nedb     = require("@yetzt/nedb");
 const fs       = require("fs");
 
 const configpath = "./config.json";
-var   config     = require(configpath);
+let   config     = require(configpath);
 const constants  = require("./constants.json");
 
 // I hate intents
@@ -49,10 +49,10 @@ const bot = new Discord.Client({
     partials: [Discord.Partials.Message, Discord.Partials.Reaction] // Partials are messages that are not fully cached and have to be fetched manually
 });
 
-var fn = {}; // Object that will contain all functions to be accessible from commands
+let fn = {}; // Object that will contain all functions to be accessible from commands
 
-var loggedin      = false;
-var logafterlogin = [];
+let loggedin      = false;
+let logafterlogin = [];
 
 bot.config    = config; // I'm just gonna add it to the bot object as quite a few cmds will probably need the config later on
 bot.constants = constants;
@@ -62,14 +62,15 @@ global.config = config;
 /* ------------ Functions for all shards: ------------ */
 /**
  * Logs text to the terminal and appends it to the output.txt file.
- * @param {String} type info, warn or error
- * @param {String} origin Filename from where the text originates from
- * @param {String} str The text to log into the terminal
- * @param {Boolean} nodate Setting to true will hide date and time in the message
- * @param {Boolean} remove Setting to true will remove this message with the next one
- * @returns {String} The resulting String
+ * @param {string} type info, warn or error
+ * @param {string} origin Filename from where the text originates from
+ * @param {string} str The text to log into the terminal
+ * @param {boolean} nodate Setting to true will hide date and time in the message
+ * @param {boolean} remove Setting to true will remove this message with the next one
+ * @param animation
+ * @returns {string} The resulting String
  */
-var logger = (type, origin, str, nodate, remove, animation) => { // Custom logger (wrapping it here so that I can pass another argument)
+let logger = (type, origin, str, nodate, remove, animation) => { // Custom logger (wrapping it here so that I can pass another argument)
     if (loggedin) logafterlogin = undefined;
     require("./functions/logger.js").logger(type, origin, str, nodate, remove, animation, logafterlogin);
 };
@@ -77,12 +78,12 @@ logger.animation     = require("./functions/logger.js").logger.animation;
 logger.stopAnimation = require("./functions/logger.js").logger.stopAnimation;
 
 /**
-* Returns the language obj the specified server has set
-* @param {Number} guildid The id of the guild
-* @param {Object} guildsettings The settings of this guild
-* @returns {Object} lang object callback
-*/
-var lang = (guildid, guildsettings) => {
+ * Returns the language obj the specified server has set
+ * @param {number} guildid The id of the guild
+ * @param {object} guildsettings The settings of this guild
+ * @returns {object} lang object callback
+ */
+let lang = (guildid, guildsettings) => {
     if (!guildid) {
         logger("error", "bot.js", "function lang: guildid not specified!");
         return {};
@@ -101,33 +102,33 @@ var lang = (guildid, guildsettings) => {
 
 /**
  * Adds the specified guild to the settings database with default values
- * @param {Object} guild The message.guild object
- * @param {Boolean} removeentry Removes the guild from the database
+ * @param {object} guild The message.guild object
+ * @param {boolean} removeentry Removes the guild from the database
  */
-var servertosettings = (guild, removeentry) => {
+let servertosettings = (guild, removeentry) => {
     require("./functions/servertosettings.js").run(bot, logger, guild, removeentry); // Call the run function of the file which contains the code of this function
 };
 
 /**
  * Attempts to get a user object from a message
- * @param {Object} message The message object
+ * @param {object} message The message object
  * @param {Array} args The args array
- * @param {Number} startindex The index of the args array to start searching from
- * @param {Number} endindex The index of the args array to stop searching (won't be included) (optional)
- * @param {Boolean} allowauthorreturn Specifies if the function should return the author if no args is given
+ * @param {number} startindex The index of the args array to start searching from
+ * @param {number} endindex The index of the args array to stop searching (won't be included) (optional)
+ * @param {boolean} allowauthorreturn Specifies if the function should return the author if no args is given
  * @param {Array} stoparguments Arguments that will stop/limit the search (basically an automatic endindex)
  * @returns The retrieved user object, undefined if nothing was found or a number >1 if more than one user was found
  */
-var getuserfrommsg = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
+let getuserfrommsg = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
     return require("./functions/getuserfrommsg.js").run(message, args, startindex, endindex, allowauthorreturn, stoparguments);
 };
 
 /**
  * Attempts to get time from message and converts it into ms
  * @param {Array} args The args array
- * @param {function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
+ * @param {Function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
  */
-var gettimefrommsg = (args, callback) => {
+let gettimefrommsg = (args, callback) => {
     require("./functions/gettimefrommsg.js").run(args, (time, unitindex, arr) => { callback(time, unitindex, arr); }); // Callback the callback
 };
 
@@ -135,51 +136,51 @@ var gettimefrommsg = (args, callback) => {
  * Attempts to get a reason from a message
  * @param {Array} args The args array
  * @param {Array} stoparguments Arguments that will stop/limit the search
- * @param {function} [callback] Called with `reason` (String or undefined) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
+ * @param {Function} [callback] Called with `reason` (String or undefined) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
  */
-var getreasonfrommsg = (args, stoparguments, callback) => {
+let getreasonfrommsg = (args, stoparguments, callback) => {
     require("./functions/getreasonfrommsg.js").run(args, stoparguments, (reason, reasontext) => { callback(reason, reasontext); }); // Callback the callback
 };
 
 /**
  * Sends a message to the modlogchannel of that guild if it has one set
  * @param {Discord.Guild} guild The guild obj
- * @param {String} action Type of action
+ * @param {string} action Type of action
  * @param {Discord.User} author Initiator of the action
  * @param {Discord.User} receiver The affected user of the action
- * @param {Array<String>} details Additional details
+ * @param {Array<string>} details Additional details
  */
-var msgtomodlogchannel = (guild, action, author, receiver, details) => {
+let msgtomodlogchannel = (guild, action, author, receiver, details) => {
     require("./functions/msgtomodlogchannel.js").run(bot, logger, guild, action, author, receiver, details); // Call the run function of the file which contains the code of this function
 };
 
 /**
  * Rounds a number with x decimals
- * @param {Number} value Number to round
- * @param {Number} decimals Amount of decimals
- * @returns {Number} Rounded number
+ * @param {number} value Number to round
+ * @param {number} decimals Amount of decimals
+ * @returns {number} Rounded number
  */
-var round = (value, decimals) => {
+let round = (value, decimals) => {
     return Number(Math.round(value+"e"+decimals)+"e-"+decimals);
 };
 
 /**
  * Returns random hex value
- * @returns {Number} Hex value
+ * @returns {number} Hex value
  */
-var randomhex = () => {
+let randomhex = () => {
     return Math.floor(Math.random() * 16777214) + 1;
 };
 
 /**
  * Returns a random String from an array
- * @param {Array<String>} arr An Array with Strings to choose from
- * @returns {String} A random String from the provided array
+ * @param {Array<string>} arr An Array with Strings to choose from
+ * @returns {string} A random String from the provided array
  */
-var randomstring = arr => arr[Math.floor(Math.random() * arr.length)];
+let randomstring = arr => arr[Math.floor(Math.random() * arr.length)];
 
-var owneronlyerror = (lang) => { return randomstring(lang.general.owneronlyerror) + " (Bot Owner only-Error)"; };
-var usermissperm   = (lang) => { return randomstring(lang.general.usermissperm) + " (Role permission-Error)"; };
+let owneronlyerror = (lang) => { return randomstring(lang.general.owneronlyerror) + " (Bot Owner only-Error)"; };
+let usermissperm   = (lang) => { return randomstring(lang.general.usermissperm) + " (Role permission-Error)"; };
 
 
 /* ------------ Run the command reader ------------ */
@@ -189,7 +190,7 @@ require("./helpers/commandReader.js").run(bot); // Function returns amount of co
 /* -------------- Create lang object -------------- */
 /**
  * Function to construct the language object
- * @param {String} dir Language Folder Root Path
+ * @param {string} dir Language Folder Root Path
  */
 function langFiles(dir) { // Idea from https://stackoverflow.com/a/63111390/12934162
     fs.readdirSync(dir).forEach(file => {
@@ -281,7 +282,7 @@ bot.levelsdb = levelsdb; // Add reference to bot obj
 /* ------------ Startup: ------------ */
 bot.on("ready", async function() {
     if ([...bot.guilds.cache.values()].length == 0) return logger("warn", "bot.js", "This shard has no guilds and is therefore unused!");
-    var thisshard = [...bot.guilds.cache.values()][0].shard; // Get shard instance of this shard with this "workaround" because it isn't directly accessable
+    let thisshard = [...bot.guilds.cache.values()][0].shard; // Get shard instance of this shard with this "workaround" because it isn't directly accessable
 
     // Set activity either to gameoverwrite or gamerotation[0]
     if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) {
@@ -294,7 +295,7 @@ bot.on("ready", async function() {
     }
 
     // Read amount of commands found without aliases
-    var commandcount = [...bot.commands.values()].filter(e => !e.info.thisisanalias).length;
+    let commandcount = [...bot.commands.values()].filter(e => !e.info.thisisanalias).length;
 
     // Print last part of ready message when this is shard 0, otherwise print small ready message for this shard
     if (thisshard.id == 0) {
@@ -359,6 +360,11 @@ bot.on("ready", async function() {
             lastPresenceChange = Date.now();
 
             // Replace code in string (${})
+            /**
+             *
+             * @param thisgame
+             * @param callback
+             */
             function processThisGame(thisgame, callback) {
                 try {
                     let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs); // Matches will be everything in between a "${" and "}" -> either null or array with results
@@ -391,7 +397,7 @@ bot.on("ready", async function() {
         // Avatar checker for christmas
         if (config.loginmode == "normal") {
             let lastxmascheck = Date.now() - 21600000; // Subtract 6 hours so that the first interval will already get executed
-            var currentavatar = "";
+            let currentavatar = "";
 
             function checkavatar() { //eslint-disable-line
                 if (new Date().getMonth() == "11") { // If month is December (getMonth counts from 0)

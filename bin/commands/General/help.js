@@ -22,19 +22,23 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    var lf = lang.cmd.help; // Lf for lang-file
+    let lf = lang.cmd.help; // Lf for lang-file
 
     // Process first argument
     if (!args[0]) args[0] = "";
         else args[0].replace(guildsettings.prefix, ""); // Remove prefix from argument if the user should have provided one
 
     // Helper function to replace boolean in string with emote
+    /**
+     *
+     * @param value
+     */
     function replaceBool(value) {
         return String(value).replace("true", "✅").replace("false", "❌");
     }
@@ -80,11 +84,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     } else { // No argument given, construct full list of commands
 
-        var msg = {};
-        var commandsObj = [...bot.commands.values()];
-        var unsortedcategories = {};
-        var sortedcategories = {};
-        var commandcount = 0;
+        let msg = {};
+        let commandsObj = [...bot.commands.values()];
+        let unsortedcategories = {};
+        let sortedcategories = {};
+        let commandcount = 0;
 
         // Pre-configure message
         msg = {

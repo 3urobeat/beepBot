@@ -22,12 +22,18 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+    /**
+     *
+     * @param wordarr
+     * @param decision
+     * @param result
+     */
     function sendresponse(wordarr, decision, result) {
         if (wordarr[0] == decision[0]) return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpstie}`);
 
@@ -35,7 +41,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             else return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpsloose}`);
     }
 
-    var word     = args[0];
+    let word     = args[0];
     let decision = fn.randomstring([[0, ":rocket:"], [1, ":newspaper:"], [2, ":scissors:"]]); // Get decision by index ["rock", "paper", "scissors"]
 
     switch (word) { // User decision

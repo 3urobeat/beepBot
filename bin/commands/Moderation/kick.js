@@ -22,19 +22,19 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {Discord.Client} bot The Discord client class
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
+ * @param {object} lang The language object for this guild
  * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} guildsettings All settings of this guild
+ * @param {object} fn The object containing references to functions for easier access
  */
 module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    var Discord = require("discord.js");
+    let Discord = require("discord.js");
 
-    var kickuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
+    let kickuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
     if (!kickuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (kickuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", kickuser));
 
-    var guildowner = await message.guild.fetchOwner();
+    let guildowner = await message.guild.fetchOwner();
 
     if (guildowner && guildowner.user.id !== message.author.id && message.guild.members.cache.get(kickuser.id).roles.highest.position >= message.member.roles.highest.position) {
         message.channel.send(lang.cmd.kick.highestRoleError);
@@ -50,7 +50,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     }
 
     // Get reason if there is one provided
-    var kickreason, kickreasontext = "";
+    let kickreason, kickreasontext = "";
 
     fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         kickreason = reason;
