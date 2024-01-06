@@ -15,9 +15,7 @@
  */
 
 
-// This file can restart the bot without restarting the node process
-var config = require("./bin/config.json");
+// Start
+const Controller = require("./bin/controller.js");
 
-Object.keys(require.cache).forEach(function(key) { delete require.cache[key]; }); // Clear cache of everything in case this is a restart
-
-require(config.filetostart);
+new Controller().start();
