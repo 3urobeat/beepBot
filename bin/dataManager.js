@@ -16,7 +16,9 @@
 
 
 const fs   = require("fs");
+const path = require("path");
 const nedb = require("@seald-io/nedb");
+const { default: Nedb } = require("@seald-io/nedb"); // eslint-disable-line
 
 const tokens = require("../../token.json");
 
@@ -39,6 +41,9 @@ const DataManager = function() {
         token: tokens.token,
         respawn: true
     };
+
+    // Stores all language files supported by the bot
+    this.langObj = {};
 
 
     /**
@@ -76,6 +81,10 @@ const DataManager = function() {
      */
     this.levelsdb = {};
 
+
+    // Load DataManager's helper files
+    require("./functions/getLang.js");
+
 };
 
 module.exports = DataManager;
@@ -93,6 +102,45 @@ DataManager.prototype.loadData = async function() {
         this.botSettings.token     = tokens.testtoken;
         this.botSettings.respawn   = false;
     }
+
+
+    /**
+     * Function to construct the language object
+     * @param {string} dir Language Folder Root Path
+     */
+    let langFiles = (dir) => { // Idea from https://stackoverflow.com/a/63111390/12934162
+        fs.readdirSync(dir).forEach((file) => {
+            const absolute = path.join(dir, file);
+
+            if (fs.statSync(absolute).isDirectory()) {
+                return langFiles(absolute);
+            } else {
+                if (!file.includes(".json")) return; // Ignore all files that aren't .json
+                let result = absolute.replace(".json", "").replace(/\\/g, "/").split("/"); // Remove file ending, convert windows \ to unix / and split path into array
+
+                result.splice(0, 2); // Remove "bin" and "lang"
+                result.splice(2, 1); // Remove category name
+
+                if (!this.langObj[result[0]]) this.langObj[result[0]] = {}; // Create language key
+                if (!this.langObj[result[0]]["cmd"]) this.langObj[result[0]]["cmd"] = {}; // Create cmd key
+
+                try {
+                    if (result[1] == "commands") {
+                        this.langObj[result[0]]["cmd"][result[2]] = require(absolute.replace("bin", "."));
+                    } else {
+                        this.langObj[result[0]][result[1]] = require(absolute.replace("bin", "."));
+                    }
+                } catch(err) {
+                    if (err) logger("warn", "dataManager.js", `langFiles: lang ${result[0]} has an invalid file: ${err}`);
+                }
+
+                return;
+            }
+        });
+    };
+
+    langFiles("./bin/lang/"); // RECURSION TIME!
+
 
     // Load databases
     this.settings         = new nedb({ filename: "./data/settings.db", autoload: true }); // Autoload
@@ -124,3 +172,13 @@ DataManager.prototype.appendToCmdUse = function(str) {
         if (err) logger("error", "controller.js", "writing startup to cmduse.txt error: " + err);
     });
 };
+
+
+/* -------- Register functions to let the IntelliSense know what's going on in helper files -------- */
+
+/**
+ * Gets the language of a guild from settings
+ * @param {string} guildID The guild ID to get the language of
+ * @returns {Promise.<object | null>} Resolves with guildSettings object or defaultSettings. On error, null is returned.
+ */
+DataManager.prototype.getLang = async function(guildID) {}; // eslint-disable-line
