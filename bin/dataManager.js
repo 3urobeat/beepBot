@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 09:30:45
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 17:50:13
+ * Last Modified: 2024-01-07 18:49:04
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -19,6 +19,7 @@ const fs   = require("fs");
 const path = require("path");
 const nedb = require("@seald-io/nedb");
 const { default: Nedb } = require("@seald-io/nedb"); // eslint-disable-line
+const Discord = require("discord.js");
 
 const tokens = require("../../token.json");
 
@@ -44,6 +45,13 @@ const DataManager = function() {
 
     // Stores all language files supported by the bot
     this.langObj = {};
+
+
+    /**
+     * Stores all commands
+     * @type {Discord.Collection}
+     */
+    this.commands;
 
 
     /**
@@ -84,6 +92,7 @@ const DataManager = function() {
 
     // Load DataManager's helper files
     require("./functions/getLang.js");
+    require("./helpers/commandReader.js");
 
 };
 
@@ -104,6 +113,7 @@ DataManager.prototype.loadData = async function() {
     }
 
 
+    // Load languages
     /**
      * Function to construct the language object
      * @param {string} dir Language Folder Root Path
@@ -140,6 +150,10 @@ DataManager.prototype.loadData = async function() {
     };
 
     langFiles("./bin/lang/"); // RECURSION TIME!
+
+
+    // Load commands
+    this.loadCommands();
 
 
     // Load databases
@@ -182,3 +196,8 @@ DataManager.prototype.appendToCmdUse = function(str) {
  * @returns {Promise.<object | null>} Resolves with guildSettings object or defaultSettings. On error, null is returned.
  */
 DataManager.prototype.getLang = async function(guildID) {}; // eslint-disable-line
+
+/**
+ * Reads all commands in ./bin/commands and loads them into a collection
+ */
+DataManager.prototype.loadCommands = function() {};
