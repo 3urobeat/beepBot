@@ -4,7 +4,7 @@
  * Created Date: 2020-10-04 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 18:36:14
+ * Last Modified: 2024-01-07 19:24:05
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -64,12 +64,28 @@ const Bot = function(controller) {
 
 
     // Load Bot's helper files
+    require("./events/guildCreate.js");
+    require("./events/guildDelete.js");
+    require("./events/guildMemberAdd.js");
+    require("./events/guildMemberRemove.js");
+    require("./events/interactionCreate.js");
+    require("./events/message.js");
+    require("./events/messageReactionAdd.js");
     require("./events/ready.js");
+    require("./events/voiceStateUpdate.js");
     require("./helpers/registerSlashCommands.js");
 
 
     // Attach event handlers
+    this._attachDiscordGuildCreateEvent();
+    this._attachDiscordGuildDeleteEvent();
+    this._attachDiscordGuildMemberAddEvent();
+    this._attachDiscordGuildMemberRemoveEvent();
+    this._attachDiscordInteractionCreateEvent();
+    this._attachDiscordMessageEvent();
+    this._attachDiscordMessageReactionAddEvent();
     this._attachDiscordReadyEvent();
+    this._attachDiscordVoiceStateUpdateEvent();
 
 };
 
@@ -116,9 +132,49 @@ bot.login();
 /* -------- Register functions to let the IntelliSense know what's going on in helper files -------- */
 
 /**
+ * Handles discord.js's guildCreate event of this shard
+ */
+Bot.prototype._attachDiscordGuildCreateEvent = function() {};
+
+/**
+ * Handles discord.js's guildDelete event of this shard
+ */
+Bot.prototype._attachDiscordGuildDeleteEvent = function() {};
+
+/**
+ * Handles discord.js's guildMemberAdd event of this shard
+ */
+Bot.prototype._attachDiscordGuildMemberAddEvent = function() {};
+
+/**
+ * Handles discord.js's guildMemberRemove event of this shard
+ */
+Bot.prototype._attachDiscordGuildMemberRemoveEvent = function() {};
+
+/**
+ * Handles discord.js's interactionCreate event of this shard
+ */
+Bot.prototype._attachDiscordInteractionCreateEvent = function() {};
+
+/**
+ * Handles discord.js's message (renamed to messageCreate) event of this shard
+ */
+Bot.prototype._attachDiscordMessageEvent = function() {};
+
+/**
+ * Handles discord.js's messageReactionAdd event of this shard
+ */
+Bot.prototype._attachDiscordMessageReactionAddEvent = function() {};
+
+/**
  * Handles discord.js's ready event of this shard
  */
 Bot.prototype._attachDiscordReadyEvent = function() {};
+
+/**
+ * Handles discord.js's voiceStateUpdate event of this shard
+ */
+Bot.prototype._attachDiscordVoiceStateUpdateEvent = function() {};
 
 /**
  * Registers slash commands

@@ -4,7 +4,7 @@
  * Created Date: 2021-02-07 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:26:14
+ * Last Modified: 2024-01-07 19:05:47
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,29 +15,30 @@
  */
 
 
-// This file contains code of the servertosettings function and is called by bot.js
-// I did this to reduce the amount of lines in bot.js to make finding stuff easier.
+const Bot = require("../bot.js");
 
-const Discord = require('discord.js'); //eslint-disable-line
 
 /**
- * The guildMemberRemove event
- * @param {Discord.Client} bot The Discord client class
- * @param {Discord.GuildMember} member The Discord guild member class
+ * Handles discord.js's guildMemberRemove event of this shard
  */
-module.exports.run = (bot, member) => {
-    bot.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
-        if (!guildsettings) return; // Yeah better stop if nothing was found to avoid errors
-        if (!guildsettings.systemchannel) return;
-        if (!guildsettings.byemsg) return;
+Bot.prototype._attachDiscordGuildMemberRemoveEvent = function() {
 
-        let msgtosend = String(guildsettings.byemsg);
-        msgtosend = msgtosend.replace("username", member.user.username);
-        msgtosend = msgtosend.replace("servername", member.guild.name);
+    this.client.on("guildMemberRemove", (member) => {
 
-        let channel = member.guild.channels.cache.get(String(guildsettings.systemchannel));
+        this.data.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
+            if (!guildsettings) return; // Yeah better stop if nothing was found to avoid errors
+            if (!guildsettings.systemchannel) return;
+            if (!guildsettings.byemsg) return;
 
-        if (!channel) return;
-        channel.send(msgtosend).catch(() => {}); // Catch but ignore error
+            let msgtosend = String(guildsettings.byemsg);
+            msgtosend = msgtosend.replace("username", member.user.username);
+            msgtosend = msgtosend.replace("servername", member.guild.name);
+
+            let channel = member.guild.channels.cache.get(String(guildsettings.systemchannel));
+
+            if (!channel) return;
+            channel.send(msgtosend).catch(() => {}); // Catch but ignore error
+        });
+
     });
 };

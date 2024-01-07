@@ -4,7 +4,7 @@
  * Created Date: 2021-02-07 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:26:31
+ * Last Modified: 2024-01-07 19:04:57
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,36 +15,38 @@
  */
 
 
-// This file contains code of the guildMemberAdd event and is called by bot.js
-// I did this to reduce the amount of lines in bot.js to make finding stuff easier.
+const Bot = require("../bot.js");
 
-const Discord = require('discord.js'); //eslint-disable-line
 
 /**
- * The guildMemberAdd event
- * @param {Discord.Client} bot The Discord client class
- * @param {Discord.GuildMember} member The Discord guild member class
+ * Handles discord.js's guildMemberAdd event of this shard
  */
-module.exports.run = (bot, member) => {
-    // Take care of greetmsg
-    bot.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
-        if (!guildsettings) return; // Yeah better stop if nothing was found to avoid errors
+Bot.prototype._attachDiscordGuildMemberAddEvent = function() {
 
-        if (guildsettings.systemchannel && guildsettings.greetmsg) {
-            // Check settings.json for greetmsg, replace username and servername and send it into setting's systemchannel
-            let msgtosend = guildsettings.greetmsg;
+    this.client.on("guildMemberAdd", (member) => {
 
-            if (msgtosend.includes("@username")) msgtosend = msgtosend.replace("@username", `<@${member.user.id}>`);
-                else msgtosend = msgtosend.replace("username", member.user.username);
+        // Take care of greetmsg
+        this.data.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
+            if (!guildsettings) return; // Yeah better stop if nothing was found to avoid errors
 
-            msgtosend = msgtosend.replace("servername", member.guild.name);
+            if (guildsettings.systemchannel && guildsettings.greetmsg) {
+                // Check settings.json for greetmsg, replace username and servername and send it into setting's systemchannel
+                let msgtosend = guildsettings.greetmsg;
 
-            member.guild.channels.cache.get(String(guildsettings.systemchannel)).send(msgtosend).catch(() => {}); // Catch but ignore error
-        }
+                if (msgtosend.includes("@username")) msgtosend = msgtosend.replace("@username", `<@${member.user.id}>`);
+                    else msgtosend = msgtosend.replace("username", member.user.username);
 
-        // Take care of memberaddrole
-        if (guildsettings.memberaddroles.length > 0) {
-            member.roles.add(guildsettings.memberaddroles); // Add all roles at once (memberaddroles is an array)
-        }
+                msgtosend = msgtosend.replace("servername", member.guild.name);
+
+                member.guild.channels.cache.get(String(guildsettings.systemchannel)).send(msgtosend).catch(() => {}); // Catch but ignore error
+            }
+
+            // Take care of memberaddrole
+            if (guildsettings.memberaddroles.length > 0) {
+                member.roles.add(guildsettings.memberaddroles); // Add all roles at once (memberaddroles is an array)
+            }
+        });
+
     });
+
 };

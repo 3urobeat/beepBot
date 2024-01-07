@@ -4,7 +4,7 @@
  * Created Date: 2021-02-11 18:54:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:25:34
+ * Last Modified: 2024-01-07 19:19:53
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,38 +15,39 @@
  */
 
 
-// This file contains code of the voiceStateUpdate event and is called by bot.js
-// I did this to reduce the amount of lines in bot.js to make finding stuff easier.
+const Bot = require("../bot.js");
 
-const Discord = require('discord.js'); //eslint-disable-line
 
 /**
- * The voiceStateUpdate event
- * @param {Discord.Client} bot The Discord client class
- * @param {Discord.VoiceState} oldstate The Discord VoiceState class of the oldstate
- * @param {Discord.VoiceState} newstate The Discord VoiceState class of the newstate
+ * Handles discord.js's voiceStateUpdate event of this shard
  */
-module.exports.run = (bot, oldstate, newstate) => {
-    if (!oldstate || !newstate) return; // Dunno why but I once got a 'Cannot read property 'id' of null' so maybe it can be undefined? dunno but it is weird
+Bot.prototype._attachDiscordVoiceStateUpdateEvent = function() {
 
-    bot.settings.findOne({ guildid: oldstate.guild.id }, (err, gs) => {
-        if (err) gs = bot.langObj["english"];
+    this.client.on("voiceStateUpdate", (oldstate, newstate) => {
 
-        // Check if this update is caused by someone who needs their mute status changed
-        bot.timedmutes.findOne({$and: [{ userid: newstate.member.id }, { guildid: newstate.guild.id }] }, (err, doc) => {
-            if (!doc) return; // Nothing found
+        if (!oldstate || !newstate) return; // Dunno why but I once got a 'Cannot read property 'id' of null' so maybe it can be undefined? dunno but it is weird
 
-            if (doc.where == "all" || doc.where == "voice") { // Check if the mute type is voice
-                if (doc.type == "tempmute" || doc.type == "permmute" && !newstate.member.voice.serverMute) { // Check if user is not muted (serverMute returns true or false) but should be muted
-                    // Mute and attach reason for audit log
-                    newstate.member.voice.setMute(true, bot.langObj[gs.lang].general.voicestateupdatemutereason.replace("muteauthor", newstate.guild.members.cache.get(doc.authorid).user.username).replace("reasontext", doc.mutereason)).catch(() => { });
+        this.data.settings.findOne({ guildid: oldstate.guild.id }, (err, gs) => {
+            if (err) gs = this.data.langObj["english"];
+
+            // Check if this update is caused by someone who needs their mute status changed
+            this.data.timedmutes.findOne({$and: [{ userid: newstate.member.id }, { guildid: newstate.guild.id }] }, (err, doc) => {
+                if (!doc) return; // Nothing found
+
+                if (doc.where == "all" || doc.where == "voice") { // Check if the mute type is voice
+                    if (doc.type == "tempmute" || doc.type == "permmute" && !newstate.member.voice.serverMute) { // Check if user is not muted (serverMute returns true or false) but should be muted
+                        // Mute and attach reason for audit log
+                        newstate.member.voice.setMute(true, this.data.langObj[gs.lang].general.voicestateupdatemutereason.replace("muteauthor", newstate.guild.members.cache.get(doc.authorid).user.username).replace("reasontext", doc.mutereason)).catch(() => { });
+                    }
+
+                    if (doc.type == "unmute") {
+                        newstate.member.voice.setMute(false, this.data.langObj[gs.lang].general.voicestateupdateunmutereason.replace("muteauthor", newstate.guild.members.cache.get(doc.authorid).user.username).replace("reasontext", doc.mutereason)).catch(() => { });
+                        this.data.timedmutes.remove({$and: [{ userid: newstate.member.id }, { guildid: newstate.guild.id }]});
+                    }
                 }
-
-                if (doc.type == "unmute") {
-                    newstate.member.voice.setMute(false, bot.langObj[gs.lang].general.voicestateupdateunmutereason.replace("muteauthor", newstate.guild.members.cache.get(doc.authorid).user.username).replace("reasontext", doc.mutereason)).catch(() => { });
-                    bot.timedmutes.remove({$and: [{ userid: newstate.member.id }, { guildid: newstate.guild.id }]});
-                }
-            }
+            });
         });
+
     });
+
 };
