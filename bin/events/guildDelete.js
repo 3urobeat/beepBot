@@ -4,7 +4,7 @@
  * Created Date: 2023-02-27 17:35:50
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:26:41
+ * Last Modified: 2024-01-07 19:32:01
  * Modified By: 3urobeat
  *
  * Copyright (c) 2023 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,20 +15,23 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Bot = require("../bot.js");
+
 
 /**
- * The guildDelete event
- * @param {Discord.Client} bot The Discord client class
- * @param {Function} logger The logger function
- * @param {Discord.Guild} guild The Discord guild class
+ * Handles discord.js's guildDelete event of this shard
  */
-module.exports.run = async (bot, logger, guild) => { //eslint-disable-line
+Bot.prototype._attachDiscordGuildDeleteEvent = function() {
 
-    bot.shard.fetchClientValues("guilds.cache.size").then(res => { // Wait for promise
-        logger("info", "guildDelete.js", `I have been removed from: ${guild.name} (${guild.id}). I'm now in ${res} servers.`);
+    this.client.on("guildDelete", (guild) => {
+
+        this.client.shard.fetchClientValues("guilds.cache.size")
+            .then((res) => {
+                logger("info", "guildDelete.js", `I have been removed from: ${guild.name} (${guild.id}). I'm now in ${res} servers.`);
+            });
+
+        bot.fn.servertosettings(guild, true); // True argument will remove function from db
+
     });
-
-    bot.fn.servertosettings(guild, true); // True argument will remove function from db
 
 };
