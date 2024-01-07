@@ -4,7 +4,7 @@
  * Created Date: 2020-10-01 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-06 12:33:33
+ * Last Modified: 2024-01-07 17:04:47
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -16,6 +16,7 @@
 
 
 const Discord = require("discord.js");
+const logger  = require("output-logger"); // Look Mom, it's my own library!
 
 const DataManager = require("./dataManager.js");
 const ascii       = require("./ascii.js");
@@ -38,7 +39,6 @@ const Controller = function() {
 
     // Load Controller's helper files
     require("./helpers/handleErrors.js");
-    require("./helpers/logger.js");
 
 
     // Attach error handler
@@ -53,6 +53,18 @@ module.exports = Controller;
  * Starts the bot
  */
 Controller.prototype.start = async function() {
+
+    // Configure my logging library (https://github.com/3urobeat/output-logger#options-1)
+    logger.options({
+        msgstructure: `[${logger.Const.ANIMATION}] [${logger.Const.TYPE} | ${logger.Const.ORIGIN}] [${logger.Const.DATE}] ${logger.Const.MESSAGE}`,
+        paramstructure: [logger.Const.TYPE, logger.Const.ORIGIN, logger.Const.MESSAGE, "nodate", "remove", logger.Const.ANIMATION],
+        outputfile: "./output.txt",
+        animationdelay: 250,
+        printdebug: false
+    });
+
+    global.logger = logger;
+
 
     // Print startup messages
     const randomstring = arr => arr[Math.floor(Math.random() * arr.length)];
@@ -145,6 +157,7 @@ Controller.prototype.start = async function() {
     });
 
 };
+
 
 /* -------- Register functions to let the IntelliSense know what's going on in helper files -------- */
 /**
