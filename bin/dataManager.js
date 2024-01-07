@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 09:30:45
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 17:03:40
+ * Last Modified: 2024-01-07 17:50:13
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -105,11 +105,22 @@ DataManager.prototype.loadData = async function() {
 
 
 /**
+ * Displays some relevant warnings
+ */
+DataManager.prototype.checkData = function() {
+    if (this.config.gamerotateseconds <= 10) logger("warn", "dataManager.js", "gamerotateseconds in config is <= 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true);
+    if (this.config.gameurl == "") logger("warn", "dataManager.js", "gameurl in config is empty and will break the bots presence!", true);
+};
+
+
+/**
  * Appends a line to cmduse.txt
  * @param {string} str The string to append
  */
 DataManager.prototype.appendToCmdUse = function(str) {
-    fs.appendFile("./bin/cmduse.txt", `\n\n[${(new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, " ").replace(/\..+/, "")}] ${str}\n`, (err) => {
+    let isoDate = (new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, " ").replace(/\..+/, "");
+
+    fs.appendFile("./bin/cmduse.txt", `\n\n[${isoDate}] ${str}\n`, (err) => {
         if (err) logger("error", "controller.js", "writing startup to cmduse.txt error: " + err);
     });
 };
