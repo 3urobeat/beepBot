@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 09:30:45
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 18:49:04
+ * Last Modified: 2024-01-07 23:24:54
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -18,8 +18,9 @@
 const fs   = require("fs");
 const path = require("path");
 const nedb = require("@seald-io/nedb");
+
 const { default: Nedb } = require("@seald-io/nedb"); // eslint-disable-line
-const Discord = require("discord.js");
+const Discord           = require("discord.js");     // eslint-disable-line
 
 const tokens = require("../../token.json");
 
@@ -92,6 +93,8 @@ const DataManager = function() {
 
     // Load DataManager's helper files
     require("./functions/getLang.js");
+    require("./functions/levelUser.js");
+    require("./functions/serverToSettings.js");
     require("./helpers/commandReader.js");
 
 };
@@ -193,9 +196,40 @@ DataManager.prototype.appendToCmdUse = function(str) {
 /**
  * Gets the language of a guild from settings
  * @param {string} guildID The guild ID to get the language of
- * @returns {Promise.<object | null>} Resolves with guildSettings object or defaultSettings. On error, null is returned.
+ * @returns {Promise.<object | null>} Resolves with the correct language object or null if guildID is undefined
  */
 DataManager.prototype.getLang = async function(guildID) {}; // eslint-disable-line
+
+/**
+ * Handles the xp addition and level up messages
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.User} author The user who sent the message
+ * @param {Discord.Guild} guild The guild of the message
+ * @param {Discord.GuildChannel} channel The channel in which the message was sent
+ */
+DataManager.prototype.levelUser = async function(bot, author, guild, channel) {}; // eslint-disable-line
+
+/**
+ * Takes user xp and returns their level
+ * @param {number} xp The current total XP
+ * @returns {number} Current level
+ */
+DataManager.prototype.xpToLevel = function(xp) {}; // eslint-disable-line
+
+/**
+ * Takes user level and returns their total xp
+ * @param {number} level The level to get the xp of
+ * @returns {number} Current total xp
+ */
+DataManager.prototype.levelToXp = function(level) {}; // eslint-disable-line
+
+/**
+ * Inserts a guild into settings.db with default settings
+ * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.Guild} guild The Discord guild class
+ * @param {boolean} removeEntry Set to true if this function is called from guildDelete event. It will mark db entries for this server to expire in 7 days.
+ */
+DataManager.prototype.serverToSettings = function(bot, guild, removeEntry) {}; // eslint-disable-line
 
 /**
  * Reads all commands in ./bin/commands and loads them into a collection
