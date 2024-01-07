@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 09:30:45
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-06 12:33:46
+ * Last Modified: 2024-01-07 17:03:40
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -15,7 +15,8 @@
  */
 
 
-const fs = require("fs");
+const fs   = require("fs");
+const nedb = require("@seald-io/nedb");
 
 const tokens = require("../../token.json");
 
@@ -39,6 +40,42 @@ const DataManager = function() {
         respawn: true
     };
 
+
+    /**
+     * Database which stores guild specific settings
+     * Document structure: { guildid: string, prefix: string, lang: string, adminroles: string[], moderatorroles: string[], systemchannel: string | null, modlogfeatures: string[], greetmsg: string | null, byemsg: string | null, memberaddroles: string[], levelsystem: boolean, allownsfw: boolean }
+     * @type {Nedb}
+     */
+    this.settings = {};
+
+    /**
+     * Database which stores bans applied through the bot
+     * Document structure: { userid: string, until: number, guildid: string, authorid: string, banreason: string }
+     * @type {Nedb}
+     */
+    this.timedbans = {};
+
+    /**
+     * Database which stores mutes applied through the bot
+     * Document structure: { type: string, userid: string, until?: number, where: string, guildid: string, authorid: string, mutereason: string }
+     * @type {Nedb}
+     */
+    this.timedmutes = {};
+
+    /**
+     * Database which stores message reactions to monitor changes of
+     * Document structure: { type: string, msg: string, reaction: string, guildid: string, allowedroles: string[], until: number }
+     * @type {Nedb}
+     */
+    this.monitorreactions = {};
+
+    /**
+     * Database which stores levelsystem data for every user
+     * Document structure: { xp: number, messages: number, userid: string, guildid: string, username: string }
+     * @type {Nedb}
+     */
+    this.levelsdb = {};
+
 };
 
 module.exports = DataManager;
@@ -56,6 +93,13 @@ DataManager.prototype.loadData = async function() {
         this.botSettings.token     = tokens.testtoken;
         this.botSettings.respawn   = false;
     }
+
+    // Load databases
+    this.settings         = new nedb({ filename: "./data/settings.db", autoload: true }); // Autoload
+    this.timedbans        = new nedb({ filename: "./data/timedbans.db", autoload: true });
+    this.timedmutes       = new nedb({ filename: "./data/timedmutes.db", autoload: true });
+    this.monitorreactions = new nedb({ filename: "./data/monitorreactions.db", autoload: true });
+    this.levelsdb         = new nedb({ filename: "./data/levels.db", autoload: true });
 
 };
 
