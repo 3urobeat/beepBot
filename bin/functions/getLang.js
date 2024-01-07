@@ -4,7 +4,7 @@
  * Created Date: 2024-01-07 16:47:19
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 17:20:30
+ * Last Modified: 2024-01-07 23:24:37
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -21,7 +21,7 @@ const DataManager = require("../dataManager.js");
 /**
  * Gets the language of a guild from settings
  * @param {string} guildID The guild ID to get the language of
- * @returns {Promise.<object | null>} Resolves with guildSettings object or defaultSettings. On error, null is returned.
+ * @returns {Promise.<object | null>} Resolves with the correct language object or null if guildID is undefined
  */
 DataManager.prototype.getLang = async function(guildID) {
 
