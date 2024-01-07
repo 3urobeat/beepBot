@@ -4,7 +4,7 @@
  * Created Date: 2022-01-14 21:01:23
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:23:45
+ * Last Modified: 2024-01-07 17:45:59
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,20 +15,22 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Bot = require("../bot.js");
+
 
 /**
  * Registers slash commands
- * @param {Discord.Client} bot The Discord client class
- * @param {Function} logger The logger function
  */
-module.exports.run = (bot, logger) => {
+Bot.prototype.registerSlashCommands = function() {
 
     let commands;
 
     // Either register guild or global slash commands, depending on loginmode
-    if (bot.config.loginmode == "test") commands = bot.guilds.cache.get(bot.constants.testguildid).commands;
-        else commands = bot.application.commands;
+    if (this.data.config.loginmode == "test") {
+        commands = this.client.guilds.cache.get(this.data.constants.testguildid).commands;
+    } else {
+        commands = this.client.application.commands;
+    }
 
     logger("info", "registerSlashCommands.js", "Registering slash commands...", false, true);
 
@@ -36,7 +38,7 @@ module.exports.run = (bot, logger) => {
     // commands.set([]); // Uncomment to reset registered slash commands
 
     // Convert Collection to Array and register all commands that were already read by the command reader
-    [...bot.commands.values()].forEach((e) => {
+    [...this.client.commands.values()].forEach((e) => {
         if (e.info.names[0] == "test") return;
         if (e.info.category == "NSFW") return; // Doesn't make that great of an impression when someone sees these commands first
         if (e.info.accessableby.includes("botowner")) return;
@@ -48,7 +50,7 @@ module.exports.run = (bot, logger) => {
 
         commands.create({
             name: e.info.names[0], // Sadly we can only provide the english command description as of now since we don't know which lang the guild is using
-            description: require("lodash").get(bot.langObj["english"], e.info.description), // Lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
+            description: require("lodash").get(this.data.langObj["english"], e.info.description), // Lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
             options: e.info.options
         });
     });
