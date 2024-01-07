@@ -4,7 +4,7 @@
  * Created Date: 2020-10-01 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 17:04:47
+ * Last Modified: 2024-01-07 17:51:39
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -23,8 +23,6 @@ const ascii       = require("./ascii.js");
 
 
 const Controller = function() {
-
-    this.bootstart = Date.now();
 
     /**
      * Collection of all shards currently spawned
@@ -78,6 +76,8 @@ Controller.prototype.start = async function() {
 
     /* -------------- Import data -------------- */
     await this.data.loadData();
+
+    this.data.checkData();
 
 
     // Log the startup in the cmduse.txt file
