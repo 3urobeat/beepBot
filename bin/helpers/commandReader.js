@@ -4,7 +4,7 @@
  * Created Date: 2022-01-18 11:39:32
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:23:51
+ * Last Modified: 2024-01-07 18:53:43
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,41 +15,46 @@
  */
 
 
-const Discord = require("discord.js"); //eslint-disable-line
+const Discord = require("discord.js");
 const path    = require("path");
 const fs      = require("fs");
 
+const DataManager = require("../dataManager");
+
 /**
- * Reads all commands in ./bin/commands and loads them into a bot.commands collection
- * @param {Discord.Client} bot The discord client class
+ * Reads all commands in ./bin/commands and loads them into a collection
  */
-module.exports.run = (bot) => {
+DataManager.prototype.loadCommands = function() {
 
-    bot.commands = new Discord.Collection();
+    // Create new collection
+    this.commands = new Discord.Collection();
 
+    // Iterate through directory and load every command
     const dirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory());
 
     dirs("./bin/commands").forEach((k) => {
         fs.readdir(`./bin/commands/${k}`, (err, files) => {
             if (err) logger("error", "bot.js", err);
+
             let jsfiles = files.filter(p => p.split(".").pop() === "js");
 
             jsfiles.forEach((f) => {
                 let cmd = require(`../commands/${k}/${f}`);
 
-                for(let j = 0; j < cmd.info.names.length; j++) { // Get all aliases of each command
+                for (let j = 0; j < cmd.info.names.length; j++) { // Get all aliases of each command
                     let tempcmd = JSON.parse(JSON.stringify(cmd)); // Yes, this practice of a deep copy is probably bad but everything else also modified other Collection entries and I sat at this problem for 3 fucking hours now
                     tempcmd["run"] = cmd.run; // Add command code to new deep copy because that got lost somehow
                     tempcmd.info.category = k;
 
-                    if (bot.commands.get(tempcmd.info.names[j])) return logger("warn", "bot.js", `Duplicate command name found! Command: ${tempcmd.info.names[j]}`, true);
+                    if (this.commands.get(tempcmd.info.names[j])) return logger("warn", "bot.js", `Duplicate command name found! Command: ${tempcmd.info.names[j]}`, true);
 
-                    if (j != 0) tempcmd.info.thisisanalias = true; // Seems like this is an alias
-                        else tempcmd.info.thisisanalias = false;
+                    // Determine if it is an alias based on if we are in a names iteration >0
+                    tempcmd.info.thisisanalias = (j != 0);
 
-                    bot.commands.set(tempcmd.info.names[j], tempcmd);
+                    this.commands.set(tempcmd.info.names[j], tempcmd);
                 }
             });
         });
     });
+
 };
