@@ -4,7 +4,7 @@
  * Created Date: 2023-02-27 17:35:50
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 19:32:01
+ * Last Modified: 2024-01-07 23:52:08
  * Modified By: 3urobeat
  *
  * Copyright (c) 2023 - 2024 3urobeat <https://github.com/3urobeat>
@@ -30,7 +30,7 @@ Bot.prototype._attachDiscordGuildDeleteEvent = function() {
                 logger("info", "guildDelete.js", `I have been removed from: ${guild.name} (${guild.id}). I'm now in ${res} servers.`);
             });
 
-        bot.fn.servertosettings(guild, true); // True argument will remove function from db
+        this.data.serverToSettings(this.client, guild, true); // True argument will remove function from db
 
     });
 

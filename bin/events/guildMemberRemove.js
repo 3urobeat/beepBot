@@ -4,7 +4,7 @@
  * Created Date: 2021-02-07 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 19:05:47
+ * Last Modified: 2024-01-08 21:21:15
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -25,19 +25,19 @@ Bot.prototype._attachDiscordGuildMemberRemoveEvent = function() {
 
     this.client.on("guildMemberRemove", (member) => {
 
-        this.data.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
-            if (!guildsettings) return; // Yeah better stop if nothing was found to avoid errors
-            if (!guildsettings.systemchannel) return;
-            if (!guildsettings.byemsg) return;
+        this.data.settings.findOne({ guildid: member.guild.id }, (err, guildSettings) => {
+            if (!guildSettings) return; // Yeah better stop if nothing was found to avoid errors
+            if (!guildSettings.systemchannel) return;
+            if (!guildSettings.byemsg) return;
 
-            let msgtosend = String(guildsettings.byemsg);
-            msgtosend = msgtosend.replace("username", member.user.username);
-            msgtosend = msgtosend.replace("servername", member.guild.name);
+            let msgToSend = String(guildSettings.byemsg);
+            msgToSend = msgToSend.replace("username", member.user.username);
+            msgToSend = msgToSend.replace("servername", member.guild.name);
 
-            let channel = member.guild.channels.cache.get(String(guildsettings.systemchannel));
+            let channel = member.guild.channels.cache.get(String(guildSettings.systemchannel));
 
             if (!channel) return;
-            channel.send(msgtosend).catch(() => {}); // Catch but ignore error
+            channel.send(msgToSend).catch(() => {}); // Catch but ignore error
         });
 
     });

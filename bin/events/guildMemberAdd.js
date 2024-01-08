@@ -4,7 +4,7 @@
  * Created Date: 2021-02-07 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 19:04:57
+ * Last Modified: 2024-01-08 21:21:20
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -26,24 +26,27 @@ Bot.prototype._attachDiscordGuildMemberAddEvent = function() {
     this.client.on("guildMemberAdd", (member) => {
 
         // Take care of greetmsg
-        this.data.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
-            if (!guildsettings) return; // Yeah better stop if nothing was found to avoid errors
+        this.data.settings.findOne({ guildid: member.guild.id }, (err, guildSettings) => {
+            if (!guildSettings) return; // Yeah better stop if nothing was found
 
-            if (guildsettings.systemchannel && guildsettings.greetmsg) {
+            if (guildSettings.systemchannel && guildSettings.greetmsg) {
                 // Check settings.json for greetmsg, replace username and servername and send it into setting's systemchannel
-                let msgtosend = guildsettings.greetmsg;
+                let msgToSend = guildSettings.greetmsg;
 
-                if (msgtosend.includes("@username")) msgtosend = msgtosend.replace("@username", `<@${member.user.id}>`);
-                    else msgtosend = msgtosend.replace("username", member.user.username);
+                if (msgToSend.includes("@username")) {
+                    msgToSend = msgToSend.replace("@username", `<@${member.user.id}>`);
+                } else {
+                    msgToSend = msgToSend.replace("username", member.user.username);
+                }
 
-                msgtosend = msgtosend.replace("servername", member.guild.name);
+                msgToSend = msgToSend.replace("servername", member.guild.name);
 
-                member.guild.channels.cache.get(String(guildsettings.systemchannel)).send(msgtosend).catch(() => {}); // Catch but ignore error
+                member.guild.channels.cache.get(String(guildSettings.systemchannel)).send(msgToSend).catch(() => {}); // Catch but ignore error
             }
 
             // Take care of memberaddrole
-            if (guildsettings.memberaddroles.length > 0) {
-                member.roles.add(guildsettings.memberaddroles); // Add all roles at once (memberaddroles is an array)
+            if (guildSettings.memberaddroles.length > 0) {
+                member.roles.add(guildSettings.memberaddroles); // Add all roles at once (memberaddroles is an array)
             }
         });
 

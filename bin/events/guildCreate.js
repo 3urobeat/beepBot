@@ -4,7 +4,7 @@
  * Created Date: 2021-02-07 15:15:19
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 19:31:32
+ * Last Modified: 2024-01-08 12:14:55
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -27,7 +27,7 @@ Bot.prototype._attachDiscordGuildCreateEvent = function() {
 
     this.client.on("guildCreate", async (guild) => {
 
-        bot.fn.servertosettings(guild);
+        this.data.serverToSettings(this.client, guild);
         logger("info", "guildCreate.js", `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount - 1} other members!`);
 
         // Get suitable channel to post welcome message to
@@ -93,7 +93,7 @@ Bot.prototype._attachDiscordGuildCreateEvent = function() {
 
 
         // Update perms of role in all channels (function because I need to call it two times from different blocks below)
-        function updatePerms(role) {
+        let updatePerms = (role) => {
             let errormsgsent = false;
 
             guild.channels.cache.forEach((channel) => {
@@ -104,7 +104,7 @@ Bot.prototype._attachDiscordGuildCreateEvent = function() {
                         if (!errormsgsent) guild.channels.cache.get(welcomechannel).send(`I was sadly unable to change the permissions of the 'beepBot Muted' role in all channels.\nYou can fix this by checking/correcting my permissions and then running the mute command once.\nError: ${err}`); // Message can technically only be in English - also: send this message only once
                     });
             });
-        }
+        };
 
         // Create beepBot Muted role if it doesn't exist (this code is used again in mute.js)
         let mutedRole = guild.roles.cache.find(role => role.name == "beepBot Muted");
