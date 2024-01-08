@@ -4,7 +4,7 @@
  * Created Date: 2020-10-04 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 22:16:08
+ * Last Modified: 2024-01-08 20:13:29
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -22,14 +22,16 @@ const logger  = require("output-logger");
 
 const DataManager = require("./dataManager.js");
 
+const { _handleErrors } = require("./helpers/handleErrors.js");
+
 
 /**
  * Constructor - One bot instance controls one shard
- * @param controller
  */
-const Bot = function(controller) {
+const Bot = function() {
 
-    this.controller = controller;
+    // Attach error handler
+    _handleErrors();
 
     // I hate intents
     this.client = new Discord.Client({

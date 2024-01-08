@@ -4,7 +4,7 @@
  * Created Date: 2020-10-01 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 17:51:39
+ * Last Modified: 2024-01-08 20:13:15
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -21,8 +21,18 @@ const logger  = require("output-logger"); // Look Mom, it's my own library!
 const DataManager = require("./dataManager.js");
 const ascii       = require("./ascii.js");
 
+const { _handleErrors } = require("./helpers/handleErrors.js");
+
 
 const Controller = function() {
+
+    // Attach error handler
+    _handleErrors();
+
+    /**
+     * @type {Discord.ShardingManager}
+     */
+    this.Manager;
 
     /**
      * Collection of all shards currently spawned
@@ -37,10 +47,6 @@ const Controller = function() {
 
     // Load Controller's helper files
     require("./helpers/handleErrors.js");
-
-
-    // Attach error handler
-    this._handleErrors();
 
 };
 
@@ -94,8 +100,8 @@ Controller.prototype.start = async function() {
 
 
     /* -------------- Start needed shards -------------- */
-    const Manager = new Discord.ShardingManager("./bin/bot.js", {
-        shardArgs: [],
+    this.Manager = new Discord.ShardingManager("./bin/bot.js", {
+        mode: "worker", // Lets me share the nedb instances in the current configuration
         totalShards: "auto",
         token: this.data.botSettings.token,
         respawn: this.data.botSettings.respawn
@@ -103,7 +109,7 @@ Controller.prototype.start = async function() {
 
 
     /* -------------- shardCreate Event -------------- */
-    Manager.on("shardCreate", (shard) => {
+    this.Manager.on("shardCreate", (shard) => {
         logger("info", "controller.js", `Spawned shard ${shard.id}!`, false, true);
 
         // Log ready message once
@@ -120,10 +126,10 @@ Controller.prototype.start = async function() {
                 logger("", "", `> Running in \x1b[32m${this.data.config.loginmode}\x1b[0m mode on ${process.platform}.`, true);
             }
 
-            if (Manager.totalShards == "auto") {
+            if (this.Manager.totalShards == "auto") {
                 logger("", "", "> ShardManager is running in automatic mode...", true);
             } else {
-                logger("", "", `> ShardManager is running with ${Manager.totalShards} shards...`, true);
+                logger("", "", `> ShardManager is running with ${this.Manager.totalShards} shards...`, true);
             }
 
 
@@ -152,7 +158,7 @@ Controller.prototype.start = async function() {
     });
 
 
-    Manager.spawn({ amount: Manager.totalShards }).catch(err => { // Respawn delay is 10000
+    this.Manager.spawn({ amount: this.Manager.totalShards }).catch(err => { // Respawn delay is 10000
         logger("error", "controller.js", `Failed to start shard: ${err.stack}`);
     });
 
@@ -160,7 +166,3 @@ Controller.prototype.start = async function() {
 
 
 /* -------- Register functions to let the IntelliSense know what's going on in helper files -------- */
-/**
- * Internal: Handles process's unhandledRejection & uncaughtException error events.
- */
-Controller.prototype._handleErrors = function() {};

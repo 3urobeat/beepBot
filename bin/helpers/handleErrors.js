@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 09:27:33
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-06 09:30:19
+ * Last Modified: 2024-01-08 19:36:42
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -15,13 +15,10 @@
  */
 
 
-const Controller = require("../controller.js");
-
-
 /**
  * Internal: Handles process's unhandledRejection & uncaughtException error events.
  */
-Controller.prototype._handleErrors = function() {
+module.exports._handleErrors = function() {
 
     // Should keep the bot from crashing
     process.on("unhandledRejection", (reason) => {
