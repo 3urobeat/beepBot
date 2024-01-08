@@ -4,7 +4,7 @@
  * Created Date: 2022-01-13 13:20:08
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 19:41:44
+ * Last Modified: 2024-01-08 22:42:22
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -47,7 +47,7 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
             // Check if guild is in settings db and add it if it isn't
             if (interaction.inGuild()) {
                 if (!guildsettings) {
-                    bot.fn.servertosettings(interaction.guild);
+                    this.data.serverToSettings(this.client, interaction.guild);
 
                     // Quickly construct guildsettings object to be able to carry on
                     let prefix = this.data.constants.DEFAULTPREFIX;
@@ -73,8 +73,13 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
                 }
 
                 // Call levelUser helper
-                require("../functions/levelUser.js").levelUser(bot, logger, interaction.member.user, interaction.guild, interaction.channel, bot.fn.lang(guildID, guildsettings), guildsettings);
+                this.data.levelUser(interaction.member.user, interaction.guild, interaction.channel);
             }
+
+
+            // Specify lang for stuff below
+            let lang = this.data.langObj[guildsettings.lang];
+
 
             // Check if this is a command first or another general interaction
             if (interaction.type == Discord.InteractionType.ApplicationCommand) {
@@ -103,9 +108,9 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
 
                 // Check for restrictions and stuff
                 if (cmd) {
-                    if (!interaction.inGuild() && !cmd.info.allowedindm) return interaction.reply(bot.fn.randomstring(["That cannot work in a dm. :face_palm:", "That won't work in a DM...", "This command in a DM? No.", "Sorry but no. Try it on a server.", "You need to be on a server!"]) + " (DM-Error)");
+                    if (!interaction.inGuild() && !cmd.info.allowedindm) return interaction.reply(this.misc.randomString(["That cannot work in a dm. :face_palm:", "That won't work in a DM...", "This command in a DM? No.", "Sorry but no. Try it on a server.", "You need to be on a server!"]) + " (DM-Error)");
 
-                    if (cmd.info.nsfwonly == true && !interaction.channel.nsfw) return interaction.reply(bot.fn.lang(interaction.guild.id, guildsettings).general.nsfwonlyerror);
+                    if (cmd.info.nsfwonly == true && !interaction.channel.nsfw) return interaction.reply(await this.data.getLang().general.nsfwonlyerror);
 
                     // Check if user is allowed to use this command
                     let ab = cmd.info.accessableby;
@@ -113,23 +118,23 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
                     let guildowner = await interaction.guild.fetchOwner();
 
                     // Check if command is allowed on this guild and respond with error message if it isn't
-                    if (cmd.info.allowedguilds && !cmd.info.allowedguilds.includes(interaction.guild.id)) return interaction.reply(bot.fn.lang(interaction.guild.id, guildsettings).general.guildnotallowederror);
+                    if (cmd.info.allowedguilds && !cmd.info.allowedguilds.includes(interaction.guild.id)) return interaction.reply(lang.general.guildnotallowederror);
 
                     // Check if server admins disabled nsfw commands
-                    if (cmd.info.nsfwonly && !guildsettings.allownsfw) return interaction.reply(bot.fn.lang(interaction.guild.id, guildsettings).general.allownsfwdisablederror);
+                    if (cmd.info.nsfwonly && !guildsettings.allownsfw) return interaction.reply(lang.general.allownsfwdisablederror);
 
 
                     if (!ab.includes("all")) { // Check if user is allowed to use this command
                         if (ab.includes("botowner")) {
-                            if (interaction.member.user.id !== "231827708198256642") return interaction.reply(bot.fn.owneronlyerror(bot.fn.lang(interaction.guild.id, guildsettings)));
+                            if (interaction.member.user.id !== "231827708198256642") return interaction.reply(this.misc.owneronlyerror(lang));
                         } else if (guildowner && interaction.member.user.id == guildowner.user.id) { // Check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
                             // Nothing to do here, just not returning an error message and let the server owner do what he wants
                         } else if (ab.includes("admins")) {
-                            if (!guildsettings.adminroles.filter(element => interaction.member.roles.cache.has(element)).length > 0) return interaction.reply(bot.fn.usermissperm(bot.fn.lang(interaction.guild.id, guildsettings)));
+                            if (!guildsettings.adminroles.filter(element => interaction.member.roles.cache.has(element)).length > 0) return interaction.reply(this.misc.usermissperm(lang));
                         } else if (ab.includes("moderators")) {
                             // Check if user doesn't have admin nor modrole because admins should be able to execute mod commands
                             if (!guildsettings.moderatorroles.filter(element => interaction.member.roles.cache.has(element)).length > 0 && !guildsettings.adminroles.filter(element => interaction.member.roles.cache.has(element)).length > 0) {
-                                return interaction.reply(bot.fn.usermissperm(bot.fn.lang(interaction.guild.id, guildsettings)));
+                                return interaction.reply(this.misc.usermissperm(lang));
                             }
                         } else {
                             interaction.reply(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${BOTOWNER} will probably see this error and fix it.`); // eslint-disable-line no-undef
@@ -144,17 +149,17 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
                     interaction["react"]  = () => { return new Promise(() => { });}; // Prevent error by doing nothing when calling react() as we can't react to an interaction
 
                     if (!interaction.inGuild()) {
-                        cmd.run(bot, interaction, args, bot.langObj["english"], logger, guildsettings, bot.fn);
+                        cmd.run(this, interaction, args, this.data.langObj["english"], guildsettings);
                     } else {
                         this.data.appendToCmdUse(`(Guild ${interaction.guild.id}) /${interaction.commandName} ${args.join(" ")}`); // Add cmd usage to cmduse.txt
-                        cmd.run(bot, interaction, args, bot.fn.lang(interaction.guild.id, guildsettings), logger, guildsettings, bot.fn); // Run the command after lang function callback
+                        cmd.run(this, interaction, args, lang, guildsettings); // Run the command after lang function callback
                     }
                 }
 
             } else {
 
                 // Log interaction when in testing mode
-                if (bot.config.loginmode == "test") logger("info", "interactionCreate.js", `Shard ${thisshard.id}: General interaction with id ${interaction.customId}`);
+                if (this.data.config.loginmode == "test") logger("info", "interactionCreate.js", `Shard ${thisshard.id}: General interaction with id ${interaction.customId}`);
 
                 switch (interaction.customId) {
                     case "welcomeLang":
@@ -163,10 +168,10 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
                         if (!interaction.memberPermissions.has(Discord.PermissionFlagsBits.ManageMessages)) return interaction.reply({ ephemeral: true, content: "Only members with 'Manage Messages' permission are allowed to change the language of this message." }); // Don't let every user interact to prevent a bit of chaos
                         if (interaction.message.createdTimestamp + 7200000 < Date.now()) return interaction.reply({ ephemeral: true, content: "Changing the language of the welcome message is disabled after 2 hours to prevent users from changing the server's language.\nIf you are an admin please use the `settings` command instead to change the language of this server." });
 
-                        var requestedlang = this.data.langObj[interaction.values[0]];
+                        let requestedlang = this.data.langObj[interaction.values[0]]; // eslint-disable-line no-case-declarations
 
                         // Construct menu again in order to be able to update the placeholder (I just couldn't find a better way yet and interaction.update always reset the user's choice)
-                        var langArray = [];
+                        let langArray = []; // eslint-disable-line no-case-declarations
 
                         Object.values(this.data.langObj).forEach((e, i) => { // Push each language to the array
                             langArray.push({
@@ -176,16 +181,6 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
                             });
                         });
 
-                        var langComponents = [
-                            new Discord.ActionRowBuilder()
-                                .addComponents(
-                                    new Discord.SelectMenuBuilder()
-                                        .setCustomId("welcomeLang")
-                                        .setPlaceholder(`${requestedlang.general.langemote} ${requestedlang.general.botaddchooselang}`)
-                                        .addOptions(langArray)
-                                )
-                        ];
-
                         // Update message with new language
                         interaction.update({
                             embeds: [{
@@ -193,7 +188,15 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
                                 description: requestedlang.general.botadddesc + requestedlang.general.botadddesc2.replace(/prefix/g, this.data.constants.DEFAULTPREFIX) + requestedlang.general.botadddesc3.replace(/prefix/g, this.data.constants.DEFAULTPREFIX),
                                 thumbnail: { url: this.client.user.displayAvatarURL() }
                             }],
-                            components: langComponents
+                            components: [
+                                new Discord.ActionRowBuilder()
+                                    .addComponents(
+                                        new Discord.SelectMenuBuilder()
+                                            .setCustomId("welcomeLang")
+                                            .setPlaceholder(`${requestedlang.general.langemote} ${requestedlang.general.botaddchooselang}`)
+                                            .addOptions(langArray)
+                                    )
+                            ]
                         });
 
                         // Update guilds language as well
@@ -211,7 +214,7 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
                         } else {
 
                             // Send ephermal missing permissions error message
-                            interaction.reply({ content: bot.fn.usermissperm(bot.fn.lang(interaction.guild.id, guildsettings)), ephemeral: true });
+                            interaction.reply({ content: this.misc.usermissperm(lang), ephemeral: true });
 
                             return;
                         }

@@ -4,7 +4,7 @@
  * Created Date: 2022-01-09 10:12:16
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 23:22:56
+ * Last Modified: 2024-01-08 20:07:33
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -24,12 +24,11 @@ let xpHistory = {}; // Store recent xp increments in an object
 
 /**
  * Handles the xp addition and level up messages
- * @param {Discord.Client} bot The Discord client class
  * @param {Discord.User} author The user who sent the message
  * @param {Discord.Guild} guild The guild of the message
  * @param {Discord.GuildChannel} channel The channel in which the message was sent
  */
-DataManager.prototype.levelUser = async function(bot, author, guild, channel) {
+DataManager.prototype.levelUser = async function(author, guild, channel) {
 
     // Get guild settings to find out if levelSystem is enabled
     let guildSettings = await this.settings.findOneAsync({ guildid: guild.id });
@@ -42,12 +41,12 @@ DataManager.prototype.levelUser = async function(bot, author, guild, channel) {
         logger("debug", "levelUser.js", `Only incrementing messages: Level system disabled or XP addition for ${author.id} in guild ${guild.id} more recent than 30 secs`);
 
         // Increment xp and messages amount for entry that matches this user's id and this guild id
-        bot.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] },
+        this.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] },
             { $inc: { messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `${author.username}#${author.discriminator}` } },
             { upsert: true },
             (err) => {
 
-            if (err) logger("error", "levelUser.js", `Error updating db of guild ${guild.id}. Error: ${err}`);
+                if (err) logger("error", "levelUser.js", `Error updating db of guild ${guild.id}. Error: ${err}`);
 
             });
 
@@ -60,7 +59,7 @@ DataManager.prototype.levelUser = async function(bot, author, guild, channel) {
         logger("debug", "levelUser.js", `Adding ${xpAmount}xp to user ${author.id} in guild ${guild.id}`);
 
         // Increment xp and messages amount for entry that matches this user's id and this guild id
-        bot.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] },
+        this.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] },
             { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `${author.username}#${author.discriminator}` } },
             { upsert: true, returnUpdatedDocs: true },
             async (err, numAffected, doc) => {

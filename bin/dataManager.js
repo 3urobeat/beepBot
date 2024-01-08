@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 09:30:45
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 23:24:54
+ * Last Modified: 2024-01-08 20:07:58
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -202,12 +202,11 @@ DataManager.prototype.getLang = async function(guildID) {}; // eslint-disable-li
 
 /**
  * Handles the xp addition and level up messages
- * @param {Discord.Client} bot The Discord client class
  * @param {Discord.User} author The user who sent the message
  * @param {Discord.Guild} guild The guild of the message
  * @param {Discord.GuildChannel} channel The channel in which the message was sent
  */
-DataManager.prototype.levelUser = async function(bot, author, guild, channel) {}; // eslint-disable-line
+DataManager.prototype.levelUser = async function(author, guild, channel) {}; // eslint-disable-line
 
 /**
  * Takes user xp and returns their level

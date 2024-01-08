@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 12:40:13
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 18:56:26
+ * Last Modified: 2024-01-07 22:11:15
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -57,11 +57,11 @@ Bot.prototype._attachDiscordReadyEvent = function() {
 
 
         // Read amount of commands found without aliases
-        this.misc.commandcount = [...this.data.commands.values()].filter(e => !e.info.thisisanalias).length;
+        this.info.commandcount = [...this.data.commands.values()].filter(e => !e.info.thisisanalias).length;
 
         // Finish startup messages from controller.js
         if (thisshard.id == 0) {
-            logger("", "", `> ${this.misc.commandcount} commands & ${Object.keys(this.data.langObj).length} languages found!`, true);
+            logger("", "", `> ${this.info.commandcount} commands & ${Object.keys(this.data.langObj).length} languages found!`, true);
             logger("", "", "> Successfully logged in shard0!", true);
             logger("", "", "*--------------------------------------------------------------*\n ", true);
         } else {

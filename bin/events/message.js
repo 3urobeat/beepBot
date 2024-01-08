@@ -4,7 +4,7 @@
  * Created Date: 2021-02-07 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 19:41:12
+ * Last Modified: 2024-01-08 20:07:48
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -65,7 +65,7 @@ Bot.prototype._attachDiscordMessageEvent = function() {
             // Check if guild is in settings db and add it if it isn't
             if (message.channel.type !== "DM") {
                 if (!guildsettings) {
-                    bot.fn.servertosettings(message.guild);
+                    this.data.serverToSettings(this.client, message.guild);
 
                     // Quickly construct guildsettings object to be able to carry on
                     let prefix = this.data.constants.DEFAULTPREFIX;
@@ -93,7 +93,7 @@ Bot.prototype._attachDiscordMessageEvent = function() {
                 }
 
                 // Call levelUser helper
-                require("../functions/levelUser.js").levelUser(bot, logger, message.author, message.guild, message.channel, bot.fn.lang(message.guild.id, guildsettings), guildsettings);
+                this.data.levelUser(message.author, message.guild, message.channel);
             }
 
 
@@ -108,7 +108,7 @@ Bot.prototype._attachDiscordMessageEvent = function() {
                     PREFIX = this.data.constants.DEFAULTTESTPREFIX;
                 }
 
-                guildsettings = bot.constants.defaultguildsettings;
+                guildsettings = this.data.constants.defaultguildsettings;
                 guildsettings["guildid"] = 0;
                 guildsettings["prefix"] = PREFIX;
             }
@@ -133,39 +133,43 @@ Bot.prototype._attachDiscordMessageEvent = function() {
             if (!cont[0]) return; // Message is empty after prefix I guess
 
 
+            // Get language
+            let lang = await this.data.getLang(guildID); // TODO: DM
+
+
             // Process content
             let args = cont.slice(1);
             let cmd  = this.data.commands.get(cont[0].toLowerCase());
 
             if (message.channel.type === "DM") {
-                if (cmd && cmd.info.allowedindm === false) return message.channel.send(bot.fn.randomstring(["That cannot work in a dm. :face_palm:", "That won't work in a DM...", "This command in a DM? No.", "Sorry but no. Try it on a server.", "You need to be on a server!"]) + " (DM-Error)");
+                if (cmd && cmd.info.allowedindm === false) return message.channel.send(this.misc.randomString(["That cannot work in a dm. :face_palm:", "That won't work in a DM...", "This command in a DM? No.", "Sorry but no. Try it on a server.", "You need to be on a server!"]) + " (DM-Error)");
             }
 
             if (cmd) { // Check if command is existing and run it
-                if (cmd.info.nsfwonly == true && !message.channel.nsfw) return message.channel.send(bot.fn.lang(message.guild.id, guildsettings).general.nsfwonlyerror);
+                if (cmd.info.nsfwonly == true && !message.channel.nsfw) return message.channel.send(lang.general.nsfwonlyerror);
 
                 let ab = cmd.info.accessableby;
 
                 let guildowner = await message.guild.fetchOwner();
 
                 // Check if command is allowed on this guild and respond with error message if it isn't
-                if (cmd.info.allowedguilds && !cmd.info.allowedguilds.includes(message.guild.id)) return message.channel.send(bot.fn.lang(message.guild.id, guildsettings).general.guildnotallowederror);
+                if (cmd.info.allowedguilds && !cmd.info.allowedguilds.includes(message.guild.id)) return message.channel.send(lang.general.guildnotallowederror);
 
                 // Check if server admins disabled nsfw commands
-                if (cmd.info.nsfwonly && !guildsettings.allownsfw) return message.channel.send(bot.fn.lang(message.guild.id, guildsettings).general.allownsfwdisablederror);
+                if (cmd.info.nsfwonly && !guildsettings.allownsfw) return message.channel.send(lang.general.allownsfwdisablederror);
 
 
                 if (!ab.includes("all")) { // Check if user is allowed to use this command
                     if (ab.includes("botowner")) {
-                        if (message.author.id !== "231827708198256642") return message.channel.send(bot.fn.owneronlyerror(bot.fn.lang(message.guild.id, guildsettings)));
+                        if (message.author.id !== "231827708198256642") return message.channel.send(this.misc.owneronlyerror(lang));
                     } else if (guildowner && message.author.id == guildowner.user.id) { // Check if owner property is accessible otherwise skip this step. This can be null because of Discord's privacy perms but will definitely be not null should the guild owner be the msg author and only then this step is even of use
                         // Nothing to do here, just not returning an error message and let the server owner do what he wants
                     } else if (ab.includes("admins")) {
-                        if (!guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id, guildsettings)));
+                        if (!guildsettings.adminroles.filter(element => message.member.roles.cache.has(element)).length > 0) return message.channel.send(await this.data.getLang.usermissperm(lang));
                     } else if (ab.includes("moderators")) {
                         // Check if user doesn't have admin nor modrole because admins should be able to execute mod commands
                         if (!guildsettings.moderatorroles.filter((e) => message.member.roles.cache.has(e)).length > 0 && !guildsettings.adminroles.filter((e) => message.member.roles.cache.has(e)).length > 0) {
-                            return message.channel.send(bot.fn.usermissperm(bot.fn.lang(message.guild.id, guildsettings)));
+                            return message.channel.send(this.misc.usermissperm(lang));
                         }
                     } else {
                         message.channel.send(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${BOTOWNER} will probably see this error and fix it.`); // eslint-disable-line no-undef
@@ -175,16 +179,16 @@ Bot.prototype._attachDiscordMessageEvent = function() {
                 }
 
                 if (message.channel.type === "DM") {
-                    cmd.run(bot, message, args, this.data.langObj["english"], logger, guildsettings, bot.fn);
+                    cmd.run(this, message, args, this.data.langObj["english"], guildsettings);
                 } else {
                     this.data.appendToCmdUse(`(Guild ${message.guild.id}) ${message.content}`); // Add cmd usage to cmduse.txt
-                    cmd.run(bot, message, args, bot.fn.lang(message.guild.id, guildsettings), logger, guildsettings, bot.fn); // Run the command after lang function callback
+                    cmd.run(this, message, args, lang, guildsettings); // Run the command after lang function callback
                 }
 
                 return;
             } else { // Cmd not recognized? check if channel is dm and send error message
                 if (message.channel.type === "DM") {
-                    message.channel.send(bot.fn.randomstring(["Invalid command! :neutral_face:", "You got something wrong there!", "Something is wrong... :thinking:", "Whoops - it seems like this command doesn't exists.", "Trust me. Something is wrong with your command.", "That is not right."]) + " (Wrong command-Error)");
+                    message.channel.send(this.misc.randomString(["Invalid command! :neutral_face:", "You got something wrong there!", "Something is wrong... :thinking:", "Whoops - it seems like this command doesn't exists.", "Trust me. Something is wrong with your command.", "That is not right."]) + " (Wrong command-Error)");
                 }
 
                 return;
