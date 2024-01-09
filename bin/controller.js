@@ -4,7 +4,7 @@
  * Created Date: 2020-10-01 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-09 13:57:45
+ * Last Modified: 2024-01-09 16:03:37
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -21,13 +21,13 @@ const logger  = require("output-logger"); // Look Mom, it's my own library!
 const DataManager = require("./dataManager.js");
 const ascii       = require("./ascii.js");
 
-const { _handleErrors } = require("./helpers/handleErrors.js");
+// Const { _handleErrors } = require("./helpers/handleErrors.js");
 
 
 const Controller = function() {
 
     // Attach error handler
-    _handleErrors();
+    // _handleErrors(); // Error handler attached in bot.js seems to be enough when in mode worker
 
     /**
      * @type {Discord.ShardingManager}
@@ -47,6 +47,11 @@ const Controller = function() {
 
     // Load Controller's helper files
     require("./helpers/handleErrors.js");
+    require("./jobs/avatarCheck.js");
+    require("./jobs/dataExpiration.js");
+    require("./jobs/gameRotation.js");
+    require("./jobs/monitorReactions.js");
+    require("./jobs/tempMod.js");
 
 };
 
@@ -102,7 +107,7 @@ Controller.prototype.start = async function() {
     /* -------------- Start needed shards -------------- */
     this.Manager = new Discord.ShardingManager("./bin/bot.js", {
         mode: "worker", // Lets me share the nedb instances in the current configuration
-        totalShards: "auto",
+        totalShards: 3,
         token: this.data.botSettings.token,
         respawn: this.data.botSettings.respawn
     });
@@ -154,6 +159,15 @@ Controller.prototype.start = async function() {
             logger("", "", `> Set Presence to ${status} - Game Rotation every ${this.data.config.gamerotateseconds} sec`, true);
 
             // End line is located in ready event in bot.js and will be logged by shard 0
+
+
+            // Attach jobs
+            this._attachAvatarCheckJob();
+            this._attachDataExpirationJob();
+            this._attachGameRotationJob();
+            this._attachMonitorReactionsJob();
+            this._attachTempModJob();
+
         }, 500);
     });
 
@@ -166,3 +180,27 @@ Controller.prototype.start = async function() {
 
 
 /* -------- Register functions to let the IntelliSense know what's going on in helper files -------- */
+/**
+ * Attaches the christmas avatar check job
+ */
+Controller.prototype._attachAvatarCheckJob = function() {};
+
+/**
+ * Attaches the data expiration job. It deletes expired data (>7 days) from all databases to adhere to EU regulations
+ */
+Controller.prototype._attachDataExpirationJob = function() {};
+
+/**
+ * Attaches the game rotation job
+ */
+Controller.prototype._attachGameRotationJob = function() {};
+
+/**
+ * Attaches the monitor reaction job to remove obsolete data from monitorreactions database
+ */
+Controller.prototype._attachMonitorReactionsJob = function() {};
+
+/**
+ * Attaches jobs for lifting temporary mod actions, like mutes and bans
+ */
+Controller.prototype._attachTempModJob = function() {};
