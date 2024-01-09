@@ -4,7 +4,7 @@
  * Created Date: 2020-10-01 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-08 20:13:15
+ * Last Modified: 2024-01-09 13:57:45
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -64,7 +64,7 @@ Controller.prototype.start = async function() {
         paramstructure: [logger.Const.TYPE, logger.Const.ORIGIN, logger.Const.MESSAGE, "nodate", "remove", logger.Const.ANIMATION],
         outputfile: "./output.txt",
         animationdelay: 250,
-        printdebug: false
+        printdebug: this.data.config.printDebug
     });
 
     global.logger = logger;

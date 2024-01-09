@@ -27,5 +27,6 @@
         "Misc",
         "other",
         "Botowner"
-    ]
+    ],
+    "printDebug": true
 }
