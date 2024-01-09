@@ -4,7 +4,7 @@
  * Created Date: 2024-01-07 18:02:48
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 18:04:38
+ * Last Modified: 2024-01-09 15:41:24
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -15,60 +15,93 @@
  */
 
 
+const Controller = require("../controller.js");
 
-// Game rotation
-let currentgameindex = 0;
-let lastPresenceChange = Date.now(); // This is useful because intervals can get very unprecise over time
 
-setInterval(() => {
-    if (lastPresenceChange + (config.gamerotateseconds * 1000) > Date.now()) return; // Last change is more recent than gamerotateseconds wants
+/**
+ * Attaches the game rotation job
+ */
+Controller.prototype._attachGameRotationJob = function() {
 
-    // Refresh config cache to check if gameoverwrite got changed
-    delete require.cache[require.resolve("./config.json")];
-    config = require("./config.json");
+    // Game rotation
+    let currentgameindex = 0;
+    let lastPresenceChange = Date.now(); // This is useful because intervals can get very unprecise over time
 
-    if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { // If botowner set a game manually then only change game if the instance isn't already playing it
-        let game = config.gameoverwrite;
-        if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = "Happy Birthday beepBot!";
+    setInterval(() => {
+        if (lastPresenceChange + (this.data.config.gamerotateseconds * 1000) > Date.now()) return; // Last change is more recent than gamerotateseconds wants
 
-        if (this.client.user.presence.activities[0].name != game) {
-            this.client.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status });
+        logger("debug", "gameRotation.js", "Updating playing status of every shard...");
+
+
+        // Refresh config cache to check if gameoverwrite got changed
+        delete require.cache[require.resolve("../config.json")];
+        this.data.config = require("../config.json");
+
+
+        // Handle gameoverwrite or birthday message
+        if (this.data.config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { // If botowner set a game manually then only change game if the instance isn't already playing it
+            let game = this.data.config.gameoverwrite;
+            if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = "Happy Birthday beepBot!";
+
+            this.Manager.broadcastEval((client, context) => {
+                if (client.user.presence.activities[0].name != context.game) {
+                    client.user.setPresence({
+                        activities: [{
+                            name: context.game,
+                            type: context.constants.gametypetranslation[context.config.gametype],
+                            url: context.config.gameurl
+                        }],
+                        status: context.config.status
+                    });
+                }
+            }, { context: { config: this.data.config, constants: this.data.constants, game: game } });
+
+            currentgameindex = 0; // Reset gameindex
+            lastPresenceChange = Date.now() + 600000; // Add 10 min to reduce load a bit
+            return; // Don't change anything else if botowner set a game manually
         }
 
-        currentgameindex = 0; // Reset gameindex
-        lastPresenceChange = Date.now() + 600000; // Add 10 min to reduce load a bit
-        return; // Don't change anything else if botowner set a game manually
-    }
 
-    currentgameindex++; // Set here already so we can't get stuck at one index should an error occur
-    if (currentgameindex == config.gamerotation.length) currentgameindex = 0; // Reset
-    lastPresenceChange = Date.now();
+        // Handle normal game rotation
+        currentgameindex++; // Set here already so we can't get stuck at one index should an error occur
+        if (currentgameindex == this.data.config.gamerotation.length) currentgameindex = 0; // Reset
+        lastPresenceChange = Date.now();
 
-    // Replace code in string (${})
-    function processThisGame(thisgame, callback) {
-        try {
-            let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs); // Matches will be everything in between a "${" and "}" -> either null or array with results
+        // Replace code in string (${})
+        let processThisGame = (thisgame, callback) => {
+            try {
+                let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs); // Matches will be everything in between a "${" and "}" -> either null or array with results
 
-            if (matches) {
-                matches.forEach(async (e, i) => {
-                    let evaled = await eval(matches[i]);
-                    thisgame = thisgame.replace(`\${${e}}`, evaled);
+                if (matches) {
+                    matches.forEach(async (e, i) => {
+                        let evaled = await eval(matches[i]);
+                        thisgame = thisgame.replace(`\${${e}}`, evaled);
 
-                    if (!thisgame.includes("${")) callback(thisgame);
-                });
-            } else {
-                callback(thisgame); // Nothing to process, callback unprocessed argument
+                        if (!thisgame.includes("${")) callback(thisgame);
+                    });
+                } else {
+                    callback(thisgame); // Nothing to process, callback unprocessed argument
+                }
+            } catch(err) {
+                logger("warn", "gameRotation.js", `Couldn't replace gamerotation[${currentgameindex}] in gamerotationloop. Error: ${err.stack}`);
+                return;
             }
+        };
 
-        } catch(err) {
-            logger("warn", "controller.js", `Couldn't replace gamerotation[${currentgameindex}] in gamerotationloop. Error: ${err.stack}`);
-            return;
-        }
-    }
+        processThisGame(this.data.config.gamerotation[currentgameindex], (game) => {
+            lastPresenceChange = Date.now(); // Set again to include processing time
 
-    processThisGame(config.gamerotation[currentgameindex], (game) => {
-        lastPresenceChange = Date.now(); // Set again to include processing time
+            this.Manager.broadcastEval((client, context) => {
+                client.user.setPresence({
+                    activities: [{
+                        name: context.game,
+                        type: context.constants.gametypetranslation[context.config.gametype],
+                        url: context.config.gameurl
+                    }],
+                    status: context.config.status
+                });
+            }, { context: { config: this.data.config, constants: this.data.constants, game: game } });
+        });
+    }, 5000);
 
-        this.client.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status });
-    });
-}, 5000);
+};
