@@ -1,10 +1,10 @@
 /*
- * File: setconfig.js
+ * File: setConfig.js
  * Project: beepbot
  * Created Date: 2021-01-19 22:36:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:13:05
+ * Last Modified: 2024-01-09 21:49:08
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,22 +15,23 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const fs = require("fs");
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The setconfig command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    const fs     = require("fs");
-    let   config = bot.config;
-    let   lf     = lang.cmd.otherbotowner;
+module.exports.run = async (bot, message, args, lang, guildsettings) => { //eslint-disable-line
+    let config = bot.data.config;
+    let lf     = lang.cmd.otherbotowner;
 
     // Code is from my Steam Comment Bot !settings cmd so I hope it doesn't look weird here - https://github.com/3urobeat/steam-comment-service-bot/blob/master/src/bot.js
     if (!args[0]) {
