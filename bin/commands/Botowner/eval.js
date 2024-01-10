@@ -4,7 +4,7 @@
  * Created Date: 2020-10-04 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:09:03
+ * Last Modified: 2024-01-09 22:39:30
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,20 +15,22 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const util = require("util");
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The eval command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    const clean = text => {
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
+    const clean = (text) => {
         if (typeof(text) === "string") return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
             else return text;
     };
@@ -38,7 +40,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         let evaled = eval(code);
 
         if (typeof evaled !== "string")
-        evaled = require("util").inspect(evaled);
+        evaled = util.inspect(evaled);
 
         message.channel.send(clean(evaled), { code:"xl" }).catch(err => {
             message.channel.send("Error: " + err);
