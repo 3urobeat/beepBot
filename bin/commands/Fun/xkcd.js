@@ -4,7 +4,7 @@
  * Created Date: 2021-12-16 11:31:39
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:07:25
+ * Last Modified: 2024-01-11 16:27:46
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,25 +15,28 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord    = require("discord.js"); // eslint-disable-line
+const superagent = require("superagent");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
 
 let maxNum = 0;
 let lastMaxNumRefresh = 0;
 
+
 /**
  * The xkcd command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
+
     // Refresh maxNum every 24 hours to be able to get a random comic
     if (lastMaxNumRefresh + 86400000 <= Date.now()) {
-        let { body } = await require("superagent").get("https://xkcd.com/info.0.json");
+        let { body } = await superagent.get("https://xkcd.com/info.0.json");
 
         maxNum = body.num;
     }
@@ -60,9 +63,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         // Send random xkcd, specifc one or todays comic
         if (args[0] && args[0] == "random") {
 
-            var random = Math.floor(Math.random() * maxNum) + 1; // Get ra random number between 0 and maxNum
+            let random = Math.floor(Math.random() * maxNum) + 1; // Get random number between 0 and maxNum
 
-            let { body } = await require("superagent").get(`https://xkcd.com/${random}/info.0.json`);
+            let { body } = await superagent.get(`https://xkcd.com/${random}/info.0.json`);
 
             // Make dates great again
             if (body.day < 10) body.day = "0" + body.day.toString();
@@ -81,15 +84,15 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             // Check if provided ID is greater than the latest released comic
             if (Number(args[0]) > maxNum) return message.channel.send(lang.cmd.otherfun.xkcdidnotfound);
 
-            let { body } = await require("superagent").get(`https://xkcd.com/${Number(args[0])}/info.0.json`);
+            let { body } = await superagent.get(`https://xkcd.com/${Number(args[0])}/info.0.json`);
 
             // Make dates great again
-            if (body.day < 10) body.day = "0" + body.day.toString();
+            if (body.day < 10)   body.day = "0" + body.day.toString();
             if (body.month < 10) body.month = "0" + body.month.toString();
 
             msg.embeds[0].title       = body.safe_title;
             msg.embeds[0].description = body.alt;
-            msg.embeds[0].url         = "https://xkcd.com/" + random;
+            msg.embeds[0].url         = "https://xkcd.com/" + args[0];
             msg.embeds[0].image.url   = body.img;
             msg.embeds[0].footer.text = `XKCD #${body.num} - ${body.day}.${body.month}.${body.year}`;
 
@@ -97,7 +100,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
         } else {
 
-            let { body } = await require("superagent").get("https://xkcd.com/info.0.json");
+            let { body } = await superagent.get("https://xkcd.com/info.0.json");
 
             // Make dates great again
             if (body.day < 10) body.day = "0" + body.day.toString();

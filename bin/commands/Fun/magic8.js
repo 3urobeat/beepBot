@@ -4,7 +4,7 @@
  * Created Date: 2020-10-07 20:44:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:09:47
+ * Last Modified: 2024-01-11 16:26:11
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,22 +15,23 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
- * The magic8 command
- * @param {Discord.Client} bot The Discord client class
+ * The magic8 commandjoke
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     if (!args[0]) return message.channel.send(lang.cmd.otherfun.magic8missingargs);
 
-    message.channel.send(":8ball: " + fn.randomstring(lang.cmd.otherfun.magic8responses));
+    message.channel.send(":8ball: " + bot.misc.randomString(lang.cmd.otherfun.magic8responses));
 };
 
 module.exports.info = {
