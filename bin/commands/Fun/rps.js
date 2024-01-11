@@ -4,7 +4,7 @@
  * Created Date: 2021-01-09 21:11:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:07:39
+ * Last Modified: 2024-01-11 16:28:59
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,40 +15,36 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The rps command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    /**
-     *
-     * @param wordarr
-     * @param decision
-     * @param result
-     */
-    function sendresponse(wordarr, decision, result) {
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
+
+    let sendresponse = (wordarr, decision, result) => {
         if (wordarr[0] == decision[0]) return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpstie}`);
 
         if (result == "win") return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpswin}`);
             else return message.channel.send(`${wordarr[1]} vs ${decision[1]}\n${lang.cmd.otherfun.rpsloose}`);
-    }
+    };
 
     let word     = args[0];
-    let decision = fn.randomstring([[0, ":rocket:"], [1, ":newspaper:"], [2, ":scissors:"]]); // Get decision by index ["rock", "paper", "scissors"]
+    let decision = bot.misc.randomString([[0, ":rock:"], [1, ":newspaper:"], [2, ":scissors:"]]); // Get decision by index ["rock", "paper", "scissors"]
 
     switch (word) { // User decision
         case "r":
         case "rock":
-            if (decision == 2) sendresponse([0, ":rocket:"], decision, "win"); // User wins
-                else sendresponse([0, ":rocket:"], decision, "loose"); // User looses (or tie but that gets handled by function)
+            if (decision == 2) sendresponse([0, ":rock:"], decision, "win"); // User wins
+                else sendresponse([0, ":rock:"], decision, "loose"); // User looses (or tie but that gets handled by function)
             break;
         case "p":
         case "paper":
@@ -63,6 +59,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         default:
             return message.channel.send(lang.cmd.otherfun.rpsusage);
     }
+
 };
 
 module.exports.info = {

@@ -4,7 +4,7 @@
  * Created Date: 2021-09-06 13:12:42
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:10:05
+ * Last Modified: 2024-01-11 16:26:07
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,21 +15,21 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+const https   = require("https");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The joke command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    let https = require("https");
-
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     let options = {
         hostname: "icanhazdadjoke.com",
         port: 443,

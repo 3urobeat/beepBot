@@ -4,7 +4,7 @@
  * Created Date: 2022-01-12 14:01:47
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:10:39
+ * Last Modified: 2024-01-11 16:56:28
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,40 +15,41 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord    = require("discord.js"); // eslint-disable-line
+const superagent = require("superagent");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The cat command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     try {
-        let { body } = await require("superagent").get("http://aws.random.cat/meow");
+        let { body } = await superagent.get("https://some-random-api.com/animal/cat");
 
         message.channel.send({
             embeds: [{
                 title: lang.general.imagehyperlink,
-                url: body.file,
+                url: body.image,
                 image: {
-                    url: body.file
+                    url: body.image
                 },
                 footer: {
                     text: `${lang.general.poweredby} random.cat API`
                 },
                 timestamp: message.createdAt,
-                color: fn.randomhex()
+                color: bot.misc.randomHex()
             }]
         });
-
     } catch (err) {
         logger("error", "cat.js", "API Error: " + err);
-        message.channel.send(`random.cat API ${lang.general.error}: ${err}`);
+        message.channel.send(`some-random-api.com API ${lang.general.error}: ${err}`);
     }
 };
 
