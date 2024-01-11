@@ -4,7 +4,7 @@
  * Created Date: 2020-10-01 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-09 16:03:37
+ * Last Modified: 2024-01-10 10:39:52
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -107,7 +107,7 @@ Controller.prototype.start = async function() {
     /* -------------- Start needed shards -------------- */
     this.Manager = new Discord.ShardingManager("./bin/bot.js", {
         mode: "worker", // Lets me share the nedb instances in the current configuration
-        totalShards: 3,
+        totalShards: "auto",
         token: this.data.botSettings.token,
         respawn: this.data.botSettings.respawn
     });
