@@ -1,27 +1,28 @@
 {
-  "name": "beepbot",
-  "version": "4.0.0",
-  "description": "beepBot - 24/7 online, customizeable, feature rich & scaleable Discord Bot.",
-  "main": "start.js",
-  "dependencies": {
-      "@seald-io/nedb": "^4.0.3",
-      "discord.js": "^14.14.1",
-      "download": "^8.0.0",
-      "output-logger": "^2.3.7"
-  },
-  "scripts": {
-      "start": "node start.js"
-  },
-  "author": "3urobeat",
-  "license": "GPL-3.0",
-  "bugs": {
-      "url": "https://github.com/3urobeat/beepbot/issues"
-  },
-  "homepage": "https://github.com/3urobeat",
-  "repository": "https://github.com/3urobeat/beepbot",
-  "devDependencies": {
-      "eslint": "^8.56.0",
-      "eslint-plugin-jsdoc": "^46.9.1",
-      "tsd-jsdoc": "^2.5.0"
-  }
+    "name": "beepbot",
+    "version": "4.0.0",
+    "description": "beepBot - 24/7 hosted, feature-rich and customizable Discord Bot for all your needs.",
+    "main": "start.js",
+    "dependencies": {
+        "@seald-io/nedb": "^4.0.3",
+        "discord.js": "^14.14.1",
+        "download": "^8.0.0",
+        "output-logger": "^2.3.7",
+        "superagent": "^8.1.2"
+    },
+    "scripts": {
+        "start": "node start.js"
+    },
+    "author": "3urobeat",
+    "license": "GPL-3.0",
+    "bugs": {
+        "url": "https://github.com/3urobeat/beepbot/issues"
+    },
+    "homepage": "https://github.com/3urobeat",
+    "repository": "https://github.com/3urobeat/beepbot",
+    "devDependencies": {
+        "eslint": "^8.56.0",
+        "eslint-plugin-jsdoc": "^46.9.1",
+        "tsd-jsdoc": "^2.5.0"
+    }
 }
