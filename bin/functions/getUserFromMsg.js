@@ -4,7 +4,7 @@
  * Created Date: 2021-02-12 19:25:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-11 18:50:48
+ * Last Modified: 2024-01-12 11:46:47
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -21,7 +21,7 @@ const Bot = require("../bot.js");
 
 
 /**
- * The getuserfrommsg helper function
+ * The getUserFromMsg helper function
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {number} startindex The index where to start searching in the args array
@@ -47,6 +47,8 @@ Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, all
             return false; // Stop loop
         }
     });
+
+    logger("debug", "getUserFromMsg.js", `Searching for: ${searchfor} | allowauthorreturn: ${allowauthorreturn}`);
 
 
     if (!searchfor && allowauthorreturn) {

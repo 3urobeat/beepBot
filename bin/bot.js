@@ -4,7 +4,7 @@
  * Created Date: 2020-10-04 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-11 18:50:35
+ * Last Modified: 2024-01-12 12:02:03
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -188,7 +188,7 @@ Bot.prototype._attachDiscordReadyEvent = function() {};
 Bot.prototype._attachDiscordVoiceStateUpdateEvent = function() {};
 
 /**
- * The getuserfrommsg helper function
+ * The getUserFromMsg helper function
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {number} startindex The index where to start searching in the args array
@@ -196,7 +196,7 @@ Bot.prototype._attachDiscordVoiceStateUpdateEvent = function() {};
  * @param {boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
  * @param {Array} stoparguments An array of arguments that will stop the loop if found at the current position
  */
-Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, allowauthorreturn, stoparguments) {}; // eslint-disable-line
+//Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, allowauthorreturn, stoparguments) {}; // eslint-disable-line
 
 /**
  * Registers slash commands
