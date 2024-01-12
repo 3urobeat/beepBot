@@ -4,7 +4,7 @@
  * Created Date: 2020-08-02 22:07:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:06:27
+ * Last Modified: 2024-01-09 21:46:24
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,19 +15,20 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The ping command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     let msg = await message.channel.send({
         embeds: [{
             title: "Ping?",
@@ -36,18 +37,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     });
 
     // Get heartbeat and calculate ping
-    let botheartbeat = fn.round(bot.ws.ping, 2);
-    let botpingpong  = fn.round(msg.createdTimestamp - message.createdTimestamp, 2);
+    //let heartbeat = bot.misc.round(bot.ws.ping, 2); // Seems to be broken
+    let ping      = bot.misc.round(msg.createdTimestamp - message.createdTimestamp, 2);
 
     // Edit original message with results
     msg.edit({
         embeds: [{
             title: "Pong!",
-            description:":heartbeat: " + botheartbeat + "ms\n:ping_pong: " + botpingpong + "ms",
+            description:":ping_pong: " + ping + "ms", // Removed from start of the string because broky: :heartbeat: " + heartbeat + "ms\n
             color: 0x32CD32
         }]
     });
-
 };
 
 module.exports.info = {

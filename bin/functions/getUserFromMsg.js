@@ -1,10 +1,10 @@
 /*
- * File: getuserfrommsg.js
+ * File: getUserFromMsg.js
  * Project: beepbot
  * Created Date: 2021-02-12 19:25:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:25:13
+ * Last Modified: 2024-01-11 18:50:48
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,10 +15,10 @@
  */
 
 
-// This file contains code of the getuserfrommsg function and is called by bot.js
-// I did this to reduce the amount of lines in bot.js to make finding stuff easier.
+const Discord = require("discord.js"); // eslint-disable-line
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Bot = require("../bot.js");
+
 
 /**
  * The getuserfrommsg helper function
@@ -29,7 +29,7 @@ const Discord = require('discord.js'); //eslint-disable-line
  * @param {boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
  * @param {Array} stoparguments An array of arguments that will stop the loop if found at the current position
  */
-module.exports.run = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
+Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, allowauthorreturn, stoparguments) {
     let searchfor = "";
     if (!endindex) endindex = 99999999;
     if (!stoparguments) stoparguments = [];

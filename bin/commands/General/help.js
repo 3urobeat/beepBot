@@ -4,7 +4,7 @@
  * Created Date: 2020-10-04 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:07:11
+ * Last Modified: 2024-01-12 08:58:52
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,19 +15,21 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+const lodash  = require("lodash");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The help command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     let lf = lang.cmd.help; // Lf for lang-file
 
     // Process first argument
@@ -35,26 +37,23 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         else args[0].replace(guildsettings.prefix, ""); // Remove prefix from argument if the user should have provided one
 
     // Helper function to replace boolean in string with emote
-    /**
-     *
-     * @param value
-     */
-    function replaceBool(value) {
+    let replaceBool = (value) => {
         return String(value).replace("true", "✅").replace("false", "❌");
-    }
+    };
 
     if (args[0]) { // User wants detailed information to one command?
-        let cmd = bot.commands.get(args[0].toLowerCase());
+        let cmd = bot.data.commands.get(args[0].toLowerCase());
 
         if (cmd) {
-            if (cmd.info.names.length > 1) var cmdaliases = cmd.info.names.filter((_, i) => i !== 0); // Remove first entry - Credit: https://stackoverflow.com/a/27396779/12934162
-                else var cmdaliases = [lf.noaliases]; // Return as array so that .join doesn't throw error
+            let cmdaliases = [lf.noaliases];
+
+            if (cmd.info.names.length > 1) cmdaliases = cmd.info.names.filter((_, i) => i !== 0); // Remove first entry - Credit: https://stackoverflow.com/a/27396779/12934162
 
             message.channel.send({
                 embeds: [{
                     title: `${lf.help} - ${cmd.info.names[0]}`,
-                    color: fn.randomhex(),
-                    description: `${require("lodash").get(lang, cmd.info.description)}`, // Lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!,
+                    color: bot.misc.randomHex(),
+                    description: `${lodash.get(lang, cmd.info.description)}`, // Lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!,
                     fields: [{
                         name: `${lf.aliases}:`,
                         value: cmdaliases.join(", "),
@@ -75,7 +74,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                                 ${lf.cmdallowedindm}: ${replaceBool(cmd.info.allowedindm)}
                                 ${lf.cmdnsfwonly}: ${replaceBool(cmd.info.nsfwonly)}`
                     }],
-                    footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • ${lf.setrestrictionsinsettings}: ${guildsettings.prefix}settings` }
+                    footer: {
+                        icon_url: message.author.displayAvatarURL(), // eslint-disable-line camelcase
+                        text: `${lang.general.requestedby} ${message.author.displayName} • ${lf.setrestrictionsinsettings}: ${guildsettings.prefix}settings`
+                    }
                 }]
             });
         } else {
@@ -85,7 +87,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     } else { // No argument given, construct full list of commands
 
         let msg = {};
-        let commandsObj = [...bot.commands.values()];
+        let commandsObj = [...bot.data.commands.values()];
         let unsortedcategories = {};
         let sortedcategories = {};
         let commandcount = 0;
@@ -94,10 +96,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         msg = {
             embeds: [{
                 title: `${lf.help} - ${lf.commandlist}`,
-                color: fn.randomhex(),
-                thumbnail: { url: bot.user.avatarURL() },
+                color: bot.misc.randomHex(),
+                thumbnail: { url: bot.client.user.avatarURL() },
                 fields: [],
-                footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username}` },
+                footer: {
+                    icon_url: message.author.displayAvatarURL(), // eslint-disable-line camelcase
+                    text: `${lang.general.requestedby} ${message.author.displayName}`
+                },
                 timestamp: new Date().toISOString()
             }]
         };
@@ -126,17 +131,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             commandcount++;
 
             // Add command to existing Category Array
-            unsortedcategories[e.info.category].push(`\`${guildsettings.prefix}${e.info.names[0]}\` - ${require("lodash").get(lang, e.info.description)}`); // Lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
+            unsortedcategories[e.info.category].push(`\`${guildsettings.prefix}${e.info.names[0]}\` - ${lodash.get(lang, e.info.description)}`); // Lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
         });
 
         // Put counted commands into description
         msg.embeds[0].description = `__${lf.overviewofxcmds.replace("commandcount", `**${commandcount}**`)}__:\n${lf.detailedcommandinfo.replace("prefix", guildsettings.prefix)}`;
 
         // Sort Object by order defined in config
-        bot.config.helpcategoryorder.forEach((e) => {
+        bot.data.config.helpcategoryorder.forEach((e) => {
             if (e == "other") { // Check if this key is the key for all categories with no specific order
                 Object.keys(unsortedcategories).forEach((k) => { // Loop over all categories
-                    if (!bot.config.helpcategoryorder.includes(k)) { // Check if this is one of the categories with no specific order
+                    if (!bot.data.config.helpcategoryorder.includes(k)) { // Check if this is one of the categories with no specific order
                         sortedcategories[k] = unsortedcategories[k]; // Just add it
                     }
                 });
@@ -150,8 +155,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
         // Add sortedcategories with commands to msg
         Object.keys(sortedcategories).forEach((e) => {
-            var categorytitle = lf[e.toLowerCase()]; // Get translated category name from language file
-            if (!categorytitle) var categorytitle = e; // If language file doesn't have this category just use the "raw" name
+            let categorytitle = lf[e.toLowerCase()]; // Get translated category name from language file
+            if (!categorytitle) categorytitle = e; // If language file doesn't have this category just use the "raw" name
 
             msg.embeds[0].fields.push({
                 name: categorytitle,
