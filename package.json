@@ -8,7 +8,8 @@
         "discord.js": "^14.14.1",
         "download": "^8.0.0",
         "output-logger": "^2.3.7",
-        "superagent": "^8.1.2"
+        "superagent": "^8.1.2",
+        "systeminformation": "^5.21.22"
     },
     "scripts": {
         "start": "node start.js"
