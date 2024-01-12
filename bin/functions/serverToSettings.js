@@ -4,7 +4,7 @@
  * Created Date: 2021-02-07 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 23:12:02
+ * Last Modified: 2024-01-12 10:54:49
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -25,8 +25,9 @@ const DataManager = require("../dataManager.js");
  * @param {Discord.Client} client The Discord client class
  * @param {Discord.Guild} guild The Discord guild class
  * @param {boolean} removeEntry Set to true if this function is called from guildDelete event. It will mark db entries for this server to expire in 7 days.
+ * @param {boolean} reset Set to true to reset the guild's settings to default
  */
-DataManager.prototype.serverToSettings = function(client, guild, removeEntry) {
+DataManager.prototype.serverToSettings = function(client, guild, removeEntry, reset) {
 
     // Helper function that avoids having to copy paste the same msg and makes changing it easier
     let logDbErr = (err) => { logger("error", "serverToSettings.js", `Error updating db of guild ${guild.id}. Error: ${err}`); };
@@ -87,20 +88,19 @@ DataManager.prototype.serverToSettings = function(client, guild, removeEntry) {
         guild.members.cache.get(String(client.user.id)).setNickname(`${nickname} [${prefix}]`).catch(() => {}); // Set nickname to existing name plus prefix and catch error but ignore it
 
 
-        // Add entry with default settings to db if no entry exists yet
-        if (!data) {
+        // Add entry with default settings to db if no entry exists yet or if reset is true
+        if (!data || reset) {
             let defaultguildsettings = this.constants.defaultguildsettings;
             defaultguildsettings["guildid"] = guild.id;
             defaultguildsettings["prefix"] = prefix;
 
             logger("info", "serverToSettings.js", `Adding ${guild.id} to settings database with default settings...`, false, true);
 
-            this.settings.insert(defaultguildsettings, (err) => { if (err) logger("error", "serverToSettings.js", "Error inserting guild: " + err); });
+            this.settings.update({ guildid: guild.id }, defaultguildsettings, { upsert: true }, (err) => { if (err) logger("error", "serverToSettings.js", "Error inserting guild: " + err); });
 
         } else {
 
             logger("info", "serverToSettings.js", `An existing entry was found for guild ${guild.id} in settings.db. Reusing existing entry with removed expiration timestamp.`, false, true);
-
         }
 
     });
