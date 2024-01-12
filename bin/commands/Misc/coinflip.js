@@ -4,7 +4,7 @@
  * Created Date: 2020-08-07 20:02:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:22:16
+ * Last Modified: 2024-01-12 16:35:25
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,20 +15,21 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The coinflip command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    message.channel.send(`${lang.cmd.othermisc.coinflipped} **${fn.randomstring(lang.cmd.othermisc.coinfliprandommsg)}**!`);
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
+    message.channel.send(`${lang.cmd.othermisc.coinflipped} **${bot.misc.randomString(lang.cmd.othermisc.coinfliprandommsg)}**!`);
 };
 
 module.exports.info = {

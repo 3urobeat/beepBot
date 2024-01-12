@@ -4,7 +4,7 @@
  * Created Date: 2021-01-09 21:11:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:19:23
+ * Last Modified: 2024-01-12 16:16:53
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,23 +15,25 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord    = require("discord.js"); // eslint-disable-line
+const superagent = require("superagent");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The urbandictionary command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     try {
         if (!args[0]) return message.channel.send(lang);
 
-        let { body } = await require("superagent").get(`https://api.urbandictionary.com/v0/define?term=${args.join(" ")}`);
+        let { body } = await superagent.get(`https://api.urbandictionary.com/v0/define?term=${encodeURIComponent(args.join(" "))}`);
         let res      = body.list[0];
 
         if (!res) return message.channel.send(lang.cmd.othermisc.udnotfound); // Send nothing found message if array is empty
@@ -40,15 +42,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             embeds: [{
                 title: res.word + " - Urban Dictionary",
                 url: res.permalink,
-                color: fn.randomhex(),
+                color: bot.misc.randomHex(),
                 description: "** **", // Produces an empty field which looks better
                 fields: [
                     {
                         name: lang.cmd.othermisc.uddefinition,
-                        value: res.definition },
+                        value: res.definition
+                    },
                     {
                         name: `${lang.general.example}:`,
-                        value: res.example }
+                        value: res.example
+                    }
                 ],
                 footer: {
                     text: `${lang.general.by} ${res.author}`
@@ -61,7 +65,6 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         logger("error", "urbandictionary.js", "API Error: " + err);
         message.channel.send(`urbandictionary API ${lang.general.error}: ${err}`);
     }
-
 };
 
 module.exports.info = {

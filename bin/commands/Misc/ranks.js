@@ -4,7 +4,7 @@
  * Created Date: 2022-01-09 20:16:29
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:21:10
+ * Last Modified: 2024-01-12 16:21:42
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,23 +15,22 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The ranks command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+module.exports.run = async (bot, message, args, lang, guildsettings) => {
 
-    let levelUser = require("../../functions/levelUser");
-
-    bot.levelsdb.find({ guildid: message.guild.id }, (err, docs) => {
+    bot.data.levelsdb.find({ guildid: message.guild.id }, (err, docs) => {
         if (err) {
             message.channel.send("Error trying to find user in database: " + err);
             logger("error", "rank.js", "Error trying to find user in database: " + err);
@@ -44,7 +43,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         let msg = {
             embeds: [{
                 title: lang.cmd.othermisc.rankstitle.replace("servername", message.guild.name),
-                color: fn.randomhex(),
+                color: bot.misc.randomHex(),
                 thumbnail: { url: message.guild.iconURL() },
                 description: "",
                 fields: [],
@@ -66,12 +65,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             msg.embeds[0].fields.push({
                 name: `${i + 1}. ${e.username}`,
-                value: `${lang.cmd.othermisc.ranklevel} ${Math.floor(levelUser.xpToLevel(e.xp))}\n${e.xp} XP\n${e.messages} ${lang.cmd.othermisc.ranksmessages}`
+                value: `${lang.cmd.othermisc.ranklevel} ${Math.floor(bot.data.xpToLevel(e.xp))}\n${e.xp} XP\n${e.messages} ${lang.cmd.othermisc.ranksmessages}`
             });
         });
 
         message.channel.send(msg);
     });
+
 };
 
 module.exports.info = {

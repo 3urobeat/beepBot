@@ -4,7 +4,7 @@
  * Created Date: 2022-01-09 17:43:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:21:20
+ * Last Modified: 2024-01-12 16:27:58
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,29 +15,28 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The rank command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-
-    let levelUser = require("../../functions/levelUser");
+module.exports.run = async (bot, message, args, lang, guildsettings) => {
 
     // Get avatar of targeted user
-    let targetuser = fn.getuserfrommsg(message, args, 0, null, true);
+    let targetuser = bot.getUserFromMsg(message, args, 0, null, true);
     if (!targetuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (targetuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", targetuser));
 
 
-    bot.levelsdb.findOne({ $and: [{ userid: targetuser.id }, { guildid: message.guild.id }] }, (err, doc) => {
+    bot.data.levelsdb.findOne({ $and: [{ userid: targetuser.id }, { guildid: message.guild.id }] }, (err, doc) => {
         if (err) {
             message.channel.send("Error trying to find user in database: " + err);
             logger("error", "rank.js", "Error trying to find user in database: " + err);
@@ -54,13 +53,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         // Create message template
         let msg = {
             embeds: [{
-                title: lang.cmd.othermisc.ranktitle.replace("username", `${targetuser.username}#${targetuser.discriminator}`),
-                color: fn.randomhex(),
+                title: lang.cmd.othermisc.ranktitle.replace("username", `@${targetuser.displayName}`),
+                color: bot.misc.randomHex(),
                 thumbnail: { url: targetuser.displayAvatarURL() },
                 description: "",
                 fields: [{
                     name: lang.cmd.othermisc.ranklevel,
-                    value: String(Math.floor(levelUser.xpToLevel(doc.xp))),
+                    value: String(Math.floor(bot.data.xpToLevel(doc.xp))),
                     inline: true
                 },
                 {
@@ -74,7 +73,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 },
                 {
                     name: lang.cmd.othermisc.rankxpfornextlvl,
-                    value: String(Math.floor(levelUser.levelToXp(Math.floor(levelUser.xpToLevel(doc.xp)) + 1) - doc.xp)) + " XP"
+                    value: String(Math.floor(bot.data.levelToXp(Math.floor(bot.data.xpToLevel(doc.xp)) + 1) - doc.xp)) + " XP"
                 }]
             }
             ]};
