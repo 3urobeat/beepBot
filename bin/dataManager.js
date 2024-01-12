@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 09:30:45
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-08 20:07:58
+ * Last Modified: 2024-01-12 10:52:20
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -224,11 +224,12 @@ DataManager.prototype.levelToXp = function(level) {}; // eslint-disable-line
 
 /**
  * Inserts a guild into settings.db with default settings
- * @param {Discord.Client} bot The Discord client class
+ * @param {Discord.Client} client The Discord client class
  * @param {Discord.Guild} guild The Discord guild class
  * @param {boolean} removeEntry Set to true if this function is called from guildDelete event. It will mark db entries for this server to expire in 7 days.
+ * @param {boolean} reset Set to true to reset the guild's settings to default
  */
-DataManager.prototype.serverToSettings = function(bot, guild, removeEntry) {}; // eslint-disable-line
+DataManager.prototype.serverToSettings = function(client, guild, removeEntry, reset) {}; // eslint-disable-line
 
 /**
  * Reads all commands in ./bin/commands and loads them into a collection
