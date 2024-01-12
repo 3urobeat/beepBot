@@ -4,7 +4,7 @@
  * Created Date: 2021-01-12 18:34:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:21:42
+ * Last Modified: 2024-01-12 16:33:28
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,25 +15,27 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord    = require("discord.js"); // eslint-disable-line
+const superagent = require("superagent");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The lyrics command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     if (!args[0]) return message.channel.send(lang.cmd.othermisc.lyricsmissingargs);
 
     const msg = await message.channel.send(lang.cmd.othermisc.lyricssearching);
 
     try {
-        let { body } = await require("superagent").get("https://some-random-api.ml/lyrics?title=" + args.join(" "));
+        let { body } = await superagent.get("https://some-random-api.com/lyrics?title=" + args.join(" "));
 
         if (body.error) { // Error? What a bummer
             if (body.error == "Sorry I couldn't find that song's lyrics") {
@@ -53,20 +55,22 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 embeds: [{
                     title: `${body.author} - ${body.title}`,
                     url: body.links.genius,
-                    thumbnail: { url: body.thumbnail.genius },
+                    thumbnail: {
+                        url: body.thumbnail.genius
+                    },
                     description: str.slice(0, 2048),
                     fields: [],
                     timestamp: message.createdAt,
                     footer: {
-                        text: `${lang.general.poweredby} some-random-api.ml & genius.com`
+                        text: `${lang.general.poweredby} some-random-api.com & genius.com`
                     },
-                    color: fn.randomhex()
+                    color: bot.misc.randomHex()
                 }]
             };
 
             // Longer than description character limit? field limits: https://birdie0.github.io/discord-webhooks-guide/other/field_limits.html
             if (str.length > 2048) fullmsg.embeds[0].fields.push({ name: "** **", value: str.slice(2048, 3072) });
-            if (str.length > 3072) fullmsg.embeds[0].fields.push({ name: "** **", value: str.slice(3072, 4096) });
+            if (str.length > 3072) fullmsg.embeds[0].fields.push({ name: "** **", value: str.slice(3072, 4096) }); // Why exactly is this hardcoded, past-me?
             if (str.length > 4096) fullmsg.embeds[0].fields.push({ name: "** **", value: str.slice(4096, 5120) });
             if (str.length > 5120) fullmsg.embeds[0].fields.push({ name: "** **", value: str.slice(5120, 899) });
 

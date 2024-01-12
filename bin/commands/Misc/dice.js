@@ -4,7 +4,7 @@
  * Created Date: 2020-08-07 20:02:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:22:04
+ * Last Modified: 2024-01-12 16:35:08
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,19 +15,20 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The dice command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     let messagecount = parseInt(args[0]);
     let randomnumber = Math.floor((Math.random() * messagecount) + 1);
 
@@ -37,7 +38,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (isNaN(messagecount)) return message.channel.send(nomaxprovided);
     if (messagecount < 2) return message.channel.send(nomaxprovided);
 
-    message.channel.send(":game_die: " + fn.randomstring(lang.cmd.othermisc.dicerandommsg) + " **" + randomnumber + "**");
+    message.channel.send(":game_die: " + bot.misc.randomString(lang.cmd.othermisc.dicerandommsg) + " **" + randomnumber + "**");
     return;
 };
 
