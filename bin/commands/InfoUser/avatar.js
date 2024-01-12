@@ -4,7 +4,7 @@
  * Created Date: 2020-08-07 20:02:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:05:38
+ * Last Modified: 2024-01-12 12:02:59
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,20 +15,21 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The avatar command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    let avataruser = fn.getuserfrommsg(message, args, 0, null, true);
+module.exports.run = (bot, message, args, lang, guildsettings) => { // eslint-disable-line
+    let avataruser = bot.getUserFromMsg(message, args, 0, null, true);
     if (!avataruser) return message.channel.send(lang.general.usernotfound);
     if (typeof (avataruser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", avataruser));
 
@@ -38,7 +39,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         embeds: [{
             author: {
                 name: avataruser.username,
-                icon_url: avatarurl,
+                icon_url: avatarurl, // eslint-disable-line camelcase
                 url: avatarurl
             },
             title: "Click here to open image in your browser",
@@ -47,11 +48,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 url: avatarurl
             },
             footer: {
-                icon_url: message.author.displayAvatarURL,
-                text: `${lang.general.requestedby} ${message.author.username}`
+                icon_url: message.author.displayAvatarURL, // eslint-disable-line camelcase
+                text: `${lang.general.requestedby} @${message.author.displayName}`
             },
             timestamp: message.createdAt,
-            color: fn.randomhex()
+            color: bot.misc.randomHex()
         }]
     });
 };
