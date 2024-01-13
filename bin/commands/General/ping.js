@@ -1,13 +1,13 @@
 /*
  * File: ping.js
  * Project: beepbot
- * Created Date: 02.08.2020 22:07:00
+ * Created Date: 2020-08-02 22:07:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-12 12:21:17
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,19 +15,20 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The ping command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     let msg = await message.channel.send({
         embeds: [{
             title: "Ping?",
@@ -36,18 +37,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     });
 
     // Get heartbeat and calculate ping
-    let botheartbeat = fn.round(bot.ws.ping, 2);
-    let botpingpong  = fn.round(msg.createdTimestamp - message.createdTimestamp, 2);
+    let heartbeat = bot.misc.round(bot.client.ws.ping, 2); // Seems to be broken
+    let ping      = bot.misc.round(msg.createdTimestamp - message.createdTimestamp, 2);
 
     // Edit original message with results
     msg.edit({
         embeds: [{
             title: "Pong!",
-            description:":heartbeat: " + botheartbeat + "ms\n:ping_pong: " + botpingpong + "ms",
+            description: `:heartbeat: ${heartbeat}ms\n:ping_pong: ${ping}ms`,
             color: 0x32CD32
         }]
     });
-
 };
 
 module.exports.info = {

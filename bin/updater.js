@@ -1,13 +1,13 @@
 /*
  * File: updater.js
  * Project: beepbot
- * Created Date: 19.01.2021 22:36:00
+ * Created Date: 2021-01-19 22:36:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-05 23:22:55
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -20,7 +20,7 @@ const fs       = require("fs");
 
 const oldconfig = Object.assign(require("./config.json")); // Get content of old config
 
-var logger = require("./functions/logger.js").logger; // Custom logger
+let logger = require("./functions/logger.js").logger; // Custom logger
 
 
 const url = "https://github.com/3urobeat/beepBot/archive/master.zip";

@@ -1,13 +1,13 @@
 ﻿/*
  * File: bot.js
  * Project: beepbot
- * Created Date: 04.10.2020 18:10:00
+ * Created Date: 2020-10-04 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 12:14:56
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,439 +15,209 @@
  */
 
 
-// This file controls one shard
-// Note: This file had like 720 lines so I moved some code into the 'events' & 'functions' folder
+// A Bot instance controls one shard
 
-var bootstart   = 0;
-var bootstart   = Date.now();
-const shardArgs = process.argv; // eslint-disable-line no-unused-vars
+const Discord = require("discord.js");
+const logger  = require("output-logger");
 
-const Discord  = require("discord.js");
-const path     = require("path");
-const nedb     = require("@yetzt/nedb");
-const fs       = require("fs");
+const DataManager = require("./dataManager.js");
 
-const configpath = "./config.json";
-var   config     = require(configpath);
-const constants  = require("./constants.json");
+const { _handleErrors } = require("./helpers/handleErrors.js");
 
-// I hate intents
-const bot = new Discord.Client({
-    intents: [
-        Discord.GatewayIntentBits.Guilds,
-        Discord.GatewayIntentBits.GuildMembers,
-        Discord.GatewayIntentBits.GuildBans,
-        Discord.GatewayIntentBits.GuildInvites,
-        Discord.GatewayIntentBits.GuildPresences,
-        Discord.GatewayIntentBits.GuildMessages,
-        Discord.GatewayIntentBits.GuildMessageReactions,
-        Discord.GatewayIntentBits.GuildVoiceStates,
-        Discord.GatewayIntentBits.DirectMessages,
-        Discord.GatewayIntentBits.DirectMessageReactions,
-        Discord.GatewayIntentBits.MessageContent
-    ],
-    partials: [Discord.Partials.Message, Discord.Partials.Reaction] // Partials are messages that are not fully cached and have to be fetched manually
-});
 
-var fn = {}; // Object that will contain all functions to be accessible from commands
-
-var loggedin      = false;
-var logafterlogin = [];
-
-bot.config    = config; // I'm just gonna add it to the bot object as quite a few cmds will probably need the config later on
-bot.constants = constants;
-
-global.config = config;
-
-/* ------------ Functions for all shards: ------------ */
 /**
- * Logs text to the terminal and appends it to the output.txt file.
- * @param {String} type info, warn or error
- * @param {String} origin Filename from where the text originates from
- * @param {String} str The text to log into the terminal
- * @param {Boolean} nodate Setting to true will hide date and time in the message
- * @param {Boolean} remove Setting to true will remove this message with the next one
- * @returns {String} The resulting String
+ * Constructor - One bot instance controls one shard
  */
-var logger = (type, origin, str, nodate, remove, animation) => { // Custom logger (wrapping it here so that I can pass another argument)
-    if (loggedin) logafterlogin = undefined;
-    require("./functions/logger.js").logger(type, origin, str, nodate, remove, animation, logafterlogin);
-};
-logger.animation     = require("./functions/logger.js").logger.animation;
-logger.stopAnimation = require("./functions/logger.js").logger.stopAnimation;
+const Bot = function() {
 
-/**
-* Returns the language obj the specified server has set
-* @param {Number} guildid The id of the guild
-* @param {Object} guildsettings The settings of this guild
-* @returns {Object} lang object callback
-*/
-var lang = (guildid, guildsettings) => {
-    if (!guildid) {
-        logger("error", "bot.js", "function lang: guildid not specified!");
-        return {};
-    }
+    // Attach error handler
+    _handleErrors();
 
-    if (!guildsettings) var serverlang = constants.defaultguildsettings.lang;
-        else var serverlang = guildsettings.lang;
-
-    if (!Object.keys(bot.langObj).includes(serverlang)) {
-        logger("warn", "bot.js", `Guild ${guildid} has an invalid language! Returning english language...`);
-        return bot.langObj["english"];
-    }
-
-    return bot.langObj[serverlang];
-};
-
-/**
- * Adds the specified guild to the settings database with default values
- * @param {Object} guild The message.guild object
- * @param {Boolean} removeentry Removes the guild from the database
- */
-var servertosettings = (guild, removeentry) => {
-    require("./functions/servertosettings.js").run(bot, logger, guild, removeentry); // Call the run function of the file which contains the code of this function
-};
-
-/**
- * Attempts to get a user object from a message
- * @param {Object} message The message object
- * @param {Array} args The args array
- * @param {Number} startindex The index of the args array to start searching from
- * @param {Number} endindex The index of the args array to stop searching (won't be included) (optional)
- * @param {Boolean} allowauthorreturn Specifies if the function should return the author if no args is given
- * @param {Array} stoparguments Arguments that will stop/limit the search (basically an automatic endindex)
- * @returns The retrieved user object, undefined if nothing was found or a number >1 if more than one user was found
- */
-var getuserfrommsg = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
-    return require("./functions/getuserfrommsg.js").run(message, args, startindex, endindex, allowauthorreturn, stoparguments);
-};
-
-/**
- * Attempts to get time from message and converts it into ms
- * @param {Array} args The args array
- * @param {function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
- */
-var gettimefrommsg = (args, callback) => {
-    require("./functions/gettimefrommsg.js").run(args, (time, unitindex, arr) => { callback(time, unitindex, arr); }); // Callback the callback
-};
-
-/**
- * Attempts to get a reason from a message
- * @param {Array} args The args array
- * @param {Array} stoparguments Arguments that will stop/limit the search
- * @param {function} [callback] Called with `reason` (String or undefined) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
- */
-var getreasonfrommsg = (args, stoparguments, callback) => {
-    require("./functions/getreasonfrommsg.js").run(args, stoparguments, (reason, reasontext) => { callback(reason, reasontext); }); // Callback the callback
-};
-
-/**
- * Sends a message to the modlogchannel of that guild if it has one set
- * @param {Discord.Guild} guild The guild obj
- * @param {String} action Type of action
- * @param {Discord.User} author Initiator of the action
- * @param {Discord.User} receiver The affected user of the action
- * @param {Array<String>} details Additional details
- */
-var msgtomodlogchannel = (guild, action, author, receiver, details) => {
-    require("./functions/msgtomodlogchannel.js").run(bot, logger, guild, action, author, receiver, details); // Call the run function of the file which contains the code of this function
-};
-
-/**
- * Rounds a number with x decimals
- * @param {Number} value Number to round
- * @param {Number} decimals Amount of decimals
- * @returns {Number} Rounded number
- */
-var round = (value, decimals) => {
-    return Number(Math.round(value+"e"+decimals)+"e-"+decimals);
-};
-
-/**
- * Returns random hex value
- * @returns {Number} Hex value
- */
-var randomhex = () => {
-    return Math.floor(Math.random() * 16777214) + 1;
-};
-
-/**
- * Returns a random String from an array
- * @param {Array<String>} arr An Array with Strings to choose from
- * @returns {String} A random String from the provided array
- */
-var randomstring = arr => arr[Math.floor(Math.random() * arr.length)];
-
-var owneronlyerror = (lang) => { return randomstring(lang.general.owneronlyerror) + " (Bot Owner only-Error)"; };
-var usermissperm   = (lang) => { return randomstring(lang.general.usermissperm) + " (Role permission-Error)"; };
-
-
-/* ------------ Run the command reader ------------ */
-require("./helpers/commandReader.js").run(bot); // Function returns amount of commands (without aliases found)
-
-
-/* -------------- Create lang object -------------- */
-/**
- * Function to construct the language object
- * @param {String} dir Language Folder Root Path
- */
-function langFiles(dir) { // Idea from https://stackoverflow.com/a/63111390/12934162
-    fs.readdirSync(dir).forEach(file => {
-        const absolute = path.join(dir, file);
-
-        if (fs.statSync(absolute).isDirectory()) {
-            return langFiles(absolute);
-        } else {
-            if (!file.includes(".json")) return; // Ignore all files that aren't .json
-            let result = absolute.replace(".json", "").replace(/\\/g, "/").split("/"); // Remove file ending, convert windows \ to unix / and split path into array
-
-            result.splice(0, 2); // Remove "bin" and "lang"
-            result.splice(2, 1); // Remove category name
-
-            if (!bot.langObj[result[0]]) bot.langObj[result[0]] = {}; // Create language key
-            if (!bot.langObj[result[0]]["cmd"]) bot.langObj[result[0]]["cmd"] = {}; // Create cmd key
-
-            try {
-                if (result[1] == "commands") {
-                    bot.langObj[result[0]]["cmd"][result[2]] = require(absolute.replace("bin", "."));
-                } else {
-                    bot.langObj[result[0]][result[1]] = require(absolute.replace("bin", "."));
-                }
-            } catch(err) {
-                if (err) logger("warn", "bot.js", `langFiles function: lang ${result[0]} has an invalid file: ${err}`);
-            }
-
-            return;
-        }
-    });
-}
-
-bot.langObj = {};
-langFiles("./bin/lang/"); // RECURSION TIME!
-
-
-// Add functions to fn object
-fn = { logger, lang, servertosettings, getuserfrommsg, gettimefrommsg, getreasonfrommsg, msgtomodlogchannel, round, randomhex, randomstring, owneronlyerror, usermissperm };
-bot.fn = fn; // I need to be able to access functions from the sharding manager
-
-process.on("unhandledRejection", (reason) => {
-    logger("error", "bot.js", `Unhandled Rejection! Reason: ${reason.stack}`);
-});
-
-process.on("uncaughtException", (reason) => {
-    logger("error", "bot.js", `Uncaught Exception! Reason: ${reason.stack}`);
-});
-
-
-/* -------------- Load databases -------------- */
-const settings = new nedb("./data/settings.db"); // Initialize database
-const timedbans = new nedb("./data/timedbans.db"); // Initialize database
-const timedmutes = new nedb("./data/timedmutes.db"); // Initialize database
-const monitorreactions = new nedb("./data/monitorreactions.db"); // Initialize database
-const levelsdb = new nedb("./data/levels.db"); // Initialize database
-
-settings.loadDatabase((err) => {
-    if (err) return logger("error", "bot.js", "Error loading settings database. Error: " + err);
-    logger("info", "bot.js", "Successfully loaded settings database."); // Load db content into memory
-});
-
-timedbans.loadDatabase((err) => {
-    if (err) return logger("error", "bot.js", "Error loading timedbans database. Error: " + err);
-    logger("info", "bot.js", "Successfully loaded timedbans database."); // Load db content into memory
-});
-
-timedmutes.loadDatabase((err) => {
-    if (err) return logger("error", "bot.js", "Error loading timedmutes database. Error: " + err);
-    logger("info", "bot.js", "Successfully loaded timedmutes database."); // Load db content into memory
-});
-
-monitorreactions.loadDatabase((err) => {
-    if (err) return logger("error", "bot.js", "Error loading monitorreactions database. Error: " + err);
-    logger("info", "bot.js", "Successfully loaded monitorreactions database."); // Load db content into memory
-});
-
-levelsdb.loadDatabase((err) => {
-    if (err) return logger("error", "bot.js", "Error loading levelsdb database. Error: " + err);
-    logger("info", "bot.js", "Successfully loaded levelsdb database."); // Load db content into memory
-});
-
-bot.settings = settings; // Add reference to bot obj
-bot.timedbans = timedbans; // Add reference to bot obj
-bot.timedmutes = timedmutes; // Add reference to bot obj
-bot.monitorreactions = monitorreactions; // Add reference to bot obj
-bot.levelsdb = levelsdb; // Add reference to bot obj
-
-
-/* ------------ Startup: ------------ */
-bot.on("ready", async function() {
-    if ([...bot.guilds.cache.values()].length == 0) return logger("warn", "bot.js", "This shard has no guilds and is therefore unused!");
-    var thisshard = [...bot.guilds.cache.values()][0].shard; // Get shard instance of this shard with this "workaround" because it isn't directly accessable
-
-    // Set activity either to gameoverwrite or gamerotation[0]
-    if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) {
-        let game = config.gameoverwrite;
-        if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = "Happy Birthday beepBot!";
-
-        bot.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status });
-    } else {
-        bot.user.setPresence({ activities: [{ name: config.gamerotation[0], type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status });
-    }
-
-    // Read amount of commands found without aliases
-    var commandcount = [...bot.commands.values()].filter(e => !e.info.thisisanalias).length;
-
-    // Print last part of ready message when this is shard 0, otherwise print small ready message for this shard
-    if (thisshard.id == 0) {
-        if (bootstart - Number(shardArgs[2]) < 10000) { // If difference is more than 10 seconds it must be a restart
-            // Finish startup messages from controller.js
-            logger("", "", `> ${commandcount} commands & ${Object.keys(bot.langObj).length} languages found!`, true);
-            logger("", "", "> Successfully logged in shard0!", true);
-            logger("", "", "*--------------------------------------------------------------*\n ", true);
-        } else {
-            logger("info", "bot.js", "shard0 got restarted...", false, true);
-        }
-    } else {
-        logger("info", "bot.js", `Successfully logged in shard${thisshard.id}!`, false, true);
-    }
-
-    loggedin = true;
-    logafterlogin.forEach(e => {
-        if (thisshard.id != 0 && e.includes("Successfully loaded") && e.includes("database")) return; // Check if this message is a database loaded message and don't log it again
-        logger(e[0], e[1], e[2], e[3], e[4]);
+    // I hate intents
+    this.client = new Discord.Client({
+        intents: [
+            Discord.GatewayIntentBits.Guilds,
+            Discord.GatewayIntentBits.GuildMembers,
+            Discord.GatewayIntentBits.GuildModeration,
+            Discord.GatewayIntentBits.GuildInvites,
+            Discord.GatewayIntentBits.GuildPresences,
+            Discord.GatewayIntentBits.GuildMessages,
+            Discord.GatewayIntentBits.GuildMessageReactions,
+            Discord.GatewayIntentBits.GuildVoiceStates,
+            Discord.GatewayIntentBits.DirectMessages,
+            Discord.GatewayIntentBits.DirectMessageReactions,
+            Discord.GatewayIntentBits.MessageContent
+        ],
+        partials: [Discord.Partials.Message, Discord.Partials.Reaction] // Partials are messages that are not fully cached and have to be fetched manually
     });
 
-    bot.commandcount = commandcount; // Probably useful for a few cmds so lets just add it to the bot obj (export here so the read process is definitely finished)
 
-    setTimeout(() => {
-        logger("", "", "", true, true); // Print empty line to clear other stuff
-    }, 2500);
-
-
-    // Register all slash commands
-    require("./helpers/registerSlashCommands.js").run(bot, logger);
+    // Stores various values
+    this.info = {
+        commandcount: 0
+    };
 
 
-    if (thisshard.id == 0) {
-        // Game rotation
-        if (config.gamerotateseconds <= 10) logger("warn", "controller.js", "gamerotateseconds in config is <= 10 seconds! Please increase this value to avoid possible cooldown errors/API spamming!", true);
-        if (config.gameurl == "") logger("warn", "controller.js", "gameurl in config is empty and will break the bots presence!", true);
-        let currentgameindex = 0;
-        let lastPresenceChange = Date.now(); // This is useful because intervals can get very unprecise over time
+    // TODO: Remove and somehow inherit from controller
+    /**
+     * @type {DataManager}
+     */
+    this.data = new DataManager();
 
-        setInterval(() => {
-            if (lastPresenceChange + (config.gamerotateseconds * 1000) > Date.now()) return; // Last change is more recent than gamerotateseconds wants
-
-            // Refresh config cache to check if gameoverwrite got changed
-            delete require.cache[require.resolve("./config.json")];
-            config = require("./config.json");
-
-            if (config.gameoverwrite != "" || (new Date().getDate() == 1 && new Date().getMonth() == 0)) { // If botowner set a game manually then only change game if the instance isn't already playing it
-                let game = config.gameoverwrite;
-                if (new Date().getDate() == 1 && new Date().getMonth() == 0) game = "Happy Birthday beepBot!";
-
-                if (bot.user.presence.activities[0].name != game) {
-                    bot.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status });
-                }
-
-                currentgameindex = 0; // Reset gameindex
-                lastPresenceChange = Date.now() + 600000; // Add 10 min to reduce load a bit
-                return; // Don't change anything else if botowner set a game manually
-            }
-
-            currentgameindex++; // Set here already so we can't get stuck at one index should an error occur
-            if (currentgameindex == config.gamerotation.length) currentgameindex = 0; // Reset
-            lastPresenceChange = Date.now();
-
-            // Replace code in string (${})
-            function processThisGame(thisgame, callback) {
-                try {
-                    let matches = thisgame.match(/(?<=\${\s*).*?(?=\s*})/gs); // Matches will be everything in between a "${" and "}" -> either null or array with results
-
-                    if (matches) {
-                        matches.forEach(async (e, i) => {
-                            let evaled = await eval(matches[i]);
-                            thisgame = thisgame.replace(`\${${e}}`, evaled);
-
-                            if (!thisgame.includes("${")) callback(thisgame);
-                        });
-                    } else {
-                        callback(thisgame); // Nothing to process, callback unprocessed argument
-                    }
-
-                } catch(err) {
-                    logger("warn", "controller.js", `Couldn't replace gamerotation[${currentgameindex}] in gamerotationloop. Error: ${err.stack}`);
-                    return;
-                }
-            }
-
-            processThisGame(config.gamerotation[currentgameindex], (game) => {
-                lastPresenceChange = Date.now(); // Set again to include processing time
-
-                bot.user.setPresence({ activities: [{ name: game, type: constants.gametypetranslation[config.gametype], url: config.gameurl }], status: config.status });
-            });
-        }, 5000);
+    this.client.bot = this; // Quick hack to later access DataManager from broadcastEval and other discord.js internal methods
 
 
-        // Avatar checker for christmas
-        if (config.loginmode == "normal") {
-            let lastxmascheck = Date.now() - 21600000; // Subtract 6 hours so that the first interval will already get executed
-            var currentavatar = "";
-
-            function checkavatar() { //eslint-disable-line
-                if (new Date().getMonth() == "11") { // If month is December (getMonth counts from 0)
-                    if (currentavatar == "xmas") return; // Seems to be already set to xmas
-
-                    bot.user.setAvatar(constants.botxmasavatar)
-                        .then(() => {
-                            logger("info", "controller.js", "Successfully changed avatar to xmas.");
-                            currentavatar = "xmas"; // Change to xmas so that the check won't run again
-                            lastxmascheck = Date.now();
-                        })
-                        .catch((err) => { // Don't set currentavatar so that the check will run again
-                            logger("warn", "controller.js", "Couldn't set xmas avatar: " + err.stack);
-                            lastxmascheck = Date.now() - 19800000; // Subtract 5.5 hours so that the next check will run in half an hour
-                            return;
-                        });
-                } else {
-                    if (currentavatar == "normal") return; // Seems to be already set to normal
-
-                    bot.user.setAvatar(constants.botdefaultavatar)
-                        .then(() => {
-                            logger("info", "controller.js", "Successfully changed avatar to normal.");
-                            currentavatar = "normal"; // Change to normal so that the check won't run again
-                            lastxmascheck = Date.now();
-                        })
-                        .catch((err) => { // Don't set currentavatar so that the check will run again
-                            logger("warn", "controller.js", "Couldn't broadcast normal avatar change: " + err.stack);
-                            lastxmascheck = Date.now() - 19800000; // Subtract 5.5 hours so that the next check will run in half an hour
-                            return;
-                        });
-                }
-            }
-
-            setInterval(() => {
-                if (lastxmascheck + 21600000 > Date.now()) return; // Last change is more recent than 6 hours
-                checkavatar();
-            }, 60000); // 60 seconds
-        }
-    }
-
-});
+    /**
+     * Collection of miscellaneous functions for easier access
+     */
+    this.misc = require("./functions/misc.js");
 
 
-/* ------------ Event Handlers: ------------ */
-bot.on("guildCreate",        (guild)              => require("./events/guildCreate.js").run(bot, logger, guild));
-bot.on("guildDelete",        (guild)              => require("./events/guildDelete.js").run(bot, logger, guild));
-bot.on("guildMemberAdd",     (member)             => require("./events/guildMemberAdd.js").run(bot, member));
-bot.on("guildMemberRemove",  (member)             => require("./events/guildMemberRemove.js").run(bot, member));
-bot.on("interactionCreate",  (interaction)        => require("./events/interactionCreate.js").run(bot, logger, interaction));
-bot.on("messageReactionAdd", (reaction, user)     => require("./events/messageReactionAdd.js").run(bot, logger, reaction, user));
-bot.on("voiceStateUpdate",   (oldstate, newstate) => require("./events/voiceStateUpdate.js").run(bot, oldstate, newstate));
+    // Load Bot's helper files
+    require("./events/guildCreate.js");
+    require("./events/guildDelete.js");
+    require("./events/guildMemberAdd.js");
+    require("./events/guildMemberRemove.js");
+    require("./events/interactionCreate.js");
+    require("./events/message.js");
+    require("./events/messageReactionAdd.js");
+    require("./events/ready.js");
+    require("./events/voiceStateUpdate.js");
+    require("./functions/getReasonFromMsg.js");
+    require("./functions/getUserFromMsg.js");
+    require("./functions/msgToModlogChannel.js");
+    require("./helpers/registerSlashCommands.js");
 
 
-/* ------------ Message Handler: ------------ */
-bot.on("messageCreate",      (message)            => require("./events/message.js").run(bot, logger, message));
+    // Attach event handlers
+    this._attachDiscordGuildCreateEvent();
+    this._attachDiscordGuildDeleteEvent();
+    this._attachDiscordGuildMemberAddEvent();
+    this._attachDiscordGuildMemberRemoveEvent();
+    this._attachDiscordInteractionCreateEvent();
+    this._attachDiscordMessageEvent();
+    this._attachDiscordMessageReactionAddEvent();
+    this._attachDiscordReadyEvent();
+    this._attachDiscordVoiceStateUpdateEvent();
+
+};
+
+module.exports = Bot;
 
 
-logger("info", "bot.js", "Logging in...", false, true);
-bot.login(); // Token is provided by the shard manager
+/**
+ * Logs in shard
+ */
+Bot.prototype.login = async function() {
+
+    // Configure my logging library (https://github.com/3urobeat/output-logger#options-1)
+    logger.options({
+        required_from_childprocess: true, // eslint-disable-line camelcase
+        msgstructure: `[${logger.Const.ANIMATION}] [${logger.Const.TYPE} | ${logger.Const.ORIGIN}] [${logger.Const.DATE}] ${logger.Const.MESSAGE}`,
+        paramstructure: [logger.Const.TYPE, logger.Const.ORIGIN, logger.Const.MESSAGE, "nodate", "remove", logger.Const.ANIMATION],
+        outputfile: "./output.txt",
+        animationdelay: 250,
+        printdebug: this.data.config.printDebug
+    });
+
+    global.logger = logger;
+
+
+    /* -------------- Import data -------------- */
+    await this.data.loadData(); // TODO: Remove and somehow inherit from controller
+
+
+    // Login shard, token is provided by ShardingManager
+    logger("info", "bot.js", "Logging in...", false, true);
+
+    this.client.login();
+
+};
+
+
+/* -------- Register functions to let the IntelliSense know what's going on in helper files -------- */
+
+/**
+ * Handles discord.js's guildCreate event of this shard
+ */
+Bot.prototype._attachDiscordGuildCreateEvent = function() {};
+
+/**
+ * Handles discord.js's guildDelete event of this shard
+ */
+Bot.prototype._attachDiscordGuildDeleteEvent = function() {};
+
+/**
+ * Handles discord.js's guildMemberAdd event of this shard
+ */
+Bot.prototype._attachDiscordGuildMemberAddEvent = function() {};
+
+/**
+ * Handles discord.js's guildMemberRemove event of this shard
+ */
+Bot.prototype._attachDiscordGuildMemberRemoveEvent = function() {};
+
+/**
+ * Handles discord.js's interactionCreate event of this shard
+ */
+Bot.prototype._attachDiscordInteractionCreateEvent = function() {};
+
+/**
+ * Handles discord.js's message (renamed to messageCreate) event of this shard
+ */
+Bot.prototype._attachDiscordMessageEvent = function() {};
+
+/**
+ * Handles discord.js's messageReactionAdd event of this shard
+ */
+Bot.prototype._attachDiscordMessageReactionAddEvent = function() {};
+
+/**
+ * Handles discord.js's ready event of this shard
+ */
+Bot.prototype._attachDiscordReadyEvent = function() {};
+
+/**
+ * Handles discord.js's voiceStateUpdate event of this shard
+ */
+Bot.prototype._attachDiscordVoiceStateUpdateEvent = function() {};
+
+/**
+ * The getReasonFromMsg helper function
+ * @param {Array} args An array of arguments the user provided
+ * @param {Array} stoparguments Array of flags
+ * @param {Function} [callback] Called with `reason` (String or null) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
+ */
+Bot.prototype.getReasonFromMsg = function(args, stoparguments, callback) {}; // eslint-disable-line
+
+/**
+ * The getUserFromMsg helper function
+ * @param {Discord.Message} message The received message object
+ * @param {Array} args An array of arguments the user provided
+ * @param {number} startindex The index where to start searching in the args array
+ * @param {number} endindex The index where to stop searching in the args array
+ * @param {boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
+ * @param {Array} stoparguments An array of arguments that will stop the loop if found at the current position
+ */
+Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, allowauthorreturn, stoparguments) {}; // eslint-disable-line
+
+/**
+ * The msgToModlogChannel helper function
+ * @param {Discord.Guild} guild The Discord guild class
+ * @param {string} action The type of the modlog event (clear, unban, kick, etc.)
+ * @param {Discord.User} author The Discord user class of the message author
+ * @param {Discord.User} receiver The Discord user class of the action recipient
+ * @param {Array} details Array containing further information like the reasontext and if the user should be notified
+ */
+Bot.prototype.msgToModlogChannel = function(guild, action, author, receiver, details) {}; // eslint-disable-line
+
+/**
+ * Registers slash commands
+ */
+Bot.prototype.registerSlashCommands = function() {};
+
+
+/* -------------- Entry point -------------- */
+let bot = new Bot(); // This needs to be below the JsDocs above so that they are loaded in the correct order
+
+bot.login();

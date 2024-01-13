@@ -1,13 +1,13 @@
 /*
  * File: ban.js
  * Project: beepbot
- * Created Date: 31.12.2020 17:05:00
+ * Created Date: 2020-12-31 17:05:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 11:54:19
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,22 +15,22 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The broadcast command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    var Discord = require("discord.js");
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
 
-    var banuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
+    let banuser = bot.getUserFromMsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
     if (!banuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (banuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", banuser));
 
@@ -38,17 +38,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         return message.channel.send(lang.cmd.ban.highestRoleError);
     }
 
-    if (banuser.id == bot.user.id) return message.channel.send(fn.randomstring(lang.cmd.ban.botban));
+    if (banuser.id == bot.client.user.id) return message.channel.send(bot.misc.randomString(lang.cmd.ban.botban));
     if (banuser.id == message.author.id) return message.channel.send(lang.cmd.ban.selfban);
 
-    if (message.guild.members.cache.get(banuser.id).roles.highest.position >= message.guild.members.cache.get(bot.user.id).roles.highest.position) {
+    if (message.guild.members.cache.get(banuser.id).roles.highest.position >= message.guild.members.cache.get(bot.client.user.id).roles.highest.position) {
         return message.channel.send(lang.cmd.ban.botRoleTooLow);
     }
 
     // Get reason if there is one provided
-    var banreason, banreasontext = "";
+    let banreason, banreasontext = "";
 
-    fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
+    bot.getReasonFromMsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         banreason = reason;
         banreasontext = reasontext;
     });
@@ -56,11 +56,11 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     // Checks user perms and ban
     if (message.member.permissions.has(Discord.PermissionFlagsBits.BanMembers, Discord.PermissionFlagsBits.Administrator)) {
         message.guild.members.cache.get(banuser.id).ban({ reason: banreason }).then(() => {
-            var notifytimetext = lang.cmd.ban.permanent; // If not permanent it will get changed by the time argument code block
+            let notifytimetext = lang.cmd.ban.permanent; // If not permanent it will get changed by the time argument code block
 
             // Time Argument
             if (args.includes("-time") || args.includes("-t")) {
-                fn.gettimefrommsg(args, (timeinms, unitindex, arrcb) => { // The 3 arguments inside brackets are arguments from the callback
+                bot.misc.getTimeFromMsg(args, (timeinms, unitindex, arrcb) => { // The 3 arguments inside brackets are arguments from the callback
                     if (!timeinms) return message.channel.send(lang.general.unsupportedtime.replace("timeargument", arrcb[1]));
 
                     let timedbansobj = {
@@ -73,17 +73,18 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                     notifytimetext = `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}`; // Change permanent to timetext
 
-                    bot.timedbans.remove({$and: [{ userid: banuser.id }, { guildid: message.guild.id }] }, (err) => { if (err) logger("error", "ban.js", `error removing user ${banuser.id}: ${err}`); }); // Remove an old entry if there should be one
-                    bot.timedbans.insert(timedbansobj, (err) => { if (err) logger("error", "ban.js", "error inserting user: " + err); });
-                    message.channel.send(lang.cmd.ban.tempbanmsg.replace("username", banuser.username).replace("timetext", notifytimetext).replace("banreasontext", banreasontext));
+                    bot.data.timedbans.remove({$and: [{ userid: banuser.id }, { guildid: message.guild.id }] }, (err) => { if (err) logger("error", "ban.js", `error removing user ${banuser.id}: ${err}`); }); // Remove an old entry if there should be one
+                    bot.data.timedbans.insert(timedbansobj, (err) => { if (err) logger("error", "ban.js", "error inserting user: " + err); });
+                    message.channel.send(lang.cmd.ban.tempbanmsg.replace("username", banuser.displayName).replace("timetext", notifytimetext).replace("banreasontext", banreasontext));
                     message.react("✅").catch(() => {}); // Catch but ignore error
 
-                    fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, notifytimetext, args.includes("-notify") || args.includes("-n")]); // Details[2] results in boolean
+                    bot.msgToModlogChannel(message.guild, "ban", message.author, banuser, [banreasontext, notifytimetext, args.includes("-notify") || args.includes("-n")]); // Details[2] results in boolean
                 });
             } else {
-                message.channel.send(lang.cmd.ban.permbanmsg.replace("username", banuser.username).replace("banreasontext", banreasontext));
+                message.channel.send(lang.cmd.ban.permbanmsg.replace("username", banuser.displayName).replace("banreasontext", banreasontext));
                 message.react("✅").catch(() => {}); // Catch but ignore error
-                fn.msgtomodlogchannel(message.guild, "ban", message.author, banuser, [banreasontext, lang.cmd.ban.permanent, args.includes("-notify") || args.includes("-n")]); // Details[2] results in boolean
+
+                bot.msgToModlogChannel(message.guild, "ban", message.author, banuser, [banreasontext, lang.cmd.ban.permanent, args.includes("-notify") || args.includes("-n")]); // Details[2] results in boolean
             }
 
             // Notify argument
@@ -98,7 +99,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             message.react("❌").catch(() => {}); // Catch but ignore error
         });
     } else {
-        message.channel.send(fn.usermissperm(lang));
+        message.channel.send(bot.misc.usermissperm(lang));
         message.react("❌").catch(() => {}); // Catch but ignore error
     }
 

@@ -1,13 +1,13 @@
 /*
  * File: clear.js
  * Project: beepbot
- * Created Date: 07.08.2020 18:02:00
+ * Created Date: 2020-08-07 18:02:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 10:52:47
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,25 +15,25 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The clear command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    var Discord = require("discord.js");
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
 
     let invalidamount = lang.cmd.othermoderation.clearinvalidamount;
     if (!args[0]) return message.channel.send(invalidamount);
 
-    var messagecount = parseInt(args[0]);
+    let messagecount = parseInt(args[0]);
     if (isNaN(messagecount)) return message.channel.send(invalidamount);
     if (messagecount > 100 || messagecount < 1) return message.channel.send(invalidamount);
 
@@ -48,11 +48,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 return;
             });
 
-        fn.msgtomodlogchannel(message.guild, "clear", message.author, {}, [messagecount, message.channel]);
+        bot.msgToModlogChannel(message.guild, "clear", message.author, {}, [messagecount, message.channel]);
+
     } else {
-        message.channel.send(fn.usermissperm(lang));
+        message.channel.send(bot.misc.usermissperm(lang));
         message.react("❌").catch(() => {}); // Catch but ignore error
     }
+
 };
 
 module.exports.info = {
@@ -65,8 +67,8 @@ module.exports.info = {
             description: "The amount of messages to delete",
             required: true,
             type: Discord.ApplicationCommandOptionType.Number,
-            min_value: 1,
-            max_value: 100
+            min_value: 1,  // eslint-disable-line camelcase
+            max_value: 100 // eslint-disable-line camelcase
         },
     ],
     accessableby: ["moderators"],

@@ -1,13 +1,13 @@
 /*
- * File: gettimefrommsg.js
+ * File: misc.js
  * Project: beepbot
- * Created Date: 07.02.2021 17:27:00
+ * Created Date: 2024-01-07 21:35:24
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 09:37:56
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,16 +15,49 @@
  */
 
 
-// This file contains code of the gettimefrommsg function and is called by bot.js
-// I did this to reduce the amount of lines in bot.js to make finding stuff easier.
+// Contains miscellaneous functions
+
 
 /**
- * The gettimefrommsg helper function
- * @param {Array} args An array of arguments the user provided
- * @param {function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
+ * Rounds a number with x decimals
+ * @param {number} value Number to round
+ * @param {number} decimals Amount of decimals
+ * @returns {number} Rounded number
  */
-module.exports.run = (args, callback) => { //eslint-disable-line
-    var arr = [];
+module.exports.round = function(value, decimals) {
+    return Number(Math.round(value+"e"+decimals)+"e-"+decimals);
+};
+
+
+/**
+ * Returns random hex value
+ * @returns {number} Hex value
+ */
+module.exports.randomHex = function() {
+    return Math.floor(Math.random() * 16777214) + 1;
+};
+
+
+/**
+ * Returns a random String from an array
+ * @param {Array<string>} arr An Array with Strings to choose from
+ * @returns {string} A random String from the provided array
+ */
+module.exports.randomString = function(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+};
+
+module.exports.owneronlyerror = (lang) => { return this.randomString(lang.general.owneronlyerror) + " (Bot Owner only-Error)"; };
+module.exports.usermissperm   = (lang) => { return this.randomString(lang.general.usermissperm) + " (Role permission-Error)"; };
+
+
+/**
+ * The getTimeFromMsg helper function
+ * @param {Array} args An array of arguments the user provided
+ * @param {Function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
+ */
+module.exports.getTimeFromMsg = (args, callback) => {
+    let arr = [];
 
     if (args.includes("-t")) {
         arr = [args[args.indexOf("-t") + 1], args[args.indexOf("-t") + 2]]; // Result example: ["2", "minutes"]

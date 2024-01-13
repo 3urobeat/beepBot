@@ -1,13 +1,13 @@
 /*
- * File: setconfig.js
+ * File: setConfig.js
  * Project: beepbot
- * Created Date: 19.01.2021 22:36:00
+ * Created Date: 2021-01-19 22:36:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 13:50:13
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,27 +15,28 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const fs = require("fs");
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The setconfig command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    const fs     = require("fs");
-    var   config = bot.config;
-    var   lf     = lang.cmd.otherbotowner;
+module.exports.run = async (bot, message, args, lang, guildsettings) => { //eslint-disable-line
+    let config = bot.data.config;
+    let lf     = lang.cmd.otherbotowner;
 
     // Code is from my Steam Comment Bot !settings cmd so I hope it doesn't look weird here - https://github.com/3urobeat/steam-comment-service-bot/blob/master/src/bot.js
     if (!args[0]) {
         fs.readFile("./bin/config.json", function(err, data) { // Use readFile to get an unprocessed object
-            if (err) return logger("error", "setconfig.js", `read config values error: ${err}`);
+            if (err) return logger("error", "setConfig.js", `read config values error: ${err}`);
 
             message.channel.send(lf.setconfigcurrentsettings + ":\n" + data.toString().slice(1, -1)); // Remove first and last character which are brackets
         });
@@ -79,10 +80,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
 
     message.channel.send(lf.setconfigkeychanged.replace("configkey", `\`${args[0]}\``).replace("oldvalue", `\`${keyvalue}\``).replace("newvalue", `\`${args[1]}\``));
-    logger("info", "setconfig.js", `${args[0]} has been changed from ${keyvalue} to ${args[1]}.`);
+    logger("info", "setConfig.js", `${args[0]} has been changed from ${keyvalue} to ${args[1]}.`);
 
     fs.writeFile("./bin/config.json", JSON.stringify(config, null, 4), err => {
-        if (err) return logger("error", "setconfig.js", `write settings cmd changes to config error: ${err}`);
+        if (err) return logger("error", "setConfig.js", `write settings cmd changes to config error: ${err}`);
 
         delete require.cache[require.resolve("../../config")];
         config = require("../../config.json");

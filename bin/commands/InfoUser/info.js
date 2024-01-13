@@ -1,13 +1,13 @@
 /*
  * File: info.js
  * Project: beepbot
- * Created Date: 07.10.2020 20:44:00
+ * Created Date: 2020-10-07 20:44:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 13:34:51
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,84 +15,90 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+const sysInfo = require("systeminformation");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The info command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     const lf         = lang.cmd.info;
-    const si         = require("systeminformation");
-    const Discord    = require("discord.js");
 
-    var infofields   = [];
-    var thumbnailurl = "";
+    let infofields   = [];
+    let thumbnailurl = "";
+    let whichmember;
+    let alluseractivites;
+    let usernickname;
+    let guildowner;
+    let cpuTemp;
+    let cpuUsage;
+
 
     // Small function to avoid repeating code
-    function quickInfoField(index, name, value, inline) {
+    let quickInfoField = (index, name, value, inline) => {
         return infofields[index] = {
             name: lf[name],
             value: String(lf[value]).replace("prefix", guildsettings.prefix),
             inline: inline
         };
-    }
+    };
 
     if (!args[0]) args[0] = "";
     if (!args[1]) args[1] = "";
+    if (!args[2]) args[2] = "";
+
+    let sendMobile = args[1].toLowerCase() == "mobile" || args[2].toLowerCase() == "mobile"; // Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
 
     switch(args[0].toLowerCase()) {
         case "user":
-            if (!args[1] || message.channel.type == Discord.ChannelType.DM) {
-                var whichmember = message.guild.members.cache.get(message.author.id);
-
-            } else if (message.guild.members.cache.find(member => member.user.username == args[1])) {
-                var whichmember = message.guild.members.cache.find(member => member.user.username == args[1]);
-
-            } else if (message.guild.members.cache.find(member => member.nickname == args[1])) {
-                var whichmember = message.guild.members.cache.find(member => member.nickname == args[1]);
-
-            } else if (message.guild.members.cache.get(args[1])) {
-                var whichmember = message.guild.members.cache.get(args[1]);
-
-            } else if (message.mentions.users.first()) {
-                var whichmember = message.guild.members.cache.get(message.mentions.users.first().id);
-
+            // Check if user wants to get info about another user
+            if (!args[1] || args[1] == "mobile" || message.channel.type == Discord.ChannelType.DM) {
+                whichmember = message.guild.members.cache.get(message.author.id);
             } else {
-                return message.channel.send(lf.usernotfound);
+                whichmember = bot.getUserFromMsg(message, args, 1, 2, true);
+
+                // Check if nothing or multiple results were found
+                if (!whichmember) return message.channel.send(lang.general.usernotfound);
+                if (typeof (whichmember) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", whichmember));
+
+                // Get GuildMember from User again to access presence etc. below
+                whichmember = message.guild.members.cache.get(whichmember.id);
             }
 
+            thumbnailurl = whichmember.user.displayAvatarURL();
+            alluseractivites = "";
+            usernickname = "";
 
-            thumbnailurl = whichmember.displayAvatarURL();
-            var alluseractivites = "";
-            var usernickname = "";
+            if (whichmember.presence) {
+                whichmember.presence.activities.forEach((e, i) => {
+                    if (i == 0) alluseractivites += `${e.name}`;
+                        else alluseractivites += `, ${e.name}`;
 
-            whichmember.presence.activities.forEach((e, i) => {
-                if (i == 0) alluseractivites += `${e.name}`;
-                    else alluseractivites += `, ${e.name}`;
-
-                if (i + 1 == Object.keys(whichmember.presence.activities).length && alluseractivites.length >= 25) {
-                    alluseractivites = alluseractivites.slice(0, 25) + "...";
-                }
-            });
+                    if (i + 1 == Object.keys(whichmember.presence.activities).length && alluseractivites.length >= 25) {
+                        alluseractivites = alluseractivites.slice(0, 25) + "...";
+                    }
+                });
+            }
 
             if (message.channel.type == Discord.ChannelType.DM || whichmember.nickname == null) usernickname = "/";
                 else usernickname = whichmember.nickname;
 
-            if (args[1].toLowerCase() == "mobile") { // Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
+            if (sendMobile) {
                 // Mobile version
                 infofields[0] = {
                     name: lf.user,
-                    value: `**${lf.username}:** ${whichmember.user.username}#${whichmember.user.discriminator}\n` +
+                    value: `**${lf.username}:** @${whichmember.user.displayName}\n` +
                            `**${lf.nickname}:** ${usernickname}\n` +
-                           `**${lf.status}:** ${whichmember.presence.status}\n` +
-                           `**${lf.games}:** (${Object.keys(whichmember.presence.activities).length}) ${alluseractivites}\n` +
+                           `**${lf.status}:** ${whichmember.presence ? whichmember.presence.status : "?"}\n` +
+                           `**${lf.games}:** (${whichmember.presence ? Object.keys(whichmember.presence.activities).length : "?"}) ${alluseractivites}\n` +
                            `**${lf.id}:** ${whichmember.id}\n` +
                            `**${lf.creationdate}:** ${(new Date(whichmember.user.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, " ").replace(/\..+/, "")}`,
                     inline: true
@@ -108,7 +114,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     value: `${lf.username}:\n` +
                            `${lf.nickname}:\n` +
                            `${lf.status}:\n` +
-                           `${lf.games}: (${Object.keys(whichmember.presence.activities).length})\n` +
+                           `${lf.games}: (${whichmember.presence ? Object.keys(whichmember.presence.activities).length : "?"})\n` +
                            `${lf.id}:\n` +
                            `${lf.creationdate}:`,
                     inline: true
@@ -116,9 +122,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                 infofields[1] = {
                     name: "\u200b",
-                    value: `${whichmember.user.username}#${whichmember.user.discriminator}\n` +
+                    value: `@${whichmember.user.displayName}\n` +
                            `${usernickname}\n` +
-                           `${whichmember.presence.status}\n` +
+                           `${whichmember.presence ? whichmember.presence.status : "?"}\n` +
                            `${alluseractivites}\n` +
                            `${whichmember.id}\n` +
                            `${(new Date(whichmember.user.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, " ").replace(/\..+/, "")}`,
@@ -141,9 +147,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             thumbnailurl = message.guild.iconURL();
 
-            var guildowner = await message.guild.fetchOwner();
+            guildowner = await message.guild.fetchOwner();
 
-            if (args[1].toLowerCase() == "mobile") {
+            if (sendMobile) {
                 // Mobile version
                 infofields[0] = {
                     name: lf.server,
@@ -199,30 +205,30 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             break;
 
         default:
-            thumbnailurl = bot.user.displayAvatarURL();
-            var cpuTemp  = await si.cpuTemperature(async (cb) => { return cb; });
-            var cpuUsage = await si.currentLoad(async (cb) => { return cb; });
+            thumbnailurl = bot.client.user.displayAvatarURL();
+            cpuTemp  = await sysInfo.cpuTemperature(async (cb) => { return cb; });
+            cpuUsage = await sysInfo.currentLoad(async (cb) => { return cb; });
             if (cpuTemp.main == -1) cpuTemp.main = "/"; // Si can't read temp
 
-            if (args[1].toLowerCase() == "mobile") {
+            if (sendMobile) {
                 // Mobile version
                 infofields[0] = {
                     name: `**${lf.bot}** - Mobile`,
-                    value: `**${lf.uptime}:** ${fn.round(bot.uptime / 3600000, 2)} hours\n` +
-                           `**${lf.heartbeat}:** ${fn.round(bot.ws.ping, 2)} ms\n` +
+                    value: `**${lf.uptime}:** ${bot.misc.round(bot.client.uptime / 3600000, 2)} hours\n` +
+                           `**${lf.heartbeat}:** ${bot.misc.round(bot.client.ws.ping, 2)} ms\n` +
                            `**${lf.ramusage}:** ${Math.round(process.memoryUsage()["rss"] / 1024 / 1024 * 100) / 100} MB (RSS)\n` +
-                           `**${lf.cputemp}:** ${bot.fn.round(cpuTemp.main, 2)} °C\n` +
-                           `**${lf.cpuusage}:** ${fn.round(cpuUsage.currentload, 2)} %\n` +
+                           `**${lf.cputemp}:** ${bot.misc.round(cpuTemp.main, 2)} °C\n` +
+                           `**${lf.cpuusage}:** ${bot.misc.round(cpuUsage.currentLoad, 2)} %\n` +
                            `**${lf.nodejsversion}:** ${process.version.replace("v", "")}\n` +
                            `**${lf.discordjsversion}:** v${Discord.version}\n` +
-                           `**${lf.servercount}:** ${(await bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
-                           `**${lf.shardcount}:** ${bot.shard.count}\n` +
-                           `**${lf.inviteme}:** [Click here!](${bot.constants.botinvitelink})\n`,
+                           `**${lf.servercount}:** ${(await bot.client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
+                           `**${lf.shardcount}:** ${bot.client.shard.count}\n` +
+                           `**${lf.inviteme}:** [Click here!](${bot.data.constants.botinvitelink})\n`,
                     inline: true
                 };
 
-                quickInfoField(3, "user", "usershowmore", false);
-                quickInfoField(4, "server", "servershowmore", false);
+                quickInfoField(1, "user", "usershowmore", false);
+                quickInfoField(2, "server", "servershowmore", false);
 
             } else {
 
@@ -244,16 +250,16 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                 infofields[1] = {
                     name: "\u200b",
-                    value: `${fn.round(bot.uptime / 3600000, 2)} hours\n` +
-                           `${fn.round(bot.ws.ping, 2)} ms\n` +
+                    value: `${bot.misc.round(bot.client.uptime / 3600000, 2)} hours\n` +
+                           `${bot.misc.round(bot.client.ws.ping, 2)} ms\n` +
                            `${Math.round(process.memoryUsage()["rss"] / 1024 / 1024 * 100) / 100} MB (RSS)\n` +
-                           `${bot.fn.round(cpuTemp.main, 2)} °C\n` +
-                           `${fn.round(cpuUsage.currentload, 2)} %\n` +
+                           `${bot.misc.round(cpuTemp.main, 2)} °C\n` +
+                           `${bot.misc.round(cpuUsage.currentLoad, 2)} %\n` +
                            `${process.version}\n` +
                            `v${Discord.version}\n` +
-                           `${(await bot.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
-                           `${bot.shard.count}\n` +
-                           `[Click here!](${bot.constants.botinvitelink})`,
+                           `${(await bot.client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => b + a)}\n` +
+                           `${bot.client.shard.count}\n` +
+                           `[Click here!](${bot.data.constants.botinvitelink})`,
                     inline: true
                 };
 
@@ -270,12 +276,15 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
     message.channel.send({
         embeds: [{
-            title: `${bot.constants.BOTNAME} - ${lf.info}`,
-            color: fn.randomhex(),
+            title: `${bot.data.constants.BOTNAME} - ${lf.info}`,
+            color: bot.misc.randomHex(),
             thumbnail: { url: thumbnailurl },
-            description: `${bot.constants.BOTNAME} version ${bot.config.version} made by ${bot.constants.BOTOWNER}\n${bot.constants.githublink}`,
+            description: `${bot.data.constants.BOTNAME} version ${bot.data.config.version} made by ${bot.data.constants.BOTOWNER}\n${bot.data.constants.githublink}`,
             fields: infofields,
-            footer: { icon_url: message.author.displayAvatarURL(), text: `${lang.general.requestedby} ${message.author.username} • ${lf.footermobilemsg.replace("prefix", guildsettings.prefix)}` }
+            footer: {
+                icon_url: message.author.displayAvatarURL(), // eslint-disable-line camelcase
+                text: `${lang.general.requestedby} @${message.author.displayName} • ${lf.footermobilemsg.replace("prefix", guildsettings.prefix)}`
+            }
         }]
     });
 
