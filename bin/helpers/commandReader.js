@@ -4,7 +4,7 @@
  * Created Date: 2022-01-18 11:39:32
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 18:53:43
+ * Last Modified: 2024-01-13 13:53:07
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -34,7 +34,7 @@ DataManager.prototype.loadCommands = function() {
 
     dirs("./bin/commands").forEach((k) => {
         fs.readdir(`./bin/commands/${k}`, (err, files) => {
-            if (err) logger("error", "bot.js", err);
+            if (err) logger("error", "commandReader.js", err);
 
             let jsfiles = files.filter(p => p.split(".").pop() === "js");
 
@@ -46,7 +46,7 @@ DataManager.prototype.loadCommands = function() {
                     tempcmd["run"] = cmd.run; // Add command code to new deep copy because that got lost somehow
                     tempcmd.info.category = k;
 
-                    if (this.commands.get(tempcmd.info.names[j])) return logger("warn", "bot.js", `Duplicate command name found! Command: ${tempcmd.info.names[j]}`, true);
+                    if (this.commands.get(tempcmd.info.names[j])) return logger("warn", "commandReader.js", `Duplicate command name found! Command: ${tempcmd.info.names[j]}`, true);
 
                     // Determine if it is an alias based on if we are in a names iteration >0
                     tempcmd.info.thisisanalias = (j != 0);

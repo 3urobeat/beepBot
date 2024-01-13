@@ -27,5 +27,5 @@
         "other",
         "Botowner"
     ],
-    "printDebug": true
+    "printDebug": false
 }

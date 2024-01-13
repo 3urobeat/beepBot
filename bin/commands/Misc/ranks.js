@@ -4,7 +4,7 @@
  * Created Date: 2022-01-09 20:16:29
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-12 16:21:42
+ * Last Modified: 2024-01-13 13:50:50
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -33,7 +33,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => {
     bot.data.levelsdb.find({ guildid: message.guild.id }, (err, docs) => {
         if (err) {
             message.channel.send("Error trying to find user in database: " + err);
-            logger("error", "rank.js", "Error trying to find user in database: " + err);
+            logger("error", "ranks.js", "Error trying to find user in database: " + err);
             return;
         }
 

@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 09:30:45
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-12 10:52:20
+ * Last Modified: 2024-01-13 13:49:02
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -186,7 +186,7 @@ DataManager.prototype.appendToCmdUse = function(str) {
     let isoDate = (new Date(Date.now() - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, " ").replace(/\..+/, "");
 
     fs.appendFile("./bin/cmduse.txt", `\n\n[${isoDate}] ${str}\n`, (err) => {
-        if (err) logger("error", "controller.js", "writing startup to cmduse.txt error: " + err);
+        if (err) logger("error", "dataManager.js", "writing startup to cmduse.txt error: " + err);
     });
 };
 
