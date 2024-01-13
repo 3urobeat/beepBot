@@ -4,7 +4,7 @@
  * Created Date: 2021-02-12 19:25:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-12 11:46:47
+ * Last Modified: 2024-01-13 13:01:09
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -56,6 +56,15 @@ Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, all
 
     } else if (message.guild.members.cache.filter(member => member.user.username == searchfor).size > 0) { // Search by username
         let searchCollection = message.guild.members.cache.filter(member => member.user.username == searchfor);
+
+        if (searchCollection.size > 1) {
+            return searchCollection.size; // Return amount of users found if more than one was found
+        } else {
+            return [...searchCollection.values()][0].user; // If only one was found return
+        }
+
+    } else if (message.guild.members.cache.filter(member => member.user.displayName == searchfor).size > 0) { // Search by displayName
+        let searchCollection = message.guild.members.cache.filter(member => member.user.displayName == searchfor);
 
         if (searchCollection.size > 1) {
             return searchCollection.size; // Return amount of users found if more than one was found
