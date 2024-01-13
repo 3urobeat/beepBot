@@ -4,7 +4,7 @@
  * Created Date: 2020-10-04 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-12 12:02:03
+ * Last Modified: 2024-01-13 09:32:32
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -83,7 +83,9 @@ const Bot = function() {
     require("./events/messageReactionAdd.js");
     require("./events/ready.js");
     require("./events/voiceStateUpdate.js");
+    require("./functions/getReasonFromMsg.js");
     require("./functions/getUserFromMsg.js");
+    require("./functions/msgToModlogChannel.js");
     require("./helpers/registerSlashCommands.js");
 
 
@@ -131,13 +133,6 @@ Bot.prototype.login = async function() {
     this.client.login();
 
 };
-
-
-/* -------------- Entry point -------------- */
-let bot = new Bot();
-
-bot.login();
-
 
 
 /* -------- Register functions to let the IntelliSense know what's going on in helper files -------- */
@@ -188,6 +183,14 @@ Bot.prototype._attachDiscordReadyEvent = function() {};
 Bot.prototype._attachDiscordVoiceStateUpdateEvent = function() {};
 
 /**
+ * The getReasonFromMsg helper function
+ * @param {Array} args An array of arguments the user provided
+ * @param {Array} stoparguments Array of flags
+ * @param {Function} [callback] Called with `reason` (String or null) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
+ */
+Bot.prototype.getReasonFromMsg = function(args, stoparguments, callback) {}; // eslint-disable-line
+
+/**
  * The getUserFromMsg helper function
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
@@ -196,9 +199,25 @@ Bot.prototype._attachDiscordVoiceStateUpdateEvent = function() {};
  * @param {boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
  * @param {Array} stoparguments An array of arguments that will stop the loop if found at the current position
  */
-//Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, allowauthorreturn, stoparguments) {}; // eslint-disable-line
+Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, allowauthorreturn, stoparguments) {}; // eslint-disable-line
+
+/**
+ * The msgToModlogChannel helper function
+ * @param {Discord.Guild} guild The Discord guild class
+ * @param {string} action The type of the modlog event (clear, unban, kick, etc.)
+ * @param {Discord.User} author The Discord user class of the message author
+ * @param {Discord.User} receiver The Discord user class of the action recipient
+ * @param {Array} details Array containing further information like the reasontext and if the user should be notified
+ */
+Bot.prototype.msgToModlogChannel = function(guild, action, author, receiver, details) {}; // eslint-disable-line
 
 /**
  * Registers slash commands
  */
 Bot.prototype.registerSlashCommands = function() {};
+
+
+/* -------------- Entry point -------------- */
+let bot = new Bot(); // This needs to be below the JsDocs above so that they are loaded in the correct order
+
+bot.login();

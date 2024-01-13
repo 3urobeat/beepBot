@@ -4,7 +4,7 @@
  * Created Date: 2022-01-14 21:01:23
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 17:45:59
+ * Last Modified: 2024-01-13 09:30:33
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -16,6 +16,8 @@
 
 
 const Bot = require("../bot.js");
+
+const lodash = require("lodash");
 
 
 /**
@@ -38,19 +40,22 @@ Bot.prototype.registerSlashCommands = function() {
     // commands.set([]); // Uncomment to reset registered slash commands
 
     // Convert Collection to Array and register all commands that were already read by the command reader
-    [...this.client.commands.values()].forEach((e) => {
+    [...this.data.commands.values()].forEach((e) => {
         if (e.info.names[0] == "test") return;
         if (e.info.category == "NSFW") return; // Doesn't make that great of an impression when someone sees these commands first
         if (e.info.accessableby.includes("botowner")) return;
         if (e.info.thisisanalias) return; // Don't include aliases, this would be too much
 
         // Test if command name or option names do not match restrictions
-        if (!/^[\w-]{1,32}$/.test(e.info.names[0]) || e.info.options.some(e => !/^[\w-]{1,32}$/.test(e.name))) return logger("error", "registerSlashCommands.js", `Command name ${e.info.names[0]} or one of the options does not match command name restrictions!\nhttps://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming`);
+        if (!/^[\w-]{1,32}$/.test(e.info.names[0]) || e.info.options.some(e => !/^[\w-]{1,32}$/.test(e.name))) {
+            logger("error", "registerSlashCommands.js", `Command name ${e.info.names[0]} or one of the options does not match command name restrictions!\nhttps://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming`);
+            return;
+        }
 
 
         commands.create({
             name: e.info.names[0], // Sadly we can only provide the english command description as of now since we don't know which lang the guild is using
-            description: require("lodash").get(this.data.langObj["english"], e.info.description), // Lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
+            description: lodash.get(this.data.langObj["english"], e.info.description), // Lodash is able to replace the obj path in the str with the corresponding item in the real obj. Very cool!
             options: e.info.options
         });
     });
