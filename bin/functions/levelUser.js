@@ -4,7 +4,7 @@
  * Created Date: 2022-01-09 10:12:16
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-08 20:07:33
+ * Last Modified: 2024-01-13 11:56:20
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -42,7 +42,7 @@ DataManager.prototype.levelUser = async function(author, guild, channel) {
 
         // Increment xp and messages amount for entry that matches this user's id and this guild id
         this.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] },
-            { $inc: { messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `${author.username}#${author.discriminator}` } },
+            { $inc: { messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `@${author.displayName}` } },
             { upsert: true },
             (err) => {
 
@@ -60,7 +60,7 @@ DataManager.prototype.levelUser = async function(author, guild, channel) {
 
         // Increment xp and messages amount for entry that matches this user's id and this guild id
         this.levelsdb.update({ $and: [{ userid: author.id }, { guildid: guild.id }] },
-            { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `${author.username}#${author.discriminator}` } },
+            { $inc: { xp: xpAmount, messages: 1 }, $set: { userid: author.id, guildid: guild.id, username: `@${author.displayName}` } },
             { upsert: true, returnUpdatedDocs: true },
             async (err, numAffected, doc) => {
 
@@ -76,7 +76,7 @@ DataManager.prototype.levelUser = async function(author, guild, channel) {
                 if (Math.floor(this.xpToLevel(doc.xp)) > 1 && Math.floor(this.xpToLevel(doc.xp)) > Math.floor(this.xpToLevel(doc.xp - xpAmount))) {
                     let lang = await this.getLang(guild.id);
 
-                    channel.send(lang.general.levelupmsg.replace("username", author.username).replace("leveltext", Math.floor(this.xpToLevel(doc.xp))));
+                    channel.send(lang.general.levelupmsg.replace("username", author.displayName).replace("leveltext", Math.floor(this.xpToLevel(doc.xp))));
                 }
 
             });

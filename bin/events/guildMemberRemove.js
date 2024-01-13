@@ -4,7 +4,7 @@
  * Created Date: 2021-02-07 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-08 21:21:15
+ * Last Modified: 2024-01-13 11:54:59
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -31,7 +31,7 @@ Bot.prototype._attachDiscordGuildMemberRemoveEvent = function() {
             if (!guildSettings.byemsg) return;
 
             let msgToSend = String(guildSettings.byemsg);
-            msgToSend = msgToSend.replace("username", member.user.username);
+            msgToSend = msgToSend.replace("username", member.user.displayName);
             msgToSend = msgToSend.replace("servername", member.guild.name);
 
             let channel = member.guild.channels.cache.get(String(guildSettings.systemchannel));
