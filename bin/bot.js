@@ -4,7 +4,7 @@
  * Created Date: 2020-10-04 18:10:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-13 09:32:32
+ * Last Modified: 2024-01-13 12:14:56
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -64,7 +64,7 @@ const Bot = function() {
      */
     this.data = new DataManager();
 
-    this.client.data = this.data; // Quick hack to later access DataManager from broadcastEval and other discord.js internal methods
+    this.client.bot = this; // Quick hack to later access DataManager from broadcastEval and other discord.js internal methods
 
 
     /**
