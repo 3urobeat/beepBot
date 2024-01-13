@@ -4,7 +4,7 @@
  * Created Date: 2024-01-07 18:02:55
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-09 15:42:58
+ * Last Modified: 2024-01-13 13:47:55
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -36,15 +36,14 @@ Controller.prototype._attachAvatarCheckJob = function() {
                     client.user.setAvatar(context.constants.botxmasavatar)
                         .then(() => {
                             logger("info", "avatarCheck.js", "Successfully changed avatar to xmas.");
-                            currentavatar = "xmas"; // Change to xmas so that the check won't run again
-                            lastxmascheck = Date.now();
                         })
                         .catch((err) => { // Don't set currentavatar so that the check will run again
                             logger("warn", "avatarCheck.js", "Couldn't set xmas avatar: " + err.stack);
-                            lastxmascheck = Date.now() - 19800000; // Subtract 5.5 hours so that the next check will run in half an hour
-                            return;
                         });
                 }, { context: { constants: this.data.constants } });
+
+                currentavatar = "xmas"; // Change to xmas so that the check won't run again
+                lastxmascheck = Date.now();
 
             } else {
 
@@ -54,15 +53,14 @@ Controller.prototype._attachAvatarCheckJob = function() {
                     client.user.setAvatar(context.constants.botdefaultavatar)
                         .then(() => {
                             logger("info", "avatarCheck.js", "Successfully changed avatar to normal.");
-                            currentavatar = "normal"; // Change to normal so that the check won't run again
-                            lastxmascheck = Date.now();
                         })
                         .catch((err) => { // Don't set currentavatar so that the check will run again
                             logger("warn", "avatarCheck.js", "Couldn't broadcast normal avatar change: " + err.stack);
-                            lastxmascheck = Date.now() - 19800000; // Subtract 5.5 hours so that the next check will run in half an hour
-                            return;
                         });
                 }, { context: { constants: this.data.constants } });
+
+                currentavatar = "normal"; // Change to normal so that the check won't run again
+                lastxmascheck = Date.now();
             }
         };
 
