@@ -4,7 +4,7 @@
  * Created Date: 2020-08-02 22:07:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-09 21:46:24
+ * Last Modified: 2024-01-12 12:21:17
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -37,14 +37,14 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
     });
 
     // Get heartbeat and calculate ping
-    //let heartbeat = bot.misc.round(bot.ws.ping, 2); // Seems to be broken
+    let heartbeat = bot.misc.round(bot.client.ws.ping, 2); // Seems to be broken
     let ping      = bot.misc.round(msg.createdTimestamp - message.createdTimestamp, 2);
 
     // Edit original message with results
     msg.edit({
         embeds: [{
             title: "Pong!",
-            description:":ping_pong: " + ping + "ms", // Removed from start of the string because broky: :heartbeat: " + heartbeat + "ms\n
+            description: `:heartbeat: ${heartbeat}ms\n:ping_pong: ${ping}ms`,
             color: 0x32CD32
         }]
     });

@@ -4,7 +4,7 @@
  * Created Date: 2020-08-07 20:02:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-11 16:45:35
+ * Last Modified: 2024-01-12 16:51:21
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,7 +15,8 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
 
 /**
  * The poll command
