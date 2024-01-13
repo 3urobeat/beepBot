@@ -4,7 +4,7 @@
  * Created Date: 2024-01-06 09:44:05
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-09 15:34:09
+ * Last Modified: 2024-01-13 12:14:36
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -43,7 +43,7 @@ Controller.prototype._attachTempModJob = function() {
                     let guild = client.guilds.cache.get(e.guildid);
 
                     if (guild) {
-                        // Add ids as fallback option for msgtomodlogchannel
+                        // Add ids as fallback option for msgToModlogChannel
                         let authorobj = guild.members.cache.get(e.authorid); // Try to populate obj with actual data
                         let receiverobj = guild.members.cache.get(e.userid);
 
@@ -52,7 +52,7 @@ Controller.prototype._attachTempModJob = function() {
                         authorobj["userid"] = e.authorid; // Add id as fallback should getting actual data failed
                         receiverobj["userid"] = e.userid;
 
-                        client.timedbans.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }] }, (err) => {
+                        client.bot.data.timedbans.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }] }, (err) => {
                             if (err) logger("error", "tempMod.js", `Error removing ${e.userid} from timedbans: ${err}`);
                         });
 
@@ -60,10 +60,10 @@ Controller.prototype._attachTempModJob = function() {
                             .then(res => {
                                 if (Object.keys(res).length > 1) receiverobj = res; // Overwrite receiverobj if we actually have data from the unban response
 
-                                client.fn.msgtomodlogchannel(guild, "unban", authorobj, receiverobj, [e.banreason]);
+                                client.bot.msgToModlogChannel(guild, "unban", authorobj, receiverobj, [e.banreason]);
                             })
                             .catch(err => {
-                                if (err != "DiscordAPIError: Unknown Ban") return client.fn.msgtomodlogchannel(guild, "unbanerr", authorobj, receiverobj, [e.banreason, err]); // If unknown ban ignore, user has already been unbanned
+                                if (err != "DiscordAPIError: Unknown Ban") return client.bot.msgToModlogChannel(guild, "unbanerr", authorobj, receiverobj, [e.banreason, err]); // If unknown ban ignore, user has already been unbanned
                             });
                     }
                 }, { context: { e: e } }) // Pass e as context to be able to access it inside
@@ -98,7 +98,7 @@ Controller.prototype._attachTempModJob = function() {
                     let guild = client.guilds.cache.get(e.guildid);
 
                     if (guild) {
-                        // Add ids as fallback option for msgtomodlogchannel
+                        // Add ids as fallback option for msgToModlogChannel
                         let authorobj = guild.members.cache.get(e.authorid).user; // Try to populate obj with actual data
                         let receiverobj = guild.members.cache.get(e.userid).user;
 
@@ -113,13 +113,13 @@ Controller.prototype._attachTempModJob = function() {
                             if (mutedrole) { // Only proceed if role still exists
                                 // Remove role
                                 guild.members.cache.get(e.userid).roles.remove(mutedrole).catch(err => { // Catch error of role adding
-                                    return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, receiverobj, [e.mutereason, err]);
+                                    return client.bot.msgToModlogChannel(guild, "unmuteerr", authorobj, receiverobj, [e.mutereason, err]);
                                 });
                             }
                         }
 
                         // Remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
-                        client.timedmutes.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }]}, (err) => {
+                        client.bot.data.timedmutes.remove({$and: [{ userid: e.userid }, { guildid: e.guildid }]}, (err) => {
                             if (err) client.fn.logger("error", "tempMod.js", `Error removing ${e.userid} from timedmutes: ${err}`);
                         });
 
@@ -127,7 +127,7 @@ Controller.prototype._attachTempModJob = function() {
                             // Remove voice mute
                             if (guild.members.cache.get(e.userid).voice.channel != null) {
                                 guild.members.cache.get(e.userid).voice.setMute(false).catch(err => {
-                                    return client.fn.msgtomodlogchannel(guild, "unmuteerr", authorobj, receiverobj, [e.mutereason, err]);
+                                    return client.bot.msgToModlogChannel(guild, "unmuteerr", authorobj, receiverobj, [e.mutereason, err]);
                                 });
                             } else {
                                 // If the user can't be unmuted right now push it into the db and handle it with the voiceStateUpdate event
@@ -140,13 +140,13 @@ Controller.prototype._attachTempModJob = function() {
                                     mutereason: e.mutereason
                                 };
 
-                                client.timedmutes.insert(unmuteobj, (err) => {
+                                client.bot.data.timedmutes.insert(unmuteobj, (err) => {
                                     if (err) client.fn.logger("error", "tempMod.js", "error updating db: " + err); // Insert new obj instead of updating old one so that the db remove call won't remove it
                                 });
                             }
                         }
 
-                        client.fn.msgtomodlogchannel(guild, "unmute", authorobj, receiverobj, ["auto", e.mutereason]);
+                        client.bot.msgToModlogChannel(guild, "unmute", authorobj, receiverobj, ["auto", e.mutereason]);
                     }
                 }, { context: { e: e } }) // Pass e as context to be able to access it inside
                     .catch(err => {

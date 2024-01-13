@@ -4,7 +4,7 @@
  * Created Date: 2024-01-07 21:35:24
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-07 22:06:40
+ * Last Modified: 2024-01-13 09:37:56
  * Modified By: 3urobeat
  *
  * Copyright (c) 2024 3urobeat <https://github.com/3urobeat>
@@ -49,3 +49,50 @@ module.exports.randomString = function(arr) {
 
 module.exports.owneronlyerror = (lang) => { return this.randomString(lang.general.owneronlyerror) + " (Bot Owner only-Error)"; };
 module.exports.usermissperm   = (lang) => { return this.randomString(lang.general.usermissperm) + " (Role permission-Error)"; };
+
+
+/**
+ * The getTimeFromMsg helper function
+ * @param {Array} args An array of arguments the user provided
+ * @param {Function} [callback] Called with `time` (Number) in ms, `unitindex` (Number or null) index of time unit in lang.general.gettimefuncoptions and `arr` (Array) Array containing amount and unit Example: ["2", "minutes"] parameters on completion
+ */
+module.exports.getTimeFromMsg = (args, callback) => {
+    let arr = [];
+
+    if (args.includes("-t")) {
+        arr = [args[args.indexOf("-t") + 1], args[args.indexOf("-t") + 2]]; // Result example: ["2", "minutes"]
+    } else if (args.includes("-time")) {
+        arr = [args[args.indexOf("-time") + 1], args[args.indexOf("-time") + 2]]; // Result example: ["2", "minutes"]
+    } else {
+        callback(null, null, []); // Nothing found
+    }
+
+    switch (arr[1]) {
+        case "second":
+        case "seconds":
+            callback(arr[0] * 1000, 0, arr);
+            break;
+        case "minute":
+        case "minutes":
+            callback(arr[0] * 60000, 1, arr);
+            break;
+        case "hour":
+        case "hours":
+            callback(arr[0] * 3600000, 2, arr);
+            break;
+        case "day":
+        case "days":
+            callback(arr[0] * 86400000, 3, arr);
+            break;
+        case "month":
+        case "months":
+            callback(arr[0] * 2629800000, 4, arr);
+            break;
+        case "year":
+        case "years":
+            callback(arr[0] * 31557600000, 5, arr);
+            break;
+        default:
+            callback(null, null, arr);
+    }
+};

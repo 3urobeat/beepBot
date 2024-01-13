@@ -1,10 +1,10 @@
 /*
- * File: getreasonfrommsg.js
+ * File: getReasonFromMsg.js
  * Project: beepbot
  * Created Date: 2021-02-12 19:25:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:25:28
+ * Last Modified: 2024-01-12 16:50:12
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,19 +15,19 @@
  */
 
 
-// This file contains code of the getreasonfrommsg function and is called by bot.js
-// I did this to reduce the amount of lines in bot.js to make finding stuff easier.
+const Bot = require("../bot.js");
+
 
 /**
- * The getreasonfrommsg helper function
+ * The getReasonFromMsg helper function
  * @param {Array} args An array of arguments the user provided
  * @param {Array} stoparguments Array of flags
- * @param {Function} [callback] Called with `reason` (String or undefined) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
+ * @param {Function} [callback] Called with `reason` (String or null) and `reasontext` or `"\"` (String) parameters on completion (reason is for Audit Log, reasontext for message)
  */
-module.exports.run = (args, stoparguments, callback) => {
+Bot.prototype.getReasonFromMsg = function(args, stoparguments, callback) {
     let searchfor = "";
     let startindex = args.indexOf("-r") + 1;
-    if (startindex == 0) return callback(undefined, "/"); // Seems like no reason was provided
+    if (startindex == 0) return callback(null, "/"); // Seems like no reason was provided
 
     args.every((e, i) => {
         if (i < startindex) return true; // We don't need to start yet so lets skip the iteration

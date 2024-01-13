@@ -4,7 +4,7 @@
  * Created Date: 2021-02-11 18:54:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-13 11:55:05
+ * Last Modified: 2024-01-13 12:31:09
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -38,6 +38,7 @@ Bot.prototype._attachDiscordVoiceStateUpdateEvent = function() {
                     if (doc.type == "tempmute" || doc.type == "permmute" && !newstate.member.voice.serverMute) { // Check if user is not muted (serverMute returns true or false) but should be muted
                         // Mute and attach reason for audit log
                         newstate.member.voice.setMute(true, this.data.langObj[gs.lang].general.voicestateupdatemutereason.replace("muteauthor", newstate.guild.members.cache.get(doc.authorid).user.displayName).replace("reasontext", doc.mutereason)).catch(() => { });
+                        logger("debug", "voiceStateUpdate.js", `Detected manual server unmute of '${newstate.member.user.displayName}' (${newstate.member.id}), re-muting them as a beepBot mute exists...`);
                     }
 
                     if (doc.type == "unmute") {
