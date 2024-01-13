@@ -4,7 +4,7 @@
  * Created Date: 2020-10-01 18:53:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:15:50
+ * Last Modified: 2024-01-13 12:49:04
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,22 +15,24 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord    = require("discord.js"); // eslint-disable-line
+const superagent = require("superagent");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The butts command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     try {
         // Note: If this API shouldn't work anymore, use nekobot: https://nekobot.xyz/api/image?type=ass
-        let { body } = await require("superagent").get("http://api.obutts.ru/butts/0/1/random");
+        let { body } = await superagent.get("http://api.obutts.ru/butts/0/1/random");
 
         let imageurl = "http://media.obutts.ru/" + body[0].preview;
 
@@ -45,7 +47,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     text: `${lang.general.poweredby} api.obutts.ru`
                 },
                 timestamp: message.createdAt,
-                color: fn.randomhex()
+                color: bot.misc.randomHex()
             }]
         });
 
