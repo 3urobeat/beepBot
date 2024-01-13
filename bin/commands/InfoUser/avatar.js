@@ -4,7 +4,7 @@
  * Created Date: 2020-08-07 20:02:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-12 12:02:59
+ * Last Modified: 2024-01-13 11:52:25
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -38,7 +38,7 @@ module.exports.run = (bot, message, args, lang, guildsettings) => { // eslint-di
     message.channel.send({
         embeds: [{
             author: {
-                name: avataruser.username,
+                name: avataruser.displayName,
                 icon_url: avatarurl, // eslint-disable-line camelcase
                 url: avatarurl
             },

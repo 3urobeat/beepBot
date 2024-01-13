@@ -4,7 +4,7 @@
  * Created Date: 2021-02-07 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-08 21:21:20
+ * Last Modified: 2024-01-13 11:54:56
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -36,7 +36,7 @@ Bot.prototype._attachDiscordGuildMemberAddEvent = function() {
                 if (msgToSend.includes("@username")) {
                     msgToSend = msgToSend.replace("@username", `<@${member.user.id}>`);
                 } else {
-                    msgToSend = msgToSend.replace("username", member.user.username);
+                    msgToSend = msgToSend.replace("username", member.user.displayName);
                 }
 
                 msgToSend = msgToSend.replace("servername", member.guild.name);
