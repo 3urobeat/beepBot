@@ -1,13 +1,13 @@
 /*
- * File: getuserfrommsg.js
+ * File: getUserFromMsg.js
  * Project: beepbot
- * Created Date: 12.02.2021 19:25:00
+ * Created Date: 2021-02-12 19:25:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 13:11:29
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,22 +15,23 @@
  */
 
 
-// This file contains code of the getuserfrommsg function and is called by bot.js
-// I did this to reduce the amount of lines in bot.js to make finding stuff easier.
+const Discord = require("discord.js"); // eslint-disable-line
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Bot = require("../bot.js");
+
 
 /**
- * The getuserfrommsg helper function
+ * The getUserFromMsg helper function
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Number} startindex The index where to start searching in the args array
- * @param {Number} endindex The index where to stop searching in the args array
- * @param {Boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
+ * @param {number} startindex The index where to start searching in the args array
+ * @param {number} endindex The index where to stop searching in the args array
+ * @param {boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
  * @param {Array} stoparguments An array of arguments that will stop the loop if found at the current position
+ * @returns {Discord.User | number | undefined} Returns the user if found, number of matching users if multiple found or undefined if no user was found
  */
-module.exports.run = (message, args, startindex, endindex, allowauthorreturn, stoparguments) => {
-    var searchfor = "";
+Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, allowauthorreturn, stoparguments) {
+    let searchfor = "";
     if (!endindex) endindex = 99999999;
     if (!stoparguments) stoparguments = [];
 
@@ -48,12 +49,23 @@ module.exports.run = (message, args, startindex, endindex, allowauthorreturn, st
         }
     });
 
+    logger("debug", "getUserFromMsg.js", `Searching for: ${searchfor} | allowauthorreturn: ${allowauthorreturn}`);
+
 
     if (!searchfor && allowauthorreturn) {
         return message.author; // Author
 
     } else if (message.guild.members.cache.filter(member => member.user.username == searchfor).size > 0) { // Search by username
         let searchCollection = message.guild.members.cache.filter(member => member.user.username == searchfor);
+
+        if (searchCollection.size > 1) {
+            return searchCollection.size; // Return amount of users found if more than one was found
+        } else {
+            return [...searchCollection.values()][0].user; // If only one was found return
+        }
+
+    } else if (message.guild.members.cache.filter(member => member.user.displayName == searchfor).size > 0) { // Search by displayName
+        let searchCollection = message.guild.members.cache.filter(member => member.user.displayName == searchfor);
 
         if (searchCollection.size > 1) {
             return searchCollection.size; // Return amount of users found if more than one was found

@@ -1,13 +1,13 @@
 /*
  * File: dice.js
  * Project: beepbot
- * Created Date: 07.08.2020 20:02:00
+ * Created Date: 2020-08-07 20:02:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-12 16:35:08
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,21 +15,22 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The dice command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    var messagecount = parseInt(args[0]);
-    var randomnumber = Math.floor((Math.random() * messagecount) + 1);
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
+    let messagecount = parseInt(args[0]);
+    let randomnumber = Math.floor((Math.random() * messagecount) + 1);
 
     let nomaxprovided = lang.cmd.othermisc.dicenomaxprovided;
 
@@ -37,7 +38,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     if (isNaN(messagecount)) return message.channel.send(nomaxprovided);
     if (messagecount < 2) return message.channel.send(nomaxprovided);
 
-    message.channel.send(":game_die: " + fn.randomstring(lang.cmd.othermisc.dicerandommsg) + " **" + randomnumber + "**");
+    message.channel.send(":game_die: " + bot.misc.randomString(lang.cmd.othermisc.dicerandommsg) + " **" + randomnumber + "**");
     return;
 };
 

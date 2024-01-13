@@ -1,13 +1,13 @@
 /*
  * File: reddit.js
  * Project: beepbot
- * Created Date: 09.01.2021 21:11:00
+ * Created Date: 2021-01-09 21:11:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-12 16:07:03
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,24 +15,26 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord    = require("discord.js"); // eslint-disable-line
+const superagent = require("superagent");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The reddit command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    let lf       = lang.cmd.othermisc; // Should this file use his lang file path often use this var as shorthand
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
+    let lf = lang.cmd.othermisc; // Should this file use his lang file path often use this var as shorthand
 
     // Check if the user provided those options and if not sets them to default values (random)
-    var subreddit = args[0] || "random";
-    var sort = args[1] || "random";
+    let subreddit = args[0] || "random";
+    let sort = args[1] || "random";
 
     // Adds r/ if t is not in the message
     if (!subreddit.toLowerCase().startsWith("r/")) {
@@ -40,7 +42,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     }
 
     try {
-        let { body } = await require("superagent").get("https://www.reddit.com/" + subreddit + "/" + sort + ".json");
+        logger("debug", "reddit.js", "Requesting: " + "https://www.reddit.com/" + subreddit + "/" + sort + ".json");
+
+        let { body } = await superagent.get("https://www.reddit.com/" + subreddit + "/" + sort + ".json").set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:121.0) Gecko/20100101 Firefox/121.0");
 
         // Posts loading message
         let msg = await message.channel.send(lf.redditsearching.replace("sort", sort).replace("subreddit", subreddit));
@@ -70,49 +74,49 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         }
 
         // Checks if no thumbnail is being provided to prevent errors, checks for missing post description and if the title length is above the embed limit
-        if (post.thumbnail == "self" || post.url == "default") {
-            var thumbnail = null;
-        } else {
+        let thumbnail;
+
+        if (post.thumbnail != "self" && post.url != "default") {
             if (post.url.includes(".jpg") || post.url.includes(".png") || post.url.includes(".gif") && !post.url.includes(".gifv")) {
-                var thumbnail = post.url; // If url value includes image file ending use it since it has a higher resolution (and imgur links seem to use gifv but can be played when replaced with mp4)
+                thumbnail = post.url; // If url value includes image file ending use it since it has a higher resolution (and imgur links seem to use gifv but can be played when replaced with mp4)
             } else {
-                var thumbnail = post.thumbnail; // If not use the crappy thumbnail
+                thumbnail = post.thumbnail; // If not use the crappy thumbnail
             }
         }
 
-        if (post.selftext == "") {
-            var selftext = lf.redditnodescription; // No description
-        } else {
+        let selftext = lf.redditnodescription;
+
+        if (post.selftext != "") {
             if (post.selftext.length >= 1200) {
-                var selftext = post.selftext.slice(0, 1200) + "..."; // Description that is longer than 1200 so lets cut it
+                selftext = post.selftext.slice(0, 1200) + "..."; // Description that is longer than 1200 so lets cut it
             } else {
-                var selftext = post.selftext;
+                selftext = post.selftext;
             }
         }
+
+        let title = post.title;
 
         if (post.title.length >= 250) {
-            var title = post.title.slice(0, 250) + "..."; // Title is longer than 250 so lets cut it as well
-        } else {
-            var title = post.title;
+            title = post.title.slice(0, 250) + "..."; // Title is longer than 250 so lets cut it as well
         }
 
         // Calculates date
         let posted = (Date.now() - new Date(post.created_utc * 1000)) / 60000;
 
         if (posted > 525949) {
-            posted = `${fn.round(posted / 525949, 0)} ${lang.general.gettimefuncoptions[5]}`;
+            posted = `${bot.misc.round(posted / 525949, 0)} ${lang.general.gettimefuncoptions[5]}`;
         } else if (posted > 43829) {
-            posted = `${fn.round(posted / 43829, 0)} ${lang.general.gettimefuncoptions[4]}`;
+            posted = `${bot.misc.round(posted / 43829, 0)} ${lang.general.gettimefuncoptions[4]}`;
         } else if (posted > 1440) {
-            posted = `${fn.round(posted / 1440, 0)} ${lang.general.gettimefuncoptions[3]}`;
+            posted = `${bot.misc.round(posted / 1440, 0)} ${lang.general.gettimefuncoptions[3]}`;
         } else if (posted > 60) {
-            posted = `${fn.round(posted / 60, 0)} ${lang.general.gettimefuncoptions[2]}`;
+            posted = `${bot.misc.round(posted / 60, 0)} ${lang.general.gettimefuncoptions[2]}`;
         } else {
-            posted = `${fn.round(posted, 0)} ${lang.general.gettimefuncoptions[1]}`;
+            posted = `${bot.misc.round(posted, 0)} ${lang.general.gettimefuncoptions[1]}`;
         }
 
         // Gets one random color for all messages if more than one is being send and sets the additional info to the description
-        let color = fn.randomhex();
+        let color = bot.misc.randomHex();
 
         const fieldsObj = [
             {

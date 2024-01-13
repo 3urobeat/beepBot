@@ -1,13 +1,13 @@
 /*
  * File: broadcast.js
  * Project: beepbot
- * Created Date: 12.01.2021 18:34:00
+ * Created Date: 2021-01-12 18:34:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 12:14:36
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,44 +15,46 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The broadcast command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     if (!args[0]) return message.channel.send(lang.cmd.otherbotowner.saymissingargs); // Same message so we are just using that
 
-    bot.shard.broadcastEval((client, context) => {
+    bot.client.shard.broadcastEval((client, context) => {
         client.guilds.cache.forEach((e) => {
-            client.settings.findOne({ guildid: e.id }, (err, guildsettings) => {
+            client.bot.data.settings.findOne({ guildid: e.id }, (err, guildsettings) => {
+                let channelID;
 
                 if (guildsettings && guildsettings.systemchannel) {
-                    var channelid = guildsettings.systemchannel; // Check if guild has a systemchannel set in bot settings
+                    channelID = guildsettings.systemchannel; // Check if guild has a systemchannel set in bot settings
 
                 } else if (e.systemChannelId) {
-                    var channelid = e.systemChannelId; // Check for systemchannel in guild settings
+                    channelID = e.systemChannelId; // Check for systemchannel in guild settings
 
                 } else if (guildsettings && guildsettings.modlogchannel) {
-                    var channelid = guildsettings.modlogchannel; // Check if guild has a modlogchannel set in bot settings
+                    channelID = guildsettings.modlogchannel; // Check if guild has a modlogchannel set in bot settings
 
                 } else if (context.args[0] == "true") { // Get first best channel if force is true
-                    var channelid = null;
+                    channelID = null;
 
                     let textchannels = e.channels.cache.filter(c => c.type == Discord.ChannelType.GuildText).sort((a, b) => a.rawPosition - b.rawPosition);
-                    var channelid = textchannels.find(c => c.permissionsFor(client.user).has(Discord.PermissionFlagsBits.SendMessages)).id;
+                    channelID = textchannels.find(c => c.permissionsFor(client.user).has(Discord.PermissionFlagsBits.SendMessages)).id;
                 }
 
-                if (!channelid) return; // No channel found
+                if (!channelID) return; // No channel found
 
-                e.channels.cache.get(String(channelid)).send(context.args.slice(1).join(" "));
+                e.channels.cache.get(String(channelID)).send(context.args.slice(1).join(" "));
             });
         });
     }, { context: { args: args } }); // Pass args as context to be able to access it inside)

@@ -1,13 +1,13 @@
 /*
  * File: guildMemberRemove.js
  * Project: beepbot
- * Created Date: 07.02.2021 17:27:00
+ * Created Date: 2021-02-07 17:27:00
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 11:54:59
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,29 +15,30 @@
  */
 
 
-// This file contains code of the servertosettings function and is called by bot.js
-// I did this to reduce the amount of lines in bot.js to make finding stuff easier.
+const Bot = require("../bot.js");
 
-const Discord = require('discord.js'); //eslint-disable-line
 
 /**
- * The guildMemberRemove event
- * @param {Discord.Client} bot The Discord client class
- * @param {Discord.GuildMember} member The Discord guild member class
+ * Handles discord.js's guildMemberRemove event of this shard
  */
-module.exports.run = (bot, member) => {
-    bot.settings.findOne({ guildid: member.guild.id }, (err, guildsettings) => {
-        if (!guildsettings) return; // Yeah better stop if nothing was found to avoid errors
-        if (!guildsettings.systemchannel) return;
-        if (!guildsettings.byemsg) return;
+Bot.prototype._attachDiscordGuildMemberRemoveEvent = function() {
 
-        let msgtosend = String(guildsettings.byemsg);
-        msgtosend = msgtosend.replace("username", member.user.username);
-        msgtosend = msgtosend.replace("servername", member.guild.name);
+    this.client.on("guildMemberRemove", (member) => {
 
-        let channel = member.guild.channels.cache.get(String(guildsettings.systemchannel));
+        this.data.settings.findOne({ guildid: member.guild.id }, (err, guildSettings) => {
+            if (!guildSettings) return; // Yeah better stop if nothing was found to avoid errors
+            if (!guildSettings.systemchannel) return;
+            if (!guildSettings.byemsg) return;
 
-        if (!channel) return;
-        channel.send(msgtosend).catch(() => {}); // Catch but ignore error
+            let msgToSend = String(guildSettings.byemsg);
+            msgToSend = msgToSend.replace("username", member.user.displayName);
+            msgToSend = msgToSend.replace("servername", member.guild.name);
+
+            let channel = member.guild.channels.cache.get(String(guildSettings.systemchannel));
+
+            if (!channel) return;
+            channel.send(msgToSend).catch(() => {}); // Catch but ignore error
+        });
+
     });
 };

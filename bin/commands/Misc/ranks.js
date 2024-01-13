@@ -1,13 +1,13 @@
 /*
  * File: ranks.js
  * Project: beepbot
- * Created Date: 09.01.2022 20:16:29
+ * Created Date: 2022-01-09 20:16:29
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-13 13:50:50
  * Modified By: 3urobeat
  *
- * Copyright (c) 2022 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,36 +15,35 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The ranks command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
+module.exports.run = async (bot, message, args, lang, guildsettings) => {
 
-    var levelUser = require("../../functions/levelUser");
-
-    bot.levelsdb.find({ guildid: message.guild.id }, (err, docs) => {
+    bot.data.levelsdb.find({ guildid: message.guild.id }, (err, docs) => {
         if (err) {
             message.channel.send("Error trying to find user in database: " + err);
-            logger("error", "rank.js", "Error trying to find user in database: " + err);
+            logger("error", "ranks.js", "Error trying to find user in database: " + err);
             return;
         }
 
         if (docs.size < 1) return; // Never occurred in my testing but I'm leaving it here just to make sure
 
         // Create message template
-        var msg = {
+        let msg = {
             embeds: [{
                 title: lang.cmd.othermisc.rankstitle.replace("servername", message.guild.name),
-                color: fn.randomhex(),
+                color: bot.misc.randomHex(),
                 thumbnail: { url: message.guild.iconURL() },
                 description: "",
                 fields: [],
@@ -52,7 +51,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     text: `${lang.cmd.othermisc.rankscheckuser}: ${guildsettings.prefix}rank [mention/username/userid]`
                 }
             }
-        ]};
+            ]};
 
         // Display warning message if level system is currently disabled
         if (!guildsettings.levelsystem) msg.embeds[0].description = lang.cmd.othermisc.ranklevelsystemdisabled;
@@ -66,12 +65,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             msg.embeds[0].fields.push({
                 name: `${i + 1}. ${e.username}`,
-                value: `${lang.cmd.othermisc.ranklevel} ${Math.floor(levelUser.xpToLevel(e.xp))}\n${e.xp} XP\n${e.messages} ${lang.cmd.othermisc.ranksmessages}`
+                value: `${lang.cmd.othermisc.ranklevel} ${Math.floor(bot.data.xpToLevel(e.xp))}\n${e.xp} XP\n${e.messages} ${lang.cmd.othermisc.ranksmessages}`
             });
         });
 
         message.channel.send(msg);
     });
+
 };
 
 module.exports.info = {

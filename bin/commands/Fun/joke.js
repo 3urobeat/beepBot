@@ -1,13 +1,13 @@
 /*
  * File: joke.js
  * Project: beepbot
- * Created Date: 06.09.2021 13:12:42
+ * Created Date: 2021-09-06 13:12:42
  * Author: 3urobeat
  *
- * Last Modified: 30.06.2023 09:44:28
+ * Last Modified: 2024-01-11 16:26:07
  * Modified By: 3urobeat
  *
- * Copyright (c) 2021 3urobeat <https://github.com/3urobeat>
+ * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -15,29 +15,29 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+const https   = require("https");
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The joke command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
- * @param {Object} lang The language object for this guild
- * @param {Function} logger The logger function
- * @param {Object} guildsettings All settings of this guild
- * @param {Object} fn The object containing references to functions for easier access
+ * @param {object} lang The language object for this guild
+ * @param {object} guildsettings All settings of this guild
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
-    var https = require("https");
-
-    var options = {
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
+    let options = {
         hostname: "icanhazdadjoke.com",
         port: 443,
         method: "GET",
         headers: { "Accept": "application/json" }
     };
 
-    var req = https.request(options, res => {
+    let req = https.request(options, res => {
         res.on("data", (data) => {
             message.channel.send(JSON.parse(data).joke);
         });
