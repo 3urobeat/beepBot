@@ -4,7 +4,7 @@
  * Created Date: 2021-02-11 18:54:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:17:25
+ * Last Modified: 2024-01-13 11:51:27
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,26 +15,24 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The mute command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     let lf = lang.cmd.mute;
 
     // Check if role was successfully created by guildCreate.js (where this code is also used)
-    /**
-     *
-     */
-    function checkMutedRole() {
+    let checkMutedRole = () => {
         return new Promise((resolve, reject) => {
             let mutedrole = message.guild.roles.cache.find(role => role.name == "beepBot Muted");
             let errorcount = 0;
@@ -65,6 +63,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     });
 
             } else { // Role seems to exist so lets check if all channels have it added to their permissions
+
                 message.guild.channels.cache.forEach((channel) => {
                     if (channel.type != Discord.ChannelType.GuildText) return;
                     if (!channel.permissionsFor(mutedrole).has(Discord.PermissionFlagsBits.SendMessages) && !channel.permissionsFor(mutedrole).has(Discord.PermissionFlagsBits.AddReactions)) return; // If this channel already has both perms set to false then skip this iteration
@@ -80,7 +79,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 resolve(); // Resolve promise
             }
         });
-    }
+    };
 
     await checkMutedRole(); // Call function and wait for resolved promise
 
@@ -89,18 +88,18 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let args0 = ["chat", "voice", "all"]; // Things args[0] should be
     if (!args0.includes(args[0])) return message.channel.send(lf.invalidargs.replace("prefix", guildsettings.prefix));
 
-    let muteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
+    let muteuser = bot.getUserFromMsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
     if (!muteuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (muteuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", muteuser));
 
-    if (muteuser.id == bot.user.id) return message.channel.send(fn.randomstring(lf.botmute));
+    if (muteuser.id == bot.client.user.id) return message.channel.send(bot.misc.randomString(lf.botmute));
     if (muteuser.id == message.author.id) return message.channel.send(lf.selfmute);
 
 
     // Get reason if there is one provided
     let mutereason, mutereasontext = "";
 
-    fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
+    bot.getReasonFromMsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         mutereason = reason;
         mutereasontext = reasontext;
     });
@@ -113,7 +112,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             // Apply role
             message.guild.members.cache.get(muteuser.id).roles.add(mutedrole, mutereason)
                 .catch(err => { // Catch error of role adding
-                    return message.channel.send(`${lf.roleadderror.replace("muteuser", muteuser.username)}\n${lang.general.error}: ${err}`);
+                    return message.channel.send(`${lf.roleadderror.replace("muteuser", muteuser.displayName)}\n${lang.general.error}: ${err}`);
                 });
         }
     }
@@ -123,7 +122,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         if (message.guild.members.cache.get(muteuser.id).voice.channel != null) {
             message.guild.members.cache.get(muteuser.id).voice.setMute(true, mutereason)
                 .catch(err => {
-                    return message.channel.send(`${lf.voicemuteerror.replace("muteuser", muteuser.username)}\n${lang.general.error}: ${err}`);
+                    return message.channel.send(`${lf.voicemuteerror.replace("muteuser", muteuser.displayName)}\n${lang.general.error}: ${err}`);
                 });
         }
     }
@@ -133,7 +132,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     let notifytimetext = lang.cmd.ban.permanent; // Needed for notify - if not permanent it will get changed by the time argument code block below (and yes just hijack the translation from the ban cmd)
 
     if (args.includes("-time") || args.includes("-t")) { // Timed mute
-        fn.gettimefrommsg(args, (timeinms, unitindex, arrcb) => { // The 3 arguments inside brackets are arguments from the callback
+        bot.misc.getTimeFromMsg(args, (timeinms, unitindex, arrcb) => { // The 3 arguments inside brackets are arguments from the callback
             if (!timeinms) return message.channel.send(lang.general.unsupportedtime.replace("timeargument", arrcb[1]));
 
             let timedmuteobj = {
@@ -148,9 +147,9 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             notifytimetext = `${arrcb[0]} ${lang.general.gettimefuncoptions[unitindex]}`; // Change permanent to timetext
 
-            bot.timedmutes.remove({$and: [{ userid: muteuser.id }, { guildid: message.guild.id }]}, (err) => { if (err) logger("error", "mute.js", `error removing user ${muteuser.id}: ${err}`); }); // Remove an old entry if there should be one
-            bot.timedmutes.insert(timedmuteobj, (err) => { if (err) logger("error", "mute.js", "error inserting user: " + err); });
-            message.channel.send(lf.tempmutemsg.replace("username", muteuser.username).replace("timetext", notifytimetext).replace("mutereasontext", mutereasontext));
+            bot.data.timedmutes.remove({$and: [{ userid: muteuser.id }, { guildid: message.guild.id }]}, (err) => { if (err) logger("error", "mute.js", `error removing user ${muteuser.id}: ${err}`); }); // Remove an old entry if there should be one
+            bot.data.timedmutes.insert(timedmuteobj, (err) => { if (err) logger("error", "mute.js", "error inserting user: " + err); });
+            message.channel.send(lf.tempmutemsg.replace("username", muteuser.displayName).replace("timetext", notifytimetext).replace("mutereasontext", mutereasontext));
         });
 
     } else { // Permanent mute
@@ -163,13 +162,13 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             mutereason: mutereasontext
         };
 
-        bot.timedmutes.remove({$and: [{ userid: muteuser.id }, { guildid: message.guild.id }]}, (err) => { if (err) logger("error", "mute.js", `error removing user ${muteuser.id}: ${err}`); }); // Remove an old entry if there should be one
-        bot.timedmutes.insert(permmuteobj, (err) => { if (err) logger("error", "mute.js", "error inserting user: " + err); });
-        message.channel.send(lf.permmutemsg.replace("username", muteuser.username).replace("mutereasontext", mutereasontext));
+        bot.data.timedmutes.remove({$and: [{ userid: muteuser.id }, { guildid: message.guild.id }]}, (err) => { if (err) logger("error", "mute.js", `error removing user ${muteuser.id}: ${err}`); }); // Remove an old entry if there should be one
+        bot.data.timedmutes.insert(permmuteobj, (err) => { if (err) logger("error", "mute.js", "error inserting user: " + err); });
+        message.channel.send(lf.permmutemsg.replace("username", muteuser.displayName).replace("mutereasontext", mutereasontext));
     }
 
     message.react("✅").catch(() => {}); // Catch but ignore error
-    fn.msgtomodlogchannel(message.guild, "mute", message.author, muteuser, [args[0].toLowerCase(), mutereasontext, notifytimetext, args.includes("-notify") || args.includes("-n")]); // Details[2] results in boolean
+    bot.msgToModlogChannel(message.guild, "mute", message.author, muteuser, [args[0].toLowerCase(), mutereasontext, notifytimetext, args.includes("-notify") || args.includes("-n")]); // Details[2] results in boolean
 
     // Notify user if author provided argument
     if (args.includes("-notify") || args.includes("-n")) {

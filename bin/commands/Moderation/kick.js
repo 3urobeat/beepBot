@@ -4,7 +4,7 @@
  * Created Date: 2020-12-13 17:41:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:18:36
+ * Last Modified: 2024-01-13 11:54:23
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,22 +15,22 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The kick command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => {
-    let Discord = require("discord.js");
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
 
-    let kickuser = fn.getuserfrommsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
+    let kickuser = bot.getUserFromMsg(message, args, 0, null, false, ["-r", "-t", "-n"]);
     if (!kickuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (kickuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", kickuser));
 
@@ -42,17 +42,17 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         return;
     }
 
-    if (kickuser.id == bot.user.id) return message.channel.send(fn.randomstring(lang.cmd.kick.botkick));
+    if (kickuser.id == bot.client.user.id) return message.channel.send(bot.misc.randomstring(lang.cmd.kick.botkick));
     if (kickuser.id == message.author.id) return message.channel.send(lang.cmd.kick.selfkick);
 
-    if (message.guild.members.cache.get(kickuser.id).roles.highest.position >= message.guild.members.cache.get(bot.user.id).roles.highest.position) {
+    if (message.guild.members.cache.get(kickuser.id).roles.highest.position >= message.guild.members.cache.get(bot.client.user.id).roles.highest.position) {
         return message.channel.send(lang.cmd.kick.botRoleTooLow);
     }
 
     // Get reason if there is one provided
     let kickreason, kickreasontext = "";
 
-    fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
+    bot.getReasonFromMsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         kickreason = reason;
         kickreasontext = reasontext;
     });
@@ -60,10 +60,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     // Checks user perms and kick
     if (message.member.permissions.has(Discord.PermissionFlagsBits.KickMembers, Discord.PermissionFlagsBits.Administrator)) {
         message.guild.members.cache.get(kickuser.id).kick(kickreason).then(() => {
-            message.channel.send(lang.cmd.kick.kickmsg.replace("username", kickuser.username).replace("kickreasontext", kickreasontext));
+            message.channel.send(lang.cmd.kick.kickmsg.replace("username", kickuser.displayName).replace("kickreasontext", kickreasontext));
             message.react("✅").catch(() => {}); // Catch but ignore error
 
-            fn.msgtomodlogchannel(message.guild, "kick", message.author, kickuser, [kickreasontext, args.includes("-notify") || args.includes("-n")]); // Details[1] results in boolean
+            bot.msgToModlogChannel(message.guild, "kick", message.author, kickuser, [kickreasontext, args.includes("-notify") || args.includes("-n")]); // Details[1] results in boolean
 
             if (args.includes("-notify") || args.includes("-n")) {
                 if (!kickuser.bot) kickuser.send(lang.cmd.kick.kicknotifymsg.replace("servername", message.guild.name).replace("kickreasontext", kickreasontext)).catch(err => {
@@ -75,7 +75,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             message.react("❌").catch(() => {}); // Catch but ignore error
         });
     } else {
-        message.channel.send(fn.usermissperm(lang));
+        message.channel.send(bot.misc.usermissperm(lang));
     }
 };
 

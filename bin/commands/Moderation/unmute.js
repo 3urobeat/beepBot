@@ -4,7 +4,7 @@
  * Created Date: 2021-02-11 18:54:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:17:06
+ * Last Modified: 2024-01-13 11:54:50
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,26 +15,27 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The unmute command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     let lf = lang.cmd.othermoderation;
 
     // Get user and do other checks
     let args0 = ["chat", "voice", "all"]; // Things args[0] should be
     if (!args0.includes(args[0])) return message.channel.send(lf.unmuteinvalidargs.replace("prefix", guildsettings.prefix));
 
-    let unmuteuser = fn.getuserfrommsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
+    let unmuteuser = bot.getUserFromMsg(message, args, 1, null, false, ["-r", "-t", "-n"]);
     if (!unmuteuser) return message.channel.send(lang.general.usernotfound);
     if (typeof (unmuteuser) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", unmuteuser));
 
@@ -42,7 +43,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     // Get reason if there is one provided
     let unmutereason, unmutereasontext = "";
 
-    fn.getreasonfrommsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
+    bot.getReasonFromMsg(args, ["-time", "-t", "-notify", "-n", undefined], (reason, reasontext) => {
         unmutereason = reason;
         unmutereasontext = reasontext;
     });
@@ -55,20 +56,20 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
             // Remove role
             message.guild.members.cache.get(unmuteuser.id).roles.remove(mutedrole, unmutereason)
                 .catch(err => { // Catch error of role adding
-                    return message.channel.send(`${lf.unmuteroleremoveerror.replace("muteuser", unmuteuser.username)}\n${lang.general.error}: ${err}`);
+                    return message.channel.send(`${lf.unmuteroleremoveerror.replace("muteuser", unmuteuser.displayName)}\n${lang.general.error}: ${err}`);
                 });
         }
     }
 
     // Remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
-    bot.timedmutes.remove({$and: [{ userid: unmuteuser.id }, { guildid: message.guild.id }]}, (err => { if (err) logger("error", "controller.js", "Error removing ${e.userid} from timedmutes: " + err); }));
+    bot.data.timedmutes.remove({$and: [{ userid: unmuteuser.id }, { guildid: message.guild.id }]}, (err => { if (err) logger("error", "controller.js", "Error removing ${e.userid} from timedmutes: " + err); }));
 
     if (args[0].toLowerCase() == "voice" || args[0].toLowerCase() == "all") { // User was banned in voice
         // Remove voice mute
         if (message.guild.members.cache.get(unmuteuser.id).voice.channel != null) {
             message.guild.members.cache.get(unmuteuser.id).voice.setMute(false, unmutereason)
                 .catch(err => {
-                    return message.channel.send(`${lf.unmutevoiceunmuteerror.replace("muteuser", unmuteuser.username)}\n${lang.general.error}: ${err}`);
+                    return message.channel.send(`${lf.unmutevoiceunmuteerror.replace("muteuser", unmuteuser.displayName)}\n${lang.general.error}: ${err}`);
                 });
 
         } else {
@@ -88,8 +89,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
     }
 
     message.react("✅").catch(() => {}); // Catch but ignore error
-    message.channel.send(lf.unmutemsg.replace("username", unmuteuser.username).replace("unmutereason", unmutereasontext));
-    fn.msgtomodlogchannel(message.guild, "unmute", message.author, unmuteuser, ["manual", unmutereasontext]);
+    message.channel.send(lf.unmutemsg.replace("username", unmuteuser.displayName).replace("unmutereason", unmutereasontext));
+    bot.msgToModlogChannel(message.guild, "unmute", message.author, unmuteuser, ["manual", unmutereasontext]);
 };
 
 module.exports.info = {

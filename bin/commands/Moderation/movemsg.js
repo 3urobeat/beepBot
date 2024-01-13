@@ -4,7 +4,7 @@
  * Created Date: 2021-01-12 18:34:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-05 23:17:44
+ * Last Modified: 2024-01-13 09:25:49
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -15,48 +15,53 @@
  */
 
 
-const Discord = require('discord.js'); //eslint-disable-line
+const Discord = require("discord.js"); // eslint-disable-line
+
+const Bot = require("../../bot.js"); // eslint-disable-line
+
 
 /**
  * The movemsg command
- * @param {Discord.Client} bot The Discord client class
+ * @param {Bot} bot Instance of this bot shard
  * @param {Discord.Message} message The received message object
  * @param {Array} args An array of arguments the user provided
  * @param {object} lang The language object for this guild
- * @param {Function} logger The logger function
  * @param {object} guildsettings All settings of this guild
- * @param {object} fn The object containing references to functions for easier access
  */
-module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn) => { //eslint-disable-line
+module.exports.run = async (bot, message, args, lang, guildsettings) => { // eslint-disable-line
     let lf = lang.cmd.movemsg;
 
     if (!args[0] && !message.reference) return message.channel.send(lf.missingargs);
 
+
     // Get message to move
+    let msgid;
+
     if (message.reference) { // Check if user replied to the message
-        var msgid = message.reference.messageId;
+        msgid = message.reference.messageId;
         args.unshift(msgid); // Add msgid to beginning of the array so that the next channelcheck doesn't get confused because otherwise the channel arg would now be index 0 and not 1
 
     } else if (args[0].startsWith("https://discord.com/channels/")) { // Check if user linked the message
         let newargs = args[0].toLowerCase().replace("https://discord.com/channels/", "").split("/");
         if (newargs[0] != message.guild.id || newargs[1] != message.channel.id) return message.channel.send(lf.wrongchannel);
 
-        var msgid = newargs[2];
+        msgid = newargs[2];
 
     } else if (args[0].length === 18 && /^\d+$/.test(args[0])) { // Check if user provided the message id
-        var msgid = args[0];
+        msgid = args[0];
 
     } else if (!isNaN(parseInt(args[0]))) { // Check if the user wants to move last x messages
         if (parseInt(args[0]) > 25) return message.channel.send(lf.toomanymsgs);
         message.react("⏳"); // React to let user know that something is happening if fetching all messages should take longer
 
-        message.channel.messages.fetch({ limit: parseInt(args[0]) + 1 }).then(messages => { // + 1 because we need to add the command message (will be removed later)
+        message.channel.messages.fetch({ limit: parseInt(args[0]) + 1 }).then((messages) => { // + 1 because we need to add the command message (will be removed later)
             msgid = messages;
         });
     }
 
+
     // Wait until msgid is defined (can take a bit longer if the bot needs to fetch multiple messages)
-    var waitformsgid = setInterval(async () => {
+    let waitformsgid = setInterval(async () => {
         if (message.createdTimestamp + 15000 < Date.now()) { // Took longer than 15 seconds to fetch all messages? abort.
             message.channel.send(lf.tooktoolong);
             clearInterval(waitformsgid);
@@ -69,35 +74,38 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
         // Get channel to move msg to
         if (!args[1]) return message.channel.send(lf.missingchannel);
 
+        let movechannelid;
+
         try {
             if (args[1].length === 18 && /^\d+$/.test(args[1])) { // Check if the arg is 18 chars long and if it is a number
-                var movechannelid = args[1].toString();
+                movechannelid = args[1].toString();
             } else if (args[1].match(/(?<=<#)[0-9]{18}?(?=>)/g)) { // <#18numbers>
-                var movechannelid = args[1].toString().replace(/[<#>]/g, "");
+                movechannelid = args[1].toString().replace(/[<#>]/g, "");
             } else {
-                var movechannelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args[1].toLowerCase()).id; // Not a channelid so try and find by name (channelnames can't have spaces so no need to join array)
+                movechannelid = message.guild.channels.cache.find(channel => channel.name.toLowerCase() === args[1].toLowerCase()).id; // Not a channelid so try and find by name (channelnames can't have spaces so no need to join array)
             }
         } catch (err) {
             return message.channel.send(lf.channelnotfound);
         }
 
         // Get reason if there is one
-        fn.getreasonfrommsg(args, [undefined], async (reason, reasontext) => {
-            movereason = reasontext;
+        bot.getReasonFromMsg(args, [undefined], async (reason, reasontext) => {
+            let movereason = reasontext;
 
-            if (movereason.length >= 1500) var movereason = movereason.slice(0, 1500) + "..."; // Don't want the footer to be longer than 1500 (although it supports up to 2048 but wtf and even 1500 is way too long)
-
+            if (movereason.length >= 1500) movereason = movereason.slice(0, 1500) + "..."; // Don't want the footer to be longer than 1500 (although it supports up to 2048 but wtf and even 1500 is way too long)
 
             // Get the message(s) to move
             let embed = {};
-            if (typeof (msgid) == "object") { // Multiple fetched messages
+            let originalmsg;
+            let originalattachments;
 
+            if (typeof (msgid) == "object") { // Multiple fetched messages
                 embed = {
                     title: lf.convotitle.replace("channelname", `#${message.channel.name}`),
                     fields: [], // Original messages
                     footer: {
-                        icon_url: message.author.displayAvatarURL(),
-                        text: `${lf.movedby.replace("author", `${message.author.username}#${message.author.discriminator}`)} • ${lang.general.reason}: ${movereason}` // Moved by and reason
+                        icon_url: message.author.displayAvatarURL(), // eslint-disable-line camelcase
+                        text: `${lf.movedby.replace("author", `@${message.author.displayName}`)} • ${lang.general.reason}: ${movereason}` // Moved by and reason
                     }
                 };
 
@@ -118,6 +126,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                             return 0;
                         }
                     });
+
                     return arr;
                 };
 
@@ -144,7 +153,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                     // Check if message is a beepBot command and suppress markdown
                     if (e.content.startsWith(guildsettings.prefix)) {
                         let cont = e.content.slice(guildsettings.prefix.length).split(" "); // Slice prefix from message
-                        if (bot.commands.get(cont[0].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``); // Check if command exists and if so add ` around prefix in message (replace applies to first occurrence)
+                        if (bot.data.commands.get(cont[0].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``); // Check if command exists and if so add ` around prefix in message (replace applies to first occurrence)
                     }
 
                     if (originalcontent.length > 1020) { // 1024 is the field value character limit
@@ -158,7 +167,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                         embed.fields[embed.fields.length - 1].value += `\n${originalcontent}`;
                     } else {
                         embed.fields.push({
-                            name: lf.convofieldname.replace("author", `${e.author.username}#${e.author.discriminator}`).replace("time", (new Date(e.createdTimestamp)).toISOString().replace(/T/, " ").replace(/\..+/, "")),
+                            name: lf.convofieldname.replace("author", `@${e.author.displayName}`).replace("time", (new Date(e.createdTimestamp)).toISOString().replace(/T/, " ").replace(/\..+/, "")),
                             value: originalcontent
                         });
                     }
@@ -166,12 +175,12 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
             } else { // One message
 
-                var originalmsg = await message.channel.messages.fetch({ message: String(msgid) });
+                originalmsg = await message.channel.messages.fetch({ message: String(msgid) });
                 if (!originalmsg) return message.channel.send(lf.messagenotfound);
 
                 let originalcontent = originalmsg.content;
                 let thumbnail = null; // Set to null so that if it isn't getting changed the embed thumbnail will stay empty
-                var originalattachments = []; // Same as line above but for files
+                originalattachments = []; // Same as line above but for files
 
                 // Handle embed as we can't display it and content is usually empty
                 if (originalmsg.embeds.length > 0) {
@@ -196,7 +205,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 // Check if message is a beepBot command and suppress markdown
                 if (originalmsg.content.startsWith(guildsettings.prefix)) {
                     let cont = message.content.slice(guildsettings.prefix.length).split(" "); // Slice prefix from message
-                    if (bot.commands.get(cont[1].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``); // Check if command exists and if so add ` around prefix in message
+                    if (bot.data.commands.get(cont[1].toLowerCase())) originalcontent = originalcontent.replace(guildsettings.prefix, `\`${guildsettings.prefix}\``); // Check if command exists and if so add ` around prefix in message
                 }
 
                 if (originalcontent.length > 1020) { // 1024 is the field value character limit
@@ -206,7 +215,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                 if (originalcontent.length == 0) originalcontent = "** **"; // Makes field look empty and avoid an error
 
                 embed = {
-                    title: lf.title.replace("username", `${originalmsg.author.username}#${originalmsg.author.discriminator}`).replace("channelname", `#${message.channel.name}`),
+                    title: lf.title.replace("username", `@${originalmsg.author.displayName}`).replace("channelname", `#${message.channel.name}`),
                     fields: [{
                         name: `${lf.fieldname.replace("time", (new Date(originalmsg.createdTimestamp)).toISOString().replace(/T/, " ").replace(/\..+/, ""))}:`, // "original msg" from utc time
                         value: originalcontent // Original msg content
@@ -215,8 +224,8 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                         url: thumbnail
                     },
                     footer: {
-                        icon_url: message.author.displayAvatarURL(),
-                        text: `${lf.movedby.replace("author", `${message.author.username}#${message.author.discriminator}`)} • ${lang.general.reason}: ${movereason}`  // Moved by and reason
+                        icon_url: message.author.displayAvatarURL(), // eslint-disable-line camelcase
+                        text: `${lf.movedby.replace("author", `@${message.author.displayName}`)} • ${lang.general.reason}: ${movereason}`  // Moved by and reason
                     }
                 };
             }
@@ -227,8 +236,10 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
 
                     if (typeof(msgid) == "object") {
                         message.channel.bulkDelete(msgid).catch(err => { message.channel.send(`${lf.errordeletingmsg}: ${err}`); }); // Msgid is a collection with all fetched messages in this case
-                        fn.msgtomodlogchannel(message.guild, "movemsg", message.author, "", ["convo", args[0], movereason, message.channel.id, movechannelid]); // Pass information to modlog function
+                        bot.msgToModlogChannel(message.guild, "movemsg", message.author, "", ["convo", args[0], movereason, message.channel.id, movechannelid]); // Pass information to modlog function
+
                     } else {
+
                         // Put all attachments into message as we won't bother with files in the modlogmsg so the code from above won't work here
                         let modlogcontent = originalmsg.content;
 
@@ -238,7 +249,7 @@ module.exports.run = async (bot, message, args, lang, logger, guildsettings, fn)
                         }
 
                         originalmsg.delete().catch(err => { message.channel.send(`${lf.errordeletingmsg}: ${err}`); });
-                        fn.msgtomodlogchannel(message.guild, "movemsg", message.author, originalmsg.author, ["single", modlogcontent, movereason, message.channel.id, movechannelid]); // Pass information to modlog function
+                        bot.msgToModlogChannel(message.guild, "movemsg", message.author, originalmsg.author, ["single", modlogcontent, movereason, message.channel.id, movechannelid]); // Pass information to modlog function
                     }
                 })
                 .catch(err => {
