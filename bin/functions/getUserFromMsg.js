@@ -4,7 +4,7 @@
  * Created Date: 2021-02-12 19:25:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-13 13:01:09
+ * Last Modified: 2024-01-13 13:11:29
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -28,6 +28,7 @@ const Bot = require("../bot.js");
  * @param {number} endindex The index where to stop searching in the args array
  * @param {boolean} allowauthorreturn Defines if the author of the message is allowed to be returned as the user to search for
  * @param {Array} stoparguments An array of arguments that will stop the loop if found at the current position
+ * @returns {Discord.User | number | undefined} Returns the user if found, number of matching users if multiple found or undefined if no user was found
  */
 Bot.prototype.getUserFromMsg = function(message, args, startindex, endindex, allowauthorreturn, stoparguments) {
     let searchfor = "";
