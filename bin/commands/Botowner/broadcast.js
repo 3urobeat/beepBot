@@ -4,7 +4,7 @@
  * Created Date: 2021-01-12 18:34:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-10 09:43:49
+ * Last Modified: 2024-01-13 12:14:36
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -33,7 +33,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
 
     bot.client.shard.broadcastEval((client, context) => {
         client.guilds.cache.forEach((e) => {
-            client.data.settings.findOne({ guildid: e.id }, (err, guildsettings) => {
+            client.bot.data.settings.findOne({ guildid: e.id }, (err, guildsettings) => {
                 let channelID;
 
                 if (guildsettings && guildsettings.systemchannel) {

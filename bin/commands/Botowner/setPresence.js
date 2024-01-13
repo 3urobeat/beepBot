@@ -4,7 +4,7 @@
  * Created Date: 2021-01-09 21:11:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-09 22:19:50
+ * Last Modified: 2024-01-12 08:58:52
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -41,7 +41,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
         bot.data.config.gameoverwrite = "";
         bot.data.config.gameurl       = bot.data.constants.DEFAULTGAMEURL;
 
-        fs.writeFile("./bin/config.json", JSON.stringify(bot.config, null, 4), (err) => {
+        fs.writeFile("./bin/config.json", JSON.stringify(bot.data.config, null, 4), (err) => {
             if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err);
         });
 
@@ -122,7 +122,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
         });
 
         bot.client.shard.broadcastEval((client, context) => {
-            bot.user.setPresence({
+            client.user.setPresence({
                 activities: [{
                     name: newgame,
                     type: context.constants.gametypetranslation[context.config.gametype],
