@@ -4,7 +4,7 @@
  * Created Date: 2022-01-13 13:20:08
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-08 22:42:22
+ * Last Modified: 2024-01-13 13:51:49
  * Modified By: 3urobeat
  *
  * Copyright (c) 2022 - 2024 3urobeat <https://github.com/3urobeat>
@@ -39,7 +39,7 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
 
         this.data.settings.findOne({ guildID: guildID }, async (err, guildsettings) => {
             if (err) {
-                logger("error", "message.js", "msg Event: Error fetching guild from database: " + err);
+                logger("error", "interactionCreate.js", "msg Event: Error fetching guild from database: " + err);
                 interaction.reply({ content: "Something went wrong getting your guild's settings from the database. Please try again later.", ephemeral: true });
                 return;
             }
@@ -69,7 +69,7 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
                         }
                     });
 
-                    if (changesmade) this.data.settings.update({ guildID: guildID }, guildsettings, (err) => { if (err) logger("error", "message.js", `Error adding missing keys to ${guildID}'s settings db: ${err}`); });
+                    if (changesmade) this.data.settings.update({ guildID: guildID }, guildsettings, (err) => { if (err) logger("error", "interactionCreate.js", `Error adding missing keys to ${guildID}'s settings db: ${err}`); });
                 }
 
                 // Call levelUser helper
@@ -138,7 +138,7 @@ Bot.prototype._attachDiscordInteractionCreateEvent = function() {
                             }
                         } else {
                             interaction.reply(`This command seems to have an invalid restriction setting. I'll have to stop the execution of this command to prevent safety issues.\n${BOTOWNER} will probably see this error and fix it.`); // eslint-disable-line no-undef
-                            logger("error", "message.js", `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${interaction.commandName}'\x1b[0m to prevent safety issues.`);
+                            logger("error", "interactionCreate.js", `The command restriction \x1b[31m'${ab}'\x1b[0m is invalid. Stopping the execution of the command \x1b[31m'${interaction.commandName}'\x1b[0m to prevent safety issues.`);
                             return;
                         }
                     }

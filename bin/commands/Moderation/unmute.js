@@ -4,7 +4,7 @@
  * Created Date: 2021-02-11 18:54:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-13 11:54:50
+ * Last Modified: 2024-01-13 13:51:17
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -62,7 +62,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
     }
 
     // Remove matching userid and guildid entries from db now so that voiceStateUpdate won't attack
-    bot.data.timedmutes.remove({$and: [{ userid: unmuteuser.id }, { guildid: message.guild.id }]}, (err => { if (err) logger("error", "controller.js", "Error removing ${e.userid} from timedmutes: " + err); }));
+    bot.data.timedmutes.remove({$and: [{ userid: unmuteuser.id }, { guildid: message.guild.id }]}, (err => { if (err) logger("error", "unmute.js", "Error removing ${e.userid} from timedmutes: " + err); }));
 
     if (args[0].toLowerCase() == "voice" || args[0].toLowerCase() == "all") { // User was banned in voice
         // Remove voice mute
@@ -84,7 +84,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
                 mutereason: unmutereasontext
             };
 
-            bot.timedmutes.insert(unmuteobj, (err) => { if (err) logger("error", "controller.js", "error updating db: " + err); }); // Insert new obj instead of updating old one so that the db remove call won't remove it
+            bot.timedmutes.insert(unmuteobj, (err) => { if (err) logger("error", "unmute.js", "error updating db: " + err); }); // Insert new obj instead of updating old one so that the db remove call won't remove it
         }
     }
 

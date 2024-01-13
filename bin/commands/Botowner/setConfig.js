@@ -4,7 +4,7 @@
  * Created Date: 2021-01-19 22:36:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-09 21:49:08
+ * Last Modified: 2024-01-13 13:50:13
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -36,7 +36,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { //esli
     // Code is from my Steam Comment Bot !settings cmd so I hope it doesn't look weird here - https://github.com/3urobeat/steam-comment-service-bot/blob/master/src/bot.js
     if (!args[0]) {
         fs.readFile("./bin/config.json", function(err, data) { // Use readFile to get an unprocessed object
-            if (err) return logger("error", "setconfig.js", `read config values error: ${err}`);
+            if (err) return logger("error", "setConfig.js", `read config values error: ${err}`);
 
             message.channel.send(lf.setconfigcurrentsettings + ":\n" + data.toString().slice(1, -1)); // Remove first and last character which are brackets
         });
@@ -80,10 +80,10 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { //esli
 
 
     message.channel.send(lf.setconfigkeychanged.replace("configkey", `\`${args[0]}\``).replace("oldvalue", `\`${keyvalue}\``).replace("newvalue", `\`${args[1]}\``));
-    logger("info", "setconfig.js", `${args[0]} has been changed from ${keyvalue} to ${args[1]}.`);
+    logger("info", "setConfig.js", `${args[0]} has been changed from ${keyvalue} to ${args[1]}.`);
 
     fs.writeFile("./bin/config.json", JSON.stringify(config, null, 4), err => {
-        if (err) return logger("error", "setconfig.js", `write settings cmd changes to config error: ${err}`);
+        if (err) return logger("error", "setConfig.js", `write settings cmd changes to config error: ${err}`);
 
         delete require.cache[require.resolve("../../config")];
         config = require("../../config.json");

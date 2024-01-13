@@ -4,7 +4,7 @@
  * Created Date: 2021-01-09 21:11:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-12 08:58:52
+ * Last Modified: 2024-01-13 13:50:31
  * Modified By: 3urobeat
  *
  * Copyright (c) 2021 - 2024 3urobeat <https://github.com/3urobeat>
@@ -42,7 +42,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
         bot.data.config.gameurl       = bot.data.constants.DEFAULTGAMEURL;
 
         fs.writeFile("./bin/config.json", JSON.stringify(bot.data.config, null, 4), (err) => {
-            if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err);
+            if (err) logger("error", "setPresence.js", "Error writing changes to config: " + err);
         });
 
         bot.client.shard.broadcastEval((client, context) => {
@@ -58,7 +58,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
                     message.channel.send(lf.setpresenceupdated);
                 })
                 .catch(err => { // Error will occur when not all shards are started yet
-                    logger("warn", "controller.js", "Couldn't set presence: " + err.stack);
+                    logger("warn", "setPresence.js", "Couldn't set presence: " + err.stack);
                 });
         }, { context: { config: bot.data.config, constants: bot.data.constants } });
 
@@ -118,7 +118,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
 
         // Write and broadcast changes
         fs.writeFile("./bin/config.json", JSON.stringify(bot.data.config, null, 4), (err) => {
-            if (err) logger("error", "setpresence.js", "Error writing changes to config: " + err);
+            if (err) logger("error", "setPresence.js", "Error writing changes to config: " + err);
         });
 
         bot.client.shard.broadcastEval((client, context) => {
@@ -134,7 +134,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
                     message.channel.send(lf.setpresenceupdated);
                 })
                 .catch(err => { // Error will occur when not all shards are started yet
-                    logger("warn", "controller.js", "Couldn't set presence: " + err.stack);
+                    logger("warn", "setPresence.js", "Couldn't set presence: " + err.stack);
                 });
         }), { context: { config: bot.data.config, constants: bot.data.constants } };
     }
