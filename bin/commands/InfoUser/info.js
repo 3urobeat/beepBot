@@ -4,7 +4,7 @@
  * Created Date: 2020-10-07 20:44:00
  * Author: 3urobeat
  *
- * Last Modified: 2024-01-12 12:28:23
+ * Last Modified: 2024-01-13 13:34:51
  * Modified By: 3urobeat
  *
  * Copyright (c) 2020 - 2024 3urobeat <https://github.com/3urobeat>
@@ -53,53 +53,52 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
 
     if (!args[0]) args[0] = "";
     if (!args[1]) args[1] = "";
+    if (!args[2]) args[2] = "";
+
+    let sendMobile = args[1].toLowerCase() == "mobile" || args[2].toLowerCase() == "mobile"; // Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
 
     switch(args[0].toLowerCase()) {
         case "user":
-            if (!args[1] || message.channel.type == Discord.ChannelType.DM) {
+            // Check if user wants to get info about another user
+            if (!args[1] || args[1] == "mobile" || message.channel.type == Discord.ChannelType.DM) {
                 whichmember = message.guild.members.cache.get(message.author.id);
-
-            } else if (message.guild.members.cache.find(member => member.user.username == args[1])) {
-                whichmember = message.guild.members.cache.find(member => member.user.username == args[1]);
-
-            } else if (message.guild.members.cache.find(member => member.nickname == args[1])) {
-                whichmember = message.guild.members.cache.find(member => member.nickname == args[1]);
-
-            } else if (message.guild.members.cache.get(args[1])) {
-                whichmember = message.guild.members.cache.get(args[1]);
-
-            } else if (message.mentions.users.first()) {
-                whichmember = message.guild.members.cache.get(message.mentions.users.first().id);
-
             } else {
-                return message.channel.send(lf.usernotfound);
+                whichmember = bot.getUserFromMsg(message, args, 1, 2, true);
+
+                // Check if nothing or multiple results were found
+                if (!whichmember) return message.channel.send(lang.general.usernotfound);
+                if (typeof (whichmember) == "number") return message.channel.send(lang.general.multipleusersfound.replace("useramount", whichmember));
+
+                // Get GuildMember from User again to access presence etc. below
+                whichmember = message.guild.members.cache.get(whichmember.id);
             }
 
-
-            thumbnailurl = whichmember.displayAvatarURL();
+            thumbnailurl = whichmember.user.displayAvatarURL();
             alluseractivites = "";
             usernickname = "";
 
-            whichmember.presence.activities.forEach((e, i) => {
-                if (i == 0) alluseractivites += `${e.name}`;
-                    else alluseractivites += `, ${e.name}`;
+            if (whichmember.presence) {
+                whichmember.presence.activities.forEach((e, i) => {
+                    if (i == 0) alluseractivites += `${e.name}`;
+                        else alluseractivites += `, ${e.name}`;
 
-                if (i + 1 == Object.keys(whichmember.presence.activities).length && alluseractivites.length >= 25) {
-                    alluseractivites = alluseractivites.slice(0, 25) + "...";
-                }
-            });
+                    if (i + 1 == Object.keys(whichmember.presence.activities).length && alluseractivites.length >= 25) {
+                        alluseractivites = alluseractivites.slice(0, 25) + "...";
+                    }
+                });
+            }
 
             if (message.channel.type == Discord.ChannelType.DM || whichmember.nickname == null) usernickname = "/";
                 else usernickname = whichmember.nickname;
 
-            if (args[1].toLowerCase() == "mobile") { // Provide mobile option because the other version looks way nicer on Desktop but is completely screwed over on mobile
+            if (sendMobile) {
                 // Mobile version
                 infofields[0] = {
                     name: lf.user,
                     value: `**${lf.username}:** @${whichmember.user.displayName}\n` +
                            `**${lf.nickname}:** ${usernickname}\n` +
-                           `**${lf.status}:** ${whichmember.presence.status}\n` +
-                           `**${lf.games}:** (${Object.keys(whichmember.presence.activities).length}) ${alluseractivites}\n` +
+                           `**${lf.status}:** ${whichmember.presence ? whichmember.presence.status : "?"}\n` +
+                           `**${lf.games}:** (${whichmember.presence ? Object.keys(whichmember.presence.activities).length : "?"}) ${alluseractivites}\n` +
                            `**${lf.id}:** ${whichmember.id}\n` +
                            `**${lf.creationdate}:** ${(new Date(whichmember.user.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, " ").replace(/\..+/, "")}`,
                     inline: true
@@ -115,7 +114,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
                     value: `${lf.username}:\n` +
                            `${lf.nickname}:\n` +
                            `${lf.status}:\n` +
-                           `${lf.games}: (${Object.keys(whichmember.presence.activities).length})\n` +
+                           `${lf.games}: (${whichmember.presence ? Object.keys(whichmember.presence.activities).length : "?"})\n` +
                            `${lf.id}:\n` +
                            `${lf.creationdate}:`,
                     inline: true
@@ -125,7 +124,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
                     name: "\u200b",
                     value: `@${whichmember.user.displayName}\n` +
                            `${usernickname}\n` +
-                           `${whichmember.presence.status}\n` +
+                           `${whichmember.presence ? whichmember.presence.status : "?"}\n` +
                            `${alluseractivites}\n` +
                            `${whichmember.id}\n` +
                            `${(new Date(whichmember.user.createdAt - (new Date().getTimezoneOffset() * 60000))).toISOString().replace(/T/, " ").replace(/\..+/, "")}`,
@@ -150,7 +149,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
 
             guildowner = await message.guild.fetchOwner();
 
-            if (args[1].toLowerCase() == "mobile") {
+            if (sendMobile) {
                 // Mobile version
                 infofields[0] = {
                     name: lf.server,
@@ -211,7 +210,7 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
             cpuUsage = await sysInfo.currentLoad(async (cb) => { return cb; });
             if (cpuTemp.main == -1) cpuTemp.main = "/"; // Si can't read temp
 
-            if (args[1].toLowerCase() == "mobile") {
+            if (sendMobile) {
                 // Mobile version
                 infofields[0] = {
                     name: `**${lf.bot}** - Mobile`,
@@ -228,8 +227,8 @@ module.exports.run = async (bot, message, args, lang, guildsettings) => { // esl
                     inline: true
                 };
 
-                quickInfoField(3, "user", "usershowmore", false);
-                quickInfoField(4, "server", "servershowmore", false);
+                quickInfoField(1, "user", "usershowmore", false);
+                quickInfoField(2, "server", "servershowmore", false);
 
             } else {
 
