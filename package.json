@@ -6,7 +6,6 @@
     "dependencies": {
         "@seald-io/nedb": "^4.0.3",
         "discord.js": "^14.14.1",
-        "download": "^8.0.0",
         "lodash": "^4.17.21",
         "output-logger": "^2.3.7",
         "superagent": "^8.1.2",
