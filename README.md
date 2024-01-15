@@ -7,10 +7,10 @@
 
 <div align="center">
 
-[![nodejs](https://img.shields.io/badge/discord.js-v13-brightgreen)](https://discord.js.org)
+[![nodejs](https://img.shields.io/badge/discord.js-v14-brightgreen)](https://discord.js.org)
 [![Star](https://img.shields.io/badge/-Give%20this%20repo%20a%20star!-yellow)](https://github.com/3urobeat/beepBot)
 [![Invite](https://img.shields.io/badge/Invite%20me%20to%20your%20server!-blue)](https://discord.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=8)
-[![Donate](https://img.shields.io/badge/donate-%241-orange)](https://paypal.me/3urobeat)
+[![Donate](https://img.shields.io/badge/Donate-%241-orange)](https://github.com/sponsors/3urobeat)
 
 </div>
 
@@ -27,28 +27,27 @@
 
 &nbsp;  
 ## **Invite and Support:**
+Invite beepBot to your server: [Click here](https://discord.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=8)  
+Need help? Join my support server: [Click here](https://discord.gg/9Yaj5qSbc8)  
+If you experienced a bug or want to propose a new feature, feel free to open an issue in this repository if you have a GitHub account.
 
-[Invite my bot to your server!](https://discord.com/oauth2/authorize?client_id=265162449441783808&scope=bot&permissions=8)  
-Need help? Join the [Support Server](https://discord.gg/9Yaj5qSbc8) and feel free to ask!  
-
-If you like my work I would really appreciate a small donation on [PayPal](https://paypal.me/3urobeat)!
-
-&nbsp;  
-&nbsp;  
-
-Privacy Policy: [Click to read](https://github.com/3urobeat/beepBot/blob/master/legal/privacy_policy.md)  
-  
-This bot is not intended to be downloaded and used privatly. This repo will miss some important files you would need to run it on your computer.  
-Instead, add the bot to your server with the invite link above.  
+Official Discord App-Directory Entry: [Click here](https://discord.com/application-directory/265162449441783808)  
+Privacy Policy: [Click here](https://github.com/3urobeat/beepBot/blob/master/legal/privacy_policy.md)
 
 &nbsp;  
 &nbsp;  
 
 <div align="center">
-	<a href="https://discordbots.org/bot/265162449441783808">
-	  <img src="https://discordbots.org/api/widget/265162449441783808.svg" />
-	</a>
-	<a href="https://botsfordiscord.com/bots/265162449441783808" >
-		<img src="https://botsfordiscord.com/api/bot/265162449441783808/widget" title="Visit beepBot listed on Bots for Discord!" alt="beepBot's Widget Failed to Load" />
+	<a href="https://top.gg/bot/265162449441783808">
+	  <img src="https://top.gg/api/widget/265162449441783808.svg" />
 	</a>
 </div>
+
+&nbsp;  
+&nbsp;  
+
+You are not allowed to host this bot yourself. Please use the 'Invite' link above to invite beepBot to your server.  
+This repo is missing a few important files and the project will not start on your machine.  
+
+The entire codebase is licensed under the GPL3 license.  
+If you want to use code from this repository in your project, feel free to do so as long as you **include a URL** as comment above the code block to the file in this repository!
