@@ -9,7 +9,7 @@
         "lodash": "^4.17.21",
         "output-logger": "^2.3.7",
         "superagent": "^8.1.2",
-        "systeminformation": "^5.21.22"
+        "systeminformation": "^5.31.6"
     },
     "scripts": {
         "start": "node start.js"
